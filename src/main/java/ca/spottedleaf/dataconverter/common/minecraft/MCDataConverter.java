@@ -1,0 +1,59 @@
+package ca.spottedleaf.dataconverter.common.minecraft;
+
+import ca.spottedleaf.dataconverter.common.converters.DataConverter;
+import ca.spottedleaf.dataconverter.common.converters.datatypes.DataType;
+import ca.spottedleaf.dataconverter.common.minecraft.datatypes.MCDataType;
+import ca.spottedleaf.dataconverter.common.types.nbt.NBTMapType;
+import it.unimi.dsi.fastutil.longs.LongArrayList;
+import net.minecraft.nbt.CompoundTag;
+
+public final class MCDataConverter {
+
+    private static final LongArrayList BREAKPOINTS = MCVersionRegistry.getBreakpoints();
+
+    public static CompoundTag convertTag(final MCDataType type, final CompoundTag data, final int fromVersion, final int toVersion) {
+        final NBTMapType wrapped = new NBTMapType(data);
+
+        final NBTMapType replaced = (NBTMapType)convert(type, wrapped, fromVersion, toVersion);
+
+        return replaced == null ? wrapped.getTag() : replaced.getTag();
+    }
+
+    public static <T, R> R convert(final DataType<T, R> type, final T data, int fromVersion, final int toVersion) {
+        Object ret = data;
+
+        long currentVersion = DataConverter.encodeVersions(fromVersion < 99 ? 99 : fromVersion, Integer.MAX_VALUE);
+        final long nextVersion = DataConverter.encodeVersions(toVersion, Integer.MAX_VALUE);
+
+        for (int i = 0, len = BREAKPOINTS.size(); i < len; ++i) {
+            final long breakpoint = BREAKPOINTS.getLong(i);
+
+            if (currentVersion >= breakpoint) {
+                continue;
+            }
+
+            final Object converted = type.convert((T)ret, currentVersion, Math.min(nextVersion, breakpoint - 1));
+            if (converted != null) {
+                ret = converted;
+            }
+
+            currentVersion = Math.min(nextVersion, breakpoint - 1);
+
+            if (currentVersion == nextVersion) {
+                break;
+            }
+        }
+
+        if (currentVersion != nextVersion) {
+            final Object converted = type.convert((T)ret, currentVersion, nextVersion);
+            if (converted != null) {
+                ret = converted;
+            }
+        }
+
+        return (R)ret;
+    }
+
+    private MCDataConverter() {}
+
+}

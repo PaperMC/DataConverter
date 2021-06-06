@@ -1,0 +1,70 @@
+package ca.spottedleaf.dataconverter.common.minecraft.converters.blockname;
+
+import ca.spottedleaf.dataconverter.common.converters.DataConverter;
+import ca.spottedleaf.dataconverter.common.minecraft.datatypes.MCTypeRegistry;
+import ca.spottedleaf.dataconverter.common.types.MapType;
+import java.util.function.Function;
+
+public final class ConverterAbstractBlockRename {
+
+    private ConverterAbstractBlockRename() {}
+
+    public static void register(final int version, final Function<String, String> renamer) {
+        MCTypeRegistry.BLOCK_NAME.addConverter(new DataConverter<>(version) {
+            @Override
+            public Object convert(final Object data, final long sourceVersion, final long toVersion) {
+                final String ret = (data instanceof String) ? renamer.apply((String)data) : null;
+                return ret == data ? null : ret;
+            }
+        });
+        MCTypeRegistry.BLOCK_STATE.addStructureConverter(new DataConverter<>(version) {
+            @Override
+            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+                final String name = data.getString("Name");
+                if (name != null) {
+                    final String converted = renamer.apply(name);
+                    if (converted != null) {
+                        data.setString("Name", converted);
+                    }
+                }
+                return null;
+            }
+        });
+    }
+
+    public static void registerAndFixJigsaw(final int version, final Function<String, String> renamer) {
+        register(version, renamer);
+        // TODO check on update, minecraft:jigsaw can change
+        MCTypeRegistry.TILE_ENTITY.addConverterForId("minecraft:jigsaw", new DataConverter<>(version) {
+            @Override
+            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+                final String finalState = data.getString("final_state");
+                if (finalState == null || finalState.isEmpty()) {
+                    return null;
+                }
+
+                final int nbtStart1 = finalState.indexOf('[');
+                final int nbtStart2 = finalState.indexOf('{');
+                int stateNameEnd = finalState.length();
+                if (nbtStart1 > 0) {
+                    stateNameEnd = Math.min(stateNameEnd, nbtStart1);
+                }
+
+                if (nbtStart2 > 0) {
+                    stateNameEnd = Math.min(stateNameEnd, nbtStart2);
+                }
+
+                final String blockStateName = finalState.substring(0, stateNameEnd);
+                final String converted = renamer.apply(blockStateName);
+                if (converted == null) {
+                    return null;
+                }
+
+                final String convertedState = converted.concat(finalState.substring(stateNameEnd));
+                data.setString("final_state", convertedState);
+
+                return null;
+            }
+        });
+    }
+}
