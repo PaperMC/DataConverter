@@ -128,6 +128,8 @@ public final class V100 {
 
             WalkerUtils.convertList(MCTypeRegistry.ITEM_STACK, data, "ArmorItems", fromVersion, toVersion);
             WalkerUtils.convertList(MCTypeRegistry.ITEM_STACK, data, "HandItems", fromVersion, toVersion);
+
+            return null;
         });
         registerMob("Shulker");
 
@@ -147,6 +149,8 @@ public final class V100 {
             }
 
             WalkerUtils.convertList(MCTypeRegistry.BLOCK_STATE, data, "palette", fromVersion, toVersion);
+
+            return null;
         });
     }
 

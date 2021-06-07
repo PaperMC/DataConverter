@@ -32,6 +32,8 @@ public final class V1929 {
 
             WalkerUtils.convertList(MCTypeRegistry.ITEM_STACK, data, "ArmorItems", fromVersion, toVersion);
             WalkerUtils.convertList(MCTypeRegistry.ITEM_STACK, data, "HandItems", fromVersion, toVersion);
+
+            return null;
         });
         MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:trader_llama", (final MapType<String> data, final long fromVersion, final long toVersion) -> {
             WalkerUtils.convert(MCTypeRegistry.ITEM_STACK, data, "SaddleItem", fromVersion, toVersion);
@@ -40,6 +42,8 @@ public final class V1929 {
             WalkerUtils.convertList(MCTypeRegistry.ITEM_STACK, data, "Items", fromVersion, toVersion);
             WalkerUtils.convertList(MCTypeRegistry.ITEM_STACK, data, "ArmorItems", fromVersion, toVersion);
             WalkerUtils.convertList(MCTypeRegistry.ITEM_STACK, data, "HandItems", fromVersion, toVersion);
+
+            return null;
         });
     }
 }

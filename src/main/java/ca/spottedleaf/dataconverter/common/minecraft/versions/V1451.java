@@ -1,6 +1,8 @@
 package ca.spottedleaf.dataconverter.common.minecraft.versions;
 
 import ca.spottedleaf.dataconverter.common.converters.DataConverter;
+import ca.spottedleaf.dataconverter.common.converters.datatypes.DataHook;
+import ca.spottedleaf.dataconverter.common.converters.datatypes.DataWalker;
 import ca.spottedleaf.dataconverter.common.minecraft.MCVersions;
 import ca.spottedleaf.dataconverter.common.minecraft.converters.chunk.ConverterFlattenChunk;
 import ca.spottedleaf.dataconverter.common.minecraft.converters.helpers.HelperBlockFlatteningV1450;
@@ -20,11 +22,11 @@ import ca.spottedleaf.dataconverter.common.types.MapType;
 import ca.spottedleaf.dataconverter.common.types.ObjectType;
 import ca.spottedleaf.dataconverter.common.types.Types;
 import com.google.common.base.Splitter;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.datafix.fixes.BlockStateData;
 import net.minecraft.util.datafix.fixes.EntityBlockStateFix;
 import net.minecraft.util.datafix.schemas.NamespacedSchema;
 import org.apache.commons.lang3.math.NumberUtils;
-
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -44,7 +46,7 @@ public final class V1451 {
         MCTypeRegistry.CHUNK.addStructureWalker(VERSION, 1, (final MapType<String> data, final long fromVersion, final long toVersion) -> {
             final MapType<String> level = data.getMap("Level");
             if (level == null) {
-                return;
+                return null;
             }
 
             WalkerUtils.convertList(MCTypeRegistry.ENTITY, level, "Entities", fromVersion, toVersion);
@@ -65,6 +67,8 @@ public final class V1451 {
                     WalkerUtils.convertList(MCTypeRegistry.BLOCK_STATE, section, "Palette", fromVersion, toVersion);
                 }
             }
+
+            return null;
         });
 
         // V2
@@ -281,7 +285,7 @@ public final class V1451 {
         MCTypeRegistry.STATS.addStructureWalker(VERSION, 6, (final MapType<String> data, final long fromVersion, final long toVersion) -> {
             final MapType<String> stats = data.getMap("stats");
             if (stats == null) {
-                return;
+                return null;
             }
 
             WalkerUtils.convertKeys(MCTypeRegistry.BLOCK_NAME, stats, "minecraft:mined", fromVersion, toVersion);
@@ -294,8 +298,120 @@ public final class V1451 {
 
             WalkerUtils.convertKeys(MCTypeRegistry.ENTITY_NAME, stats, "minecraft:killed", fromVersion, toVersion);
             WalkerUtils.convertKeys(MCTypeRegistry.ENTITY_NAME, stats, "minecraft:killed_by", fromVersion, toVersion);
+
+            return null;
         });
 
+        MCTypeRegistry.OBJECTIVE.addStructureHook(VERSION, 6, new DataHook<>() {
+            private static String packWithDot(final String string) {
+                final ResourceLocation resourceLocation = ResourceLocation.tryParse(string);
+                return resourceLocation != null ? resourceLocation.getNamespace() + "." + resourceLocation.getPath() : string;
+            }
+
+            @Override
+            public MapType<String> preHook(final MapType<String> data, final long fromVersion, final long toVersion) {
+                // unpack
+                final String criteriaName = data.getString("CriteriaName");
+                String type;
+                String id;
+
+                if (criteriaName != null) {
+                    final int index = criteriaName.indexOf(':');
+                    if (index < 0) {
+                        type = "_special";
+                        id = criteriaName;
+                    } else {
+                        try {
+                            type = ResourceLocation.of(criteriaName.substring(0, index), '.').toString();
+                            id = ResourceLocation.of(criteriaName.substring(index + 1), '.').toString();
+                        } catch (final Exception ex) {
+                            type = "_special";
+                            id = criteriaName;
+                        }
+                    }
+                } else {
+                    type = null;
+                    id = null;
+                }
+
+                if (type != null && id != null) {
+                    final MapType<String> criteriaType = Types.NBT.createEmptyMap();
+                    data.setMap("CriteriaType", criteriaType);
+
+                    criteriaType.setString("type", type);
+                    criteriaType.setString("id", id);
+                }
+
+                return null;
+            }
+
+            @Override
+            public MapType<String> postHook(final MapType<String> data, final long fromVersion, final long toVersion) {
+                // repack
+                final MapType<String> criteriaType = data.getMap("CriteriaType");
+
+                final String newName;
+                if (criteriaType == null) {
+                    newName = null;
+                } else {
+                    final String type = criteriaType.getString("type");
+                    final String id = criteriaType.getString("id");
+                    if (type != null && id != null) {
+                        if ("_special".equals(type)) {
+                            newName = id;
+                        } else {
+                            newName = packWithDot(type) + ":" + packWithDot(id);
+                        }
+                    } else {
+                        newName = null;
+                    }
+                }
+
+                if (newName != null) {
+                    data.remove("CriteriaType");
+                    data.setString("CriteriaName", newName);
+                }
+
+                return null;
+            }
+        });
+
+        MCTypeRegistry.OBJECTIVE.addStructureWalker(VERSION, 6, (final MapType<String> data, final long fromVersion, final long toVersion) -> {
+            final MapType<String> criteriaType = data.getMap("CriteriaType");
+            if (criteriaType == null) {
+                return null;
+            }
+
+            final String type = criteriaType.getString("type");
+
+            if (type == null) {
+                return null;
+            }
+
+            switch (type) {
+                case "minecraft:mined": {
+                    WalkerUtils.convert(MCTypeRegistry.ITEM_NAME, criteriaType, "id", fromVersion, toVersion);
+                    break;
+                }
+
+                case "minecraft:crafted":
+                case "minecraft:used":
+                case "minecraft:broken":
+                case "minecraft:picked_up":
+                case "minecraft:dropped": {
+                    WalkerUtils.convert(MCTypeRegistry.BLOCK_NAME, criteriaType, "id", fromVersion, toVersion);
+                    break;
+                }
+
+                case "minecraft:killed":
+                case "minecraft:killed_by": {
+                    WalkerUtils.convert(MCTypeRegistry.ENTITY_NAME, criteriaType, "id", fromVersion, toVersion);
+                    break;
+                }
+            }
+
+            return null;
+        });
 
 
         // V7
@@ -376,7 +492,7 @@ public final class V1451 {
         MCTypeRegistry.STRUCTURE_FEATURE.addStructureWalker(VERSION, 7, (final MapType<String> data, final long fromVersion, final long toVersion) -> {
             final ListType list = data.getList("Children", ObjectType.MAP);
             if (list == null) {
-                return;
+                return null;
             }
 
             for (int i = 0, len = list.size(); i < len; ++i) {
@@ -386,6 +502,8 @@ public final class V1451 {
                 WalkerUtils.convert(MCTypeRegistry.BLOCK_STATE, child, "CC", fromVersion, toVersion);
                 WalkerUtils.convert(MCTypeRegistry.BLOCK_STATE, child, "CD", fromVersion, toVersion);
             }
+
+            return null;
         });
     }
 

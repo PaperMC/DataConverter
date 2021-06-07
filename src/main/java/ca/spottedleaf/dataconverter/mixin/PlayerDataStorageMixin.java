@@ -1,4 +1,4 @@
-package ca.spottedleaf.dataconverter.mixin.chunk;
+package ca.spottedleaf.dataconverter.mixin;
 
 import ca.spottedleaf.dataconverter.common.minecraft.MCDataConverter;
 import ca.spottedleaf.dataconverter.common.minecraft.datatypes.MCTypeRegistry;
@@ -13,8 +13,12 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(PlayerDataStorage.class)
-public abstract class MixinPlayerDataStorage {
+public abstract class PlayerDataStorageMixin {
 
+    /**
+     * Redirects ONLY player converters to the new dataconverter system. On update,
+     * new types should be included here.
+     */
     @Redirect(
             method = "load",
             at = @At(
@@ -22,8 +26,8 @@ public abstract class MixinPlayerDataStorage {
                     value = "INVOKE"
             )
     )
-    private <T> CompoundTag updatePlayerData(final DataFixer dataFixer, final DataFixTypes dataFixTypes, final CompoundTag compoundTag,
-                                             final int version) {
+    private CompoundTag updatePlayerData(final DataFixer dataFixer, final DataFixTypes dataFixTypes, final CompoundTag compoundTag,
+                                         final int version) {
         if (dataFixTypes == DataFixTypes.PLAYER) {
             return MCDataConverter.convertTag(MCTypeRegistry.PLAYER, compoundTag, version, SharedConstants.getCurrentVersion().getWorldVersion());
         }

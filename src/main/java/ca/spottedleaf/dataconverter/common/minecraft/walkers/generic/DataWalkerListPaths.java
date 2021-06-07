@@ -16,7 +16,7 @@ public class DataWalkerListPaths<T, R> implements DataWalker<String> {
     }
 
     @Override
-    public final void walk(final MapType<String> data, final long fromVersion, final long toVersion) {
+    public final MapType<String> walk(final MapType<String> data, final long fromVersion, final long toVersion) {
         final DataType<T, R> type = this.type;
         for (final String path : this.paths) {
             final ListType list = data.getListUnchecked(path);
@@ -32,5 +32,7 @@ public class DataWalkerListPaths<T, R> implements DataWalker<String> {
                 }
             }
         }
+
+        return null;
     }
 }

@@ -1,6 +1,7 @@
 package ca.spottedleaf.dataconverter.common.minecraft.datatypes;
 
 import ca.spottedleaf.dataconverter.common.converters.DataConverter;
+import ca.spottedleaf.dataconverter.common.converters.datatypes.DataHook;
 import ca.spottedleaf.dataconverter.common.converters.datatypes.DataWalker;
 import ca.spottedleaf.dataconverter.common.minecraft.MCVersionRegistry;
 import ca.spottedleaf.dataconverter.common.types.MapType;
@@ -84,16 +85,54 @@ public class IDDataType extends MCDataType {
                 break;
             }
 
+            final List<DataHook<String>> hooks = this.structureHooks.getFloor(converterVersion);
+
+            if (hooks != null) {
+                for (int k = 0, klen = hooks.size(); k < klen; ++k) {
+                    final MapType<String> replace = hooks.get(k).preHook(data, fromVersion, toVersion);
+                    if (replace != null) {
+                        ret = data = replace;
+                    }
+                }
+            }
+
             final MapType<String> replace = converter.convert(data, fromVersion, toVersion);
             if (replace != null) {
                 ret = data = replace;
             }
+
+            if (hooks != null) {
+                for (int klen = hooks.size(), k = klen - 1; k >= 0; --k) {
+                    final MapType<String> postReplace = hooks.get(k).postHook(data, fromVersion, toVersion);
+                    if (postReplace != null) {
+                        ret = data = postReplace;
+                    }
+                }
+            }
         }
+
+        final List<DataHook<String>> hooks = this.structureHooks.getFloor(toVersion);
+
+        // run pre hooks
+
+        if (hooks != null) {
+            for (int k = 0, klen = hooks.size(); k < klen; ++k) {
+                final MapType<String> replace = hooks.get(k).preHook(data, fromVersion, toVersion);
+                if (replace != null) {
+                    ret = data = replace;
+                }
+            }
+        }
+
+        // run all walkers
 
         final List<DataWalker<String>> walkers = this.structureWalkers.getFloor(toVersion);
         if (walkers != null) {
             for (int i = 0, len = walkers.size(); i < len; ++i) {
-                walkers.get(i).walk(data, fromVersion, toVersion);
+                final MapType<String> replace = walkers.get(i).walk(data, fromVersion, toVersion);
+                if (replace != null) {
+                    ret = data = replace;
+                }
             }
         }
 
@@ -102,7 +141,21 @@ public class IDDataType extends MCDataType {
             final List<DataWalker<String>> walkersForId = walkersByVersion.getFloor(toVersion);
             if (walkersForId != null) {
                 for (int i = 0, len = walkersForId.size(); i < len; ++i) {
-                    walkersForId.get(i).walk(data, fromVersion, toVersion);
+                    final MapType<String> replace = walkersForId.get(i).walk(data, fromVersion, toVersion);
+                    if (replace != null) {
+                        ret = data = replace;
+                    }
+                }
+            }
+        }
+
+        // run post hooks
+
+        if (hooks != null) {
+            for (int klen = hooks.size(), k = klen - 1; k >= 0; --k) {
+                final MapType<String> postReplace = hooks.get(k).postHook(data, fromVersion, toVersion);
+                if (postReplace != null) {
+                    ret = data = postReplace;
                 }
             }
         }

@@ -5,6 +5,7 @@ import ca.spottedleaf.dataconverter.common.minecraft.MCVersions;
 import ca.spottedleaf.dataconverter.common.minecraft.converters.blockname.ConverterAbstractBlockRename;
 import ca.spottedleaf.dataconverter.common.minecraft.converters.entity.ConverterAbstractEntityRename;
 import ca.spottedleaf.dataconverter.common.minecraft.converters.itemname.ConverterAbstractItemRename;
+import ca.spottedleaf.dataconverter.common.minecraft.converters.recipe.ConverterAbstractRecipeRename;
 import ca.spottedleaf.dataconverter.common.minecraft.datatypes.MCTypeRegistry;
 import ca.spottedleaf.dataconverter.common.types.MapType;
 import com.google.common.collect.ImmutableMap;
@@ -70,16 +71,7 @@ public final class V1510 {
     public static void register() {
         ConverterAbstractBlockRename.register(VERSION, RENAMED_BLOCKS::get);
         ConverterAbstractItemRename.register(VERSION, RENAMED_ITEMS::get);
-
-        MCTypeRegistry.RECIPE.addConverter(new DataConverter<>(VERSION) {
-            @Override
-            public Object convert(final Object data, final long sourceVersion, final long toVersion) {
-                if (data instanceof String) {
-                    return RECIPES_UPDATES.get((String)data);
-                }
-                return null;
-            }
-        });
+        ConverterAbstractRecipeRename.register(VERSION, RECIPES_UPDATES::get);
 
         ConverterAbstractEntityRename.register(VERSION, (String input) -> {
             if (input.startsWith("minecraft:bred_")) {

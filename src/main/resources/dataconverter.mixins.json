@@ -4,10 +4,15 @@
   "package": "ca.spottedleaf.dataconverter.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
-    "chunk.ChunkStorageMixin",
-    "chunk.EntityStorageMixin",
-    "chunk.MixinPlayerDataStorage",
-    "chunk.SectionStorageMixin"
+    "ChunkStorageMixin",
+    "DimensionDataStorageMixin",
+    "EntityStorageMixin",
+    "PlayerAdvancementsMixin",
+    "PlayerDataStorageMixin",
+    "SectionStorageMixin",
+    "ServerStatsCounterMixin",
+    "StructureManagerMixin",
+    "StructureUpdaterMixin"
   ],
   "client": [
   ],

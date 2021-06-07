@@ -57,6 +57,7 @@ import ca.spottedleaf.dataconverter.common.minecraft.versions.V1911;
 import ca.spottedleaf.dataconverter.common.minecraft.versions.V1917;
 import ca.spottedleaf.dataconverter.common.minecraft.versions.V1918;
 import ca.spottedleaf.dataconverter.common.minecraft.versions.V1920;
+import ca.spottedleaf.dataconverter.common.minecraft.versions.V1925;
 import ca.spottedleaf.dataconverter.common.minecraft.versions.V1928;
 import ca.spottedleaf.dataconverter.common.minecraft.versions.V1929;
 import ca.spottedleaf.dataconverter.common.minecraft.versions.V1931;
@@ -91,6 +92,7 @@ import ca.spottedleaf.dataconverter.common.minecraft.versions.V2529;
 import ca.spottedleaf.dataconverter.common.minecraft.versions.V2531;
 import ca.spottedleaf.dataconverter.common.minecraft.versions.V2533;
 import ca.spottedleaf.dataconverter.common.minecraft.versions.V2535;
+import ca.spottedleaf.dataconverter.common.minecraft.versions.V2551;
 import ca.spottedleaf.dataconverter.common.minecraft.versions.V2552;
 import ca.spottedleaf.dataconverter.common.minecraft.versions.V2553;
 import ca.spottedleaf.dataconverter.common.minecraft.versions.V2558;
@@ -107,6 +109,7 @@ import ca.spottedleaf.dataconverter.common.minecraft.versions.V2700;
 import ca.spottedleaf.dataconverter.common.minecraft.versions.V2701;
 import ca.spottedleaf.dataconverter.common.minecraft.versions.V2702;
 import ca.spottedleaf.dataconverter.common.minecraft.versions.V2707;
+import ca.spottedleaf.dataconverter.common.minecraft.versions.V2710;
 import ca.spottedleaf.dataconverter.common.minecraft.versions.V2717;
 import ca.spottedleaf.dataconverter.common.minecraft.versions.V501;
 import ca.spottedleaf.dataconverter.common.minecraft.versions.V502;
@@ -127,28 +130,31 @@ import ca.spottedleaf.dataconverter.common.minecraft.versions.V99;
 
 public final class MCTypeRegistry {
 
-    public static final MCDataType LEVEL            = new MCDataType("Level");
-    public static final MCDataType PLAYER           = new MCDataType("Player");
-    public static final MCDataType CHUNK            = new MCDataType("Chunk");
-    public static final IDDataType TILE_ENTITY      = new IDDataType("TileEntity");
-    public static final IDDataType ENTITY           = new IDDataType("Entity");
-    public static final IDDataType ITEM_STACK       = new IDDataType("ItemStack");
-    public static final MCValueType BLOCK_NAME      = new MCValueType();
-    public static final MCValueType ITEM_NAME       = new MCValueType();
-    public static final MCValueType RECIPE           = new MCValueType();
-    public static final MCDataType BLOCK_STATE       = new MCDataType("BlockState");
-    public static final MCDataType STRUCTURE         = new MCDataType("Structure");
-    public static final MCDataType UNTAGGED_SPAWNER  = new MCDataType("Spawner");
-    public static final MCDataType ADVANCEMENTS      = new MCDataType("Advancements");
-    public static final MCValueType ENTITY_NAME      = new MCValueType();
-    public static final MCValueType BIOME            = new MCValueType();
-    public static final MCDataType OPTIONS           = new MCDataType("Options");
-    public static final MCDataType HOTBAR            = new MCDataType("CreativeHotbar");
-    public static final MCDataType STATS             = new MCDataType("Stats");
-    public static final MCDataType STRUCTURE_FEATURE = new MCDataType("StructureFeature");
-    public static final MCDataType POI_CHUNK         = new MCDataType("PoiChunk");
-    public static final MCDataType ENTITY_CHUNK      = new MCDataType("EntityChunk");
-
+    public static final MCDataType LEVEL              = new MCDataType("Level");
+    public static final MCDataType PLAYER             = new MCDataType("Player");
+    public static final MCDataType CHUNK              = new MCDataType("Chunk");
+    public static final MCDataType HOTBAR             = new MCDataType("CreativeHotbar");
+    public static final MCDataType OPTIONS            = new MCDataType("Options");
+    public static final MCDataType STRUCTURE          = new MCDataType("Structure");
+    public static final MCDataType STATS              = new MCDataType("Stats");
+    public static final MCDataType SAVED_DATA         = new MCDataType("SavedData");
+    public static final MCDataType ADVANCEMENTS       = new MCDataType("Advancements");
+    public static final MCDataType POI_CHUNK          = new MCDataType("PoiChunk");
+    public static final MCDataType ENTITY_CHUNK       = new MCDataType("EntityChunk");
+    public static final IDDataType TILE_ENTITY        = new IDDataType("TileEntity");
+    public static final IDDataType ITEM_STACK         = new IDDataType("ItemStack");
+    public static final MCDataType BLOCK_STATE        = new MCDataType("BlockState");
+    public static final MCValueType ENTITY_NAME       = new MCValueType("EntityName");
+    public static final IDDataType ENTITY             = new IDDataType("Entity");
+    public static final MCValueType BLOCK_NAME        = new MCValueType("BlockName");
+    public static final MCValueType ITEM_NAME         = new MCValueType("ItemName");
+    public static final MCDataType UNTAGGED_SPAWNER   = new MCDataType("Spawner");
+    public static final MCDataType STRUCTURE_FEATURE  = new MCDataType("StructureFeature");
+    public static final MCDataType OBJECTIVE          = new MCDataType("Objective");
+    public static final MCDataType TEAM               = new MCDataType("Team");
+    public static final MCValueType RECIPE            = new MCValueType("RecipeName");
+    public static final MCValueType BIOME             = new MCValueType("Biome");
+    public static final MCDataType WORLD_GEN_SETTINGS = new MCDataType("WorldGenSettings");
 
     static {
         // General notes:
@@ -156,7 +162,6 @@ public final class MCTypeRegistry {
         // - ID specific converters run after structure converters.
         // - Structure walkers run after id specific converters.
         // - ID specific walkers run after structure walkers.
-
 
         V99.register(); // all legacy data before converters existed
         V100.register(); // first version with version id
@@ -224,7 +229,7 @@ public final class MCTypeRegistry {
         V1502.register();
         V1506.register(); // TODO this needs some work... level.dat converter
         V1510.register();
-        V1514.register(); // TODO missing scoreboard objective converters
+        V1514.register();
         V1515.register();
         V1624.register();
         // V1.14
@@ -240,11 +245,11 @@ public final class MCTypeRegistry {
         V1917.register();
         V1918.register();
         V1920.register();
-        // V1925 is SAVED_DATA fixer, we don't have datafixers for that stuff! TODO add later?
+        V1925.register();
         V1928.register();
         V1929.register();
         V1931.register();
-        V1936.register(); // TODO OPTIONS dataconverters
+        V1936.register();
         V1946.register();
         V1948.register();
         V1953.register();
@@ -252,7 +257,7 @@ public final class MCTypeRegistry {
         V1961.register();
         V1963.register();
         // V1.15
-        V2100.register(); // TODO missing advancements converter
+        V2100.register();
         V2202.register();
         V2209.register();
         V2211.register();
@@ -260,12 +265,12 @@ public final class MCTypeRegistry {
         // V1.16
         V2501.register();
         V2502.register();
-        V2503.register(); // TODO missing advancements converter
+        V2503.register();
         V2505.register();
         V2508.register();
         V2509.register();
         V2511.register();
-        V2514.register(); // TODO missing SAVED_DATA converter
+        V2514.register();
         V2516.register();
         V2518.register();
         V2519.register();
@@ -278,10 +283,10 @@ public final class MCTypeRegistry {
         V2533.register();
         V2535.register();
         // 2550 is world gen settings converter TODO add worldgen setting converters?
-        // 2551 is world gen schema TODO add worldgen settings?
+        V2551.register();
         V2552.register();
         V2553.register();
-        V2558.register(); // TODO missing options.txt converter // TODO missing world gen settings converter
+        V2558.register(); // TODO missing world gen settings converter
         V2568.register();
         // V1.17
         // WARN: Mojang registers V2671 under 2571, but that version predates 1.16.5? So it looks like a typo...
@@ -302,7 +307,7 @@ public final class MCTypeRegistry {
         V2702.register();
         // In reference to V2671, why the fuck is goat being registered again? For this obvious reason, V2704 is absent.
         V2707.register();
-        // 2710 is stats rename TODO add stat converters?
+        V2710.register();
         V2717.register();
     }
 

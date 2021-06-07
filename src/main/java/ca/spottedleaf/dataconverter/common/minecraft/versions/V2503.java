@@ -2,8 +2,10 @@ package ca.spottedleaf.dataconverter.common.minecraft.versions;
 
 import ca.spottedleaf.dataconverter.common.converters.DataConverter;
 import ca.spottedleaf.dataconverter.common.minecraft.MCVersions;
+import ca.spottedleaf.dataconverter.common.minecraft.converters.advancements.ConverterAbstractAdvancementsRename;
 import ca.spottedleaf.dataconverter.common.minecraft.datatypes.MCTypeRegistry;
 import ca.spottedleaf.dataconverter.common.types.MapType;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import java.util.Set;
 
@@ -58,5 +60,8 @@ public final class V2503 {
                 return null;
             }
         });
+        ConverterAbstractAdvancementsRename.register(VERSION, ImmutableMap.of(
+                "minecraft:recipes/misc/composter", "minecraft:recipes/decorations/composter"
+        )::get);
     }
 }

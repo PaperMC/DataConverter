@@ -93,7 +93,7 @@ public final class V1466 {
         MCTypeRegistry.CHUNK.addStructureWalker(VERSION, (final MapType<String> data, final long fromVersion, final long toVersion) -> {
             final MapType<String> level = data.getMap("Level");
             if (level == null) {
-                return;
+                return null;
             }
 
             WalkerUtils.convertList(MCTypeRegistry.ENTITY, level, "Entities", fromVersion, toVersion);
@@ -116,6 +116,8 @@ public final class V1466 {
             }
 
             WalkerUtils.convertValues(MCTypeRegistry.STRUCTURE_FEATURE, level.getMap("Structures"), "Starts", fromVersion, toVersion);
+
+            return null;
         });
         MCTypeRegistry.STRUCTURE_FEATURE.addStructureWalker(VERSION, (final MapType<String> data, final long fromVersion, final long toVersion) -> {
             final ListType list = data.getList("Children", ObjectType.MAP);
@@ -131,6 +133,8 @@ public final class V1466 {
             }
 
             WalkerUtils.convert(MCTypeRegistry.BIOME, data, "biome", fromVersion, toVersion);
+
+            return null;
         });
     }
 

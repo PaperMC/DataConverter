@@ -1,9 +1,9 @@
 package ca.spottedleaf.dataconverter.common.minecraft.datatypes;
 
 import ca.spottedleaf.dataconverter.common.converters.DataConverter;
+import ca.spottedleaf.dataconverter.common.converters.datatypes.DataHook;
 import ca.spottedleaf.dataconverter.common.converters.datatypes.DataType;
 import ca.spottedleaf.dataconverter.common.converters.datatypes.DataWalker;
-import ca.spottedleaf.dataconverter.common.minecraft.MCVersionRegistry;
 import ca.spottedleaf.dataconverter.common.types.MapType;
 import ca.spottedleaf.dataconverter.common.util.Long2ObjectArraySortedMap;
 import java.util.ArrayList;
@@ -15,6 +15,7 @@ public class MCDataType extends DataType<MapType<String>, MapType<String>> {
 
     protected final ArrayList<DataConverter<MapType<String>, MapType<String>>> structureConverters = new ArrayList<>();
     protected final Long2ObjectArraySortedMap<List<DataWalker<String>>> structureWalkers = new Long2ObjectArraySortedMap<>();
+    protected final Long2ObjectArraySortedMap<List<DataHook<String>>> structureHooks = new Long2ObjectArraySortedMap<>();
 
     public MCDataType(final String name) {
         this.name = name;
@@ -35,6 +36,16 @@ public class MCDataType extends DataType<MapType<String>, MapType<String>> {
         }).add(walker);
     }
 
+    public void addStructureHook(final int minVersion, final DataHook<String> hook) {
+        this.addStructureHook(minVersion, 0, hook);
+    }
+
+    public void addStructureHook(final int minVersion, final int versionStep, final DataHook<String> hook) {
+        this.structureHooks.computeIfAbsent(DataConverter.encodeVersions(minVersion, versionStep), (final long keyInMap) -> {
+            return new ArrayList<>();
+        }).add(hook);
+    }
+
     @Override
     public MapType<String> convert(MapType<String> data, final long fromVersion, final long toVersion) {
         MapType<String> ret = null;
@@ -52,16 +63,59 @@ public class MCDataType extends DataType<MapType<String>, MapType<String>> {
                 break;
             }
 
+            final List<DataHook<String>> hooks = this.structureHooks.getFloor(converterVersion);
+
+            if (hooks != null) {
+                for (int k = 0, klen = hooks.size(); k < klen; ++k) {
+                    final MapType<String> replace = hooks.get(k).preHook(data, fromVersion, toVersion);
+                    if (replace != null) {
+                        ret = data = replace;
+                    }
+                }
+            }
+
             final MapType<String> replace = converter.convert(data, fromVersion, toVersion);
             if (replace != null) {
                 ret = data = replace;
+            }
+
+            if (hooks != null) {
+                for (int klen = hooks.size(), k = klen - 1; k >= 0; --k) {
+                    final MapType<String> postReplace = hooks.get(k).postHook(data, fromVersion, toVersion);
+                    if (postReplace != null) {
+                        ret = data = postReplace;
+                    }
+                }
+            }
+        }
+
+        final List<DataHook<String>> hooks = this.structureHooks.getFloor(toVersion);
+
+        if (hooks != null) {
+            for (int k = 0, klen = hooks.size(); k < klen; ++k) {
+                final MapType<String> replace = hooks.get(k).preHook(data, fromVersion, toVersion);
+                if (replace != null) {
+                    ret = data = replace;
+                }
             }
         }
 
         final List<DataWalker<String>> walkers = this.structureWalkers.getFloor(toVersion);
         if (walkers != null) {
             for (int i = 0, len = walkers.size(); i < len; ++i) {
-                walkers.get(i).walk(data, fromVersion, toVersion);
+                final MapType<String> replace = walkers.get(i).walk(data, fromVersion, toVersion);
+                if (replace != null) {
+                    ret = data = replace;
+                }
+            }
+        }
+
+        if (hooks != null) {
+            for (int klen = hooks.size(), k = klen - 1; k >= 0; --k) {
+                final MapType<String> postReplace = hooks.get(k).postHook(data, fromVersion, toVersion);
+                if (postReplace != null) {
+                    ret = data = postReplace;
+                }
             }
         }
 

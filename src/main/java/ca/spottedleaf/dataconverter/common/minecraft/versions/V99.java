@@ -67,6 +67,8 @@ public final class V99 {
     public static void register() {
         MCTypeRegistry.ENTITY.addStructureWalker(VERSION, (final MapType<String> data, final long fromVersion, final long toVersion) -> {
             WalkerUtils.convert(MCTypeRegistry.ENTITY, data, "Riding", fromVersion, toVersion);
+
+            return null;
         });
         // Thrown Projectile -> new DataWalkerBlockNames("inTile")
         // Mob -> new DataWalkerItemLists("Equipment")
@@ -154,6 +156,8 @@ public final class V99 {
                     }
                 }
             }
+
+            return null;
         });
         MCTypeRegistry.ENTITY.addWalker(VERSION, "Shulker", new DataWalkerItemLists("Equipment"));
 
@@ -173,7 +177,7 @@ public final class V99 {
 
             final MapType<String> tag = data.getMap("tag");
             if (tag == null) {
-                return;
+                return null;
             }
 
             // only things here are in tag, if changed update if above
@@ -241,6 +245,8 @@ public final class V99 {
 
             WalkerUtils.convertList(MCTypeRegistry.BLOCK_NAME, tag, "CanDestroy", fromVersion, toVersion);
             WalkerUtils.convertList(MCTypeRegistry.BLOCK_NAME, tag, "CanPlaceOn", fromVersion, toVersion);
+
+            return null;
         });
 
         MCTypeRegistry.PLAYER.addStructureWalker(VERSION, new DataWalkerItemLists("Inventory", "EnderItems"));
@@ -248,7 +254,7 @@ public final class V99 {
         MCTypeRegistry.CHUNK.addStructureWalker(VERSION, (final MapType<String> data, final long fromVersion, final long toVersion) -> {
             final MapType<String> level = data.getMap("Level");
             if (level == null) {
-                return;
+                return null;
             }
 
             WalkerUtils.convertList(MCTypeRegistry.ENTITY, level, "Entities", fromVersion, toVersion);
@@ -261,10 +267,27 @@ public final class V99 {
                     WalkerUtils.convert(MCTypeRegistry.BLOCK_NAME, tileTick, "i", fromVersion, toVersion);
                 }
             }
+
+            return null;
         });
 
         MCTypeRegistry.ENTITY_CHUNK.addStructureWalker(VERSION, (final MapType<String> data, final long fromVersion, final long toVersion) -> {
             WalkerUtils.convertList(MCTypeRegistry.ENTITY, data, "Entities", fromVersion, toVersion);
+
+            return null;
+        });
+
+        MCTypeRegistry.SAVED_DATA.addStructureWalker(VERSION, (final MapType<String> root, final long fromVersion, final long toVersion) -> {
+            final MapType<String> data = root.getMap("data");
+            if (data == null) {
+                return null;
+            }
+
+            WalkerUtils.convertValues(MCTypeRegistry.STRUCTURE_FEATURE, data, "Features", fromVersion, toVersion);
+            WalkerUtils.convertList(MCTypeRegistry.OBJECTIVE, data, "Objectives", fromVersion, toVersion);
+            WalkerUtils.convertList(MCTypeRegistry.TEAM, data, "Teams", fromVersion, toVersion);
+
+            return null;
         });
 
         // TODO other types

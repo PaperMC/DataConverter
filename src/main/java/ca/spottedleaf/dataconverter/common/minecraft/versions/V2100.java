@@ -1,7 +1,8 @@
 package ca.spottedleaf.dataconverter.common.minecraft.versions;
 
-import ca.spottedleaf.dataconverter.common.converters.DataConverter;
 import ca.spottedleaf.dataconverter.common.minecraft.MCVersions;
+import ca.spottedleaf.dataconverter.common.minecraft.converters.advancements.ConverterAbstractAdvancementsRename;
+import ca.spottedleaf.dataconverter.common.minecraft.converters.recipe.ConverterAbstractRecipeRename;
 import ca.spottedleaf.dataconverter.common.minecraft.datatypes.MCTypeRegistry;
 import ca.spottedleaf.dataconverter.common.minecraft.walkers.generic.WalkerUtils;
 import ca.spottedleaf.dataconverter.common.minecraft.walkers.itemstack.DataWalkerItemLists;
@@ -24,15 +25,10 @@ public final class V2100 {
     }
 
     public static void register() {
-        MCTypeRegistry.RECIPE.addConverter(new DataConverter<>(VERSION) {
-            @Override
-            public Object convert(final Object data, final long sourceVersion, final long toVersion) {
-                if (data instanceof String) {
-                    return RECIPE_RENAMES.get((String)data);
-                }
-                return null;
-            }
-        });
+        ConverterAbstractRecipeRename.register(VERSION, RECIPE_RENAMES::get);
+        ConverterAbstractAdvancementsRename.register(VERSION, ImmutableMap.of(
+                "minecraft:recipes/misc/sugar", "minecraft:recipes/misc/sugar_from_sugar_cane"
+        )::get);
 
         registerMob("minecraft:bee");
         registerMob("minecraft:bee_stinger");
@@ -43,6 +39,8 @@ public final class V2100 {
                     WalkerUtils.convert(MCTypeRegistry.ENTITY, bees.getMap(i), "EntityData", fromVersion, toVersion);
                 }
             }
+
+            return null;
         });
     }
 }

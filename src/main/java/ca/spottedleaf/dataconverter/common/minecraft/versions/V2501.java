@@ -18,6 +18,8 @@ public final class V2501 {
             WalkerUtils.convertList(MCTypeRegistry.ITEM_STACK, data, "Items", fromVersion, toVersion);
 
             WalkerUtils.convertKeys(MCTypeRegistry.RECIPE, data, "RecipesUsed", fromVersion, toVersion);
+
+            return null;
         });
     }
 

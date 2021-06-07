@@ -74,6 +74,8 @@ public final class V106 {
             }
 
             WalkerUtils.convert(MCTypeRegistry.ENTITY, data, "SpawnData", fromVersion, toVersion);
+
+            return null;
         });
     }
 

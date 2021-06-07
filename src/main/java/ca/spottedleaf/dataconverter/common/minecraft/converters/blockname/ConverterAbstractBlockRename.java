@@ -10,14 +10,18 @@ public final class ConverterAbstractBlockRename {
     private ConverterAbstractBlockRename() {}
 
     public static void register(final int version, final Function<String, String> renamer) {
-        MCTypeRegistry.BLOCK_NAME.addConverter(new DataConverter<>(version) {
+        register(version, 0, renamer);
+    }
+
+    public static void register(final int version, final int subVersion, final Function<String, String> renamer) {
+        MCTypeRegistry.BLOCK_NAME.addConverter(new DataConverter<>(version, subVersion) {
             @Override
             public Object convert(final Object data, final long sourceVersion, final long toVersion) {
                 final String ret = (data instanceof String) ? renamer.apply((String)data) : null;
                 return ret == data ? null : ret;
             }
         });
-        MCTypeRegistry.BLOCK_STATE.addStructureConverter(new DataConverter<>(version) {
+        MCTypeRegistry.BLOCK_STATE.addStructureConverter(new DataConverter<>(version, subVersion) {
             @Override
             public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
                 final String name = data.getString("Name");
@@ -33,9 +37,13 @@ public final class ConverterAbstractBlockRename {
     }
 
     public static void registerAndFixJigsaw(final int version, final Function<String, String> renamer) {
-        register(version, renamer);
+        registerAndFixJigsaw(version, 0, renamer);
+    }
+
+    public static void registerAndFixJigsaw(final int version, final int subVersion, final Function<String, String> renamer) {
+        register(version, subVersion, renamer);
         // TODO check on update, minecraft:jigsaw can change
-        MCTypeRegistry.TILE_ENTITY.addConverterForId("minecraft:jigsaw", new DataConverter<>(version) {
+        MCTypeRegistry.TILE_ENTITY.addConverterForId("minecraft:jigsaw", new DataConverter<>(version, subVersion) {
             @Override
             public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
                 final String finalState = data.getString("final_state");

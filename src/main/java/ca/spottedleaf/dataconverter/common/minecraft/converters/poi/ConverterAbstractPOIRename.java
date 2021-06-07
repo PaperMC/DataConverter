@@ -12,7 +12,11 @@ public final class ConverterAbstractPOIRename {
     private ConverterAbstractPOIRename() {}
 
     public static void register(final int version, final Function<String, String> renamer) {
-        MCTypeRegistry.POI_CHUNK.addStructureConverter(new DataConverter<>(version) {
+        register(version, 0, renamer);
+    }
+
+    public static void register(final int version, final int subVersion, final Function<String, String> renamer) {
+        MCTypeRegistry.POI_CHUNK.addStructureConverter(new DataConverter<>(version, subVersion) {
             @Override
             public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
                 final MapType<String> sections = data.getMap("Sections");

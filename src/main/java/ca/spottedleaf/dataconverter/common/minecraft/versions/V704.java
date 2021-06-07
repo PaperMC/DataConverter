@@ -235,7 +235,7 @@ public final class V704 {
 
             final MapType<String> tag = data.getMap("tag");
             if (tag == null) {
-                return;
+                return null;
             }
 
             // only things here are in tag, if changed update if above
@@ -305,6 +305,8 @@ public final class V704 {
 
             WalkerUtils.convertList(MCTypeRegistry.BLOCK_NAME, tag, "CanDestroy", fromVersion, toVersion);
             WalkerUtils.convertList(MCTypeRegistry.BLOCK_NAME, tag, "CanPlaceOn", fromVersion, toVersion);
+
+            return null;
         });
     }
 

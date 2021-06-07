@@ -2,6 +2,7 @@ package ca.spottedleaf.dataconverter.common.minecraft.versions;
 
 import ca.spottedleaf.dataconverter.common.converters.DataConverter;
 import ca.spottedleaf.dataconverter.common.minecraft.MCVersions;
+import ca.spottedleaf.dataconverter.common.minecraft.converters.recipe.ConverterAbstractRecipeRename;
 import ca.spottedleaf.dataconverter.common.minecraft.datatypes.MCTypeRegistry;
 import com.google.common.collect.ImmutableMap;
 import java.util.Map;
@@ -70,14 +71,6 @@ public final class V1502 {
     private V1502() {}
 
     public static void register() {
-        MCTypeRegistry.RECIPE.addConverter(new DataConverter<>(VERSION) {
-            @Override
-            public Object convert(final Object data, final long sourceVersion, final long toVersion) {
-                if (data instanceof String) {
-                    return RECIPES_UPDATES.get((String)data);
-                }
-                return null;
-            }
-        });
+        ConverterAbstractRecipeRename.register(VERSION, RECIPES_UPDATES::get);
     }
 }

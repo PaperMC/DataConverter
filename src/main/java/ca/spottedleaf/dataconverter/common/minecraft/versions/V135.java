@@ -44,10 +44,14 @@ public final class V135 {
             if (rootVehicle != null) {
                 WalkerUtils.convert(MCTypeRegistry.ENTITY, rootVehicle, "Entity", fromVersion, toVersion);
             }
+
+            return null;
         });
 
         MCTypeRegistry.ENTITY.addStructureWalker(VERSION, (final MapType<String> data, final long fromVersion, final long toVersion) -> {
             WalkerUtils.convertList(MCTypeRegistry.ENTITY, data, "Passengers", fromVersion, toVersion);
+
+            return null;
         });
 
     }

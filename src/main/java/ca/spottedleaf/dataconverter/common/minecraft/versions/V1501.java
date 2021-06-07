@@ -2,6 +2,7 @@ package ca.spottedleaf.dataconverter.common.minecraft.versions;
 
 import ca.spottedleaf.dataconverter.common.converters.DataConverter;
 import ca.spottedleaf.dataconverter.common.minecraft.MCVersions;
+import ca.spottedleaf.dataconverter.common.minecraft.converters.advancements.ConverterAbstractAdvancementsRename;
 import ca.spottedleaf.dataconverter.common.minecraft.datatypes.MCTypeRegistry;
 import ca.spottedleaf.dataconverter.common.types.MapType;
 import com.google.common.collect.ImmutableMap;
@@ -73,18 +74,6 @@ public final class V1501 {
     private V1501() {}
 
     public static void register() {
-        MCTypeRegistry.ADVANCEMENTS.addStructureConverter(new DataConverter<>(VERSION) {
-            @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
-                for (final String key : new ArrayList<>(data.keys())) {
-                    final String updated = RENAMES.get(key);
-                    if (updated != null) {
-                        data.setGeneric(updated, data.getGeneric(key));
-                        data.remove(key);
-                    }
-                }
-                return null;
-            }
-        });
+        ConverterAbstractAdvancementsRename.register(VERSION, RENAMES::get);
     }
 }

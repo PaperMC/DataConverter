@@ -8,6 +8,11 @@ import java.util.List;
 public class MCValueType extends DataType<Object, Object> {
 
     protected final ArrayList<DataConverter<Object, Object>> converters = new ArrayList<>();
+    public final String name;
+
+    public MCValueType(final String name) {
+        this.name = name;
+    }
 
     public void addConverter(final DataConverter<Object, Object> converter) {
         this.converters.add(converter);

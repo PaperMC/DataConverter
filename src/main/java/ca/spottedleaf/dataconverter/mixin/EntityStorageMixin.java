@@ -1,4 +1,4 @@
-package ca.spottedleaf.dataconverter.mixin.chunk;
+package ca.spottedleaf.dataconverter.mixin;
 
 import ca.spottedleaf.dataconverter.common.minecraft.MCDataConverter;
 import ca.spottedleaf.dataconverter.common.minecraft.datatypes.MCTypeRegistry;

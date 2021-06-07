@@ -193,6 +193,8 @@ public final class V705 {
 
             WalkerUtils.convertList(MCTypeRegistry.ITEM_STACK, data, "ArmorItems", fromVersion, toVersion);
             WalkerUtils.convertList(MCTypeRegistry.ITEM_STACK, data, "HandItems", fromVersion, toVersion);
+
+            return null;
         });
         registerMob("minecraft:villager_golem");
         registerMob("minecraft:witch");

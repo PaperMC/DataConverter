@@ -88,6 +88,8 @@ public final class V1125 {
             WalkerUtils.convertKeys(MCTypeRegistry.ENTITY_NAME, data.getMap("minecraft:adventure/kill_a_mob"), "criteria", fromVersion, toVersion);
             WalkerUtils.convertKeys(MCTypeRegistry.ENTITY_NAME, data.getMap("minecraft:adventure/kill_all_mobs"), "criteria", fromVersion, toVersion);
             WalkerUtils.convertKeys(MCTypeRegistry.ENTITY_NAME, data.getMap("minecraft:adventure/bred_all_animals"), "criteria", fromVersion, toVersion);
+
+            return null;
         });
     }
 

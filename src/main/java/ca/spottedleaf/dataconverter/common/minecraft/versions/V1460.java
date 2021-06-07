@@ -7,7 +7,6 @@ import ca.spottedleaf.dataconverter.common.minecraft.walkers.block_name.DataWalk
 import ca.spottedleaf.dataconverter.common.minecraft.walkers.itemstack.DataWalkerItemLists;
 import ca.spottedleaf.dataconverter.common.types.MapType;
 import net.minecraft.resources.ResourceLocation;
-
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;

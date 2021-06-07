@@ -516,7 +516,43 @@ public final class V2514 {
             }
         });
 
-        // TODO saved data
+        MCTypeRegistry.SAVED_DATA.addStructureConverter(new DataConverter<>(VERSION) {
+            @Override
+            public MapType<String> convert(final MapType<String> root, final long sourceVersion, final long toVersion) {
+                final MapType<String> data = root.getMap("data");
+                if (data == null) {
+                    return null;
+                }
+
+                final ListType raids = data.getList("Raids", ObjectType.MAP);
+                if (raids == null) {
+                    return null;
+                }
+
+                for (int i = 0, len = raids.size(); i < len; ++i) {
+                    final MapType<String> raid = raids.getMap(i);
+
+                    final ListType heros = raid.getList("HeroesOfTheVillage", ObjectType.MAP);
+
+                    if (heros == null) {
+                        continue;
+                    }
+
+                    final ListType newHeros = Types.NBT.createEmptyList();
+                    raid.setList("HeroesOfTheVillage", newHeros);
+
+                    for (int k = 0, klen = heros.size(); k < klen; ++k) {
+                        final MapType<String> uuidOld = heros.getMap(i);
+                        final int[] uuidNew = createUUIDFromLongs(uuidOld, "UUIDMost", "UUIDLeast");
+                        if (uuidNew != null) {
+                            newHeros.addIntArray(uuidNew);
+                        }
+                    }
+                }
+
+                return null;
+            }
+        });
 
         MCTypeRegistry.ITEM_STACK.addStructureConverter(new DataConverter<>(VERSION) {
             @Override

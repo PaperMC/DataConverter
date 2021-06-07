@@ -27,12 +27,16 @@ public final class V1022 {
                 WalkerUtils.convertList(MCTypeRegistry.RECIPE, recipeBook, "recipes", fromVersion, toVersion);
                 WalkerUtils.convertList(MCTypeRegistry.RECIPE, recipeBook, "toBeDisplayed", fromVersion, toVersion);
             }
+
+            return null;
         });
 
         MCTypeRegistry.HOTBAR.addStructureWalker(VERSION, (final MapType<String> data, final long fromVersion, final long toVersion) -> {
             for (final String key : data.keys()) {
                 WalkerUtils.convertList(MCTypeRegistry.ITEM_STACK, data, key, fromVersion, toVersion);
             }
+
+            return null;
         });
     }
 
