@@ -19,6 +19,7 @@ public class PlayerAdvancementsMixin {
      * Redirects ONLY advancements converters to the new dataconverter system. On update,
      * new types should be included here.
      */
+    /* TODO disabled until Json type is implemented
     @Redirect(
             method = "load",
             at = @At(
@@ -34,4 +35,5 @@ public class PlayerAdvancementsMixin {
 
         return dataFixer.update(type, input, version, newVersion);
     }
+     */
 }
