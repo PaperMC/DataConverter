@@ -104,11 +104,6 @@ public interface ListType {
         throw new IllegalArgumentException("Object " + to + " is not a valid type!");
     }
 
-    /**
-     * Overwrites this list contents with a deep copy of the specified list's contents.
-     */
-    public void set(final ListType to);
-
     // types here are strict. if the type on get does not match the underlying type, will throw.
 
     public Number getNumber(final int index);

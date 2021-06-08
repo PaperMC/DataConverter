@@ -15,7 +15,8 @@ public enum ObjectType {
     LONG_ARRAY(long[].class),
     LIST(ListType.class),
     MAP(MapType.class),
-    STRING(String.class);
+    STRING(String.class),
+    UNDEFINED(null);
 
     private final Class<?> clazz;
     private final boolean isNumber;

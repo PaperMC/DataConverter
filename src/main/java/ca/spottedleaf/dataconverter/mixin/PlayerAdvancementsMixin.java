@@ -2,6 +2,7 @@ package ca.spottedleaf.dataconverter.mixin;
 
 import ca.spottedleaf.dataconverter.common.minecraft.MCDataConverter;
 import ca.spottedleaf.dataconverter.common.minecraft.datatypes.MCTypeRegistry;
+import com.google.gson.JsonObject;
 import com.mojang.datafixers.DSL;
 import com.mojang.datafixers.DataFixer;
 import com.mojang.serialization.Dynamic;
@@ -19,7 +20,6 @@ public class PlayerAdvancementsMixin {
      * Redirects ONLY advancements converters to the new dataconverter system. On update,
      * new types should be included here.
      */
-    /* TODO disabled until Json type is implemented
     @Redirect(
             method = "load",
             at = @At(
@@ -30,10 +30,9 @@ public class PlayerAdvancementsMixin {
     private <T> Dynamic<T> updateAdvancementsData(final DataFixer dataFixer, final DSL.TypeReference type, final Dynamic<T> input,
                                                   final int version, final int newVersion) {
         if (type == References.ADVANCEMENTS) {
-            return new Dynamic<>(input.getOps(), (T)MCDataConverter.convertTag(MCTypeRegistry.ADVANCEMENTS, (CompoundTag)input.getValue(), version, newVersion));
+            return new Dynamic<>(input.getOps(), (T)MCDataConverter.convertJson(MCTypeRegistry.ADVANCEMENTS, (JsonObject)input.getValue(), false, version, newVersion));
         }
 
         return dataFixer.update(type, input, version, newVersion);
     }
-     */
 }

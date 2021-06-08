@@ -39,6 +39,18 @@ public final class NBTMapType implements MapType<String> {
     }
 
     @Override
+    public int hashCode() {
+        return this.map.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "NBTMapType{" +
+                "map=" + this.map +
+                '}';
+    }
+
+    @Override
     public int size() {
         return this.map.size();
     }
@@ -56,18 +68,6 @@ public final class NBTMapType implements MapType<String> {
     @Override
     public Set<String> keys() {
         return this.map.getAllKeys();
-    }
-
-    @Override
-    public int hashCode() {
-        return this.map.hashCode();
-    }
-
-    @Override
-    public String toString() {
-        return "NBTMapType{" +
-                "map=" + this.map +
-                '}';
     }
 
     public CompoundTag getTag() {
@@ -429,23 +429,5 @@ public final class NBTMapType implements MapType<String> {
     @Override
     public void setString(final String key, final String val) {
         this.map.putString(key, val);
-    }
-
-    @Override
-    public void set(final MapType<String> to) {
-        if (to == this) {
-            return;
-        }
-
-        final NBTMapType other = (NBTMapType)to;
-        if (this.map == other.map) {
-            return;
-        }
-
-        this.map.getAllKeys().clear();
-
-        for (final String key : other.map.getAllKeys()) {
-            this.map.put(key, other.map.get(key).copy());
-        }
     }
 }

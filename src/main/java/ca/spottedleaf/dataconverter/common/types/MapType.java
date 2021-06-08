@@ -124,7 +124,8 @@ public interface MapType<K> {
 
     public default ListType getList(final K key, final ObjectType type, final ListType dfl) {
         final ListType ret = this.getListUnchecked(key, null);
-        if (ret != null && ret.getType() == type) {
+        final ObjectType retType;
+        if (ret != null && ((retType = ret.getType()) == type || retType == ObjectType.UNDEFINED)) {
             return ret;
         } else {
             return dfl;
@@ -146,7 +147,9 @@ public interface MapType<K> {
     public void setString(final K key, final String val);
 
     public default void setGeneric(final K key, final Object value) {
-        if (value instanceof Number) {
+        if (value instanceof Boolean) {
+            this.setBoolean(key, ((Boolean)value).booleanValue());
+        } else if (value instanceof Number) {
             if (value instanceof Byte) {
                 this.setByte(key, ((Byte)value).byteValue());
                 return;
@@ -193,9 +196,4 @@ public interface MapType<K> {
 
         throw new IllegalArgumentException("Object " + value + " is not a valid type!");
     }
-
-    /**
-     * Overwrites this map's contents with a deep copy of the specified map's contents.
-     */
-    public void set(final MapType<String> to);
 }

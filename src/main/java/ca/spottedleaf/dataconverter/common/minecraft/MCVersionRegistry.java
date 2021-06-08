@@ -188,8 +188,8 @@ public final class MCVersionRegistry {
         // register breakpoints here
 
         // Too much changed in this version.
-        registerBreakpoint(1451);
-        registerBreakpoint(1451, Integer.MAX_VALUE);
+        registerBreakpoint(MCVersions.V17W47A);
+        registerBreakpoint(MCVersions.V17W47A, Integer.MAX_VALUE);
 
 
     }

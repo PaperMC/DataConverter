@@ -112,22 +112,6 @@ public final class NBTListType implements ListType {
     }
 
     @Override
-    public void set(final ListType to) {
-        if (to == this) {
-            return;
-        }
-        final NBTListType other = (NBTListType)to;
-        if (this.list == other.list) {
-            return;
-        }
-
-        this.list.clear();
-        for (int i = 0, len = to.size(); i < len; ++i) {
-            this.list.add(other.list.get(i));
-        }
-    }
-
-    @Override
     public Number getNumber(final int index) {
         final Tag tag = this.list.get(index); // does bound checking for us
         if (!(tag instanceof NumericTag)) {

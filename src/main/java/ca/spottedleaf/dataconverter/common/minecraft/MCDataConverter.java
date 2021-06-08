@@ -3,7 +3,9 @@ package ca.spottedleaf.dataconverter.common.minecraft;
 import ca.spottedleaf.dataconverter.common.converters.DataConverter;
 import ca.spottedleaf.dataconverter.common.converters.datatypes.DataType;
 import ca.spottedleaf.dataconverter.common.minecraft.datatypes.MCDataType;
+import ca.spottedleaf.dataconverter.common.types.json.JsonMapType;
 import ca.spottedleaf.dataconverter.common.types.nbt.NBTMapType;
+import com.google.gson.JsonObject;
 import it.unimi.dsi.fastutil.longs.LongArrayList;
 import net.minecraft.nbt.CompoundTag;
 
@@ -17,6 +19,14 @@ public final class MCDataConverter {
         final NBTMapType replaced = (NBTMapType)convert(type, wrapped, fromVersion, toVersion);
 
         return replaced == null ? wrapped.getTag() : replaced.getTag();
+    }
+
+    public static JsonObject convertJson(final MCDataType type, final JsonObject data, final boolean compressed, final int fromVersion, final int toVersion) {
+        final JsonMapType wrapped = new JsonMapType(data, compressed);
+
+        final JsonMapType replaced = (JsonMapType)convert(type, wrapped, fromVersion, toVersion);
+
+        return replaced == null ? wrapped.getJson() : replaced.getJson();
     }
 
     public static <T, R> R convert(final DataType<T, R> type, final T data, int fromVersion, final int toVersion) {
