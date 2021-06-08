@@ -892,20 +892,20 @@ public final class ConverterFlattenChunk extends DataConverter<MapType<String>, 
                     return this.value[pos];
                 }
 
-                int insert = this.size;
-                MapType<String> write = k;
+                final int insert = this.size;
+                MapType<String> inPalette = k;
 
                 if ("%%FILTER_ME%%".equals(getName(k))) {
-                    write = AIR;
+                    inPalette = AIR;
                 }
 
                 if (insert >= this.byId.length) {
                     this.byId = Arrays.copyOf(this.byId, this.byId.length * 2);
-                    this.byId[insert] = write;
+                    this.byId[insert] = k;
                 } else {
-                    this.byId[insert] = write;
+                    this.byId[insert] = k;
                 }
-                this.paletteStates.addMap(write);
+                this.paletteStates.addMap(inPalette);
 
                 this.last = k;
 
