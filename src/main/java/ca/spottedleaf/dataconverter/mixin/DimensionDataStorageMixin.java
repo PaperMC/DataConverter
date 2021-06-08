@@ -26,7 +26,7 @@ public abstract class DimensionDataStorageMixin {
             )
     )
     private CompoundTag updateSavedData(final DataFixer dataFixer, final DataFixTypes dataFixTypes, final CompoundTag compoundTag,
-                                                   final int fromVersion, final int toVersion) {
+                                        final int fromVersion, final int toVersion) {
         if (dataFixTypes == DataFixTypes.SAVED_DATA) {
             return MCDataConverter.convertTag(MCTypeRegistry.SAVED_DATA, compoundTag, fromVersion, toVersion);
         }

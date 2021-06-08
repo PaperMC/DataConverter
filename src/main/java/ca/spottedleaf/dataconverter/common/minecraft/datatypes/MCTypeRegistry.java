@@ -92,6 +92,7 @@ import ca.spottedleaf.dataconverter.common.minecraft.versions.V2529;
 import ca.spottedleaf.dataconverter.common.minecraft.versions.V2531;
 import ca.spottedleaf.dataconverter.common.minecraft.versions.V2533;
 import ca.spottedleaf.dataconverter.common.minecraft.versions.V2535;
+import ca.spottedleaf.dataconverter.common.minecraft.versions.V2550;
 import ca.spottedleaf.dataconverter.common.minecraft.versions.V2551;
 import ca.spottedleaf.dataconverter.common.minecraft.versions.V2552;
 import ca.spottedleaf.dataconverter.common.minecraft.versions.V2553;
@@ -227,7 +228,7 @@ public final class MCTypeRegistry {
         V1500.register();
         V1501.register();
         V1502.register();
-        V1506.register(); // TODO this needs some work... level.dat converter
+        V1506.register();
         V1510.register();
         V1514.register();
         V1515.register();
@@ -282,11 +283,11 @@ public final class MCTypeRegistry {
         V2531.register();
         V2533.register();
         V2535.register();
-        // 2550 is world gen settings converter TODO add worldgen setting converters?
+        V2550.register();
         V2551.register();
         V2552.register();
         V2553.register();
-        V2558.register(); // TODO missing world gen settings converter
+        V2558.register();
         V2568.register();
         // V1.17
         // WARN: Mojang registers V2671 under 2571, but that version predates 1.16.5? So it looks like a typo...

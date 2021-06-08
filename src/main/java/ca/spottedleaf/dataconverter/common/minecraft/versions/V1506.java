@@ -4,12 +4,28 @@ import ca.spottedleaf.dataconverter.common.converters.DataConverter;
 import ca.spottedleaf.dataconverter.common.minecraft.MCVersions;
 import ca.spottedleaf.dataconverter.common.minecraft.datatypes.MCTypeRegistry;
 import ca.spottedleaf.dataconverter.common.types.MapType;
+import ca.spottedleaf.dataconverter.common.types.json.JsonMapType;
+import ca.spottedleaf.dataconverter.common.types.json.JsonTypeUtil;
+import ca.spottedleaf.dataconverter.common.types.nbt.NBTMapType;
+import com.google.common.base.Splitter;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.Dynamic;
+import com.mojang.serialization.DynamicOps;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
+import net.minecraft.util.GsonHelper;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public final class V1506 {
 
@@ -94,50 +110,110 @@ public final class V1506 {
 
     private V1506() {}
 
-    // I only keep non-chunk converters around for completion. so im not commenting or mapping this one.
     public static void register() {
         MCTypeRegistry.LEVEL.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
             public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
-                // TODO ahh shit what the fuck to do about generatorOptions
+                final String generatorOptions = data.getString("generatorOptions");
+                final String generatorName = data.getString("generatorName");
+                if ("flat".equalsIgnoreCase(generatorName)) {
+                    data.setMap("generatorOptions", V1506.convert(generatorOptions == null ? "" : generatorOptions));
+                } else if ("buffet".equalsIgnoreCase(generatorName) && generatorOptions != null) {
+                    data.setMap("generatorOptions", JsonTypeUtil.convertJsonToNBT(new JsonMapType(GsonHelper.parse(generatorName, true), false)));
+                }
                 return null;
             }
         });
     }
 
-    private static Pair<Integer, String> getLayerInfoFromString(String string) {
-        String[] strings = string.split("\\*", 2);
-        int j;
-        if (strings.length == 2) {
+    private static MapType<String> convert(final String param0) {
+        final Dynamic<Tag> dynamic = convert(param0, NbtOps.INSTANCE);
+
+        return new NBTMapType((CompoundTag)dynamic.getValue());
+    }
+
+    // Yeah I ain't touching that. This is basically magic value hell.
+    private static <T> Dynamic<T> convert(final String generatorSettings, final DynamicOps<T> ops) {
+        final Iterator<String> splitSettings = Splitter.on(';').split(generatorSettings).iterator();
+        String biome = "minecraft:plains";
+        final Map<String, Map<String, String>> structures = Maps.newHashMap();
+        final List<Pair<Integer, String>> layers;
+        if (!generatorSettings.isEmpty() && splitSettings.hasNext()) {
+            layers = getLayersInfoFromString(splitSettings.next());
+            if (!layers.isEmpty()) {
+                // biome is next
+                if (splitSettings.hasNext()) {
+                    biome = MAP.getOrDefault(splitSettings.next(), "minecraft:plains");
+                }
+
+                // structures is next
+                if (splitSettings.hasNext()) {
+                    final String[] structuresSplit = splitSettings.next().toLowerCase(Locale.ROOT).split(",");
+
+                    for (final String structureString : structuresSplit) {
+                        final String[] structureInfo = structureString.split("\\(", 2);
+                        if (!structureInfo[0].isEmpty()) {
+                            structures.put(structureInfo[0], Maps.newHashMap());
+                            if (structureInfo.length > 1 && structureInfo[1].endsWith(")") && structureInfo[1].length() > 1) {
+                                // I can't even guess the mappings for these. Not worth my time, it will work regardless of the mappings
+                                final String[] var7 = structureInfo[1].substring(0, structureInfo[1].length() - 1).split(" ");
+
+                                for (final String var8 : var7) {
+                                    String[] var9 = var8.split("=", 2);
+                                    if (var9.length == 2) {
+                                        structures.get(structureInfo[0]).put(var9[0], var9[1]);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    structures.put("village", Maps.newHashMap());
+                }
+            }
+        } else {
+            layers = Lists.newArrayList();
+            layers.add(Pair.of(1, "minecraft:bedrock"));
+            layers.add(Pair.of(2, "minecraft:dirt"));
+            layers.add(Pair.of(1, "minecraft:grass_block"));
+            structures.put("village", Maps.newHashMap());
+        }
+
+        final T layerTag = ops.createList(layers.stream().map((param1x) -> ops.createMap(ImmutableMap.of(ops.createString("height"), ops.createInt(param1x.getFirst()), ops.createString("block"), ops.createString(param1x.getSecond())))));
+        final T structuresTag = ops.createMap(structures.entrySet().stream().map((param1x) -> Pair.of(ops.createString(param1x.getKey().toLowerCase(Locale.ROOT)), ops.createMap(param1x.getValue().entrySet().stream().map((param1xx) -> Pair.of(ops.createString(param1xx.getKey()), ops.createString(param1xx.getValue()))).collect(Collectors.toMap(Pair::getFirst, Pair::getSecond))))).collect(Collectors.toMap(Pair::getFirst, Pair::getSecond)));
+        return new Dynamic<>(ops, ops.createMap(ImmutableMap.of(ops.createString("layers"), layerTag, ops.createString("biome"), ops.createString(biome), ops.createString("structures"), structuresTag)));
+    }
+
+    private static Pair<Integer, String> getLayerInfoFromString(final String layerString) {
+        final String[] split = layerString.split("\\*", 2);
+        int layerCount;
+        if (split.length == 2) {
             try {
-                j = Integer.parseInt(strings[0]);
-            } catch (NumberFormatException var4) {
+                layerCount = Integer.parseInt(split[0]);
+            } catch (final NumberFormatException ex) {
                 return null;
             }
         } else {
-            j = 1;
+            layerCount = 1;
         }
 
-        String string2 = strings[strings.length - 1];
-        return Pair.of(j, string2);
+        final String blockName = split[split.length - 1];
+        return Pair.of(layerCount, blockName);
     }
 
-    private static List<Pair<Integer, String>> getLayersInfoFromString(String string) {
-        List<Pair<Integer, String>> list = Lists.newArrayList();
-        String[] strings = string.split(",");
-        String[] var3 = strings;
-        int var4 = strings.length;
+    private static List<Pair<Integer, String>> getLayersInfoFromString(final String layersString) {
+        final List<Pair<Integer, String>> ret = new ArrayList<>();
+        final String[] layers = layersString.split(",");
 
-        for(int var5 = 0; var5 < var4; ++var5) {
-            String string2 = var3[var5];
-            Pair<Integer, String> pair = getLayerInfoFromString(string2);
-            if (pair == null) {
+        for (final String layerString : layers) {
+            final Pair<Integer, String> layer = getLayerInfoFromString(layerString);
+            if (layer == null) {
                 return Collections.emptyList();
             }
 
-            list.add(pair);
+            ret.add(layer);
         }
 
-        return list;
+        return ret;
     }
 }

@@ -6,7 +6,6 @@ import com.google.gson.JsonObject;
 import com.mojang.datafixers.DSL;
 import com.mojang.datafixers.DataFixer;
 import com.mojang.serialization.Dynamic;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.PlayerAdvancements;
 import net.minecraft.util.datafix.fixes.References;
 import org.spongepowered.asm.mixin.Mixin;
@@ -14,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(PlayerAdvancements.class)
-public class PlayerAdvancementsMixin {
+public abstract class PlayerAdvancementsMixin {
 
     /**
      * Redirects ONLY advancements converters to the new dataconverter system. On update,

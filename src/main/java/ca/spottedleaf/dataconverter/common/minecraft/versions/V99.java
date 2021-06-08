@@ -289,8 +289,6 @@ public final class V99 {
 
             return null;
         });
-
-        // TODO other types
     }
 
     protected static String getStringId(final Object id) {
