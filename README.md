@@ -438,6 +438,7 @@ and walkers are registered.
 - Fix logs like `Unable to resolve BlockEntity for ItemStack` - Mojang did not specify the full
   Item name -> Block Entity map. I have code that will ensure the map includes everything.
 - Fix incorrect potion conversion from ancient versions (pre converters). Not sure why DFU breaks here...
+- Tamed wolf collar colours are not managled during the Flattening conversion
 
 ### Known bugs
 This data converter is new. Of course there are going to be bugs. Please take backups before using, 
