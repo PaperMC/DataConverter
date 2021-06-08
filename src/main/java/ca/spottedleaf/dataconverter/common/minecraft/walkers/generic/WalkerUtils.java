@@ -63,7 +63,7 @@ public final class WalkerUtils {
             final Object value = data.getGeneric(i);
             final Object converted = type.convert(value, fromVersion, toVersion);
             if (converted != null) {
-                data.setGeneric(i, value);
+                data.setGeneric(i, converted);
             }
         }
     }

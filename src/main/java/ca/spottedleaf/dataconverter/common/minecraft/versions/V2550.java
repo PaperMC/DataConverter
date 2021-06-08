@@ -128,7 +128,7 @@ public final class V2550 {
                                 biomeSource.setString("biome", biome);
                             }
 
-                            generator = noise(seed,newType, biomeSource);
+                            generator = noise(seed, newType, biomeSource);
                             break;
                         }
 
@@ -314,7 +314,7 @@ public final class V2550 {
         final MapType<String> endBiomeSource = Types.NBT.createEmptyMap();
         endBiomeSource.setString("type", "minecraft:the_end");
         endBiomeSource.setLong("seed", seed);
-        end.setMap("generator", noise(seed,"minecraft:the_end", endBiomeSource));
+        end.setMap("generator", noise(seed,"minecraft:end", endBiomeSource));
 
         return ret;
     }

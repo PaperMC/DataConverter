@@ -9,12 +9,14 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.datafix.fixes.References;
 import net.minecraft.world.level.storage.LevelStorageSource;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(LevelStorageSource.class)
 public abstract class LevelStorageSourceMixin {
 
+    @Unique
     private static <T> Dynamic<T> updateLevel(final DataFixer dataFixer, final DSL.TypeReference type, final Dynamic<T> input,
                                               final int version, final int newVersion) {
         if (type == References.LEVEL) {
@@ -45,7 +47,7 @@ public abstract class LevelStorageSourceMixin {
      * new types should be included here.
      */
     @Redirect(
-            method = "getLevelData",
+            method = "lambda$getLevelData$4",
             at = @At(
                     target = "Lcom/mojang/datafixers/DataFixer;update(Lcom/mojang/datafixers/DSL$TypeReference;Lcom/mojang/serialization/Dynamic;II)Lcom/mojang/serialization/Dynamic;",
                     value = "INVOKE"
@@ -61,7 +63,7 @@ public abstract class LevelStorageSourceMixin {
      * new types should be included here.
      */
     @Redirect(
-            method = "levelSummaryReader",
+            method = "lambda$levelSummaryReader$5",
             at = @At(
                     target = "Lcom/mojang/datafixers/DataFixer;update(Lcom/mojang/datafixers/DSL$TypeReference;Lcom/mojang/serialization/Dynamic;II)Lcom/mojang/serialization/Dynamic;",
                     value = "INVOKE"

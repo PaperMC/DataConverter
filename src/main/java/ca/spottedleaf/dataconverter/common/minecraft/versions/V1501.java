@@ -1,12 +1,8 @@
 package ca.spottedleaf.dataconverter.common.minecraft.versions;
 
-import ca.spottedleaf.dataconverter.common.converters.DataConverter;
 import ca.spottedleaf.dataconverter.common.minecraft.MCVersions;
 import ca.spottedleaf.dataconverter.common.minecraft.converters.advancements.ConverterAbstractAdvancementsRename;
-import ca.spottedleaf.dataconverter.common.minecraft.datatypes.MCTypeRegistry;
-import ca.spottedleaf.dataconverter.common.types.MapType;
 import com.google.common.collect.ImmutableMap;
-import java.util.ArrayList;
 import java.util.Map;
 
 public final class V1501 {

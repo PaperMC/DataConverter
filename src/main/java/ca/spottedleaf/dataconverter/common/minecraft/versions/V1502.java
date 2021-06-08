@@ -1,9 +1,7 @@
 package ca.spottedleaf.dataconverter.common.minecraft.versions;
 
-import ca.spottedleaf.dataconverter.common.converters.DataConverter;
 import ca.spottedleaf.dataconverter.common.minecraft.MCVersions;
 import ca.spottedleaf.dataconverter.common.minecraft.converters.recipe.ConverterAbstractRecipeRename;
-import ca.spottedleaf.dataconverter.common.minecraft.datatypes.MCTypeRegistry;
 import com.google.common.collect.ImmutableMap;
 import java.util.Map;
 
