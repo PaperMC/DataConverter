@@ -170,7 +170,7 @@ public final class MCVersionRegistry {
                 2707,
                 2710,
                 2717
-                // All up to 1.17-rc2
+                // All up to 1.17
         };
         Arrays.sort(converterVersions);
 
@@ -205,8 +205,8 @@ public final class MCVersionRegistry {
                 throw new RuntimeException(ex);
             }
 
-            if (VERSION_NAMES.containsKey(value)) {
-                LOGGER.warn("Error registering version: \"" + name + "\", version number '" + value + "' is already associated with \"" + VERSION_NAMES.get(value) + "\"");
+            if (VERSION_NAMES.containsKey(value) && value != MCVersions.V15W33B) { // Mojang registered 15w33a and 15w33b under the same id.
+                LOGGER.warn("Error registering version \"" + name + "\", version number '" + value + "' is already associated with \"" + VERSION_NAMES.get(value) + "\"");
             }
 
             VERSION_NAMES.put(value, name.substring(1).replace("_PRE", "-PRE").replace("_RC", "-RC").replace('_', '.').toLowerCase(Locale.ROOT));

@@ -356,4 +356,5 @@ public final class MCVersions {
     public static final int V1_17_PRE5            = 2721;
     public static final int V1_17_RC1             = 2722;
     public static final int V1_17_RC2             = 2723;
+    public static final int V1_17                 = 2724;
 }
