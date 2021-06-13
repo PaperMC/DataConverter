@@ -490,7 +490,7 @@ public final class ConverterFlattenChunk extends DataConverter<MapType<String>, 
                     final int z = (tileEntity.getInt("z") - this.blockZ) & 15;
                     final int index = (y << 8) | (z << 4) | x;
                     if (this.tileEntities.put(index, tileEntity) != null) {
-                        LOGGER.warn("In chunk: {}x{} found a duplicate block entity at position: [{}, {}, {}]", this.blockX, this.blockZ, x, y, z);
+                        LOGGER.warn("In chunk: {}x{} found a duplicate block entity at position (ConverterFlattenChunk): [{}, {}, {}]", this.blockX, this.blockZ, x, y, z);
                     }
                 }
             }
@@ -503,12 +503,12 @@ public final class ConverterFlattenChunk extends DataConverter<MapType<String>, 
                     final Section section = new Section(sectionData);
 
                     if (section.y < 0 || section.y > 15) {
-                        LOGGER.warn("In chunk: {}x{} found an invalid chunk section y: {}", this.blockX, this.blockZ, section.y);
+                        LOGGER.warn("In chunk: {}x{} found an invalid chunk section y (ConverterFlattenChunk): {}", this.blockX, this.blockZ, section.y);
                         continue;
                     }
 
                     if (this.sections[section.y] != null) {
-                        LOGGER.warn("In chunk: {}x{} found a duplicate chunk section: {}", this.blockX, this.blockZ, section.y);
+                        LOGGER.warn("In chunk: {}x{} found a duplicate chunk section (ConverterFlattenChunk): {}", this.blockX, this.blockZ, section.y);
                     }
 
                     this.sides = section.upgrade(this.sides);

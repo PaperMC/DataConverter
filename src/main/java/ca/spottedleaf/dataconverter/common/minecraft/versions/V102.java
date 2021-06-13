@@ -44,7 +44,7 @@ public final class V102 {
 
                 String remap = HelperItemNameV102.getNameFromId(id);
                 if (remap == null) {
-                    LOGGER.warn("Unknown legacy id (v102) " + id + " for item " + data);
+                    LOGGER.warn("Unknown legacy integer id (V102) " + id);
                     remap = HelperItemNameV102.getNameFromId(0);
                 }
 

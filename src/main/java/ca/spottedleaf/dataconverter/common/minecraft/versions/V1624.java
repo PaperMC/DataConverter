@@ -68,7 +68,7 @@ public final class V1624 {
 
                         final String id = tile.getString("id");
                         if (!"minecraft:chest".equals(id)) {
-                            LOGGER.warn("Block Entity ({},{},{}) was expected to be a chest", x, y, z);
+                            LOGGER.warn("Block Entity ({},{},{}) was expected to be a chest (V1624)", x, y, z);
                         }
 
                         tile.setString("id", "minecraft:trapped_chest");

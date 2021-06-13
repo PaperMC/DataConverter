@@ -442,7 +442,7 @@ public final class ConverterFlattenItemStack extends DataConverter<MapType<Strin
             if (remap != null) {
                 data.setString("id", remap);
             } else {
-                LOGGER.warn("Item " + data + " requires flattening but found no mapping for it!");
+                LOGGER.warn("Item '" + id + "' requires flattening but found no mapping for it! (ConverterFlattenItemStack)");
             }
         } else if (damage != 0 && ITEMS_WITH_DAMAGE.contains(id)) {
             // migrate damage

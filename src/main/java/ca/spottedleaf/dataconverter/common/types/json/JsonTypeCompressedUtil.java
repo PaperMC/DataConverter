@@ -4,7 +4,7 @@ import ca.spottedleaf.dataconverter.common.types.ListType;
 import ca.spottedleaf.dataconverter.common.types.MapType;
 import ca.spottedleaf.dataconverter.common.types.TypeUtil;
 
-public class JsonTypeCompressedUtil implements TypeUtil {
+public final class JsonTypeCompressedUtil implements TypeUtil {
 
     @Override
     public ListType createEmptyList() {

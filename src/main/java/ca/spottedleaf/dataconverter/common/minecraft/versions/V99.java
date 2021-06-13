@@ -201,7 +201,7 @@ public final class V99 {
 
                 final boolean removeId;
                 if (entityId == null) {
-                    LOGGER.warn("Unable to resolve Entity for ItemStack: " + data);
+                    LOGGER.warn("Unable to resolve Entity for ItemStack (V99): " + itemId);
                     removeId = false;
                 } else {
                     removeId = !entityTag.hasKey("id", ObjectType.STRING);
@@ -227,7 +227,7 @@ public final class V99 {
                 final String entityId = ITEM_ID_TO_TILE_ENTITY_ID.get(itemId);
                 final boolean removeId;
                 if (entityId == null) {
-                    LOGGER.warn("Unable to resolve BlockEntity for ItemStack: " + data);
+                    LOGGER.warn("Unable to resolve BlockEntity for ItemStack (V99): " + itemId);
                     removeId = false;
                 } else {
                     removeId = !blockEntityTag.hasKey("id", ObjectType.STRING);

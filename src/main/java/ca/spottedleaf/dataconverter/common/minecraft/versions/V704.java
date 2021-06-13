@@ -28,7 +28,8 @@ public final class V704 {
         @Override
         public String put(final String key, final String value) {
             if (this.containsKey(key)) {
-                LOGGER.fatal("Duplicate item id to tile key: " + key, new Throwable());
+                LOGGER.fatal("Duplicate item id to tile key: " + key);
+                throw new RuntimeException(); // only devs should see the consequence of this... at least start up the damn thing...
             }
             return super.put(key, value);
         }
@@ -168,7 +169,7 @@ public final class V704 {
 
             final String itemName = Registry.ITEM.getKey(item).toString();
             if (!ITEM_ID_TO_TILE_ENTITY_ID.containsKey(itemName)) {
-                LOGGER.error("Item id " + itemName + " does not contain tile mapping!");
+                LOGGER.error("Item id " + itemName + " does not contain tile mapping! (V704)");
             }
         }
     }
@@ -259,7 +260,7 @@ public final class V704 {
 
                 final boolean removeId;
                 if (entityId == null) {
-                    LOGGER.warn("Unable to resolve Entity for ItemStack: " + data);
+                    LOGGER.warn("Unable to resolve Entity for ItemStack (V704): " + itemId);
                     removeId = false;
                 } else {
                     removeId = !entityTag.hasKey("id", ObjectType.STRING);
@@ -285,7 +286,7 @@ public final class V704 {
                 final String entityId = ITEM_ID_TO_TILE_ENTITY_ID.get(itemId);
                 final boolean removeId;
                 if (entityId == null) {
-                    LOGGER.warn("Unable to resolve BlockEntity for ItemStack: " + data);
+                    LOGGER.warn("Unable to resolve BlockEntity for ItemStack (V704): " + itemId);
                     removeId = false;
                 } else {
                     removeId = !blockEntityTag.hasKey("id", ObjectType.STRING);

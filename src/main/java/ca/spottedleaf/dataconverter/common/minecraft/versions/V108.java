@@ -30,7 +30,7 @@ public final class V108 {
                 try {
                     uuid = UUID.fromString(uuidString);
                 } catch (final Exception ex) {
-                    LOGGER.warn("Failed to parse UUID for legacy entity (V108): " + data, ex);
+                    LOGGER.warn("Failed to parse UUID for legacy entity (V108): " + uuidString, ex);
                     return null;
                 }
 
