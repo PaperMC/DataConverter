@@ -259,7 +259,7 @@ public final class V704 {
                 }
 
                 final boolean removeId;
-                if (entityId == null) {
+                if (entityId == null && !"minecraft:air".equals(itemId)) {
                     LOGGER.warn("Unable to resolve Entity for ItemStack (V704): " + itemId);
                     removeId = false;
                 } else {
@@ -285,7 +285,7 @@ public final class V704 {
                 final String itemId = data.getString("id");
                 final String entityId = ITEM_ID_TO_TILE_ENTITY_ID.get(itemId);
                 final boolean removeId;
-                if (entityId == null) {
+                if (entityId == null && "minecraft:air".equals(itemId)) {
                     LOGGER.warn("Unable to resolve BlockEntity for ItemStack (V704): " + itemId);
                     removeId = false;
                 } else {
