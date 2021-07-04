@@ -179,7 +179,7 @@ public final class V1451 {
                 return null;
             }
         });
-        MCTypeRegistry.LEVEL.addStructureConverter(new DataConverter<>(VERSION) {
+        MCTypeRegistry.LEVEL.addStructureConverter(new DataConverter<>(VERSION, 5) {
             private final Splitter SPLITTER = Splitter.on(';').limit(5);
             private final Splitter LAYER_SPLITTER = Splitter.on(',');
             private final Splitter OLD_AMOUNT_SPLITTER = Splitter.on('x').limit(2);

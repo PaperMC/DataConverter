@@ -254,6 +254,15 @@ public final class V704 {
                     // DFU agrees with my analysis here, it will only set the entityId here to the namespaced variant
                     // with the V705 schema.
                     entityId = DataConverter.getVersion(fromVersion) < 705 ? "ArmorStand" : "minecraft:armor_stand";
+                } else if (itemId != null && itemId.contains("_spawn_egg")) {
+                    // V1451 changes spawn eggs to have the sub entity id be a part of the item id, but of course Mojang never
+                    // bothered to write in logic to set the sub entity id, so we have to.
+                    // format is ALWAYS <namespace>:<id>_spawn_egg post flattening
+                    entityId = itemId.substring(0, itemId.indexOf("_spawn_egg"));
+                } else if ("minecraft:item_frame".equals(itemId)) {
+                    // add missing item_frame entity id
+                    // version check is same for armorstand, as both were namespaced at the same time
+                    entityId = DataConverter.getVersion(fromVersion) < 705 ? "ItemFrame" : "minecraft:item_frame";
                 } else {
                     entityId = entityTag.getString("id");
                 }

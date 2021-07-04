@@ -195,6 +195,9 @@ public final class V99 {
                     // DFU agrees with my analysis here, it will only set the entityId here to the namespaced variant
                     // with the V705 schema.
                     entityId = "ArmorStand";
+                } else if ("minecraft:item_frame".equals(itemId)) {
+                    // add missing item_frame entity id
+                    entityId = "ItemFrame";
                 } else {
                     entityId = entityTag.getString("id");
                 }
