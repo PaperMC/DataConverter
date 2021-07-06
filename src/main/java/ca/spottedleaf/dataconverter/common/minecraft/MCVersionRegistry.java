@@ -170,7 +170,7 @@ public final class MCVersionRegistry {
                 2707,
                 2710,
                 2717
-                // All up to 1.17
+                // All up to 1.17.1
         };
         Arrays.sort(converterVersions);
 
