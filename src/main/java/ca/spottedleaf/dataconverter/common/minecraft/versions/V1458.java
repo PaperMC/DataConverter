@@ -12,6 +12,21 @@ public final class V1458 {
 
     protected static final int VERSION = MCVersions.V17W50A + 1;
 
+    public static MapType<String> updateCustomName(final MapType<String> data) {
+        final String customName = data.getString("CustomName");
+        if (customName == null) {
+            return null;
+        }
+
+        if (customName.isEmpty()) {
+            data.remove("CustomName");
+        } else {
+            data.setString("CustomName", Component.Serializer.toJson(new TextComponent(customName)));
+        }
+
+        return null;
+    }
+
     public static void register() {
         MCTypeRegistry.ENTITY.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
@@ -20,18 +35,13 @@ public final class V1458 {
                     return null;
                 }
 
-                final String customName = data.getString("CustomName");
-                if (customName == null) {
-                    return null;
-                }
-
-                if (customName.isEmpty()) {
-                    data.remove("CustomName");
-                } else {
-                    data.setString("CustomName", Component.Serializer.toJson(new TextComponent(customName)));
-                }
-
-                return null;
+                return updateCustomName(data);
+            }
+        });
+        MCTypeRegistry.PLAYER.addStructureConverter(new DataConverter<>(VERSION) {
+            @Override
+            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+                return updateCustomName(data);
             }
         });
 
@@ -70,18 +80,7 @@ public final class V1458 {
                     return null;
                 }
 
-                final String customName = data.getString("CustomName");
-                if (customName == null) {
-                    return null;
-                }
-
-                if (customName.isEmpty()) {
-                    data.remove("CustomName");
-                } else {
-                    data.setString("CustomName", Component.Serializer.toJson(new TextComponent(customName)));
-                }
-
-                return null;
+                return updateCustomName(data);
             }
         });
 

@@ -259,7 +259,7 @@ public final class HelperItemNameV102 {
         ITEM_NAMES.put(347, "minecraft:clock");
         ITEM_NAMES.put(348, "minecraft:glowstone_dust");
         ITEM_NAMES.put(349, "minecraft:fish");
-        ITEM_NAMES.put(350, "minecraft:cooked_fished");
+        ITEM_NAMES.put(350, "minecraft:cooked_fish"); // Fix typo, the game never recognized cooked_fished
         ITEM_NAMES.put(351, "minecraft:dye");
         ITEM_NAMES.put(352, "minecraft:bone");
         ITEM_NAMES.put(353, "minecraft:sugar");
