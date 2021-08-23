@@ -47,7 +47,7 @@ public final class V1466 {
                 }
 
                 final boolean terrainPopulated = level.getBoolean("TerrainPopulated");
-                final boolean lightPopulated = level.getBoolean("LightPopulated") || level.getNumber("LightPopulated") != null;
+                final boolean lightPopulated = level.getBoolean("LightPopulated") || level.getNumber("LightPopulated") == null;
                 final String newStatus = !terrainPopulated ? "carved" : (lightPopulated ? "mobs_spawned" : "decorated");
 
                 level.setString("Status", newStatus);
