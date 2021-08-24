@@ -1,7 +1,7 @@
 package ca.spottedleaf.dataconverter.mixin;
 
-import ca.spottedleaf.dataconverter.common.minecraft.MCDataConverter;
-import ca.spottedleaf.dataconverter.common.minecraft.datatypes.MCTypeRegistry;
+import ca.spottedleaf.dataconverter.minecraft.MCDataConverter;
+import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
 import com.mojang.datafixers.DataFixer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
