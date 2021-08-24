@@ -2,7 +2,6 @@ package ca.spottedleaf.dataconverter.common.minecraft.versions;
 
 import ca.spottedleaf.dataconverter.common.converters.DataConverter;
 import ca.spottedleaf.dataconverter.common.converters.datatypes.DataHook;
-import ca.spottedleaf.dataconverter.common.converters.datatypes.DataWalker;
 import ca.spottedleaf.dataconverter.common.minecraft.MCVersions;
 import ca.spottedleaf.dataconverter.common.minecraft.converters.chunk.ConverterFlattenChunk;
 import ca.spottedleaf.dataconverter.common.minecraft.converters.helpers.HelperBlockFlatteningV1450;
@@ -10,7 +9,7 @@ import ca.spottedleaf.dataconverter.common.minecraft.converters.helpers.HelperIt
 import ca.spottedleaf.dataconverter.common.minecraft.converters.itemstack.ConverterFlattenItemStack;
 import ca.spottedleaf.dataconverter.common.minecraft.converters.itemstack.ConverterFlattenSpawnEgg;
 import ca.spottedleaf.dataconverter.common.minecraft.converters.stats.ConverterFlattenStats;
-import ca.spottedleaf.dataconverter.common.minecraft.converters.tileentity.ConverterFlattenTileEntity;
+import ca.spottedleaf.dataconverter.common.minecraft.converters.entity.ConverterFlattenEntity;
 import ca.spottedleaf.dataconverter.common.minecraft.datatypes.MCTypeRegistry;
 import ca.spottedleaf.dataconverter.common.minecraft.walkers.generic.DataWalkerTypePaths;
 import ca.spottedleaf.dataconverter.common.minecraft.walkers.itemstack.DataWalkerItemLists;
@@ -90,7 +89,7 @@ public final class V1451 {
         MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, 2, "minecraft:piston", new DataWalkerTypePaths<>(MCTypeRegistry.BLOCK_STATE, "blockState"));
 
         // V3
-        ConverterFlattenTileEntity.register();
+        ConverterFlattenEntity.register();
         MCTypeRegistry.ITEM_STACK.addConverterForId("minecraft:filled_map", new DataConverter<>(VERSION, 3) {
             @Override
             public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
@@ -123,7 +122,10 @@ public final class V1451 {
         MCTypeRegistry.ENTITY.addWalker(VERSION, 3, "minecraft:hopper_minecart", new DataWalkerItemLists("Items"));
         MCTypeRegistry.ENTITY.addWalker(VERSION, 3, "minecraft:minecart", new DataWalkerTypePaths<>(MCTypeRegistry.BLOCK_STATE, "DisplayState"));
         MCTypeRegistry.ENTITY.addWalker(VERSION, 3, "minecraft:spawner_minecart", new DataWalkerTypePaths<>(MCTypeRegistry.BLOCK_STATE, "DisplayState"));
-        MCTypeRegistry.ENTITY.addWalker(VERSION, 3, "minecraft:spawner_minecart", MCTypeRegistry.UNTAGGED_SPAWNER::convert);
+        MCTypeRegistry.ENTITY.addWalker(VERSION, 3, "minecraft:spawner_minecart", (final MapType<String> data, final long fromVersion, final long toVersion) -> {
+            MCTypeRegistry.UNTAGGED_SPAWNER.convert(data, fromVersion, toVersion);
+            return null;
+        });
         MCTypeRegistry.ENTITY.addWalker(VERSION, 3, "minecraft:tnt_minecart", new DataWalkerTypePaths<>(MCTypeRegistry.BLOCK_STATE, "DisplayState"));
 
         // V4
@@ -133,7 +135,7 @@ public final class V1451 {
                 if (data instanceof Number) {
                     return HelperBlockFlatteningV1450.getNameForId(((Number)data).intValue());
                 } else if (data instanceof String) {
-                    return HelperBlockFlatteningV1450.getNewBlockName(NamespacedSchema.ensureNamespaced((String)data));
+                    return HelperBlockFlatteningV1450.getNewBlockName((String)data); // structure hook ensured data is namespaced
                 }
                 return null;
             }
@@ -273,10 +275,10 @@ public final class V1451 {
                 }
 
                 final MapType<String> recordItem = Types.NBT.createEmptyMap();
+                data.setMap("RecordItem", recordItem);
+
                 recordItem.setString("id", newItemId);
                 recordItem.setByte("Count", (byte)1);
-
-                data.setMap("RecordItem", recordItem);
 
                 return null;
             }
@@ -416,7 +418,7 @@ public final class V1451 {
 
         // V7
         MCTypeRegistry.STRUCTURE_FEATURE.addStructureConverter(new DataConverter<>(VERSION, 7) {
-            private void convertToBlockState(final MapType<String> data, final String path) {
+            private static void convertToBlockState(final MapType<String> data, final String path) {
                 final Number number = data.getNumber(path);
                 if (number == null) {
                     return;
@@ -439,14 +441,14 @@ public final class V1451 {
 
                     switch (id) {
                         case "ViF":
-                            this.convertToBlockState(child, "CA");
-                            this.convertToBlockState(child, "CB");
+                            convertToBlockState(child, "CA");
+                            convertToBlockState(child, "CB");
                             break;
                         case "ViDF":
-                            this.convertToBlockState(child, "CA");
-                            this.convertToBlockState(child, "CB");
-                            this.convertToBlockState(child, "CC");
-                            this.convertToBlockState(child, "CD");
+                            convertToBlockState(child, "CA");
+                            convertToBlockState(child, "CB");
+                            convertToBlockState(child, "CC");
+                            convertToBlockState(child, "CD");
                             break;
                     }
                 }
@@ -457,7 +459,7 @@ public final class V1451 {
 
         // convert villagers to trade with pumpkins and not the carved pumpkin
         MCTypeRegistry.ENTITY.addConverterForId("minecraft:villager", new DataConverter<>(VERSION, 7) {
-            private void convertPumpkin(final MapType<String> data, final String path) {
+            private static void convertPumpkin(final MapType<String> data, final String path) {
                 final MapType<String> item = data.getMap(path);
                 if (item == null) {
                     return;
@@ -479,9 +481,9 @@ public final class V1451 {
                         for (int i = 0, len = recipes.size(); i < len; ++i) {
                             final MapType<String> recipe = recipes.getMap(i);
 
-                            this.convertPumpkin(recipe, "buy");
-                            this.convertPumpkin(recipe, "buyB");
-                            this.convertPumpkin(recipe, "sell");
+                            convertPumpkin(recipe, "buy");
+                            convertPumpkin(recipe, "buyB");
+                            convertPumpkin(recipe, "sell");
                         }
                     }
                 }

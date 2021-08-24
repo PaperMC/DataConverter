@@ -14,54 +14,55 @@ public final class V101 {
 
     protected static final int VERSION = MCVersions.V15W32A + 1;
 
-    public static void register() {
-        MCTypeRegistry.TILE_ENTITY.addConverterForId("Sign", new DataConverter<MapType<String>, MapType<String>>(VERSION) {
-            protected void updateLine(final MapType<String> data, final String path) {
-                final String textString = data.getString(path);
-                if (textString == null || textString.isEmpty() || "null".equals(textString)) {
-                    data.setString(path, Component.Serializer.toJson(TextComponent.EMPTY));
-                    return;
+    protected static void updateLine(final MapType<String> data, final String path) {
+        final String textString = data.getString(path);
+        if (textString == null || textString.isEmpty() || "null".equals(textString)) {
+            data.setString(path, Component.Serializer.toJson(TextComponent.EMPTY));
+            return;
+        }
+
+        Component component = null;
+
+        if (textString.charAt(0) == '"' && textString.charAt(textString.length() - 1) == '"'
+                || textString.charAt(0) == '{' && textString.charAt(textString.length() - 1) == '}') {
+            try {
+                component = GsonHelper.fromJson(BlockEntitySignTextStrictJsonFix.GSON, textString, Component.class, true);
+                if (component == null) {
+                    component = TextComponent.EMPTY;
                 }
+            } catch (final JsonParseException ignored) {}
 
-                Component component = null;
-
-                if (textString.charAt(0) == '"' && textString.charAt(textString.length() - 1) == '"'
-                        || textString.charAt(0) == '{' && textString.charAt(textString.length() - 1) == '}') {
-                    try {
-                        component = GsonHelper.fromJson(BlockEntitySignTextStrictJsonFix.GSON, textString, Component.class, true);
-                        if (component == null) {
-                            component = TextComponent.EMPTY;
-                        }
-                    } catch (final JsonParseException ignored) {}
-
-                    if (component == null) {
-                        try {
-                            component = Component.Serializer.fromJson(textString);
-                        } catch (final JsonParseException ignored) {}
-                    }
-
-                    if (component == null) {
-                        try {
-                            component = Component.Serializer.fromJsonLenient(textString);
-                        } catch (final JsonParseException ignored) {}
-                    }
-
-                    if (component == null) {
-                        component = new TextComponent(textString);
-                    }
-                } else {
-                    component = new TextComponent(textString);
-                }
-
-                data.setString(path, Component.Serializer.toJson(component));
+            if (component == null) {
+                try {
+                    component = Component.Serializer.fromJson(textString);
+                } catch (final JsonParseException ignored) {}
             }
+
+            if (component == null) {
+                try {
+                    component = Component.Serializer.fromJsonLenient(textString);
+                } catch (final JsonParseException ignored) {}
+            }
+
+            if (component == null) {
+                component = new TextComponent(textString);
+            }
+        } else {
+            component = new TextComponent(textString);
+        }
+
+        data.setString(path, Component.Serializer.toJson(component));
+    }
+
+    public static void register() {
+        MCTypeRegistry.TILE_ENTITY.addConverterForId("Sign", new DataConverter<>(VERSION) {
 
             @Override
             public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
-                this.updateLine(data, "Text1");
-                this.updateLine(data, "Text2");
-                this.updateLine(data, "Text3");
-                this.updateLine(data, "Text4");
+                updateLine(data, "Text1");
+                updateLine(data, "Text2");
+                updateLine(data, "Text3");
+                updateLine(data, "Text4");
                 return null;
             }
         });

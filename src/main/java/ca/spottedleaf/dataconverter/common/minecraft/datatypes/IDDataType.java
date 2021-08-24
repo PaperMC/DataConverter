@@ -85,7 +85,7 @@ public class IDDataType extends MCDataType {
                 break;
             }
 
-            final List<DataHook<String>> hooks = this.structureHooks.getFloor(converterVersion);
+            final List<DataHook<MapType<String>, MapType<String>>> hooks = this.structureHooks.getFloor(converterVersion);
 
             if (hooks != null) {
                 for (int k = 0, klen = hooks.size(); k < klen; ++k) {
@@ -111,7 +111,7 @@ public class IDDataType extends MCDataType {
             }
         }
 
-        final List<DataHook<String>> hooks = this.structureHooks.getFloor(toVersion);
+        final List<DataHook<MapType<String>, MapType<String>>> hooks = this.structureHooks.getFloor(toVersion);
 
         // run pre hooks
 

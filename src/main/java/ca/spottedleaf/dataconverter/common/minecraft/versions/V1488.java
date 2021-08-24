@@ -16,6 +16,10 @@ public final class V1488 {
 
     protected static final int VERSION = MCVersions.V18W19B + 3;
 
+    protected static boolean isIglooPiece(final MapType<String> piece) {
+        return "Iglu".equals(piece.getString("id"));
+    }
+
     public static void register() {
         ConverterAbstractBlockRename.register(VERSION, ImmutableMap.of(
                 "minecraft:kelp_top", "minecraft:kelp",
@@ -31,36 +35,14 @@ public final class V1488 {
         MCTypeRegistry.TILE_ENTITY.addConverterForId("minecraft:command_block", new DataConverter<>(VERSION) {
             @Override
             public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
-                final String customName = data.getString("CustomName");
-                if (customName == null) {
-                    return null;
-                }
-
-                if (customName.isEmpty()) {
-                    data.remove("CustomName");
-                } else {
-                    data.setString("CustomName", Component.Serializer.toJson(new TextComponent(customName)));
-                }
-
-                return null;
+                return V1458.updateCustomName(data);
             }
         });
 
         MCTypeRegistry.ENTITY.addConverterForId("minecraft:commandblock_minecart", new DataConverter<>(VERSION) {
             @Override
             public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
-                final String customName = data.getString("CustomName");
-                if (customName == null) {
-                    return null;
-                }
-
-                if (customName.isEmpty()) {
-                    data.remove("CustomName");
-                } else {
-                    data.setString("CustomName", Component.Serializer.toJson(new TextComponent(customName)));
-                }
-
-                return null;
+                return V1458.updateCustomName(data);
             }
         });
 
@@ -101,10 +83,6 @@ public final class V1488 {
                 return null;
             }
         });
-    }
-
-    private static boolean isIglooPiece(final MapType<String> piece) {
-        return "Iglu".equals(piece.getString("id"));
     }
 
     private V1488() {}

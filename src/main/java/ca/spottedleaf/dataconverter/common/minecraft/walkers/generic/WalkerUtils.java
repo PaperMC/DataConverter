@@ -5,7 +5,6 @@ import ca.spottedleaf.dataconverter.common.minecraft.datatypes.MCValueType;
 import ca.spottedleaf.dataconverter.common.types.ObjectType;
 import ca.spottedleaf.dataconverter.common.types.ListType;
 import ca.spottedleaf.dataconverter.common.types.MapType;
-
 import java.util.ArrayList;
 
 public final class WalkerUtils {

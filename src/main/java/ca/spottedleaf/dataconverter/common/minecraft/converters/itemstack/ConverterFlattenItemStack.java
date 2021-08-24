@@ -444,7 +444,9 @@ public final class ConverterFlattenItemStack extends DataConverter<MapType<Strin
             } else {
                 LOGGER.warn("Item '" + id + "' requires flattening but found no mapping for it! (ConverterFlattenItemStack)");
             }
-        } else if (damage != 0 && ITEMS_WITH_DAMAGE.contains(id)) {
+        }
+
+        if (damage != 0 && ITEMS_WITH_DAMAGE.contains(id)) {
             // migrate damage
             MapType<String> tag = data.getMap("tag");
             if (tag == null) {

@@ -3,6 +3,7 @@ package ca.spottedleaf.dataconverter.common.minecraft.versions;
 import ca.spottedleaf.dataconverter.common.converters.DataConverter;
 import ca.spottedleaf.dataconverter.common.minecraft.MCVersions;
 import ca.spottedleaf.dataconverter.common.minecraft.datatypes.MCTypeRegistry;
+import ca.spottedleaf.dataconverter.common.minecraft.hooks.DataHookEnforceNamespacedID;
 import ca.spottedleaf.dataconverter.common.minecraft.walkers.block_name.DataWalkerBlockNames;
 import ca.spottedleaf.dataconverter.common.minecraft.walkers.itemstack.DataWalkerItemLists;
 import ca.spottedleaf.dataconverter.common.minecraft.walkers.itemstack.DataWalkerItems;

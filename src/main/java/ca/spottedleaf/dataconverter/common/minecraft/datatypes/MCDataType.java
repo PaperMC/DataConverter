@@ -4,6 +4,7 @@ import ca.spottedleaf.dataconverter.common.converters.DataConverter;
 import ca.spottedleaf.dataconverter.common.converters.datatypes.DataHook;
 import ca.spottedleaf.dataconverter.common.converters.datatypes.DataType;
 import ca.spottedleaf.dataconverter.common.converters.datatypes.DataWalker;
+import ca.spottedleaf.dataconverter.common.minecraft.MCVersionRegistry;
 import ca.spottedleaf.dataconverter.common.types.MapType;
 import ca.spottedleaf.dataconverter.common.util.Long2ObjectArraySortedMap;
 import java.util.ArrayList;
@@ -15,13 +16,14 @@ public class MCDataType extends DataType<MapType<String>, MapType<String>> {
 
     protected final ArrayList<DataConverter<MapType<String>, MapType<String>>> structureConverters = new ArrayList<>();
     protected final Long2ObjectArraySortedMap<List<DataWalker<String>>> structureWalkers = new Long2ObjectArraySortedMap<>();
-    protected final Long2ObjectArraySortedMap<List<DataHook<String>>> structureHooks = new Long2ObjectArraySortedMap<>();
+    protected final Long2ObjectArraySortedMap<List<DataHook<MapType<String>, MapType<String>>>> structureHooks = new Long2ObjectArraySortedMap<>();
 
     public MCDataType(final String name) {
         this.name = name;
     }
 
     public void addStructureConverter(final DataConverter<MapType<String>, MapType<String>> converter) {
+        MCVersionRegistry.checkVersion(converter.getEncodedVersion());
         this.structureConverters.add(converter);
         this.structureConverters.sort(DataConverter.LOWEST_VERSION_COMPARATOR);
     }
@@ -36,11 +38,11 @@ public class MCDataType extends DataType<MapType<String>, MapType<String>> {
         }).add(walker);
     }
 
-    public void addStructureHook(final int minVersion, final DataHook<String> hook) {
+    public void addStructureHook(final int minVersion, final DataHook<MapType<String>, MapType<String>> hook) {
         this.addStructureHook(minVersion, 0, hook);
     }
 
-    public void addStructureHook(final int minVersion, final int versionStep, final DataHook<String> hook) {
+    public void addStructureHook(final int minVersion, final int versionStep, final DataHook<MapType<String>, MapType<String>> hook) {
         this.structureHooks.computeIfAbsent(DataConverter.encodeVersions(minVersion, versionStep), (final long keyInMap) -> {
             return new ArrayList<>();
         }).add(hook);
@@ -63,7 +65,7 @@ public class MCDataType extends DataType<MapType<String>, MapType<String>> {
                 break;
             }
 
-            final List<DataHook<String>> hooks = this.structureHooks.getFloor(converterVersion);
+            final List<DataHook<MapType<String>, MapType<String>>> hooks = this.structureHooks.getFloor(converterVersion);
 
             if (hooks != null) {
                 for (int k = 0, klen = hooks.size(); k < klen; ++k) {
@@ -89,7 +91,7 @@ public class MCDataType extends DataType<MapType<String>, MapType<String>> {
             }
         }
 
-        final List<DataHook<String>> hooks = this.structureHooks.getFloor(toVersion);
+        final List<DataHook<MapType<String>, MapType<String>>> hooks = this.structureHooks.getFloor(toVersion);
 
         if (hooks != null) {
             for (int k = 0, klen = hooks.size(); k < klen; ++k) {

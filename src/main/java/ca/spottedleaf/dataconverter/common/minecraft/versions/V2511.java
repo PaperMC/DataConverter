@@ -23,7 +23,7 @@ public final class V2511 {
     }
 
     private static void setUUID(final MapType<String> data, final long most, final long least) {
-        if (most != 0 && least != 0) {
+        if (most != 0L && least != 0L) {
             data.setInts("OwnerUUID", createUUIDArray(most, least));
         }
     }

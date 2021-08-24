@@ -3,6 +3,7 @@ package ca.spottedleaf.dataconverter.common.minecraft.versions;
 import ca.spottedleaf.dataconverter.common.converters.DataConverter;
 import ca.spottedleaf.dataconverter.common.minecraft.MCVersions;
 import ca.spottedleaf.dataconverter.common.minecraft.datatypes.MCTypeRegistry;
+import ca.spottedleaf.dataconverter.common.minecraft.hooks.DataHookEnforceNamespacedID;
 import ca.spottedleaf.dataconverter.common.minecraft.walkers.itemstack.DataWalkerItemLists;
 import ca.spottedleaf.dataconverter.common.minecraft.walkers.item_name.DataWalkerItemNames;
 import ca.spottedleaf.dataconverter.common.minecraft.walkers.itemstack.DataWalkerItems;
@@ -226,7 +227,10 @@ public final class V704 {
         MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, "minecraft:jukebox", new DataWalkerItems("RecordItem"));
         registerInventory("minecraft:dispenser");
         registerInventory("minecraft:dropper");
-        MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, "minecraft:mob_spawner", MCTypeRegistry.UNTAGGED_SPAWNER::convert);
+        MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, "minecraft:mob_spawner", (final MapType<String> data, final long fromVersion, final long toVersion) -> {
+            MCTypeRegistry.UNTAGGED_SPAWNER.convert(data, fromVersion, toVersion);
+            return null;
+        });
         registerInventory("minecraft:brewing_stand");
         registerInventory("minecraft:hopper");
         MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, "minecraft:flower_pot", new DataWalkerItemNames("Item"));
@@ -322,6 +326,9 @@ public final class V704 {
 
             return null;
         });
+
+        // Enforce namespace for ids
+        MCTypeRegistry.TILE_ENTITY.addStructureHook(VERSION, new DataHookEnforceNamespacedID());
     }
 
     private V704() {}

@@ -136,7 +136,7 @@ public final class V1492 {
                 for (int i = 0, len = children.size(); i < len; ++i) {
                     final MapType<String> child = children.getMap(i);
 
-                    if (!renames.getFirst().equals(child.getString("id"))) {
+                    if (renames.getFirst().equals(child.getString("id"))) {
                         final String template = child.getString("Template", "");
                         child.setString("Template", renames.getSecond().getOrDefault(template, template));
                     }

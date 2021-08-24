@@ -3,6 +3,8 @@ package ca.spottedleaf.dataconverter.common.minecraft.versions;
 import ca.spottedleaf.dataconverter.common.minecraft.MCVersions;
 import ca.spottedleaf.dataconverter.common.minecraft.converters.entity.ConverterAbstractEntityRename;
 import ca.spottedleaf.dataconverter.common.minecraft.datatypes.MCTypeRegistry;
+import ca.spottedleaf.dataconverter.common.minecraft.hooks.DataHookEnforceNamespacedID;
+import ca.spottedleaf.dataconverter.common.minecraft.hooks.DataHookValueTypeEnforceNamespaced;
 import ca.spottedleaf.dataconverter.common.minecraft.walkers.block_name.DataWalkerBlockNames;
 import ca.spottedleaf.dataconverter.common.minecraft.walkers.itemstack.DataWalkerItemLists;
 import ca.spottedleaf.dataconverter.common.minecraft.walkers.itemstack.DataWalkerItems;
@@ -169,7 +171,10 @@ public final class V705 {
         registerThrowableProjectile("minecraft:snowball");
         registerMob("minecraft:snowman");
         MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:spawner_minecart", new DataWalkerBlockNames("DisplayTile"));
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:spawner_minecart", MCTypeRegistry.UNTAGGED_SPAWNER::convert);
+        MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:spawner_minecart", (final MapType<String> data, final long fromVersion, final long toVersion) -> {
+            MCTypeRegistry.UNTAGGED_SPAWNER.convert(data, fromVersion, toVersion);
+            return null;
+        });
         MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:spectral_arrow", new DataWalkerBlockNames("inTile"));
         registerMob("minecraft:spider");
         registerMob("minecraft:squid");
@@ -215,6 +220,10 @@ public final class V705 {
         registerMob("minecraft:vindication_illager");
         // Don't need to re-register itemstack walker, the V704 will correctly choose the right id for armorstand based on
         // the source version
+
+        // Enforce namespace for ids
+        MCTypeRegistry.ENTITY.addStructureHook(VERSION, new DataHookEnforceNamespacedID());
+        MCTypeRegistry.ENTITY_NAME.addStructureHook(VERSION, new DataHookValueTypeEnforceNamespaced());
     }
 
     private V705() {}

@@ -6,6 +6,7 @@ import ca.spottedleaf.dataconverter.common.minecraft.converters.blockname.Conver
 import ca.spottedleaf.dataconverter.common.minecraft.converters.entity.ConverterAbstractEntityRename;
 import ca.spottedleaf.dataconverter.common.minecraft.converters.itemname.ConverterAbstractItemRename;
 import ca.spottedleaf.dataconverter.common.minecraft.converters.recipe.ConverterAbstractRecipeRename;
+import ca.spottedleaf.dataconverter.common.minecraft.converters.stats.ConverterAbstractStatsRename;
 import ca.spottedleaf.dataconverter.common.minecraft.datatypes.MCTypeRegistry;
 import ca.spottedleaf.dataconverter.common.types.MapType;
 import com.google.common.collect.ImmutableMap;
@@ -81,45 +82,10 @@ public final class V1510 {
             return RENAMED_ENTITY_IDS.get(input);
         });
 
-        MCTypeRegistry.STATS.addStructureConverter(new DataConverter<>(VERSION) {
-            @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
-                final MapType<String> stats = data.getMap("stats");
-                if (stats == null) {
-                    return null;
-                }
-
-                final MapType<String> custom = stats.getMap("minecraft:custom");
-
-                if (custom == null) {
-                    return null;
-                }
-
-                for (final String key : new ArrayList<>(custom.keys())) {
-                    final String convert;
-                    switch (key) {
-                        case "minecraft:swim_one_cm":
-                            convert = "minecraft:walk_on_water_one_cm";
-                            break;
-                        case "minecraft:dive_one_cm":
-                            convert = "minecraft:walk_under_water_one_cm";
-                            break;
-                        default:
-                            convert = null;
-                            break;
-                    }
-
-                    if (convert == null) {
-                        continue;
-                    }
-
-                    custom.setGeneric(convert, custom.getGeneric(key));
-                    custom.remove(key);
-                }
-
-                return null;
-            }
-        });
+        ConverterAbstractStatsRename.register(VERSION, ImmutableMap.of(
+                "minecraft:swim_one_cm", "minecraft:walk_on_water_one_cm",
+                "minecraft:dive_one_cm", "minecraft:walk_under_water_one_cm"
+        )::get);
 
 
         MCTypeRegistry.ENTITY.copyWalkers(VERSION, "minecraft:commandblock_minecart", "minecraft:command_block_minecart");

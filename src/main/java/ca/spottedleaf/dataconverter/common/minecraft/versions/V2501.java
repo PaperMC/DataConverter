@@ -37,7 +37,6 @@ public final class V2501 {
                 final MapType<String> newRecipes = Types.NBT.createEmptyMap();
                 data.setMap("RecipesUsed", newRecipes);
 
-
                 for (int i = 0; i < recipesUsedSize; ++i) {
                     final String recipeKey = data.getString("RecipeLocation" + i);
                     data.remove("RecipeLocation" + i);

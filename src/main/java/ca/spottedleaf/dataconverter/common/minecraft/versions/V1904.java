@@ -30,11 +30,13 @@ public final class V1904 {
                     }
                 } else if (catType > 0 && catType < 4) {
                     data.setString("id", "minecraft:cat");
+                    data.setString("OwnerUUID", data.getString("OwnerUUID", ""));
                 }
 
                 return null;
             }
         });
+
         registerMob("minecraft:cat");
     }
 

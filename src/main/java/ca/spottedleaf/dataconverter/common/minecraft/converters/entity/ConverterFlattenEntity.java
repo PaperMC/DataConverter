@@ -1,4 +1,4 @@
-package ca.spottedleaf.dataconverter.common.minecraft.converters.tileentity;
+package ca.spottedleaf.dataconverter.common.minecraft.converters.entity;
 
 import ca.spottedleaf.dataconverter.common.converters.DataConverter;
 import ca.spottedleaf.dataconverter.common.minecraft.MCVersions;
@@ -10,7 +10,7 @@ import ca.spottedleaf.dataconverter.common.types.ObjectType;
 import java.util.HashMap;
 import java.util.Map;
 
-public final class ConverterFlattenTileEntity extends DataConverter<MapType<String>, MapType<String>> {
+public final class ConverterFlattenEntity extends DataConverter<MapType<String>, MapType<String>> {
 
     private static final Map<String, Integer> BLOCK_NAME_TO_ID = new HashMap<>();
     static {
@@ -274,17 +274,17 @@ public final class ConverterFlattenTileEntity extends DataConverter<MapType<Stri
 
     protected final String[] paths;
 
-    public ConverterFlattenTileEntity(final String... paths) {
+    public ConverterFlattenEntity(final String... paths) {
         super(VERSION, 3);
         this.paths = paths;
     }
 
     private static void register(final String id, final String... paths) {
-        MCTypeRegistry.TILE_ENTITY.addConverterForId(id, new ConverterFlattenTileEntity(paths));
+        MCTypeRegistry.ENTITY.addConverterForId(id, new ConverterFlattenEntity(paths));
     }
 
     public static void register() {
-        MCTypeRegistry.TILE_ENTITY.addConverterForId("minecraft:falling_block", new DataConverter<>(VERSION, 3) {
+        MCTypeRegistry.ENTITY.addConverterForId("minecraft:falling_block", new DataConverter<>(VERSION, 3) {
             @Override
             public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
                 final int blockId;

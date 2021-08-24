@@ -3,6 +3,8 @@ package ca.spottedleaf.dataconverter.common.minecraft.versions;
 import ca.spottedleaf.dataconverter.common.minecraft.MCVersions;
 import ca.spottedleaf.dataconverter.common.minecraft.converters.helpers.HelperItemNameV102;
 import ca.spottedleaf.dataconverter.common.minecraft.datatypes.MCTypeRegistry;
+import ca.spottedleaf.dataconverter.common.minecraft.hooks.DataHookEnforceNamespacedID;
+import ca.spottedleaf.dataconverter.common.minecraft.hooks.DataHookValueTypeEnforceNamespaced;
 import ca.spottedleaf.dataconverter.common.minecraft.walkers.block_name.DataWalkerBlockNames;
 import ca.spottedleaf.dataconverter.common.minecraft.walkers.itemstack.DataWalkerItemLists;
 import ca.spottedleaf.dataconverter.common.minecraft.walkers.item_name.DataWalkerItemNames;
@@ -64,29 +66,39 @@ public final class V99 {
         ITEM_ID_TO_TILE_ENTITY_ID.put("minecraft:shield", "Banner");
     }
 
+    private static void registerMob(final String id) {
+        MCTypeRegistry.ENTITY.addWalker(VERSION, id, new DataWalkerItemLists("Equipment"));
+    }
+
+    private static void registerProjectile(final String id) {
+        MCTypeRegistry.ENTITY.addWalker(VERSION, id, new DataWalkerBlockNames("inTile"));
+    }
+
+    private static void registerInventory(final String id) {
+        MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, id, new DataWalkerItemLists("Items"));
+    }
+
     public static void register() {
+        // entities
         MCTypeRegistry.ENTITY.addStructureWalker(VERSION, (final MapType<String> data, final long fromVersion, final long toVersion) -> {
             WalkerUtils.convert(MCTypeRegistry.ENTITY, data, "Riding", fromVersion, toVersion);
 
             return null;
         });
-        // Thrown Projectile -> new DataWalkerBlockNames("inTile")
-        // Mob -> new DataWalkerItemLists("Equipment")
-        // Minecart -> new DataWalkerBlockNames("DisplayTile")
         MCTypeRegistry.ENTITY.addWalker(VERSION, "Item", new DataWalkerItems("Item"));
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "ThrownEgg", new DataWalkerBlockNames("inTile"));
+        registerProjectile("ThrownEgg");
         MCTypeRegistry.ENTITY.addWalker(VERSION, "Arrow", new DataWalkerBlockNames("inTile"));
         MCTypeRegistry.ENTITY.addWalker(VERSION, "TippedArrow", new DataWalkerBlockNames("inTile"));
         MCTypeRegistry.ENTITY.addWalker(VERSION, "SpectralArrow", new DataWalkerBlockNames("inTile"));
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "Snowball", new DataWalkerBlockNames("inTile"));
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "Fireball", new DataWalkerBlockNames("inTile"));
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "SmallFireball", new DataWalkerBlockNames("inTile"));
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "ThrownEnderpearl", new DataWalkerBlockNames("inTile"));
+        registerProjectile("Snowball");
+        registerProjectile("Fireball");
+        registerProjectile("SmallFireball");
+        registerProjectile("ThrownEnderpearl");
         MCTypeRegistry.ENTITY.addWalker(VERSION, "ThrownPotion", new DataWalkerBlockNames("inTile"));
         MCTypeRegistry.ENTITY.addWalker(VERSION, "ThrownPotion", new DataWalkerItems("Potion"));
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "ThrownExpBottle", new DataWalkerBlockNames("inTile"));
+        registerProjectile("ThrownExpBottle");
         MCTypeRegistry.ENTITY.addWalker(VERSION, "ItemFrame", new DataWalkerItems("Item"));
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "WitherSkull", new DataWalkerBlockNames("inTile"));
+        registerProjectile("WitherSkull");
         MCTypeRegistry.ENTITY.addWalker(VERSION, "FallingSand", new DataWalkerBlockNames("Block"));
         MCTypeRegistry.ENTITY.addWalker(VERSION, "FallingSand", new DataWalkerTileEntities("TileEntityData"));
         MCTypeRegistry.ENTITY.addWalker(VERSION, "FireworksRocketEntity", new DataWalkerItems("FireworksItem"));
@@ -96,51 +108,57 @@ public final class V99 {
         // Vanilla does not make the generic minecart convert spawners, but we do.
         MCTypeRegistry.ENTITY.addWalker(VERSION, "Minecart", new DataWalkerBlockNames("DisplayTile")); // for all minecart types
         MCTypeRegistry.ENTITY.addWalker(VERSION, "Minecart", new DataWalkerItemLists("Items")); // for chest types
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "Minecart", MCTypeRegistry.UNTAGGED_SPAWNER::convert); // for spawner type
+        MCTypeRegistry.ENTITY.addWalker(VERSION, "Minecart", (final MapType<String> data, final long fromVersion, final long toVersion) -> {
+            MCTypeRegistry.UNTAGGED_SPAWNER.convert(data, fromVersion, toVersion);
+            return null;
+        }); // for spawner type
         MCTypeRegistry.ENTITY.addWalker(VERSION, "MinecartRideable", new DataWalkerBlockNames("DisplayTile"));
         MCTypeRegistry.ENTITY.addWalker(VERSION, "MinecartChest", new DataWalkerBlockNames("DisplayTile"));
         MCTypeRegistry.ENTITY.addWalker(VERSION, "MinecartChest", new DataWalkerItemLists("Items"));
         MCTypeRegistry.ENTITY.addWalker(VERSION, "MinecartFurnace", new DataWalkerBlockNames("DisplayTile"));
         MCTypeRegistry.ENTITY.addWalker(VERSION, "MinecartTNT", new DataWalkerBlockNames("DisplayTile"));
         MCTypeRegistry.ENTITY.addWalker(VERSION, "MinecartSpawner", new DataWalkerBlockNames("DisplayTile"));
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "MinecartSpawner", MCTypeRegistry.UNTAGGED_SPAWNER::convert);
+        MCTypeRegistry.ENTITY.addWalker(VERSION, "MinecartSpawner", (final MapType<String> data, final long fromVersion, final long toVersion) -> {
+            MCTypeRegistry.UNTAGGED_SPAWNER.convert(data, fromVersion, toVersion);
+            return null;
+        });
         MCTypeRegistry.ENTITY.addWalker(VERSION, "MinecartHopper", new DataWalkerBlockNames("DisplayTile"));
         MCTypeRegistry.ENTITY.addWalker(VERSION, "MinecartHopper", new DataWalkerItemLists("Items"));
         MCTypeRegistry.ENTITY.addWalker(VERSION, "MinecartCommandBlock", new DataWalkerBlockNames("DisplayTile"));
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "ArmorStand", new DataWalkerItemLists("Equipment"));
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "Creeper", new DataWalkerItemLists("Equipment"));
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "Skeleton", new DataWalkerItemLists("Equipment"));
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "Spider", new DataWalkerItemLists("Equipment"));
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "Giant", new DataWalkerItemLists("Equipment"));
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "Zombie", new DataWalkerItemLists("Equipment"));
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "Slime", new DataWalkerItemLists("Equipment"));
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "Ghast", new DataWalkerItemLists("Equipment"));
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "PigZombie", new DataWalkerItemLists("Equipment"));
+        registerMob("ArmorStand");
+        registerMob("Creeper");
+        registerMob("Skeleton");
+        registerMob("Spider");
+        registerMob("Giant");
+        registerMob("Zombie");
+        registerMob("Slime");
+        registerMob("Ghast");
+        registerMob("PigZombie");
         MCTypeRegistry.ENTITY.addWalker(VERSION, "Enderman", new DataWalkerBlockNames("carried"));
         MCTypeRegistry.ENTITY.addWalker(VERSION, "Enderman", new DataWalkerItemLists("Equipment"));
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "CaveSpider", new DataWalkerItemLists("Equipment"));
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "Silverfish", new DataWalkerItemLists("Equipment"));
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "Blaze", new DataWalkerItemLists("Equipment"));
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "LavaSlime", new DataWalkerItemLists("Equipment"));
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "EnderDragon", new DataWalkerItemLists("Equipment"));
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "WitherBoss", new DataWalkerItemLists("Equipment"));
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "Bat", new DataWalkerItemLists("Equipment"));
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "Witch", new DataWalkerItemLists("Equipment"));
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "Endermite", new DataWalkerItemLists("Equipment"));
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "Guardian", new DataWalkerItemLists("Equipment"));
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "Pig", new DataWalkerItemLists("Equipment"));
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "Sheep", new DataWalkerItemLists("Equipment"));
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "Cow", new DataWalkerItemLists("Equipment"));
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "Chicken", new DataWalkerItemLists("Equipment"));
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "Squid", new DataWalkerItemLists("Equipment"));
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "Wolf", new DataWalkerItemLists("Equipment"));
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "MushroomCow", new DataWalkerItemLists("Equipment"));
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "SnowMan", new DataWalkerItemLists("Equipment"));
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "Ozelot", new DataWalkerItemLists("Equipment"));
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "VillagerGolem", new DataWalkerItemLists("Equipment"));
+        registerMob("CaveSpider");
+        registerMob("Silverfish");
+        registerMob("Blaze");
+        registerMob("LavaSlime");
+        registerMob("EnderDragon");
+        registerMob("WitherBoss");
+        registerMob("Bat");
+        registerMob("Witch");
+        registerMob("Endermite");
+        registerMob("Guardian");
+        registerMob("Pig");
+        registerMob("Sheep");
+        registerMob("Cow");
+        registerMob("Chicken");
+        registerMob("Squid");
+        registerMob("Wolf");
+        registerMob("MushroomCow");
+        registerMob("SnowMan");
+        registerMob("Ozelot");
+        registerMob("VillagerGolem");
         MCTypeRegistry.ENTITY.addWalker(VERSION, "EntityHorse", new DataWalkerItemLists("Items", "Equipment"));
         MCTypeRegistry.ENTITY.addWalker(VERSION, "EntityHorse", new DataWalkerItems("ArmorItem", "SaddleItem"));
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "Rabbit", new DataWalkerItemLists("Equipment"));
+        registerMob("Rabbit");
         MCTypeRegistry.ENTITY.addWalker(VERSION, "Villager", new DataWalkerItemLists("Inventory", "Equipment"));
         MCTypeRegistry.ENTITY.addWalker(VERSION, "Villager", (final MapType<String> data, final long fromVersion, final long toVersion) -> {
             final MapType<String> offers = data.getMap("Offers");
@@ -159,18 +177,26 @@ public final class V99 {
 
             return null;
         });
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "Shulker", new DataWalkerItemLists("Equipment"));
+        registerMob("Shulker");
+
+        // tile entities
 
         // Inventory -> new DataWalkerItemLists("Items")
-        MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, "Furnace", new DataWalkerItemLists("Items"));
-        MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, "Chest", new DataWalkerItemLists("Items"));
+        registerInventory("Furnace");
+        registerInventory("Chest");
         MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, "RecordPlayer", new DataWalkerItems("RecordItem"));
-        MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, "Trap", new DataWalkerItemLists("Items"));
-        MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, "Dropper", new DataWalkerItemLists("Items"));
-        MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, "MobSpawner", MCTypeRegistry.UNTAGGED_SPAWNER::convert);
-        MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, "Cauldron", new DataWalkerItemLists("Items"));
-        MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, "Hopper", new DataWalkerItemLists("Items"));
-        MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, "FlowerPot", new DataWalkerItemNames("Item")); // Note: Vanilla does not properly handle this case, it will not convert int ids!
+        registerInventory("Trap");
+        registerInventory("Dropper");
+        MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, "MobSpawner", (final MapType<String> data, final long fromVersion, final long toVersion) -> {
+            MCTypeRegistry.UNTAGGED_SPAWNER.convert(data, fromVersion, toVersion);
+            return null;
+        });
+        registerInventory("Cauldron");
+        registerInventory("Hopper");
+        // Note: Vanilla does not properly handle this case, it will not convert int ids!
+        MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, "FlowerPot", new DataWalkerItemNames("Item"));
+
+        // rest
 
         MCTypeRegistry.ITEM_STACK.addStructureWalker(VERSION, (final MapType<String> data, final long fromVersion, final long toVersion) -> {
             WalkerUtils.convert(MCTypeRegistry.ITEM_NAME, data, "id", fromVersion, toVersion);
@@ -296,6 +322,14 @@ public final class V99 {
 
             return null;
         });
+
+
+        // Enforce namespacing for ids
+        MCTypeRegistry.BLOCK_NAME.addStructureHook(VERSION, new DataHookValueTypeEnforceNamespaced());
+        MCTypeRegistry.ITEM_NAME.addStructureHook(VERSION, new DataHookValueTypeEnforceNamespaced());
+        MCTypeRegistry.ITEM_STACK.addStructureHook(VERSION, new DataHookEnforceNamespacedID());
+
+        // Entity is absent; the String form is not yet namespaced, unlike the above.
     }
 
     protected static String getStringId(final Object id) {

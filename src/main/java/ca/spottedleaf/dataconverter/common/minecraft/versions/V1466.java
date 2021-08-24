@@ -13,7 +13,7 @@ public final class V1466 {
 
     protected static final int VERSION = MCVersions.V18W06A;
 
-    private static short packOffsetCoordinates(final int x, final int y, final int z) {
+    protected static short packOffsetCoordinates(final int x, final int y, final int z) {
         return (short)((x & 15) | ((y & 15) << 4) | ((z & 15) << 8));
     }
 

@@ -21,6 +21,7 @@ public final class V1474 {
                 return null;
             }
         });
+        // data hooks ensure the inputs are namespaced
         ConverterAbstractBlockRename.register(VERSION, (final String old) -> {
             return "minecraft:purple_shulker_box".equals(old) ? "minecraft:shulker_box" : null;
         });

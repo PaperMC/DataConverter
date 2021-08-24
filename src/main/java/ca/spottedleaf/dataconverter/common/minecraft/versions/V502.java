@@ -19,11 +19,15 @@ public final class V502 {
         MCTypeRegistry.ENTITY.addConverterForId("Zombie", new DataConverter<>(VERSION) {
             @Override
             public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
-                if (!data.getBoolean("IsVillager") || data.getNumber("ZombieType") != null) {
+                if (!data.getBoolean("IsVillager")) {
                     return null;
                 }
 
                 data.remove("IsVillager");
+
+                if (data.hasKey("ZombieType")) {
+                    return null;
+                }
 
                 int type = data.getInt("VillagerProfession", -1);
                 // Vanilla doesn't remove the profession tag, so we don't!

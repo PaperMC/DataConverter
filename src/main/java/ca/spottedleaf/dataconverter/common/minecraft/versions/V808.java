@@ -12,7 +12,7 @@ public final class V808 {
     protected static final int VERSION = MCVersions.V16W38A + 1;
 
     public static void register() {
-        MCTypeRegistry.ENTITY.addConverterForId("minecraft:shulker", new DataConverter<>(VERSION) {
+        MCTypeRegistry.ENTITY.addConverterForId("minecraft:shulker", new DataConverter<>(VERSION, 1) {
             @Override
             public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
                 if (!data.hasKey("Color", ObjectType.NUMBER)) {

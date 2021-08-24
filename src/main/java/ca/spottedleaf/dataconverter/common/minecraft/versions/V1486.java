@@ -27,8 +27,8 @@ public final class V1486 {
 
 
     public static void register() {
-        registerMob("minecraft:cod");
-        registerMob("minecraft:salmon");
+        MCTypeRegistry.ENTITY.copyWalkers(VERSION, "minecraft:cod_mob", "minecraft:cod");
+        MCTypeRegistry.ENTITY.copyWalkers(VERSION, "minecraft:salmon_mob", "minecraft:salmon");
 
         ConverterAbstractEntityRename.register(VERSION, RENAMED_ENTITY_IDS::get);
         ConverterAbstractItemRename.register(VERSION, RENAMED_ITEM_IDS::get);

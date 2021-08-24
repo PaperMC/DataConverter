@@ -29,6 +29,9 @@ public final class V102 {
                 }
                 final int id = ((Number)data).intValue();
                 final String remap = HelperItemNameV102.getNameFromId(id);
+                if (remap == null) {
+                    LOGGER.warn("Unknown legacy integer id (V102) " + id);
+                }
                 return remap == null ? HelperItemNameV102.getNameFromId(0) : remap;
             }
         });
@@ -67,7 +70,7 @@ public final class V102 {
                 }
 
                 if (!tag.hasKey("Potion", ObjectType.STRING)) {
-                    String converted = HelperItemNameV102.getPotionNameFromId(damage);
+                    final String converted = HelperItemNameV102.getPotionNameFromId(damage);
                     tag.setString("Potion", converted == null ? "minecraft:water" : converted);
                     if ((damage & 16384) == 16384) {
                         data.setString("id", "minecraft:splash_potion");

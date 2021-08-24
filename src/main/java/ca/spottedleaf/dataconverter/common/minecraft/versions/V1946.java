@@ -21,7 +21,7 @@ public final class V1946 {
 
                 for (int y = 0; y < 16; ++y) {
                     final String key = Integer.toString(y);
-                    final MapType<String> records = data.getMap(key);
+                    final Object records = data.getGeneric(key);
 
                     if (records == null) {
                         continue;
@@ -30,8 +30,8 @@ public final class V1946 {
                     data.remove(key);
 
                     final MapType<String> section = Types.NBT.createEmptyMap();
-                    section.setMap("Records", records);
-                    sections.setMap(key, section);
+                    section.setGeneric("Records", records);
+                    sections.setMap(key, section); // integer keys convert to string in DFU (at least for NBT ops)
                 }
 
                 return null;

@@ -6,6 +6,7 @@ import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntLinkedOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntRBTreeSet;
 import it.unimi.dsi.fastutil.longs.LongArrayList;
+import it.unimi.dsi.fastutil.longs.LongLinkedOpenHashSet;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import java.lang.reflect.Field;
@@ -22,7 +23,8 @@ public final class MCVersionRegistry {
     protected static final LongArrayList DATA_VERSION_LIST;
 
     protected static final IntArrayList DATACONVERTER_VERSIONS_LIST;
-    protected static final IntLinkedOpenHashSet DATACONVERTER_VERSIONS = new IntLinkedOpenHashSet();
+    protected static final IntLinkedOpenHashSet DATACONVERTER_VERSIONS_MAJOR = new IntLinkedOpenHashSet();
+    protected static final LongLinkedOpenHashSet DATACONVERTER_VERSIONS = new LongLinkedOpenHashSet();
     protected static final Int2ObjectLinkedOpenHashMap<IntArrayList> SUBVERSIONS = new Int2ObjectLinkedOpenHashMap<>();
     protected static final LongArrayList BREAKPOINTS = new LongArrayList();
     static {
@@ -174,9 +176,11 @@ public final class MCVersionRegistry {
         };
         Arrays.sort(converterVersions);
 
-        DATACONVERTER_VERSIONS.addAll(DATACONVERTER_VERSIONS_LIST = new IntArrayList(converterVersions));
+        DATACONVERTER_VERSIONS_MAJOR.addAll(DATACONVERTER_VERSIONS_LIST = new IntArrayList(converterVersions));
 
         // add sub versions
+        registerSubVersion(MCVersions.V16W38A + 1, 1);
+
         registerSubVersion(MCVersions.V17W47A, 1);
         registerSubVersion(MCVersions.V17W47A, 2);
         registerSubVersion(MCVersions.V17W47A, 3);
@@ -186,10 +190,15 @@ public final class MCVersionRegistry {
         registerSubVersion(MCVersions.V17W47A, 7);
 
         // register breakpoints here
+        // for all major releases after 1.16, add them here. this reduces the work required to determine if a breakpoint
+        // is needed for new converters
 
         // Too much changed in this version.
         registerBreakpoint(MCVersions.V17W47A);
         registerBreakpoint(MCVersions.V17W47A, Integer.MAX_VALUE);
+
+        // final release of major version
+        registerBreakpoint(MCVersions.V1_17_1, Integer.MAX_VALUE);
 
 
     }
@@ -212,7 +221,7 @@ public final class MCVersionRegistry {
             VERSION_NAMES.put(value, name.substring(1).replace("_PRE", "-PRE").replace("_RC", "-RC").replace('_', '.').toLowerCase(Locale.ROOT));
         }
 
-        for (final int version : DATACONVERTER_VERSIONS) {
+        for (final int version : DATACONVERTER_VERSIONS_MAJOR) {
             if (VERSION_NAMES.containsKey(version)) {
                 continue;
             }
@@ -254,6 +263,19 @@ public final class MCVersionRegistry {
         }
 
         DATA_VERSION_LIST.sort(Comparator.naturalOrder());
+
+        for (final int version : DATACONVERTER_VERSIONS_MAJOR) {
+            DATACONVERTER_VERSIONS.add(DataConverter.encodeVersions(version, 0));
+
+            final IntArrayList subVersions = SUBVERSIONS.get(version);
+            if (subVersions == null) {
+                continue;
+            }
+
+            for (final int step : subVersions) {
+                DATACONVERTER_VERSIONS.add(DataConverter.encodeVersions(version, step));
+            }
+        }
     }
 
     private static void registerSubVersion(final int version, final int step) {
@@ -275,7 +297,7 @@ public final class MCVersionRegistry {
 
     // returns only versions that have dataconverters
     public static boolean hasDataConverters(final int version) {
-        return DATACONVERTER_VERSIONS.contains(version);
+        return DATACONVERTER_VERSIONS_MAJOR.contains(version);
     }
 
     public String getVersionName(final int version) {
@@ -300,5 +322,11 @@ public final class MCVersionRegistry {
 
     public static LongArrayList getBreakpoints() {
         return BREAKPOINTS;
+    }
+
+    public static void checkVersion(final long version) {
+        if (!DATACONVERTER_VERSIONS.contains(version)) {
+            throw new IllegalStateException("Version " + DataConverter.encodedToString(version) + " is not registered to have dataconverters, yet has a dataconverter");
+        }
     }
 }

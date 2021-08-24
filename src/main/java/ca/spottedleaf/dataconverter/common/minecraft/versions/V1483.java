@@ -23,7 +23,7 @@ public final class V1483 {
                 "minecraft:puffer_fish_spawn_egg", "minecraft:pufferfish_spawn_egg"
         )::get);
 
-        registerMob("minecraft:pufferfish");
+        MCTypeRegistry.ENTITY.copyWalkers(VERSION, "minecraft:puffer_fish", "minecraft:pufferfish");
     }
 
     private V1483() {}

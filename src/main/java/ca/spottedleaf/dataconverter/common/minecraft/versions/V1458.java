@@ -13,10 +13,7 @@ public final class V1458 {
     protected static final int VERSION = MCVersions.V17W50A + 1;
 
     public static MapType<String> updateCustomName(final MapType<String> data) {
-        final String customName = data.getString("CustomName");
-        if (customName == null) {
-            return null;
-        }
+        final String customName = data.getString("CustomName", "");
 
         if (customName.isEmpty()) {
             data.remove("CustomName");
@@ -28,6 +25,14 @@ public final class V1458 {
     }
 
     public static void register() {
+        // From CB
+        MCTypeRegistry.PLAYER.addStructureConverter(new DataConverter<>(VERSION) {
+            @Override
+            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+                return updateCustomName(data);
+            }
+        });
+
         MCTypeRegistry.ENTITY.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
             public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
@@ -35,12 +40,6 @@ public final class V1458 {
                     return null;
                 }
 
-                return updateCustomName(data);
-            }
-        });
-        MCTypeRegistry.PLAYER.addStructureConverter(new DataConverter<>(VERSION) {
-            @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
                 return updateCustomName(data);
             }
         });

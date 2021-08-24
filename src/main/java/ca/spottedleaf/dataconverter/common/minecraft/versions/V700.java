@@ -29,7 +29,5 @@ public final class V700 {
         registerMob("ElderGuardian");
     }
 
-    private V700() {
-
-    }
+    private V700() {}
 }

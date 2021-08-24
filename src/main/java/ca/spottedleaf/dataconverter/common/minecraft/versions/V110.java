@@ -17,7 +17,7 @@ public final class V110 {
         MCTypeRegistry.ENTITY.addConverterForId("EntityHorse", new DataConverter<>(VERSION) {
             @Override
             public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
-                if (data.getByte("Saddle") == 0 || data.hasKey("SaddleItem", ObjectType.MAP)) {
+                if (!data.getBoolean("Saddle") || data.hasKey("SaddleItem", ObjectType.MAP)) {
                     return null;
                 }
 

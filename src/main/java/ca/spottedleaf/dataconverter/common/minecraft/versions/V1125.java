@@ -3,6 +3,7 @@ package ca.spottedleaf.dataconverter.common.minecraft.versions;
 import ca.spottedleaf.dataconverter.common.converters.DataConverter;
 import ca.spottedleaf.dataconverter.common.minecraft.MCVersions;
 import ca.spottedleaf.dataconverter.common.minecraft.datatypes.MCTypeRegistry;
+import ca.spottedleaf.dataconverter.common.minecraft.hooks.DataHookValueTypeEnforceNamespaced;
 import ca.spottedleaf.dataconverter.common.minecraft.walkers.generic.WalkerUtils;
 import ca.spottedleaf.dataconverter.common.types.ObjectType;
 import ca.spottedleaf.dataconverter.common.types.ListType;
@@ -91,6 +92,9 @@ public final class V1125 {
 
             return null;
         });
+
+        // Enforce namespacing for ids
+        MCTypeRegistry.BIOME.addStructureHook(VERSION, new DataHookValueTypeEnforceNamespaced());
     }
 
     private V1125() {}

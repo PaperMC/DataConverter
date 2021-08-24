@@ -44,7 +44,7 @@ public final class V1918 {
             public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
                 final int profession = data.getInt("Profession");
                 final int career = data.getInt("Career");
-                final Number careerLevel = data.getNumber("CareerLevel");
+                final int careerLevel = data.getInt("CareerLevel", 1);
                 data.remove("Profession");
                 data.remove("Career");
                 data.remove("CareerLevel");
@@ -53,7 +53,7 @@ public final class V1918 {
                 data.setMap("VillagerData", villagerData);
                 villagerData.setString("type", "minecraft:plains");
                 villagerData.setString("profession", getProfessionString(profession, career));
-                villagerData.setInt("level", careerLevel == null ? 1 : careerLevel.intValue());
+                villagerData.setInt("level", careerLevel);
 
                 return null;
             }

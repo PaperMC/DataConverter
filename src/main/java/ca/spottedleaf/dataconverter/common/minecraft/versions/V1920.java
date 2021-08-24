@@ -5,6 +5,7 @@ import ca.spottedleaf.dataconverter.common.minecraft.MCVersions;
 import ca.spottedleaf.dataconverter.common.minecraft.datatypes.MCTypeRegistry;
 import ca.spottedleaf.dataconverter.common.minecraft.walkers.itemstack.DataWalkerItemLists;
 import ca.spottedleaf.dataconverter.common.types.MapType;
+import ca.spottedleaf.dataconverter.common.util.NamespaceUtil;
 
 public final class V1920 {
 
@@ -40,6 +41,10 @@ public final class V1920 {
                 final MapType<String> references = structures.getMap("References");
                 if (references != null) {
                     final MapType<String> newVillage = references.getMap("New_Village");
+                    // I believe Mojang had a typo here, removing Village from references only made sense
+                    // if the new village didn't exist. DFU removes it whether or not it exists, but still relocates
+                    // New_Village to Village first. It doesn't make sense to me to relocate it just to remove it, so it
+                    // must be a typo.
                     if (newVillage == null) {
                         references.remove("Village");
                     } else {
@@ -57,7 +62,7 @@ public final class V1920 {
             public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
                 final String id = data.getString("id");
 
-                if ("minecraft:new_village".equals(id)) {
+                if ("minecraft:new_village".equals(NamespaceUtil.correctNamespace(id))) {
                     data.setString("id", "minecraft:village");
                 }
 

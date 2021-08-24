@@ -47,9 +47,12 @@ public final class HelperBlockFlatteningV1450 {
         try {
             final MapType<String> ret = new NBTMapType(TagParser.parseTag(blockstate.replace('\'', '"')));
 
-            final MapType<String> identity = IDENTITY_ENSURE.putIfAbsent(ret, ret);
+            synchronized (IDENTITY_ENSURE) {
+                final MapType<String> identity = IDENTITY_ENSURE.putIfAbsent(ret, ret);
 
-            return identity == null ? ret : identity;
+                return identity == null ? ret : identity;
+            }
+
         } catch (final Exception ex) {
             throw new RuntimeException("Exception parsing " + blockstate, ex);
         }
