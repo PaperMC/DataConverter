@@ -15,7 +15,7 @@ by other mods. When you use this mod, you completely accept the risk
 that dataconverters _WILL NOT RUN_ on your mods' data. Your world 
 data _WILL BECOME CORRUPT_ as a result, and it is entirely **YOUR FAULT**.
 
-If you want to use this mod, please use [Tuinity](https://github.com/Tuinity/Tuinity).
+If you want to use this mod, please use [Paper](https://github.com/PaperMC/Paper).
 Because plugins cannot register datafixers with DFU, there is no risk
 of non-vanilla datafixers being skipped. Plugins that run things through
 DFU are not affected, because this mod only redirects Vanilla calls to
