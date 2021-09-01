@@ -84,6 +84,7 @@ public final class V2550 {
                                     final MapType<String> layer = Types.NBT.createEmptyMap();
                                     layer.setInt("height", heights[i]);
                                     layer.setString("block", blocks[i]);
+                                    layers.addMap(layer);
                                 }
                             }
 
