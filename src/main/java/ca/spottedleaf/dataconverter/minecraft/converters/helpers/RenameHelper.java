@@ -1,0 +1,49 @@
+package ca.spottedleaf.dataconverter.minecraft.converters.helpers;
+
+import ca.spottedleaf.dataconverter.types.MapType;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Function;
+
+public final class RenameHelper {
+
+    // assumes no two or more entries are renamed to a single value, otherwise result will be only one of them will win
+    // and there is no defined winner in such a case
+    public static void renameKeys(final MapType<String> data, final Function<String, String> renamer) {
+        boolean needsRename = false;
+        for (final String key : data.keys()) {
+            if (renamer.apply(key) != null) {
+                needsRename = true;
+                break;
+            }
+        }
+
+        if (!needsRename) {
+            return;
+        }
+
+        final List<String> newKeys = new ArrayList<>();
+        final List<Object> newValues = new ArrayList<>();
+
+        for (final String key : new ArrayList<>(data.keys())) {
+            final String renamed = renamer.apply(key);
+
+            if (renamed != null) {
+                newValues.add(data.getGeneric(key));
+                newKeys.add(renamed);
+                data.remove(key);
+            }
+        }
+
+        // insert new keys
+        for (int i = 0, len = newKeys.size(); i < len; ++i) {
+            final String key = newKeys.get(i);
+            final Object value = newValues.get(i);
+
+            data.setGeneric(key, value);
+        }
+    }
+
+    private RenameHelper() {}
+
+}

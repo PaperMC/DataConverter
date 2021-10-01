@@ -1,6 +1,7 @@
 package ca.spottedleaf.dataconverter.minecraft.converters.stats;
 
 import ca.spottedleaf.dataconverter.converters.DataConverter;
+import ca.spottedleaf.dataconverter.minecraft.converters.helpers.RenameHelper;
 import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
 import ca.spottedleaf.dataconverter.types.MapType;
 import java.util.ArrayList;
@@ -56,17 +57,7 @@ public final class ConverterAbstractStatsRename  {
                     return null;
                 }
 
-                for (final String key : new ArrayList<>(custom.keys())) {
-                    final String rename = renamer.apply(key);
-                    if (rename == null) {
-                        continue;
-                    }
-
-                    final Object value = custom.getGeneric(key);
-                    custom.remove(key);
-
-                    custom.setGeneric(rename, value);
-                }
+                RenameHelper.renameKeys(custom, renamer);
 
                 return null;
             }

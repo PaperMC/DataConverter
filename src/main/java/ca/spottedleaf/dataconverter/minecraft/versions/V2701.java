@@ -58,12 +58,6 @@ public final class V2701 {
                         continue;
                     }
 
-                    final String featureName = feature.getString("name");
-
-                    if (featureName == null) {
-                        continue;
-                    }
-
                     final String replacement = convertToString(feature);
 
                     if (replacement != null) {

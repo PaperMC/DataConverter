@@ -1,5 +1,6 @@
 package ca.spottedleaf.dataconverter.minecraft.walkers.generic;
 
+import ca.spottedleaf.dataconverter.minecraft.converters.helpers.RenameHelper;
 import ca.spottedleaf.dataconverter.minecraft.datatypes.MCDataType;
 import ca.spottedleaf.dataconverter.minecraft.datatypes.MCValueType;
 import ca.spottedleaf.dataconverter.types.ObjectType;
@@ -94,13 +95,9 @@ public final class WalkerUtils {
             return;
         }
 
-        for (final String key : new ArrayList<>(data.keys())) {
-            final String updated = (String)type.convert(key, fromVersion, toVersion);
-            if (updated != null) {
-                data.setGeneric(updated, data.getGeneric(key));
-                data.remove(key);
-            }
-        }
+        RenameHelper.renameKeys(data, (final String input) -> {
+            return (String)type.convert(input, fromVersion, toVersion);
+        });
     }
 
     public static void convertValues(final MCDataType type, final MapType<String> data, final String path, final long fromVersion, final long toVersion) {

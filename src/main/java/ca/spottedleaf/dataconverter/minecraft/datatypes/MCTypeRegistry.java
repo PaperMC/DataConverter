@@ -105,6 +105,7 @@ import ca.spottedleaf.dataconverter.minecraft.versions.V2686;
 import ca.spottedleaf.dataconverter.minecraft.versions.V2688;
 import ca.spottedleaf.dataconverter.minecraft.versions.V2690;
 import ca.spottedleaf.dataconverter.minecraft.versions.V2691;
+import ca.spottedleaf.dataconverter.minecraft.versions.V2693;
 import ca.spottedleaf.dataconverter.minecraft.versions.V2696;
 import ca.spottedleaf.dataconverter.minecraft.versions.V2700;
 import ca.spottedleaf.dataconverter.minecraft.versions.V2701;
@@ -112,7 +113,10 @@ import ca.spottedleaf.dataconverter.minecraft.versions.V2702;
 import ca.spottedleaf.dataconverter.minecraft.versions.V2707;
 import ca.spottedleaf.dataconverter.minecraft.versions.V2710;
 import ca.spottedleaf.dataconverter.minecraft.versions.V2717;
+import ca.spottedleaf.dataconverter.minecraft.versions.V2825;
 import ca.spottedleaf.dataconverter.minecraft.versions.V2831;
+import ca.spottedleaf.dataconverter.minecraft.versions.V2832;
+import ca.spottedleaf.dataconverter.minecraft.versions.V2833;
 import ca.spottedleaf.dataconverter.minecraft.versions.V501;
 import ca.spottedleaf.dataconverter.minecraft.versions.V502;
 import ca.spottedleaf.dataconverter.minecraft.versions.V505;
@@ -303,6 +307,7 @@ public final class MCTypeRegistry {
         V2688.register();
         V2690.register();
         V2691.register();
+        V2693.register();
         V2696.register();
         V2700.register();
         V2701.register();
@@ -312,7 +317,10 @@ public final class MCTypeRegistry {
         V2710.register();
         V2717.register();
         // V1.18
+        V2825.register();
         V2831.register();
+        V2832.register();
+        V2833.register();
     }
 
     private MCTypeRegistry() {}

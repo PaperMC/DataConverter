@@ -40,11 +40,14 @@ public abstract class ChunkStorageMixin implements AutoCloseable {
             }
         }
 
+        // add in dimension for converters
+        compoundTag.getCompound("Level").putString("__dimension", resourceKey.location().toString());
         compoundTag = MCDataConverter.convertTag(MCTypeRegistry.CHUNK, compoundTag, Math.max(1493, fromVersion), SharedConstants.getCurrentVersion().getWorldVersion());
         if (fromVersion < SharedConstants.getCurrentVersion().getWorldVersion()) {
             compoundTag.putInt("DataVersion", SharedConstants.getCurrentVersion().getWorldVersion());
         }
 
+        compoundTag.getCompound("Level").remove("__dimension"); // remove temp value for converters
         return compoundTag;
     }
 
