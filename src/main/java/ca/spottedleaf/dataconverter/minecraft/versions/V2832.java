@@ -16,6 +16,7 @@ import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
 import org.apache.commons.lang3.mutable.MutableBoolean;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import java.util.BitSet;
 
 public final class V2832 {
 
@@ -460,7 +461,7 @@ public final class V2832 {
         }
 
         for (final String key : carvingMasks.keys()) {
-            final long[] old = carvingMasks.getLongs(key);
+            final long[] old = BitSet.valueOf(carvingMasks.getBytes(key)).toLongArray();
             final long[] newVal = new long[64 * newSize];
 
             System.arraycopy(old, 0, newVal, 64 * offset, old.length);
