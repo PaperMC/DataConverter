@@ -177,7 +177,8 @@ public final class MCVersionRegistry {
                 2831,
                 2832,
                 2833,
-                // All up to 21w39a
+                2838
+                // All up to 21w40a
         };
         Arrays.sort(converterVersions);
 

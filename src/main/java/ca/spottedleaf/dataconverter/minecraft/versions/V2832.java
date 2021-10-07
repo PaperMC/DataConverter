@@ -448,7 +448,7 @@ public final class V2832 {
         addEmptyListPadding(level, "LiquidsToBeTicked");
         addEmptyListPadding(level, "PostProcessing");
         addEmptyListPadding(level, "ToBeTicked");
-        shiftUpgradeData(level.getMap("UpgradeData"), 4);
+        shiftUpgradeData(level.getMap("UpgradeData"), 4); // https://bugs.mojang.com/browse/MC-238076
         padCarvingMasks(level, 24, 4);
     }
 
@@ -626,131 +626,11 @@ public final class V2832 {
         return wrapPalette(palette, null);
     }
 
-    // start egregious hack
-    // TODO remove this fix when https://bugs.mojang.com/browse/MC-238056 is resolved by Mojang
-    private static void remap(final long[] val, int bitsPerObject, final int[] mapping, final boolean blocks) {
-        bitsPerObject = blocks ? Math.max(4, bitsPerObject) : bitsPerObject;
-        int objectsPerValue = 64 / bitsPerObject;
-        final long mask = (1L << bitsPerObject) - 1; // works even if bitsPerObject == 64
-
-        if (val.length != (((blocks ? 4096 : 64) + objectsPerValue - 1) / objectsPerValue)) {
-            throw new IllegalStateException();
-        }
-
-        for (int i = 0; i < val.length; ++i) {
-            long next = 0L;
-            long curr = val[i];
-
-            for (int objIdx = 0; objIdx + bitsPerObject <= 64; objIdx += bitsPerObject) {
-                final long value = (curr >> objIdx) & mask;
-                next |= ((long)mapping[(int)value]) << objIdx;
-            }
-
-            if (next != curr) {
-                val[i] = next;
-            }
-        }
-    }
-
-    private static long[] resize(final long[] val, int oldBitsPerObject, int newBitsPerObject, final boolean blocks, final int max) {
-        oldBitsPerObject = blocks ? Math.max(4, oldBitsPerObject) : oldBitsPerObject; // must be at least 4 if blocks
-        newBitsPerObject = blocks ? Math.max(4, newBitsPerObject) : newBitsPerObject; // must be at least 4 if blocks
-        final long oldMask = (1L << oldBitsPerObject) - 1; // works even if bitsPerObject == 64
-        final long newMask = (1L << newBitsPerObject) - 1;
-        final int oldObjectsPerValue = 64 / oldBitsPerObject;
-        final int newObjectsPerValue = 64 / newBitsPerObject;
-
-        if (newBitsPerObject == oldBitsPerObject) {
-            return val;
-        }
-
-        final int items = blocks ? 4096 : 64; // 64 = 4096 / 4 / 4 / 4
-
-        final long[] ret = new long[(items + newObjectsPerValue - 1) / newObjectsPerValue];
-
-        if (val.length != ((items + oldObjectsPerValue - 1) / oldObjectsPerValue)) {
-            throw new IllegalStateException();
-        }
-
-        int shift = 0;
-        int idx = 0;
-        long newCurr = 0L;
-
-        int currItem = 0;
-        for (int i = 0; i < val.length; ++i) {
-            long oldCurr = val[i];
-
-            for (int objIdx = 0; currItem < items && objIdx + oldBitsPerObject <= 64; objIdx += oldBitsPerObject, ++currItem) {
-                final long value = (oldCurr >> objIdx) & oldMask;
-
-                newCurr |= value << shift;
-                shift += newBitsPerObject;
-
-                if (value >= max) {
-                    throw new IllegalStateException("wat");
-                }
-
-                if (shift + newBitsPerObject > 64) { // will next write overflow?
-                    // must move to next idx
-                    ret[idx++] = newCurr;
-                    shift = 0;
-                    newCurr = 0L;
-                }
-            }
-
-            if (currItem == items && i != (val.length - 1)) {
-                throw new IllegalStateException("wat");
-            }
-        }
-
-        // don't forget to write the last one
-        if (shift != 0) {
-            ret[idx] = newCurr;
-        }
-
-        return ret;
-    }
-    // end egregious hack
-
     private static MapType<String> wrapPalette(final ListType palette, final long[] blockStates) {
         final MapType<String> ret = Types.NBT.createEmptyMap();
         ret.setList("palette", palette);
         if (blockStates != null) {
             ret.setLongs("data", blockStates);
-            // TODO remove this fix when https://bugs.mojang.com/browse/MC-238056 is resolved by Mojang
-            // start egregious hack
-            // The new deserializer will fuck up duplicates, so let's fix this by eliminating them here AND CORRECTLY
-            // modifying the data array
-            final Object2IntLinkedOpenHashMap<Object> correctPalette = new Object2IntLinkedOpenHashMap<>();
-            correctPalette.defaultReturnValue(-1);
-            final int[] remap = new int[palette.size()];
-            boolean broken = false;
-            boolean blocks = palette.getGeneric(0) instanceof MapType;
-            for (int i = 0, len = palette.size(); i < len; ++i) {
-                final int current = correctPalette.size();
-                final int prev = correctPalette.putIfAbsent(palette.getGeneric(i), current);
-                remap[i] = prev == -1 ? current : prev;
-                if (prev != -1) {
-                    broken = true;
-                }
-            }
-            if (broken) {
-                // rewrite palette list
-                final ListType newPalette = Types.NBT.createEmptyList();
-                for (final Object val : correctPalette.keySet()) {
-                    newPalette.addGeneric(val);
-                }
-                ret.setList("palette", newPalette);
-
-                // rewrite the storage array
-                remap(blockStates, ceilLog2(palette.size()), remap, blocks);
-
-                if (ceilLog2(newPalette.size()) != ceilLog2(palette.size())) {
-                    // must resize the block storage too...
-                    ret.setLongs("data", resize(blockStates, ceilLog2(palette.size()), ceilLog2(newPalette.size()), blocks, newPalette.size()));
-                }
-            }
-            // end egregious hack
         }
 
         return ret;
