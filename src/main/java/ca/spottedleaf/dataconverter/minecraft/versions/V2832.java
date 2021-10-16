@@ -12,7 +12,6 @@ import ca.spottedleaf.dataconverter.types.Types;
 import it.unimi.dsi.fastutil.ints.Int2IntLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.ints.IntIterator;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
-import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
 import org.apache.commons.lang3.mutable.MutableBoolean;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -125,7 +124,110 @@ public final class V2832 {
             "MOTION_BLOCKING_NO_LEAVES"
     };
 
+    private static int getObjectsPerValue(final long[] val) {
+        return (4096 + val.length - 1) / (val.length); // expression is invalid if it returns > 64
+    }
 
+    private static long[] resize(final long[] val, final int oldBitsPerObject, final int newBitsPerObject) {
+        final long oldMask = (1L << oldBitsPerObject) - 1; // works even if bitsPerObject == 64
+        final long newMask = (1L << newBitsPerObject) - 1;
+        final int oldObjectsPerValue = 64 / oldBitsPerObject;
+        final int newObjectsPerValue = 64 / newBitsPerObject;
+
+        if (newBitsPerObject == oldBitsPerObject) {
+            return val;
+        }
+
+        final int items = 4096;
+
+        final long[] ret = new long[(items + newObjectsPerValue - 1) / newObjectsPerValue];
+
+        final int expectedSize = ((items + oldObjectsPerValue - 1) / oldObjectsPerValue);
+        if (val.length != expectedSize) {
+            throw new IllegalStateException("Expected size: " + expectedSize + ", got: " + val.length);
+        }
+
+        int shift = 0;
+        int idx = 0;
+        long newCurr = 0L;
+
+        int currItem = 0;
+        for (int i = 0; i < val.length; ++i) {
+            final long oldCurr = val[i];
+
+            for (int objIdx = 0; currItem < items && objIdx + oldBitsPerObject <= 64; objIdx += oldBitsPerObject, ++currItem) {
+                final long value = (oldCurr >> objIdx) & oldMask;
+
+                if ((value & newMask) != value) {
+                    throw new IllegalStateException("Old data storage has values that cannot be moved into new palette (would erase data)!");
+                }
+
+                newCurr |= value << shift;
+                shift += newBitsPerObject;
+
+                if (shift + newBitsPerObject > 64) { // will next write overflow?
+                    // must move to next idx
+                    ret[idx++] = newCurr;
+                    shift = 0;
+                    newCurr = 0L;
+                }
+            }
+        }
+
+        // don't forget to write the last one
+        if (shift != 0) {
+            ret[idx] = newCurr;
+        }
+
+        return ret;
+    }
+
+    private static void fixLithiumChunks(final MapType<String> data) {
+        // See https://github.com/CaffeineMC/lithium-fabric/issues/279
+        final MapType<String> level = data.getMap("Level");
+        if (level == null) {
+            return;
+        }
+
+        final int chunkX = level.getInt("xPos");
+        final int chunkZ = level.getInt("zPos");
+
+        final ListType sections = level.getList("Sections", ObjectType.MAP);
+        if (sections == null) {
+            return;
+        }
+
+        for (int i = 0, len = sections.size(); i < len; ++i) {
+            final MapType<String> section = sections.getMap(i);
+
+            final int sectionY = section.getInt("Y");
+
+            final ListType palette = section.getList("Palette", ObjectType.MAP);
+            final long[] blockStates = section.getLongs("BlockStates");
+
+            if (palette == null || blockStates == null) {
+                continue;
+            }
+
+            final int expectedBits = Math.max(4, ceilLog2(palette.size()));
+            final int gotObjectsPerValue = getObjectsPerValue(blockStates);
+            final int gotBits = 64 / gotObjectsPerValue;
+
+            if (expectedBits == gotBits) {
+                continue;
+            }
+
+            try {
+                section.setLongs("BlockStates", resize(blockStates, gotBits, expectedBits));
+            } catch (final Exception ex) {
+                LOGGER.fatal("Failed to rewrite mismatched palette and data storage for section y: " + sectionY
+                        + " for chunk [" + chunkX + "," + chunkZ + "], palette entries: " + palette.size() + ", data storage size: "
+                        + blockStates.length,
+                        ex
+                );
+            }
+        }
+    }
 
     public static void register() {
         // See V2551 for the layout of world gen settings
@@ -209,6 +311,8 @@ public final class V2832 {
         MCTypeRegistry.CHUNK.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
             public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+                fixLithiumChunks(data); // See https://github.com/CaffeineMC/lithium-fabric/issues/279
+
                 final MapType<String> level = data.getMap("Level");
 
                 if (level == null) {
