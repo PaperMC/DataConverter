@@ -47,7 +47,7 @@ public abstract class LevelStorageSourceMixin {
      * new types should be included here.
      */
     @Redirect(
-            method = "lambda$getLevelData$4",
+            method = "lambda$getLevelData$1",
             at = @At(
                     target = "Lcom/mojang/datafixers/DataFixer;update(Lcom/mojang/datafixers/DSL$TypeReference;Lcom/mojang/serialization/Dynamic;II)Lcom/mojang/serialization/Dynamic;",
                     value = "INVOKE"
@@ -63,7 +63,7 @@ public abstract class LevelStorageSourceMixin {
      * new types should be included here.
      */
     @Redirect(
-            method = "lambda$levelSummaryReader$5",
+            method = "lambda$levelSummaryReader$2",
             at = @At(
                     target = "Lcom/mojang/datafixers/DataFixer;update(Lcom/mojang/datafixers/DSL$TypeReference;Lcom/mojang/serialization/Dynamic;II)Lcom/mojang/serialization/Dynamic;",
                     value = "INVOKE"
