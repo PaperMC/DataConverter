@@ -52,7 +52,7 @@ public class MCValueType extends DataType<Object, Object> {
                 break;
             }
 
-            final List<DataHook<Object, Object>> hooks = this.structureHooks.getFloor(converterVersion);
+            List<DataHook<Object, Object>> hooks = this.structureHooks.getFloor(converterVersion);
 
             if (hooks != null) {
                 for (int k = 0, klen = hooks.size(); k < klen; ++k) {
@@ -67,6 +67,9 @@ public class MCValueType extends DataType<Object, Object> {
             if (converted != null) {
                 ret = converted;
             }
+
+            // possibly new data format, update hooks
+            hooks = this.structureHooks.getFloor(toVersion);
 
             if (hooks != null) {
                 for (int k = 0, klen = hooks.size(); k < klen; ++k) {

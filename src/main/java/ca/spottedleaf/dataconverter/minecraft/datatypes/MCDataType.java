@@ -65,7 +65,7 @@ public class MCDataType extends DataType<MapType<String>, MapType<String>> {
                 break;
             }
 
-            final List<DataHook<MapType<String>, MapType<String>>> hooks = this.structureHooks.getFloor(converterVersion);
+            List<DataHook<MapType<String>, MapType<String>>> hooks = this.structureHooks.getFloor(converterVersion);
 
             if (hooks != null) {
                 for (int k = 0, klen = hooks.size(); k < klen; ++k) {
@@ -80,6 +80,9 @@ public class MCDataType extends DataType<MapType<String>, MapType<String>> {
             if (replace != null) {
                 ret = data = replace;
             }
+
+            // possibly new data format, update hooks
+            hooks = this.structureHooks.getFloor(toVersion);
 
             if (hooks != null) {
                 for (int klen = hooks.size(), k = klen - 1; k >= 0; --k) {
