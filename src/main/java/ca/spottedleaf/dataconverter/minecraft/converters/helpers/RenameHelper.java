@@ -44,6 +44,15 @@ public final class RenameHelper {
         }
     }
 
+    // Clobbers anything in toKey if fromKey exists
+    public static void renameSingle(final MapType<String> data, final String fromKey, final String toKey) {
+        final Object value = data.getGeneric(fromKey);
+        if (value != null) {
+            data.remove(fromKey);
+            data.setGeneric(toKey, value);
+        }
+    }
+
     private RenameHelper() {}
 
 }

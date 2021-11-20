@@ -118,6 +118,10 @@ import ca.spottedleaf.dataconverter.minecraft.versions.V2831;
 import ca.spottedleaf.dataconverter.minecraft.versions.V2832;
 import ca.spottedleaf.dataconverter.minecraft.versions.V2833;
 import ca.spottedleaf.dataconverter.minecraft.versions.V2838;
+import ca.spottedleaf.dataconverter.minecraft.versions.V2841;
+import ca.spottedleaf.dataconverter.minecraft.versions.V2842;
+import ca.spottedleaf.dataconverter.minecraft.versions.V2843;
+import ca.spottedleaf.dataconverter.minecraft.versions.V2846;
 import ca.spottedleaf.dataconverter.minecraft.versions.V501;
 import ca.spottedleaf.dataconverter.minecraft.versions.V502;
 import ca.spottedleaf.dataconverter.minecraft.versions.V505;
@@ -323,6 +327,10 @@ public final class MCTypeRegistry {
         V2832.register();
         V2833.register();
         V2838.register();
+        V2841.register();
+        V2842.register();
+        V2843.register();
+        V2846.register();
     }
 
     private MCTypeRegistry() {}

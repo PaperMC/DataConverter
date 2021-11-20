@@ -177,8 +177,12 @@ public final class MCVersionRegistry {
                 2831,
                 2832,
                 2833,
-                2838
-                // All up to 21w42a
+                2838,
+                2841,
+                2842,
+                2843,
+                2846
+                // All up to 1.18-pre5
         };
         Arrays.sort(converterVersions);
 
@@ -196,7 +200,7 @@ public final class MCVersionRegistry {
         registerSubVersion(MCVersions.V17W47A, 7);
 
         // register breakpoints here
-        // for all major releases after 1.16, add them here. this reduces the work required to determine if a breakpoint
+        // for all major releases after 1.16, add them. this reduces the work required to determine if a breakpoint
         // is needed for new converters
 
         // Too much changed in this version.

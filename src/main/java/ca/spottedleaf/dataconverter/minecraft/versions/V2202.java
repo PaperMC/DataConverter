@@ -22,7 +22,7 @@ public final class V2202 {
 
                 final int[] oldBiomes = level.getInts("Biomes");
 
-                if (oldBiomes == null) {
+                if (oldBiomes == null || oldBiomes.length != 256) {
                     return null;
                 }
 
@@ -35,7 +35,7 @@ public final class V2202 {
                         int k = (j << 2) + 2;
                         int l = (n << 2) + 2;
                         int m = l << 4 | k;
-                        newBiomes[n << 2 | j] = m < oldBiomes.length ? oldBiomes[m] : -1;
+                        newBiomes[n << 2 | j] = oldBiomes[m];
                     }
                 }
 

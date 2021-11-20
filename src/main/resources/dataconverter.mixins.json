@@ -2,19 +2,9 @@
   "required": true,
   "minVersion": "0.8",
   "package": "ca.spottedleaf.dataconverter.mixin",
-  "compatibilityLevel": "JAVA_16",
+  "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "ChunkStorageMixin",
-    "DimensionDataStorageMixin",
-    "EntityStorageMixin",
-    "LevelStorageSourceMixin",
-    "PlayerAdvancementsMixin",
-    "PlayerDataStorageMixin",
-    "PrimaryLevelDataMixin",
-    "SectionStorageMixin",
-    "ServerStatsCounterMixin",
-    "StructureManagerMixin",
-    "StructureUpdaterMixin"
+    "DataFixersMixin"
   ],
   "client": [
   ],

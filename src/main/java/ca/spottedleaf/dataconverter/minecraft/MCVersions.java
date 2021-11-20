@@ -369,4 +369,11 @@ public final class MCVersions {
     public static final int V21W40A               = 2838;
     public static final int V21W41A               = 2839;
     public static final int V21W42A               = 2840;
+    public static final int V21W43A               = 2844;
+    public static final int V21W44A               = 2845;
+    public static final int V1_18_PRE1            = 2847;
+    public static final int V1_18_PRE2            = 2848;
+    public static final int V1_18_PRE3            = 2849;
+    public static final int V1_18_PRE4            = 2850;
+    public static final int V1_18_PRE5            = 2851;
 }

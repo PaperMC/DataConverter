@@ -13,6 +13,27 @@ public final class MCDataConverter {
 
     private static final LongArrayList BREAKPOINTS = MCVersionRegistry.getBreakpoints();
 
+    public static <T> T copy(final T type) {
+        if (type instanceof CompoundTag) {
+            return (T)((CompoundTag)type).copy();
+        } else if (type instanceof JsonObject) {
+            return (T)((JsonObject)type).deepCopy();
+        }
+
+        return type;
+    }
+
+    public static <T, R> R convertUnwrapped(final DataType<T, R> type, final T data, final boolean compressedJson, final int fromVersion, final int toVersion) {
+        if (data instanceof CompoundTag) {
+            return (R)convertTag((MCDataType)type, (CompoundTag)data, fromVersion, toVersion);
+        }
+        if (data instanceof JsonObject) {
+            return (R)convertJson((MCDataType)type, (JsonObject)data, compressedJson, fromVersion, toVersion);
+        }
+
+        return convert(type, data, fromVersion, toVersion);
+    }
+
     public static CompoundTag convertTag(final MCDataType type, final CompoundTag data, final int fromVersion, final int toVersion) {
         final NBTMapType wrapped = new NBTMapType(data);
 

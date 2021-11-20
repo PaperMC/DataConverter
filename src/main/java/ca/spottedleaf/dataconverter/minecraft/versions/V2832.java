@@ -15,7 +15,10 @@ import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import org.apache.commons.lang3.mutable.MutableBoolean;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import java.util.Arrays;
 import java.util.BitSet;
+import java.util.HashSet;
+import java.util.Set;
 
 public final class V2832 {
 
@@ -123,6 +126,64 @@ public final class V2832 {
             "MOTION_BLOCKING",
             "MOTION_BLOCKING_NO_LEAVES"
     };
+
+    private static final Set<String> STATUS_IS_OR_AFTER_SURFACE = new HashSet<>(Arrays.asList(
+            "surface",
+            "carvers",
+            "liquid_carvers",
+            "features",
+            "light",
+            "spawn",
+            "heightmaps",
+            "full"
+    ));
+    private static final Set<String> STATUS_IS_OR_AFTER_NOISE = new HashSet<>(Arrays.asList(
+            "noise",
+            "surface",
+            "carvers",
+            "liquid_carvers",
+            "features",
+            "light",
+            "spawn",
+            "heightmaps",
+            "full"
+    ));
+    private static final Set<String> BLOCKS_BEFORE_FEATURE_STATUS = new HashSet<>(Arrays.asList(
+            "minecraft:air",
+            "minecraft:basalt",
+            "minecraft:bedrock",
+            "minecraft:blackstone",
+            "minecraft:calcite",
+            "minecraft:cave_air",
+            "minecraft:coarse_dirt",
+            "minecraft:crimson_nylium",
+            "minecraft:dirt",
+            "minecraft:end_stone",
+            "minecraft:grass_block",
+            "minecraft:gravel",
+            "minecraft:ice",
+            "minecraft:lava",
+            "minecraft:mycelium",
+            "minecraft:nether_wart_block",
+            "minecraft:netherrack",
+            "minecraft:orange_terracotta",
+            "minecraft:packed_ice",
+            "minecraft:podzol",
+            "minecraft:powder_snow",
+            "minecraft:red_sand",
+            "minecraft:red_sandstone",
+            "minecraft:sand",
+            "minecraft:sandstone",
+            "minecraft:snow_block",
+            "minecraft:soul_sand",
+            "minecraft:soul_soil",
+            "minecraft:stone",
+            "minecraft:terracotta",
+            "minecraft:warped_nylium",
+            "minecraft:warped_wart_block",
+            "minecraft:water",
+            "minecraft:white_terracotta"
+    ));
 
     private static int getObjectsPerValue(final long[] val) {
         return (4096 + val.length - 1) / (val.length); // expression is invalid if it returns > 64
@@ -307,10 +368,11 @@ public final class V2832 {
 
         // It looks like DFU will only support worlds in the old height format or the new one, any custom one isn't supported
         // and by not supported I mean it will just treat it as the old format... maybe at least throw in that case?
-        // TODO add support for old custom worldheights?
         MCTypeRegistry.CHUNK.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
             public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+                // The below covers padPaletteEntries - this was written BEFORE that code was added to the datafixer -
+                // and this still works, so I'm keeping it. Don't fix what isn't broken.
                 fixLithiumChunks(data); // See https://github.com/CaffeineMC/lithium-fabric/issues/279
 
                 final MapType<String> level = data.getMap("Level");
@@ -319,7 +381,9 @@ public final class V2832 {
                     return null;
                 }
 
-                final String dimension = level.getString("__dimension"); // Passed through by ChunkStorage
+                final MapType<String> context = data.getMap("__context"); // Passed through by ChunkStorage
+                final String dimension = context == null ? "" : context.getString("dimension", "");
+                final String generator = context == null ? "" : context.getString("generator", "");
                 final boolean isOverworld = "minecraft:overworld".equals(dimension);
                 final int minSection = isOverworld ? -4 : 0;
                 final MutableBoolean isAlreadyExtended = new MutableBoolean();
@@ -332,6 +396,8 @@ public final class V2832 {
                 // must update sections for two things:
                 // 1. the biomes are now stored per section, so we must insert the biomes palette into each section (and create them if they don't exist)
                 // 2. each section must now have block states (or at least DFU is ensuring they do, but current code does not require)
+                V2841.SimplePaletteReader bottomSection = null;
+                final Set<String> allBlocks = new HashSet<>();
                 if (sections != null) {
                     final IntOpenHashSet existingSections = new IntOpenHashSet();
 
@@ -356,11 +422,22 @@ public final class V2832 {
                         section.remove("Palette");
                         section.remove("BlockStates");
 
+                        if (palette != null) {
+                            for (int j = 0, len2 = palette.size(); j < len2; ++j) {
+                                allBlocks.add(V2841.getBlockId(palette.getMap(j)));
+                            }
+                        }
+
+                        final MapType<String> palettedContainer;
                         if (palette != null && blockStates != null) {
                             // only if both exist, same as DFU, same as legacy chunk loading code
-                            section.setMap("block_states", wrapPaletteOptimised(palette, blockStates));
+                            section.setMap("block_states", palettedContainer = wrapPaletteOptimised(palette, blockStates));
                         } else {
-                            section.setMap("block_states", wrappedEmptyBlockPalette.copy()); // must write a palette now, copy so that later edits do not edit them all
+                            section.setMap("block_states", palettedContainer = wrappedEmptyBlockPalette.copy()); // must write a palette now, copy so that later edits do not edit them all
+                        }
+
+                        if (section.getInt("Y", Integer.MAX_VALUE) == 0) {
+                            bottomSection = new V2841.SimplePaletteReader(palettedContainer.getList("palette", ObjectType.MAP), palettedContainer.getLongs("data"));
                         }
                     }
 
@@ -383,8 +460,11 @@ public final class V2832 {
                     }
                 }
 
+                // update status so interpolation can take place
+                predictChunkStatusBeforeSurface(level, allBlocks);
+
                 // done with sections, update the rest of the chunk
-                updateChunkData(level, isOverworld, isAlreadyExtended.getValue());
+                updateChunkData(level, isOverworld, isAlreadyExtended.getValue(), "minecraft:noise".equals(generator), bottomSection);
 
                 return null;
             }
@@ -511,6 +591,29 @@ public final class V2832 {
         });
     }
 
+    private static void predictChunkStatusBeforeSurface(final MapType<String> level, final Set<String> chunkBlocks) {
+        final String status = level.getString("Status", "empty");
+        if (STATUS_IS_OR_AFTER_SURFACE.contains(status)) {
+            return;
+        }
+
+        chunkBlocks.remove("minecraft:air");
+        final boolean chunkNotEmpty = !chunkBlocks.isEmpty();
+        chunkBlocks.removeAll(BLOCKS_BEFORE_FEATURE_STATUS);
+        final boolean chunkFeatureStatus = !chunkBlocks.isEmpty();
+
+        final String update;
+        if (chunkFeatureStatus) {
+            update = "liquid_carvers";
+        } else if (!"noise".equals(status) && !chunkNotEmpty) {
+            update = "biomes".equals(status) ? "structure_references" : status;
+        } else {
+            update = "noise";
+        }
+
+        level.setString("Status", update);
+    }
+
     private static MapType<String> getEmptyBlockPalette() {
         final MapType<String> airBlockState = Types.NBT.createEmptyMap();
         airBlockState.setString("Name", "minecraft:air");
@@ -536,7 +639,9 @@ public final class V2832 {
         });
     }
 
-    private static void updateChunkData(final MapType<String> level, final boolean wantExtendedHeight, final boolean isAlreadyExtended) {
+    private static void updateChunkData(final MapType<String> level, final boolean wantExtendedHeight, final boolean isAlreadyExtended,
+                                        final boolean onNoiseGenerator, final V2841.SimplePaletteReader bottomSection) {
+        level.remove("Biomes");
         if (!wantExtendedHeight) {
             padCarvingMasks(level, 16, 0);
             return;
@@ -552,8 +657,57 @@ public final class V2832 {
         addEmptyListPadding(level, "LiquidsToBeTicked");
         addEmptyListPadding(level, "PostProcessing");
         addEmptyListPadding(level, "ToBeTicked");
-        shiftUpgradeData(level.getMap("UpgradeData"), 4); // https://bugs.mojang.com/browse/MC-238076
+        shiftUpgradeData(level.getMap("UpgradeData"), 4); // https://bugs.mojang.com/browse/MC-238076 - fixed now, Mojang fix is identical. No change required.
         padCarvingMasks(level, 24, 4);
+
+        if (!onNoiseGenerator) {
+            return;
+        }
+
+        final String status = level.getString("Status");
+        if (status == null || "empty".equals(status)) {
+            return;
+        }
+
+        final MapType<String> blendingData = Types.NBT.createEmptyMap();
+        level.setMap("blending_data", blendingData);
+
+        blendingData.setBoolean("old_noise", STATUS_IS_OR_AFTER_NOISE.contains(status));
+
+        if (bottomSection == null) {
+            return;
+        }
+
+        final BitSet missingBedrock = new BitSet(256);
+        boolean hasBedrock = false;
+
+        for (int z = 0; z <= 15; ++z) {
+            for (int x = 0; x <= 15; ++x) {
+                final MapType<String> state = bottomSection.getState(x, 0, z);
+                final String blockId = V2841.getBlockId(state);
+                final boolean isBedrock = state != null && "minecraft:bedrock".equals(blockId);
+                final boolean isAir = state != null && "minecraft:air".equals(blockId);
+                if (isAir) {
+                    missingBedrock.set((z << 4) | x);
+                }
+
+                hasBedrock |= isBedrock;
+            }
+        }
+
+        if (hasBedrock && missingBedrock.cardinality() != missingBedrock.size()) {
+            final String targetStatus = "full".equals(status) ? "heightmaps" : status;
+
+            final MapType<String> belowZeroRetrogen = Types.NBT.createEmptyMap();
+            level.setMap("below_zero_retrogen", belowZeroRetrogen);
+
+            belowZeroRetrogen.setString("target_status", targetStatus);
+            belowZeroRetrogen.setLongs("missing_bedrock", missingBedrock.toLongArray());
+
+            level.setString("Status", "empty");
+        }
+
+        level.setBoolean("isLightOn", false);
     }
 
     private static void padCarvingMasks(final MapType<String> level, final int newSize, final int offset) {
