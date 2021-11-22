@@ -679,7 +679,7 @@ public final class V2832 {
         }
 
         final BitSet missingBedrock = new BitSet(256);
-        boolean hasBedrock = false;
+        boolean hasBedrock = status.equals("noise");
 
         for (int z = 0; z <= 15; ++z) {
             for (int x = 0; x <= 15; ++x) {
