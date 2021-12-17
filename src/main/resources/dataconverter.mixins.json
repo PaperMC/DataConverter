@@ -4,7 +4,12 @@
   "package": "ca.spottedleaf.dataconverter.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "DataFixersMixin"
+    "ChunkStorageMixin",
+    "EntityStorageMixin",
+    "PlayerDataStorageMixin",
+    "SectionStorageMixin",
+    "StructureManagerMixin",
+    "StructureUpdaterMixin"
   ],
   "client": [
   ],
