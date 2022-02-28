@@ -10,18 +10,18 @@ import ca.spottedleaf.dataconverter.minecraft.walkers.itemstack.DataWalkerItems;
 import ca.spottedleaf.dataconverter.minecraft.walkers.generic.WalkerUtils;
 import ca.spottedleaf.dataconverter.types.ObjectType;
 import ca.spottedleaf.dataconverter.types.MapType;
+import com.mojang.logging.LogUtils;
 import net.minecraft.core.Registry;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.EntityBlock;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
 import java.util.HashMap;
 import java.util.Map;
 
 public final class V704 {
 
-    private static final Logger LOGGER = LogManager.getLogger();
+    private static final Logger LOGGER = LogUtils.getLogger();
 
     protected static final int VERSION = MCVersions.V1_10_2 + 192;
 
@@ -29,7 +29,7 @@ public final class V704 {
         @Override
         public String put(final String key, final String value) {
             if (this.containsKey(key)) {
-                LOGGER.fatal("Duplicate item id to tile key: " + key);
+                LOGGER.error("Duplicate item id to tile key: " + key);
                 throw new RuntimeException(); // only devs should see the consequence of this... at least start up the damn thing...
             }
             return super.put(key, value);

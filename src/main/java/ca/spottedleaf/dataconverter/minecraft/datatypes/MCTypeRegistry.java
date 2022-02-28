@@ -54,6 +54,7 @@ import ca.spottedleaf.dataconverter.minecraft.versions.V1904;
 import ca.spottedleaf.dataconverter.minecraft.versions.V1905;
 import ca.spottedleaf.dataconverter.minecraft.versions.V1906;
 import ca.spottedleaf.dataconverter.minecraft.versions.V1911;
+import ca.spottedleaf.dataconverter.minecraft.versions.V1914;
 import ca.spottedleaf.dataconverter.minecraft.versions.V1917;
 import ca.spottedleaf.dataconverter.minecraft.versions.V1918;
 import ca.spottedleaf.dataconverter.minecraft.versions.V1920;
@@ -123,6 +124,8 @@ import ca.spottedleaf.dataconverter.minecraft.versions.V2842;
 import ca.spottedleaf.dataconverter.minecraft.versions.V2843;
 import ca.spottedleaf.dataconverter.minecraft.versions.V2846;
 import ca.spottedleaf.dataconverter.minecraft.versions.V2852;
+import ca.spottedleaf.dataconverter.minecraft.versions.V2967;
+import ca.spottedleaf.dataconverter.minecraft.versions.V2970;
 import ca.spottedleaf.dataconverter.minecraft.versions.V501;
 import ca.spottedleaf.dataconverter.minecraft.versions.V502;
 import ca.spottedleaf.dataconverter.minecraft.versions.V505;
@@ -139,8 +142,12 @@ import ca.spottedleaf.dataconverter.minecraft.versions.V813;
 import ca.spottedleaf.dataconverter.minecraft.versions.V816;
 import ca.spottedleaf.dataconverter.minecraft.versions.V820;
 import ca.spottedleaf.dataconverter.minecraft.versions.V99;
+import com.mojang.logging.LogUtils;
+import org.slf4j.Logger;
 
 public final class MCTypeRegistry {
+
+    private static final Logger LOGGER = LogUtils.getLogger();
 
     public static final MCDataType LEVEL              = new MCDataType("Level");
     public static final MCDataType PLAYER             = new MCDataType("Player");
@@ -169,6 +176,17 @@ public final class MCTypeRegistry {
     public static final MCDataType WORLD_GEN_SETTINGS = new MCDataType("WorldGenSettings");
 
     static {
+        try {
+            registerAll();
+        } catch (final ThreadDeath thr) {
+            throw thr;
+        } catch (final Throwable thr) {
+            LOGGER.error(LogUtils.FATAL_MARKER, "Failed to register data converters", thr);
+            throw new RuntimeException(thr);
+        }
+    }
+
+    private static void registerAll() {
         // General notes:
         // - Structure converters run before everything.
         // - ID specific converters run after structure converters.
@@ -254,6 +272,7 @@ public final class MCTypeRegistry {
         V1906.register();
         // V1909 is just adding a simple block entity (jigsaw)
         V1911.register();
+        V1914.register();
         V1917.register();
         V1918.register();
         V1920.register();
@@ -333,6 +352,8 @@ public final class MCTypeRegistry {
         V2843.register();
         V2846.register();
         V2852.register();
+        V2967.register();
+        V2970.register();
     }
 
     private MCTypeRegistry() {}

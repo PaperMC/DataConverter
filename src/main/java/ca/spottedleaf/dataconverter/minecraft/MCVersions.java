@@ -377,4 +377,21 @@ public final class MCVersions {
     public static final int V1_18_PRE4            = 2850;
     public static final int V1_18_PRE5            = 2851;
     public static final int V1_18_PRE6            = 2853;
+    public static final int V1_18_PRE7            = 2854;
+    public static final int V1_18_PRE8            = 2855;
+    public static final int V1_18_RC1             = 2856;
+    public static final int V1_18_RC2             = 2857;
+    public static final int V1_18_RC3             = 2858;
+    public static final int V1_18_RC4             = 2859;
+    public static final int V1_18                 = 2860;
+    public static final int V1_18_1_PRE1          = 2861;
+    public static final int V1_18_1_RC1           = 2862;
+    public static final int V1_18_1_RC2           = 2863;
+    public static final int V1_18_1_RC3           = 2864;
+    public static final int V1_18_1               = 2865;
+    public static final int V22W03A               = 2966;
+    public static final int V22W05A               = 2967;
+    public static final int V22W06A               = 2968;
+    public static final int V22W07A               = 2969;
+    public static final int V1_18_2_PRE1          = 2971;
 }

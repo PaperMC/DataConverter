@@ -4,9 +4,8 @@ import ca.spottedleaf.dataconverter.converters.DataConverter;
 import ca.spottedleaf.dataconverter.minecraft.MCVersions;
 import ca.spottedleaf.dataconverter.types.MapType;
 import ca.spottedleaf.dataconverter.types.Types;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
+import com.mojang.logging.LogUtils;
+import org.slf4j.Logger;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -15,7 +14,7 @@ import java.util.Set;
 
 public final class ConverterFlattenItemStack extends DataConverter<MapType<String>, MapType<String>> {
 
-    private static final Logger LOGGER = LogManager.getLogger();
+    private static final Logger LOGGER = LogUtils.getLogger();
 
     // Map of "id.damage" -> "flattened id"
     private static final Map<String, String> FLATTEN_MAP = new HashMap<>();

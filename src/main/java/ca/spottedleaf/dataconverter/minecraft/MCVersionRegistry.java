@@ -1,14 +1,14 @@
 package ca.spottedleaf.dataconverter.minecraft;
 
 import ca.spottedleaf.dataconverter.converters.DataConverter;
+import com.mojang.logging.LogUtils;
 import it.unimi.dsi.fastutil.ints.Int2ObjectLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntLinkedOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntRBTreeSet;
 import it.unimi.dsi.fastutil.longs.LongArrayList;
 import it.unimi.dsi.fastutil.longs.LongLinkedOpenHashSet;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -16,7 +16,7 @@ import java.util.Locale;
 
 public final class MCVersionRegistry {
 
-    private static final Logger LOGGER = LogManager.getLogger();
+    private static final Logger LOGGER = LogUtils.getLogger();
 
     protected static final Int2ObjectLinkedOpenHashMap<String> VERSION_NAMES = new Int2ObjectLinkedOpenHashMap<>();
     protected static final IntArrayList VERSION_LIST;
@@ -112,6 +112,7 @@ public final class MCVersionRegistry {
                 1906,
                 1909,
                 1911,
+                1914,
                 1917,
                 1918,
                 1920,
@@ -183,7 +184,9 @@ public final class MCVersionRegistry {
                 2843,
                 2846,
                 2852,
-                // All up to 1.18-pre6
+                2967,
+                2970
+                // All up to 1.18.2-pre1
         };
         Arrays.sort(converterVersions);
 

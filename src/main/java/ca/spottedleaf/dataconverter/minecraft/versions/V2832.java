@@ -9,12 +9,12 @@ import ca.spottedleaf.dataconverter.types.ListType;
 import ca.spottedleaf.dataconverter.types.MapType;
 import ca.spottedleaf.dataconverter.types.ObjectType;
 import ca.spottedleaf.dataconverter.types.Types;
+import com.mojang.logging.LogUtils;
 import it.unimi.dsi.fastutil.ints.Int2IntLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.ints.IntIterator;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import org.apache.commons.lang3.mutable.MutableBoolean;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.HashSet;
@@ -22,7 +22,7 @@ import java.util.Set;
 
 public final class V2832 {
 
-    protected static final Logger LOGGER = LogManager.getLogger();
+    private static final Logger LOGGER = LogUtils.getLogger();
 
     protected static final int VERSION = MCVersions.V1_17_1 + 102;
 
@@ -281,7 +281,7 @@ public final class V2832 {
             try {
                 section.setLongs("BlockStates", resize(blockStates, gotBits, expectedBits));
             } catch (final Exception ex) {
-                LOGGER.fatal("Failed to rewrite mismatched palette and data storage for section y: " + sectionY
+                LOGGER.error("Failed to rewrite mismatched palette and data storage for section y: " + sectionY
                         + " for chunk [" + chunkX + "," + chunkZ + "], palette entries: " + palette.size() + ", data storage size: "
                         + blockStates.length,
                         ex

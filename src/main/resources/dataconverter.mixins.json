@@ -8,6 +8,7 @@
     "EntityStorageMixin",
     "PlayerDataStorageMixin",
     "SectionStorageMixin",
+    "StructureCheckMixin",
     "StructureManagerMixin",
     "StructureUpdaterMixin"
   ],

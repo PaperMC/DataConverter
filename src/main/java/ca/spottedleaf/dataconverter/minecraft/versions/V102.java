@@ -7,12 +7,12 @@ import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
 import ca.spottedleaf.dataconverter.types.ObjectType;
 import ca.spottedleaf.dataconverter.types.MapType;
 import ca.spottedleaf.dataconverter.types.Types;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import com.mojang.logging.LogUtils;
+import org.slf4j.Logger;
 
 public final class V102 {
 
-    private static final Logger LOGGER = LogManager.getLogger();
+    private static final Logger LOGGER = LogUtils.getLogger();
 
     protected static final int VERSION = MCVersions.V15W32A + 2;
 
