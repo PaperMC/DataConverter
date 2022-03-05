@@ -267,6 +267,9 @@ public final class V704 {
                     // add missing item_frame entity id
                     // version check is same for armorstand, as both were namespaced at the same time
                     entityId = DataConverter.getVersion(fromVersion) < 705 ? "ItemFrame" : "minecraft:item_frame";
+                } else if ("minecraft:glow_item_frame".equals(itemId)) {
+                    // add missing glow_item_frame entity id
+                    entityId = "minecraft:glow_item_frame";
                 } else {
                     entityId = entityTag.getString("id");
                 }
