@@ -154,6 +154,9 @@ public final class V704 {
         ITEM_ID_TO_TILE_ENTITY_ID.put("minecraft:light_gray_bed", "minecraft:bed");
         ITEM_ID_TO_TILE_ENTITY_ID.put("minecraft:light_gray_banner", "minecraft:banner");
         ITEM_ID_TO_TILE_ENTITY_ID.put("minecraft:soul_campfire", "minecraft:campfire");
+        ITEM_ID_TO_TILE_ENTITY_ID.put("minecraft:sculk_catalyst", "minecraft:sculk_catalyst");
+        ITEM_ID_TO_TILE_ENTITY_ID.put("minecraft:mangrove_sign", "minecraft:sign");
+        ITEM_ID_TO_TILE_ENTITY_ID.put("minecraft:sculk_shrieker", "minecraft:sculk_shrieker");
     }
 
     // This class is responsible for also integrity checking the item id to tile id map here, we just use the item registry to figure it out

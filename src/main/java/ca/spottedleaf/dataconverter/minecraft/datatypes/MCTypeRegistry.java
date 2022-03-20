@@ -126,6 +126,9 @@ import ca.spottedleaf.dataconverter.minecraft.versions.V2846;
 import ca.spottedleaf.dataconverter.minecraft.versions.V2852;
 import ca.spottedleaf.dataconverter.minecraft.versions.V2967;
 import ca.spottedleaf.dataconverter.minecraft.versions.V2970;
+import ca.spottedleaf.dataconverter.minecraft.versions.V3077;
+import ca.spottedleaf.dataconverter.minecraft.versions.V3078;
+import ca.spottedleaf.dataconverter.minecraft.versions.V3079;
 import ca.spottedleaf.dataconverter.minecraft.versions.V501;
 import ca.spottedleaf.dataconverter.minecraft.versions.V502;
 import ca.spottedleaf.dataconverter.minecraft.versions.V505;
@@ -354,6 +357,11 @@ public final class MCTypeRegistry {
         V2852.register();
         V2967.register();
         V2970.register();
+        // V1.19
+        // V3076 is registering a simple tile entity (sculk_catalyst)
+        V3077.register();
+        V3078.register();
+        V3079.register();
     }
 
     private MCTypeRegistry() {}

@@ -9,7 +9,7 @@
     "PlayerDataStorageMixin",
     "SectionStorageMixin",
     "StructureCheckMixin",
-    "StructureManagerMixin",
+    "StructureTemplateManagerMixin",
     "StructureUpdaterMixin"
   ],
   "client": [

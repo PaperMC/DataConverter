@@ -398,4 +398,5 @@ public final class MCVersions {
     public static final int V1_18_2_PRE3          = 2973;
     public static final int V1_18_2_RC1           = 2974;
     public static final int V1_18_2               = 2975;
+    public static final int V22W11A               = 3080;
 }

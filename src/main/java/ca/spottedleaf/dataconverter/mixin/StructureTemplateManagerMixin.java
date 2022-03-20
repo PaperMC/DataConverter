@@ -7,13 +7,13 @@ import net.minecraft.SharedConstants;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.util.datafix.DataFixTypes;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureManager;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(StructureManager.class)
-public abstract class StructureManagerMixin {
+@Mixin(StructureTemplateManager.class)
+public abstract class StructureTemplateManagerMixin {
 
     /**
      * Redirects ONLY structure converters to the new dataconverter system. On update,
