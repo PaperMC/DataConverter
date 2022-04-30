@@ -10,9 +10,10 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-public final class V3079 {
+public final class V3088 {
 
-    protected static final int VERSION = MCVersions.V1_18_2 + 104;
+    // this class originally targeted 3079 but was changed to target a later version without changing the converter, zero clue why
+    protected static final int VERSION = MCVersions.V22W14A;
 
     private static final Set<String> STATUSES_TO_SKIP_BLENDING = new HashSet<>(
             Arrays.asList(

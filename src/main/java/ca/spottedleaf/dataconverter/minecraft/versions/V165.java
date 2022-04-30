@@ -7,8 +7,8 @@ import ca.spottedleaf.dataconverter.types.ObjectType;
 import ca.spottedleaf.dataconverter.types.ListType;
 import ca.spottedleaf.dataconverter.types.MapType;
 import com.google.gson.JsonParseException;
+import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.datafix.fixes.BlockEntitySignTextStrictJsonFix;
 import org.apache.commons.lang3.StringUtils;
@@ -40,7 +40,7 @@ public final class V165 {
                             try {
                                 component = GsonHelper.fromJson(BlockEntitySignTextStrictJsonFix.GSON, page, Component.class, true);
                                 if (component == null) {
-                                    component = TextComponent.EMPTY;
+                                    component = CommonComponents.EMPTY;
                                 }
                             } catch (final JsonParseException ignored) {}
 
@@ -57,13 +57,13 @@ public final class V165 {
                             }
 
                             if (component == null) {
-                                component = new TextComponent(page);
+                                component = Component.literal(page);
                             }
                         } else {
-                            component = new TextComponent(page);
+                            component = Component.literal(page);
                         }
                     } else {
-                        component = TextComponent.EMPTY;
+                        component = CommonComponents.EMPTY;
                     }
 
                     pages.setString(i, Component.Serializer.toJson(component));

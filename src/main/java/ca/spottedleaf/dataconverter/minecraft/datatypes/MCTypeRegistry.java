@@ -102,6 +102,7 @@ import ca.spottedleaf.dataconverter.minecraft.versions.V2568;
 import ca.spottedleaf.dataconverter.minecraft.versions.V2671;
 import ca.spottedleaf.dataconverter.minecraft.versions.V2679;
 import ca.spottedleaf.dataconverter.minecraft.versions.V2680;
+import ca.spottedleaf.dataconverter.minecraft.versions.V2684;
 import ca.spottedleaf.dataconverter.minecraft.versions.V2686;
 import ca.spottedleaf.dataconverter.minecraft.versions.V2688;
 import ca.spottedleaf.dataconverter.minecraft.versions.V2690;
@@ -128,9 +129,14 @@ import ca.spottedleaf.dataconverter.minecraft.versions.V2967;
 import ca.spottedleaf.dataconverter.minecraft.versions.V2970;
 import ca.spottedleaf.dataconverter.minecraft.versions.V3077;
 import ca.spottedleaf.dataconverter.minecraft.versions.V3078;
-import ca.spottedleaf.dataconverter.minecraft.versions.V3079;
+import ca.spottedleaf.dataconverter.minecraft.versions.V3083;
+import ca.spottedleaf.dataconverter.minecraft.versions.V3084;
+import ca.spottedleaf.dataconverter.minecraft.versions.V3086;
+import ca.spottedleaf.dataconverter.minecraft.versions.V3087;
+import ca.spottedleaf.dataconverter.minecraft.versions.V3088;
 import ca.spottedleaf.dataconverter.minecraft.versions.V3081;
 import ca.spottedleaf.dataconverter.minecraft.versions.V3082;
+import ca.spottedleaf.dataconverter.minecraft.versions.V3090;
 import ca.spottedleaf.dataconverter.minecraft.versions.V501;
 import ca.spottedleaf.dataconverter.minecraft.versions.V502;
 import ca.spottedleaf.dataconverter.minecraft.versions.V505;
@@ -179,6 +185,7 @@ public final class MCTypeRegistry {
     public static final MCValueType RECIPE            = new MCValueType("RecipeName");
     public static final MCValueType BIOME             = new MCValueType("Biome");
     public static final MCDataType WORLD_GEN_SETTINGS = new MCDataType("WorldGenSettings");
+    public static final MCValueType GAME_EVENT_NAME   = new MCValueType("GameEventName");
 
     static {
         try {
@@ -332,7 +339,7 @@ public final class MCTypeRegistry {
         V2671.register();
         V2679.register();
         V2680.register();
-        // V2684 is registering a simple tile entity (skulk sensor)
+        V2684.register();
         V2686.register();
         V2688.register();
         V2690.register();
@@ -363,9 +370,14 @@ public final class MCTypeRegistry {
         // V3076 is registering a simple tile entity (sculk_catalyst)
         V3077.register();
         V3078.register();
-        V3079.register();
         V3081.register();
         V3082.register();
+        V3083.register();
+        V3084.register();
+        V3086.register();
+        V3087.register();
+        V3088.register();
+        V3090.register();
     }
 
     private MCTypeRegistry() {}

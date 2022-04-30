@@ -2,6 +2,7 @@ package ca.spottedleaf.dataconverter.minecraft.versions;
 
 import ca.spottedleaf.dataconverter.minecraft.MCVersions;
 import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
+import ca.spottedleaf.dataconverter.minecraft.walkers.game_event.GameEventListenerWalker;
 import ca.spottedleaf.dataconverter.minecraft.walkers.itemstack.DataWalkerItemLists;
 
 public final class V3081 {
@@ -14,5 +15,6 @@ public final class V3081 {
 
     public static void register() {
         registerMob("minecraft:warden");
+        MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:warden", new GameEventListenerWalker());
     }
 }

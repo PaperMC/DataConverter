@@ -11,5 +11,4 @@ public final class V3082 {
     public static void register() {
         MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:chest_boat", new DataWalkerItemLists("Items"));
     }
-
 }

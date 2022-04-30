@@ -7,7 +7,6 @@ import ca.spottedleaf.dataconverter.types.ListType;
 import ca.spottedleaf.dataconverter.types.MapType;
 import ca.spottedleaf.dataconverter.types.ObjectType;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 
 public final class V1803 {
 
@@ -37,7 +36,7 @@ public final class V1803 {
                 }
 
                 for (int i = 0, len = lore.size(); i < len; ++i) {
-                    lore.setString(i, Component.Serializer.toJson(new TextComponent(lore.getString(i))));
+                    lore.setString(i, Component.Serializer.toJson(Component.literal(lore.getString(i))));
                 }
 
                 return null;

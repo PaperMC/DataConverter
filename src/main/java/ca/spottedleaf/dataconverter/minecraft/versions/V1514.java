@@ -5,7 +5,6 @@ import ca.spottedleaf.dataconverter.minecraft.MCVersions;
 import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
 import ca.spottedleaf.dataconverter.types.MapType;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.scores.criteria.ObjectiveCriteria;
 
 public final class V1514 {
@@ -23,7 +22,7 @@ public final class V1514 {
                     return null;
                 }
 
-                final String update = Component.Serializer.toJson(new TextComponent(displayName));
+                final String update = Component.Serializer.toJson(Component.literal(displayName));
 
                 data.setString("DisplayName", update);
 
@@ -39,7 +38,7 @@ public final class V1514 {
                     return null;
                 }
 
-                final String update = Component.Serializer.toJson(new TextComponent(displayName));
+                final String update = Component.Serializer.toJson(Component.literal(displayName));
 
                 data.setString("DisplayName", update);
 

@@ -5,8 +5,6 @@ import ca.spottedleaf.dataconverter.minecraft.MCVersions;
 import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
 import ca.spottedleaf.dataconverter.types.MapType;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 
 public final class V1458 {
 
@@ -18,7 +16,7 @@ public final class V1458 {
         if (customName.isEmpty()) {
             data.remove("CustomName");
         } else {
-            data.setString("CustomName", Component.Serializer.toJson(new TextComponent(customName)));
+            data.setString("CustomName", Component.Serializer.toJson(Component.literal(customName)));
         }
 
         return null;
@@ -59,11 +57,11 @@ public final class V1458 {
 
                 final String name = display.getString("Name");
                 if (name != null) {
-                    display.setString("Name", Component.Serializer.toJson(new TextComponent(name)));
+                    display.setString("Name", Component.Serializer.toJson(Component.literal(name)));
                 } else {
                     final String localisedName = display.getString("LocName");
                     if (localisedName != null) {
-                        display.setString("Name", Component.Serializer.toJson(new TranslatableComponent(localisedName)));
+                        display.setString("Name", Component.Serializer.toJson(Component.translatable(localisedName)));
                         display.remove("LocName");
                     }
                 }
