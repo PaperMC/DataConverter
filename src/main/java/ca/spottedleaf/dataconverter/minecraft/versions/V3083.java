@@ -15,6 +15,6 @@ public final class V3083 {
 
     public static void register() {
         registerMob("minecraft:allay");
-        MCTypeRegistry.ENTITY.addStructureWalker(VERSION, new GameEventListenerWalker());
+        MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:allay", new GameEventListenerWalker());
     }
 }
