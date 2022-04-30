@@ -391,7 +391,7 @@ public final class V1451 {
 
             switch (type) {
                 case "minecraft:mined": {
-                    WalkerUtils.convert(MCTypeRegistry.ITEM_NAME, criteriaType, "id", fromVersion, toVersion);
+                    WalkerUtils.convert(MCTypeRegistry.BLOCK_NAME, criteriaType, "id", fromVersion, toVersion);
                     break;
                 }
 
@@ -400,7 +400,7 @@ public final class V1451 {
                 case "minecraft:broken":
                 case "minecraft:picked_up":
                 case "minecraft:dropped": {
-                    WalkerUtils.convert(MCTypeRegistry.BLOCK_NAME, criteriaType, "id", fromVersion, toVersion);
+                    WalkerUtils.convert(MCTypeRegistry.ITEM_NAME, criteriaType, "id", fromVersion, toVersion);
                     break;
                 }
 
