@@ -1,7 +1,7 @@
 package ca.spottedleaf.dataconverter.minecraft.versions;
 
 import ca.spottedleaf.dataconverter.minecraft.MCVersions;
-import ca.spottedleaf.dataconverter.minecraft.converters.entity.ConverterEntityVariant;
+import ca.spottedleaf.dataconverter.minecraft.converters.entity.ConverterEntityToVariant;
 import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 
@@ -17,6 +17,6 @@ public final class V3087 {
     }
 
     public static void register() {
-        MCTypeRegistry.ENTITY.addConverterForId("minecraft:frog", new ConverterEntityVariant(VERSION, "Variant", FROG_ID_CONVERSION::get));
+        MCTypeRegistry.ENTITY.addConverterForId("minecraft:frog", new ConverterEntityToVariant(VERSION, "Variant", FROG_ID_CONVERSION::get));
     }
 }

@@ -2,7 +2,7 @@ package ca.spottedleaf.dataconverter.minecraft.versions;
 
 import ca.spottedleaf.dataconverter.minecraft.MCVersions;
 import ca.spottedleaf.dataconverter.minecraft.converters.advancements.ConverterCriteriaRename;
-import ca.spottedleaf.dataconverter.minecraft.converters.entity.ConverterEntityVariant;
+import ca.spottedleaf.dataconverter.minecraft.converters.entity.ConverterEntityToVariant;
 import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
 import com.google.common.collect.ImmutableMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
@@ -43,7 +43,7 @@ public final class V3086 {
             .build();
 
     public static void register() {
-        MCTypeRegistry.ENTITY.addConverterForId("minecraft:cat", new ConverterEntityVariant(VERSION, "CatType", CAT_ID_CONVERSION::get));
+        MCTypeRegistry.ENTITY.addConverterForId("minecraft:cat", new ConverterEntityToVariant(VERSION, "CatType", CAT_ID_CONVERSION::get));
         MCTypeRegistry.ADVANCEMENTS.addStructureConverter(new ConverterCriteriaRename(VERSION, "minecraft:husbandry/complete_catalogue", CAT_ADVANCEMENTS_CONVERSION::get));
     }
 }

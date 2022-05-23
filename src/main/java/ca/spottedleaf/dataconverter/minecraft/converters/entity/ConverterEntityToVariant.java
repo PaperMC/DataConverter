@@ -4,18 +4,18 @@ import ca.spottedleaf.dataconverter.converters.DataConverter;
 import ca.spottedleaf.dataconverter.types.MapType;
 import java.util.function.IntFunction;
 
-public final class ConverterEntityVariant extends DataConverter<MapType<String>, MapType<String>> {
+public final class ConverterEntityToVariant extends DataConverter<MapType<String>, MapType<String>> {
 
     public final String path;
     public final IntFunction<String> conversion;
 
-    public ConverterEntityVariant(final int toVersion, final String path, final IntFunction<String> conversion) {
+    public ConverterEntityToVariant(final int toVersion, final String path, final IntFunction<String> conversion) {
         super(toVersion);
         this.path = path;
         this.conversion = conversion;
     }
 
-    public ConverterEntityVariant(final int toVersion, final int versionStep, final String path, final IntFunction<String> conversion) {
+    public ConverterEntityToVariant(final int toVersion, final int versionStep, final String path, final IntFunction<String> conversion) {
         super(toVersion, versionStep);
         this.path = path;
         this.conversion = conversion;
