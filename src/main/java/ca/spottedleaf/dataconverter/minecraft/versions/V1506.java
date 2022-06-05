@@ -119,7 +119,7 @@ public final class V1506 {
                 if ("flat".equalsIgnoreCase(generatorName)) {
                     data.setMap("generatorOptions", V1506.convert(generatorOptions == null ? "" : generatorOptions));
                 } else if ("buffet".equalsIgnoreCase(generatorName) && generatorOptions != null) {
-                    data.setMap("generatorOptions", JsonTypeUtil.convertJsonToNBT(new JsonMapType(GsonHelper.parse(generatorName, true), false)));
+                    data.setMap("generatorOptions", JsonTypeUtil.convertJsonToNBT(new JsonMapType(GsonHelper.parse(generatorOptions, true), false)));
                 }
                 return null;
             }
