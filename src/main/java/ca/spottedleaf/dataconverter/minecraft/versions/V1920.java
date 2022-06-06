@@ -70,6 +70,6 @@ public final class V1920 {
             }
         });
 
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:campfire", new DataWalkerItemLists("Items"));
+        MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, "minecraft:campfire", new DataWalkerItemLists("Items"));
     }
 }
