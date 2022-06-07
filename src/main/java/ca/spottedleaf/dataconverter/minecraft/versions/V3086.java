@@ -6,6 +6,7 @@ import ca.spottedleaf.dataconverter.minecraft.converters.entity.ConverterEntityT
 import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
 import com.google.common.collect.ImmutableMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import java.util.HashMap;
 import java.util.Map;
 
 public final class V3086 {
@@ -28,7 +29,7 @@ public final class V3086 {
         CAT_ID_CONVERSION.put(10, "minecraft:all_black");
     }
 
-    protected static final Map<String, String> CAT_ADVANCEMENTS_CONVERSION = ImmutableMap.<String, String>builder()
+    protected static final Map<String, String> CAT_ADVANCEMENTS_CONVERSION = new HashMap<>(ImmutableMap.<String, String>builder()
             .put("textures/entity/cat/tabby.png", "minecraft:tabby")
             .put("textures/entity/cat/black.png", "minecraft:black")
             .put("textures/entity/cat/red.png", "minecraft:red")
@@ -40,7 +41,8 @@ public final class V3086 {
             .put("textures/entity/cat/white.png", "minecraft:white")
             .put("textures/entity/cat/jellie.png", "minecraft:jellie")
             .put("textures/entity/cat/all_black.png", "minecraft:all_black")
-            .build();
+            .build()
+    );
 
     public static void register() {
         MCTypeRegistry.ENTITY.addConverterForId("minecraft:cat", new ConverterEntityToVariant(VERSION, "CatType", CAT_ID_CONVERSION::get));

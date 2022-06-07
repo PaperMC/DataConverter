@@ -4,6 +4,8 @@ import java.util.Set;
 
 public interface MapType<K> {
 
+    public TypeUtil getTypeUtil();
+
     @Override
     public int hashCode();
 
@@ -122,6 +124,15 @@ public interface MapType<K> {
         return this.getList(key, type, null);
     }
 
+    public default ListType getOrCreateList(final K key, final ObjectType type) {
+        ListType ret = this.getList(key, type);
+        if (ret == null) {
+            this.setList(key, ret = this.getTypeUtil().createEmptyList());
+        }
+
+        return ret;
+    }
+
     public default ListType getList(final K key, final ObjectType type, final ListType dfl) {
         final ListType ret = this.getListUnchecked(key, null);
         final ObjectType retType;
@@ -135,6 +146,15 @@ public interface MapType<K> {
     public void setList(final K key, final ListType val);
 
     public <T> MapType<T> getMap(final K key);
+
+    public default <T> MapType<T> getOrCreateMap(final K key) {
+        MapType<T> ret = this.getMap(key);
+        if (ret == null) {
+            this.setMap(key, ret = this.getTypeUtil().createEmptyMap());
+        }
+
+        return ret;
+    }
 
     public <T> MapType<T> getMap(final K key, final MapType<T> dfl);
 

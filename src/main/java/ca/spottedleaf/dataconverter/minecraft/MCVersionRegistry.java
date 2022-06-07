@@ -1,6 +1,7 @@
 package ca.spottedleaf.dataconverter.minecraft;
 
 import ca.spottedleaf.dataconverter.converters.DataConverter;
+import ca.spottedleaf.dataconverter.minecraft.versions.V3093;
 import com.mojang.logging.LogUtils;
 import it.unimi.dsi.fastutil.ints.Int2ObjectLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
@@ -196,6 +197,7 @@ public final class MCVersionRegistry {
                 3087,
                 3088,
                 3090,
+                3093,
                 3094,
                 3097
                 // All up to 1.19-pre1

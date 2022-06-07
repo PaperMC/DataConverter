@@ -3,6 +3,8 @@ package ca.spottedleaf.dataconverter.types.nbt;
 import ca.spottedleaf.dataconverter.types.ListType;
 import ca.spottedleaf.dataconverter.types.MapType;
 import ca.spottedleaf.dataconverter.types.ObjectType;
+import ca.spottedleaf.dataconverter.types.TypeUtil;
+import ca.spottedleaf.dataconverter.types.Types;
 import net.minecraft.nbt.ByteArrayTag;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntArrayTag;
@@ -36,6 +38,11 @@ public final class NBTMapType implements MapType<String> {
         }
 
         return this.map.equals(((NBTMapType)obj).map);
+    }
+
+    @Override
+    public TypeUtil getTypeUtil() {
+        return Types.NBT;
     }
 
     @Override

@@ -3,6 +3,8 @@ package ca.spottedleaf.dataconverter.types.nbt;
 import ca.spottedleaf.dataconverter.types.ObjectType;
 import ca.spottedleaf.dataconverter.types.ListType;
 import ca.spottedleaf.dataconverter.types.MapType;
+import ca.spottedleaf.dataconverter.types.TypeUtil;
+import ca.spottedleaf.dataconverter.types.Types;
 import net.minecraft.nbt.ByteArrayTag;
 import net.minecraft.nbt.ByteTag;
 import net.minecraft.nbt.CompoundTag;
@@ -28,6 +30,11 @@ public final class NBTListType implements ListType {
 
     public NBTListType(final ListTag tag) {
         this.list = tag;
+    }
+
+    @Override
+    public TypeUtil getTypeUtil() {
+        return Types.NBT;
     }
 
     @Override

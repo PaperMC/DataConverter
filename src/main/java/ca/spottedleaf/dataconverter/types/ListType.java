@@ -2,6 +2,8 @@ package ca.spottedleaf.dataconverter.types;
 
 public interface ListType {
 
+    public TypeUtil getTypeUtil();
+
     @Override
     public int hashCode();
 

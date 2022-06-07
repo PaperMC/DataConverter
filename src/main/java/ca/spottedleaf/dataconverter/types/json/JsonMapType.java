@@ -3,6 +3,8 @@ package ca.spottedleaf.dataconverter.types.json;
 import ca.spottedleaf.dataconverter.types.ListType;
 import ca.spottedleaf.dataconverter.types.MapType;
 import ca.spottedleaf.dataconverter.types.ObjectType;
+import ca.spottedleaf.dataconverter.types.TypeUtil;
+import ca.spottedleaf.dataconverter.types.Types;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -24,6 +26,11 @@ public final class JsonMapType implements MapType<String> {
     public JsonMapType(final JsonObject map, final boolean compressed) {
         this.map = map;
         this.compressed = compressed;
+    }
+
+    @Override
+    public TypeUtil getTypeUtil() {
+        return this.compressed ? Types.JSON_COMPRESSED : Types.JSON;
     }
 
     @Override

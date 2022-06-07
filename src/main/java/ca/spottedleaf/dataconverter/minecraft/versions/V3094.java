@@ -20,7 +20,6 @@ public final class V3094 {
             "minecraft:dream_goat_horn"
     };
 
-
     public static void register() {
         MCTypeRegistry.ITEM_STACK.addConverterForId("minecraft:goat_horn", new DataConverter<>(VERSION) {
             @Override

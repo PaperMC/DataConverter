@@ -27,12 +27,11 @@ public final class V3088 {
     public static void register() {
         MCTypeRegistry.CHUNK.addStructureConverter(new DataConverter<>(VERSION) {
 
-            // maxSection is exclusive
-            private static MapType<String> createBlendingData(final int minSection, final int maxSection) {
+            private static MapType<String> createBlendingData(final int height, final int minY) {
                 final MapType<String> ret = Types.NBT.createEmptyMap();
 
-                ret.setInt("min_section", minSection);
-                ret.setInt("max_section", maxSection);
+                ret.setInt("min_section", minY >> 4);
+                ret.setInt("max_section", (minY + height) >> 4);
 
                 return ret;
             }
@@ -49,11 +48,11 @@ public final class V3088 {
                 final MapType<String> belowZeroRetrogen = data.getMap("below_zero_retrogen");
 
                 if (!STATUSES_TO_SKIP_BLENDING.contains(status)) {
-                    data.setMap("blending_data", createBlendingData(0 >> 4, 256 >> 4));
+                    data.setMap("blending_data", createBlendingData(384, -64));
                 } else if (belowZeroRetrogen != null) {
                     final String realStatus = NamespaceUtil.correctNamespace(belowZeroRetrogen.getString("target_status", "empty"));
                     if (!STATUSES_TO_SKIP_BLENDING.contains(realStatus)) {
-                        data.setMap("blending_data", createBlendingData(-64 >> 4, 320 >> 4));
+                        data.setMap("blending_data", createBlendingData(256, 0));
                     }
                 }
 
