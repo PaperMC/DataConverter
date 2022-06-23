@@ -39,6 +39,10 @@ public final class V3088 {
             @Override
             public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
                 data.remove("blending_data");
+                final MapType<String> context = data.getMap("__context");
+                if (!"minecraft:overworld".equals(context == null ? null : context.getString("dimension"))) {
+                    return null;
+                }
 
                 final String status = NamespaceUtil.correctNamespace(data.getString("Status"));
                 if (status == null) {
