@@ -5,7 +5,7 @@ import ca.spottedleaf.dataconverter.minecraft.MCVersions;
 import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
 import ca.spottedleaf.dataconverter.types.MapType;
 
-public class V3108 {
+public final class V3108 {
 
     private static final int VERSION = MCVersions.V1_19_1_PRE1 + 1;
 
