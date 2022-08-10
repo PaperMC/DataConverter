@@ -420,4 +420,15 @@ public final class MCVersions {
     public static final int V1_19_1_PRE1          = 3107;
     public static final int V1_19_1_RC1           = 3109;
     public static final int V1_19_1_PRE2          = 3110;
+    public static final int V1_19_1_PRE3          = 3111;
+    public static final int V1_19_1_PRE4          = 3112;
+    public static final int V1_19_1_PRE5          = 3113;
+    public static final int V1_19_1_PRE6          = 3114;
+    public static final int V1_19_1_RC2           = 3115;
+    public static final int V1_19_1_RC3           = 3116;
+    public static final int V1_19_1               = 3117;
+    public static final int V1_19_2_RC1           = 3118;
+    public static final int V1_19_2_RC2           = 3119;
+    public static final int V1_19_2               = 3120;
+
 }
