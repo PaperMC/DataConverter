@@ -11,12 +11,19 @@ import ca.spottedleaf.dataconverter.minecraft.walkers.generic.WalkerUtils;
 import ca.spottedleaf.dataconverter.types.ObjectType;
 import ca.spottedleaf.dataconverter.types.MapType;
 import com.mojang.logging.LogUtils;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 import org.slf4j.Logger;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public final class V704 {
@@ -157,23 +164,58 @@ public final class V704 {
         ITEM_ID_TO_TILE_ENTITY_ID.put("minecraft:sculk_catalyst", "minecraft:sculk_catalyst");
         ITEM_ID_TO_TILE_ENTITY_ID.put("minecraft:mangrove_sign", "minecraft:sign");
         ITEM_ID_TO_TILE_ENTITY_ID.put("minecraft:sculk_shrieker", "minecraft:sculk_shrieker");
+        ITEM_ID_TO_TILE_ENTITY_ID.put("minecraft:chiseled_bookshelf", "minecraft:chiseled_bookshelf");
+        ITEM_ID_TO_TILE_ENTITY_ID.put("minecraft:bamboo_sign", "minecraft:sign");
+        ITEM_ID_TO_TILE_ENTITY_ID.put("minecraft:oak_hanging_sign", "minecraft:sign");
+        ITEM_ID_TO_TILE_ENTITY_ID.put("minecraft:spruce_hanging_sign", "minecraft:sign");
+        ITEM_ID_TO_TILE_ENTITY_ID.put("minecraft:birch_hanging_sign", "minecraft:sign");
+        ITEM_ID_TO_TILE_ENTITY_ID.put("minecraft:jungle_hanging_sign", "minecraft:sign");
+        ITEM_ID_TO_TILE_ENTITY_ID.put("minecraft:acacia_hanging_sign", "minecraft:sign");
+        ITEM_ID_TO_TILE_ENTITY_ID.put("minecraft:dark_oak_hanging_sign", "minecraft:sign");
+        ITEM_ID_TO_TILE_ENTITY_ID.put("minecraft:mangrove_hanging_sign", "minecraft:sign");
+        ITEM_ID_TO_TILE_ENTITY_ID.put("minecraft:bamboo_hanging_sign", "minecraft:sign");
+        ITEM_ID_TO_TILE_ENTITY_ID.put("minecraft:crimson_hanging_sign", "minecraft:sign");
+        ITEM_ID_TO_TILE_ENTITY_ID.put("minecraft:warped_hanging_sign", "minecraft:sign");
+        ITEM_ID_TO_TILE_ENTITY_ID.put("minecraft:piglin_head", "minecraft:skull");
     }
 
     // This class is responsible for also integrity checking the item id to tile id map here, we just use the item registry to figure it out
 
     static {
-        for (final Item item : Registry.ITEM) {
+        for (final Item item : BuiltInRegistries.ITEM) {
             if (!(item instanceof BlockItem)) {
                 continue;
             }
 
-            if (!(((BlockItem)item).getBlock() instanceof EntityBlock)) {
+            if (!(((BlockItem)item).getBlock() instanceof EntityBlock entityBlock)) {
                 continue;
             }
 
-            final String itemName = Registry.ITEM.getKey(item).toString();
-            if (!ITEM_ID_TO_TILE_ENTITY_ID.containsKey(itemName)) {
+            String possibleId;
+            try {
+                final BlockEntity entity = entityBlock.newBlockEntity(new BlockPos(0, 0, 0), ((Block)entityBlock).defaultBlockState());
+                if (entity != null) {
+                    possibleId = BlockEntityType.getKey(entity.getType()).toString();
+                } else {
+                    possibleId = null;
+                }
+            } catch (final Throwable th) {
+                possibleId = null;
+            }
+
+            final String itemName = BuiltInRegistries.ITEM.getKey(item).toString();
+            final String mappedTo = ITEM_ID_TO_TILE_ENTITY_ID.get(itemName);
+            if (mappedTo == null) {
                 LOGGER.error("Item id " + itemName + " does not contain tile mapping! (V704)");
+            } else if (possibleId != null && !mappedTo.equals(possibleId)) {
+                final boolean chestCase = mappedTo.equals("minecraft:chest") && possibleId.equals("minecraft:trapped_chest");
+                final boolean signCase = mappedTo.equals("minecraft:sign") && possibleId.equals("minecraft:hanging_sign");
+                // save data is identical for the chest and sign case, so we don't care
+                // it's also important to note that there is no versioning for this map, so it is possible
+                // that mapping them correctly could cause issues converting old data
+                if (!chestCase && !signCase) {
+                    LOGGER.error("Item id " + itemName + " is mapped to the wrong tile entity! Mapped to: " + mappedTo + ", expected: " + possibleId);
+                }
             }
         }
     }

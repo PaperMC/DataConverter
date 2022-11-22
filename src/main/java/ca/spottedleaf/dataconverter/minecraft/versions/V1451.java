@@ -142,7 +142,7 @@ public final class V1451 {
         MCTypeRegistry.ITEM_STACK.addStructureConverter(new ConverterFlattenItemStack());
 
         // V5
-        MCTypeRegistry.ITEM_STACK.addConverterForId("minecraft:spawn_egg", new ConverterFlattenSpawnEgg());
+        MCTypeRegistry.ITEM_STACK.addConverterForId("minecraft:spawn_egg", new ConverterFlattenSpawnEgg(VERSION, 5));
         /* This datafixer has been disabled because the collar colour handler did not change from 1.12 -> 1.13 at all.
         // So clearly somebody fucked up. This fixes wolf colours incorrectly converting between versions
         MCTypeRegistry.ENTITY.addConverterForId("minecraft:wolf", new DataConverter<>(VERSION, 5) {

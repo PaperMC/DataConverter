@@ -18,6 +18,7 @@ public final class ConverterFlattenSpawnEgg extends DataConverter<MapType<String
         ENTITY_ID_TO_NEW_EGG_ID.put("minecraft:creeper", "minecraft:creeper_spawn_egg");
         ENTITY_ID_TO_NEW_EGG_ID.put("minecraft:donkey", "minecraft:donkey_spawn_egg");
         ENTITY_ID_TO_NEW_EGG_ID.put("minecraft:elder_guardian", "minecraft:elder_guardian_spawn_egg");
+        ENTITY_ID_TO_NEW_EGG_ID.put("minecraft:ender_dragon", "minecraft:ender_dragon_spawn_egg");
         ENTITY_ID_TO_NEW_EGG_ID.put("minecraft:enderman", "minecraft:enderman_spawn_egg");
         ENTITY_ID_TO_NEW_EGG_ID.put("minecraft:endermite", "minecraft:endermite_spawn_egg");
         ENTITY_ID_TO_NEW_EGG_ID.put("minecraft:evocation_illager", "minecraft:evocation_illager_spawn_egg");
@@ -25,6 +26,7 @@ public final class ConverterFlattenSpawnEgg extends DataConverter<MapType<String
         ENTITY_ID_TO_NEW_EGG_ID.put("minecraft:guardian", "minecraft:guardian_spawn_egg");
         ENTITY_ID_TO_NEW_EGG_ID.put("minecraft:horse", "minecraft:horse_spawn_egg");
         ENTITY_ID_TO_NEW_EGG_ID.put("minecraft:husk", "minecraft:husk_spawn_egg");
+        ENTITY_ID_TO_NEW_EGG_ID.put("minecraft:iron_golem", "minecraft:iron_golem_spawn_egg");
         ENTITY_ID_TO_NEW_EGG_ID.put("minecraft:llama", "minecraft:llama_spawn_egg");
         ENTITY_ID_TO_NEW_EGG_ID.put("minecraft:magma_cube", "minecraft:magma_cube_spawn_egg");
         ENTITY_ID_TO_NEW_EGG_ID.put("minecraft:mooshroom", "minecraft:mooshroom_spawn_egg");
@@ -41,6 +43,7 @@ public final class ConverterFlattenSpawnEgg extends DataConverter<MapType<String
         ENTITY_ID_TO_NEW_EGG_ID.put("minecraft:skeleton", "minecraft:skeleton_spawn_egg");
         ENTITY_ID_TO_NEW_EGG_ID.put("minecraft:skeleton_horse", "minecraft:skeleton_horse_spawn_egg");
         ENTITY_ID_TO_NEW_EGG_ID.put("minecraft:slime", "minecraft:slime_spawn_egg");
+        ENTITY_ID_TO_NEW_EGG_ID.put("minecraft:snow_golem", "minecraft:snow_golem_spawn_egg");
         ENTITY_ID_TO_NEW_EGG_ID.put("minecraft:spider", "minecraft:spider_spawn_egg");
         ENTITY_ID_TO_NEW_EGG_ID.put("minecraft:squid", "minecraft:squid_spawn_egg");
         ENTITY_ID_TO_NEW_EGG_ID.put("minecraft:stray", "minecraft:stray_spawn_egg");
@@ -49,6 +52,7 @@ public final class ConverterFlattenSpawnEgg extends DataConverter<MapType<String
         ENTITY_ID_TO_NEW_EGG_ID.put("minecraft:villager", "minecraft:villager_spawn_egg");
         ENTITY_ID_TO_NEW_EGG_ID.put("minecraft:vindication_illager", "minecraft:vindication_illager_spawn_egg");
         ENTITY_ID_TO_NEW_EGG_ID.put("minecraft:witch", "minecraft:witch_spawn_egg");
+        ENTITY_ID_TO_NEW_EGG_ID.put("minecraft:wither", "minecraft:wither_spawn_egg");
         ENTITY_ID_TO_NEW_EGG_ID.put("minecraft:wither_skeleton", "minecraft:wither_skeleton_spawn_egg");
         ENTITY_ID_TO_NEW_EGG_ID.put("minecraft:wolf", "minecraft:wolf_spawn_egg");
         ENTITY_ID_TO_NEW_EGG_ID.put("minecraft:zombie", "minecraft:zombie_spawn_egg");
@@ -57,8 +61,8 @@ public final class ConverterFlattenSpawnEgg extends DataConverter<MapType<String
         ENTITY_ID_TO_NEW_EGG_ID.put("minecraft:zombie_villager", "minecraft:zombie_villager_spawn_egg");
     }
 
-    public ConverterFlattenSpawnEgg() {
-        super(MCVersions.V17W47A,5);
+    public ConverterFlattenSpawnEgg(final int version, final int versionStep) {
+        super(version, versionStep);
     }
 
     @Override
