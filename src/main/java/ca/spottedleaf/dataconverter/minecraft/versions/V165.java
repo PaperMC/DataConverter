@@ -38,7 +38,7 @@ public final class V165 {
                     if (!"null".equals(page) && !StringUtils.isEmpty(page)) {
                         if (page.charAt(0) == '"' && page.charAt(page.length() - 1) == '"' || page.charAt(0) == '{' && page.charAt(page.length() - 1) == '}') {
                             try {
-                                component = GsonHelper.fromJson(BlockEntitySignTextStrictJsonFix.GSON, page, Component.class, true);
+                                component = GsonHelper.fromNullableJson(BlockEntitySignTextStrictJsonFix.GSON, page, Component.class, true);
                                 if (component == null) {
                                     component = CommonComponents.EMPTY;
                                 }

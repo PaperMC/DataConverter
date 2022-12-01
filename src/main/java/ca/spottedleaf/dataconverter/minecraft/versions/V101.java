@@ -26,7 +26,7 @@ public final class V101 {
         if (textString.charAt(0) == '"' && textString.charAt(textString.length() - 1) == '"'
                 || textString.charAt(0) == '{' && textString.charAt(textString.length() - 1) == '}') {
             try {
-                component = GsonHelper.fromJson(BlockEntitySignTextStrictJsonFix.GSON, textString, Component.class, true);
+                component = GsonHelper.fromNullableJson(BlockEntitySignTextStrictJsonFix.GSON, textString, Component.class, true);
                 if (component == null) {
                     component = CommonComponents.EMPTY;
                 }

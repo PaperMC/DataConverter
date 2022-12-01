@@ -235,6 +235,7 @@ public final class MCTypeRegistry {
         // V3203 registers a simple entity
         // V3204 registers a simple tile entity
         V3209.register();
+        V3214.register();
     }
 
     private MCTypeRegistry() {}
