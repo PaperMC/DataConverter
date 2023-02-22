@@ -6,6 +6,7 @@ import com.mojang.datafixers.DSL;
 import com.mojang.datafixers.DataFixer;
 import com.mojang.serialization.Dynamic;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.datafix.DataFixTypes;
 import net.minecraft.util.datafix.fixes.References;
 import net.minecraft.world.level.chunk.storage.SectionStorage;
 import org.spongepowered.asm.mixin.Mixin;
@@ -22,16 +23,16 @@ public abstract class SectionStorageMixin implements AutoCloseable {
     @Redirect(
             method = "readColumn(Lnet/minecraft/world/level/ChunkPos;Lcom/mojang/serialization/DynamicOps;Ljava/lang/Object;)V",
             at = @At(
-                    target = "Lcom/mojang/datafixers/DataFixer;update(Lcom/mojang/datafixers/DSL$TypeReference;Lcom/mojang/serialization/Dynamic;II)Lcom/mojang/serialization/Dynamic;",
+                    target = "Lnet/minecraft/util/datafix/DataFixTypes;update(Lcom/mojang/datafixers/DataFixer;Lcom/mojang/serialization/Dynamic;II)Lcom/mojang/serialization/Dynamic;",
                     value = "INVOKE"
             )
     )
-    private <T> Dynamic<T> updatePOIData(final DataFixer dataFixer, final DSL.TypeReference type, final Dynamic<T> input,
+    private <T> Dynamic<T> updatePOIData(final DataFixTypes type, final DataFixer dataFixer, final Dynamic<T> input,
                                          final int version, final int newVersion) {
-        if (type == References.POI_CHUNK) {
+        if (type == DataFixTypes.POI_CHUNK) {
             return new Dynamic<>(input.getOps(), (T)MCDataConverter.convertTag(MCTypeRegistry.POI_CHUNK, (CompoundTag)input.getValue(), version, newVersion));
         }
 
-        return dataFixer.update(type, input, version, newVersion);
+        return type.update(dataFixer, input, version, newVersion);
     }
 }

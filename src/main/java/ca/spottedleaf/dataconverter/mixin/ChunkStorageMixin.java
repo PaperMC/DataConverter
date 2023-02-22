@@ -25,6 +25,9 @@ public abstract class ChunkStorageMixin implements AutoCloseable {
     @Nullable
     private LegacyStructureDataHandler legacyStructureHandler;
 
+    @Shadow
+    protected abstract LegacyStructureDataHandler getLegacyStructureHandler(ResourceKey<Level> resourceKey, Supplier<DimensionDataStorage> supplier);
+
     /**
      * @reason DFU is slow :(
      * @author Spottedleaf
@@ -35,18 +38,15 @@ public abstract class ChunkStorageMixin implements AutoCloseable {
         if (i < 1493) {
             compoundTag = MCDataConverter.convertTag(MCTypeRegistry.CHUNK, compoundTag, i, 1493);
             if (compoundTag.getCompound("Level").getBoolean("hasLegacyStructureData")) {
-                if (this.legacyStructureHandler == null) {
-                    this.legacyStructureHandler = LegacyStructureDataHandler.getLegacyStructureHandler(resourceKey, (DimensionDataStorage)supplier.get());
-                }
-
-                compoundTag = this.legacyStructureHandler.updateFromLegacy(compoundTag);
+                LegacyStructureDataHandler legacyStructureDataHandler = this.getLegacyStructureHandler(resourceKey, supplier);
+                compoundTag = legacyStructureDataHandler.updateFromLegacy(compoundTag);
             }
         }
 
         ChunkStorage.injectDatafixingContext(compoundTag, resourceKey, optional);
-        compoundTag = MCDataConverter.convertTag(MCTypeRegistry.CHUNK, compoundTag, Math.max(1493, i), SharedConstants.getCurrentVersion().getWorldVersion());
-        if (i < SharedConstants.getCurrentVersion().getWorldVersion()) {
-            compoundTag.putInt("DataVersion", SharedConstants.getCurrentVersion().getWorldVersion());
+        compoundTag = MCDataConverter.convertTag(MCTypeRegistry.CHUNK, compoundTag, Math.max(1493, i), SharedConstants.getCurrentVersion().getDataVersion().getVersion());
+        if (i < SharedConstants.getCurrentVersion().getDataVersion().getVersion()) {
+            compoundTag.putInt("DataVersion", SharedConstants.getCurrentVersion().getDataVersion().getVersion());
         }
 
         compoundTag.remove("__context");

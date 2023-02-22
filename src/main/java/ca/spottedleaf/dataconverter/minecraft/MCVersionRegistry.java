@@ -201,9 +201,13 @@ public final class MCVersionRegistry {
                 3097,
                 3108,
                 3201,
+                3203,
+                3204,
                 3209,
-                3214
-                // All up to 1.19.3-rc1
+                3214,
+                3319,
+                3322
+                // All up to 1.19.4-pre1
         };
         Arrays.sort(converterVersions);
 

@@ -3,6 +3,7 @@ package ca.spottedleaf.dataconverter.mixin;
 import ca.spottedleaf.dataconverter.minecraft.MCDataConverter;
 import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
 import com.mojang.datafixers.DataFixer;
+import com.mojang.serialization.Dynamic;
 import net.minecraft.SharedConstants;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
@@ -22,16 +23,16 @@ public abstract class StructureCheckMixin {
     @Redirect(
             method = "tryLoadFromStorage",
             at = @At(
-                    target = "Lnet/minecraft/nbt/NbtUtils;update(Lcom/mojang/datafixers/DataFixer;Lnet/minecraft/util/datafix/DataFixTypes;Lnet/minecraft/nbt/CompoundTag;I)Lnet/minecraft/nbt/CompoundTag;",
+                    target = "Lnet/minecraft/util/datafix/DataFixTypes;updateToCurrentVersion(Lcom/mojang/datafixers/DataFixer;Lnet/minecraft/nbt/CompoundTag;I)Lnet/minecraft/nbt/CompoundTag;",
                     value = "INVOKE"
             )
     )
-    private CompoundTag updatePartialChunk(final DataFixer dataFixer, final DataFixTypes dataFixTypes, final CompoundTag compoundTag,
+    private CompoundTag updatePartialChunk(final DataFixTypes type, final DataFixer dataFixer, final CompoundTag compoundTag,
                                            final int version) {
-        if (dataFixTypes == DataFixTypes.CHUNK) {
-            return MCDataConverter.convertTag(MCTypeRegistry.CHUNK, compoundTag, version, SharedConstants.getCurrentVersion().getWorldVersion());
+        if (type == DataFixTypes.CHUNK) {
+            return MCDataConverter.convertTag(MCTypeRegistry.CHUNK, compoundTag, version, SharedConstants.getCurrentVersion().getDataVersion().getVersion());
         }
 
-        return NbtUtils.update(dataFixer, dataFixTypes, compoundTag, version);
+        return type.updateToCurrentVersion(dataFixer, compoundTag, version);
     }
 }

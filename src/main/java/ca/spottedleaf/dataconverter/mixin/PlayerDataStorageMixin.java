@@ -22,16 +22,15 @@ public abstract class PlayerDataStorageMixin {
     @Redirect(
             method = "load",
             at = @At(
-                    target = "Lnet/minecraft/nbt/NbtUtils;update(Lcom/mojang/datafixers/DataFixer;Lnet/minecraft/util/datafix/DataFixTypes;Lnet/minecraft/nbt/CompoundTag;I)Lnet/minecraft/nbt/CompoundTag;",
+                    target = "Lnet/minecraft/util/datafix/DataFixTypes;updateToCurrentVersion(Lcom/mojang/datafixers/DataFixer;Lnet/minecraft/nbt/CompoundTag;I)Lnet/minecraft/nbt/CompoundTag;",
                     value = "INVOKE"
             )
     )
-    private CompoundTag updatePlayerData(final DataFixer dataFixer, final DataFixTypes dataFixTypes, final CompoundTag compoundTag,
-                                         final int version) {
-        if (dataFixTypes == DataFixTypes.PLAYER) {
-            return MCDataConverter.convertTag(MCTypeRegistry.PLAYER, compoundTag, version, SharedConstants.getCurrentVersion().getWorldVersion());
+    private CompoundTag updatePlayerData(final DataFixTypes type, final DataFixer dataFixer, final CompoundTag compoundTag, final int version) {
+        if (type == DataFixTypes.PLAYER) {
+            return MCDataConverter.convertTag(MCTypeRegistry.PLAYER, compoundTag, version, SharedConstants.getCurrentVersion().getDataVersion().getVersion());
         }
 
-        return NbtUtils.update(dataFixer, dataFixTypes, compoundTag, version);
+        return type.updateToCurrentVersion(dataFixer, compoundTag, version);
     }
 }
