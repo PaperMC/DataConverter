@@ -3,7 +3,10 @@ package ca.spottedleaf.dataconverter.minecraft.versions;
 import ca.spottedleaf.dataconverter.converters.DataConverter;
 import ca.spottedleaf.dataconverter.minecraft.MCVersions;
 import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
+import ca.spottedleaf.dataconverter.types.ListType;
 import ca.spottedleaf.dataconverter.types.MapType;
+import ca.spottedleaf.dataconverter.types.ObjectType;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,24 +28,27 @@ public final class V3322 {
             return;
         }
 
-        final MapType<String> data = root.getMap(path);
+        final ListType effects = root.getList(path, ObjectType.MAP);
 
-        if (data == null) {
+        if (effects == null) {
             return;
         }
 
-        final MapType<String> factorData = data.getMap("FactorCalculationData");
-        if (factorData == null) {
-            return;
+        for (int i = 0, len = effects.size(); i < len; ++i) {
+            final MapType<String> data = effects.getMap(i);
+            final MapType<String> factorData = data.getMap("FactorCalculationData");
+            if (factorData == null) {
+                continue;
+            }
+
+            final int timestamp = factorData.getInt("effect_changed_timestamp", -1);
+            factorData.remove("effect_changed_timestamp");
+
+            final int duration = data.getInt("Duration", -1);
+
+            final int ticksActive = timestamp - duration;
+            factorData.setInt("ticks_active", ticksActive);
         }
-
-        final int timestamp = factorData.getInt("effect_changed_timestamp", -1);
-        factorData.remove("effect_changed_timestamp");
-
-        final int duration = data.getInt("Duration", -1);
-
-        final int ticksActive = timestamp - duration;
-        factorData.setInt("ticks_active", ticksActive);
     }
 
     public static void register() {
