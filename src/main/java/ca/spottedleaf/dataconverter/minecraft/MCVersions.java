@@ -446,5 +446,12 @@ public final class MCVersions {
     public static final int V23W06A               = 3326;
     public static final int V23W07A               = 3329;
     public static final int V1_19_4_PRE1          = 3330;
+    public static final int V1_19_4_PRE2          = 3331;
+    public static final int V1_19_4_PRE3          = 3332;
+    public static final int V1_19_4_PRE4          = 3333;
+    public static final int V1_19_4_RC1           = 3334;
+    public static final int V1_19_4_RC2           = 3335;
+    public static final int V1_19_4_RC3           = 3336;
+    public static final int V1_19_4               = 3337;
 
 }
