@@ -34,6 +34,7 @@ public final class MCTypeRegistry {
     public static final MCValueType BIOME             = new MCValueType("Biome");
     public static final MCDataType WORLD_GEN_SETTINGS = new MCDataType("WorldGenSettings");
     public static final MCValueType GAME_EVENT_NAME   = new MCValueType("GameEventName");
+    public static final MCValueType MULTI_NOISE_BIOME_SOURCE_PARAMETER_LIST = new MCValueType("MULTI_NOISE_BIOME_SOURCE_PARAMETER_LIST");
 
     static {
         try {
@@ -242,6 +243,15 @@ public final class MCTypeRegistry {
         V3326.register();
         V3327.register();
         V3328.register();
+        // V1.20
+        V3438.register();
+        V3439.register();
+        V3440.register();
+        V3441.register();
+        V3447.register();
+        V3448.register();
+        V3450.register();
+        V3451.register();
     }
 
     private MCTypeRegistry() {}

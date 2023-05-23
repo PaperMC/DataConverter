@@ -18,13 +18,7 @@ public class DataHookEnforceNamespacedID implements DataHook<MapType<String>, Ma
 
     @Override
     public MapType<String> preHook(final MapType<String> data, final long fromVersion, final long toVersion) {
-        final String id = data.getString(this.path);
-        if (id != null) {
-            final String replace = NamespaceUtil.correctNamespaceOrNull(id);
-            if (replace != null) {
-                data.setString(this.path, replace);
-            }
-        }
+        NamespaceUtil.enforceForPath(data, this.path);
         return null;
     }
 

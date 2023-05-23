@@ -154,6 +154,7 @@ public final class V704 {
         ITEM_ID_TO_TILE_ENTITY_ID.put("minecraft:bee_nest", "minecraft:beehive");
         ITEM_ID_TO_TILE_ENTITY_ID.put("minecraft:beehive", "minecraft:beehive");
         ITEM_ID_TO_TILE_ENTITY_ID.put("minecraft:sculk_sensor", "minecraft:sculk_sensor");
+        ITEM_ID_TO_TILE_ENTITY_ID.put("minecraft:decorated_pot", "minecraft:decorated_pot");
 
         // These are missing from Vanilla (TODO check on update)
         ITEM_ID_TO_TILE_ENTITY_ID.put("minecraft:enchanting_table", "minecraft:enchanting_table");
@@ -177,10 +178,11 @@ public final class V704 {
         ITEM_ID_TO_TILE_ENTITY_ID.put("minecraft:crimson_hanging_sign", "minecraft:sign");
         ITEM_ID_TO_TILE_ENTITY_ID.put("minecraft:warped_hanging_sign", "minecraft:sign");
         ITEM_ID_TO_TILE_ENTITY_ID.put("minecraft:piglin_head", "minecraft:skull");
-        ITEM_ID_TO_TILE_ENTITY_ID.put("minecraft:suspicious_sand", "minecraft:suspicious_sand");
-        ITEM_ID_TO_TILE_ENTITY_ID.put("minecraft:decorated_pot", "minecraft:decorated_pot");
+        ITEM_ID_TO_TILE_ENTITY_ID.put("minecraft:suspicious_sand", "minecraft:brushable_block"); // note: this was renamed in the past, see special case in the itemstack walker
         ITEM_ID_TO_TILE_ENTITY_ID.put("minecraft:cherry_sign", "minecraft:sign");
         ITEM_ID_TO_TILE_ENTITY_ID.put("minecraft:cherry_hanging_sign", "minecraft:sign");
+        ITEM_ID_TO_TILE_ENTITY_ID.put("minecraft:suspicious_gravel", "minecraft:brushable_block");
+        ITEM_ID_TO_TILE_ENTITY_ID.put("minecraft:calibrated_sculk_sensor", "minecraft:calibrated_sculk_sensor");
     }
 
     // This class is responsible for also integrity checking the item id to tile id map here, we just use the item registry to figure it out
@@ -350,7 +352,13 @@ public final class V704 {
             MapType<String> blockEntityTag = tag.getMap("BlockEntityTag");
             if (blockEntityTag != null) {
                 final String itemId = data.getString("id");
-                final String entityId = ITEM_ID_TO_TILE_ENTITY_ID.get(itemId);
+                final String entityId;
+                if ("minecraft:suspicious_sand".equals(itemId) && fromVersion < V3438.VERSION) {
+                    // renamed after this version, and since the id is a mapping to just string we need to special case this
+                    entityId = "minecraft:suspicious_sand";
+                } else {
+                    entityId = ITEM_ID_TO_TILE_ENTITY_ID.get(itemId);
+                }
                 final boolean removeId;
                 if (entityId == null) {
                     if (!"minecraft:air".equals(itemId)) {

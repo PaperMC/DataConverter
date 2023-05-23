@@ -10,6 +10,10 @@ public final class RenameHelper {
     // assumes no two or more entries are renamed to a single value, otherwise result will be only one of them will win
     // and there is no defined winner in such a case
     public static void renameKeys(final MapType<String> data, final Function<String, String> renamer) {
+        if (data == null) {
+            return;
+        }
+
         List<String> newKeys = null;
         List<Object> newValues = null;
         boolean needsRename = false;
@@ -51,11 +55,33 @@ public final class RenameHelper {
 
     // Clobbers anything in toKey if fromKey exists
     public static void renameSingle(final MapType<String> data, final String fromKey, final String toKey) {
+        if (data == null) {
+            return;
+        }
+
         final Object value = data.getGeneric(fromKey);
         if (value != null) {
             data.remove(fromKey);
             data.setGeneric(toKey, value);
         }
+    }
+
+    public static void renameString(final MapType<String> data, final String key, final Function<String, String> renamer) {
+        if (data == null) {
+            return;
+        }
+
+        final String value = data.getString(key);
+        if (value == null) {
+            return;
+        }
+
+        final String renamed = renamer.apply(value);
+        if (renamed == null) {
+            return;
+        }
+
+        data.setString(key, renamed);
     }
 
     private RenameHelper() {}

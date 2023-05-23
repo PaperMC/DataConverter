@@ -7,6 +7,7 @@
     "ChunkStorageMixin",
     "EntityStorageMixin",
     "PlayerDataStorageMixin",
+    "PrintTheFuckingErrorJesusChristMixin",
     "SectionStorageMixin",
     "StructureCheckMixin",
     "StructureTemplateManagerMixin",

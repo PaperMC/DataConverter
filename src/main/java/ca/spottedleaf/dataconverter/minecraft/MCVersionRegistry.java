@@ -206,8 +206,16 @@ public final class MCVersionRegistry {
                 3209,
                 3214,
                 3319,
-                3322
-                // All up to 1.19.4
+                3322,
+                3438,
+                3439,
+                3440,
+                3441,
+                3447,
+                3448,
+                3450,
+                3451
+                // All up to 1.20-pre5
         };
         Arrays.sort(converterVersions);
 
@@ -238,7 +246,8 @@ public final class MCVersionRegistry {
         // final release of major version
         registerBreakpoint(MCVersions.V1_18_2, Integer.MAX_VALUE);
 
-
+        // final release of major version
+        registerBreakpoint(MCVersions.V1_19_4, Integer.MAX_VALUE);
     }
 
     static {

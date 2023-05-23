@@ -529,7 +529,7 @@ public final class V2832 {
                                 }
 
                                 case "minecraft:multi_noise": {
-                                    // preset is absent, no type for namespaced string
+                                    WalkerUtils.convert(MCTypeRegistry.MULTI_NOISE_BIOME_SOURCE_PARAMETER_LIST, biomeSource, "preset", fromVersion, toVersion);
 
                                     // Vanilla's schema is _still_ wrong. It should be DSL.fields("biomes", DSL.list(DSL.fields("biome")))
                                     // But it just contains the list part. That obviously can never be the case, because
@@ -541,6 +541,7 @@ public final class V2832 {
                                             WalkerUtils.convert(MCTypeRegistry.BIOME, biomes.getMap(i), "biome", fromVersion, toVersion);
                                         }
                                     }
+
                                     break;
                                 }
 
@@ -654,6 +655,12 @@ public final class V2832 {
         }
 
         offsetHeightmaps(level);
+        // Difference from DFU: Still convert the Lights data. Just because it's being removed in a later version doesn't mean
+        // that it should be removed here.
+        // Generally, converters act only on the current version to bring it to the next. This principle allows the converter
+        // for the next version to assume that it acts on its current version, not some in-between of the current version
+        // and some future version that did not exist at the time it was written. This allows converters to be written and tested
+        // only with knowledge of the current version and the next version.
         addEmptyListPadding(level, "Lights");
         addEmptyListPadding(level, "LiquidsToBeTicked");
         addEmptyListPadding(level, "PostProcessing");
