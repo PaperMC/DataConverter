@@ -252,6 +252,7 @@ public final class MCTypeRegistry {
         V3448.register();
         V3450.register();
         V3451.register();
+        V3459.register();
     }
 
     private MCTypeRegistry() {}

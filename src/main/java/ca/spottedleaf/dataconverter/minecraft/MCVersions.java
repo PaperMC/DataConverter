@@ -464,5 +464,8 @@ public final class MCVersions {
     public static final int V1_20_PRE3            = 3456;
     public static final int V1_20_PRE4            = 3457;
     public static final int V1_20_PRE5            = 3458;
+    public static final int V1_20_PRE6            = 3460;
+    public static final int V1_20_PRE7            = 3461;
+    public static final int V1_20_RC1             = 3462;
 
 }
