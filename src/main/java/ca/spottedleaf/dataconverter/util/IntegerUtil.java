@@ -94,7 +94,7 @@ public final class IntegerUtil {
     }
 
     public static long getDivisorNumbers(final int d) {
-        final int ad = Math.abs(d);
+        final int ad = branchlessAbs(d);
 
         if (ad < 2) {
             throw new IllegalArgumentException("|number| must be in [2, 2^31 -1], not: " + d);
@@ -102,6 +102,22 @@ public final class IntegerUtil {
 
         final int two31 = 0x80000000;
         final long mask = 0xFFFFFFFFL; // mask for enforcing unsigned behaviour
+
+        /*
+         Signed usage:
+         int number;
+         long magic = getDivisorNumbers(div);
+         long mul = magic >>> 32;
+         int sign = number >> 31;
+         int result = (int)(((long)number * mul) >>> magic) - sign;
+         */
+        /*
+         Unsigned usage:
+         int number;
+         long magic = getDivisorNumbers(div);
+         long mul = magic >>> 32;
+         int result = (int)(((long)number * mul) >>> magic);
+         */
 
         int p = 31;
 
@@ -135,7 +151,7 @@ public final class IntegerUtil {
         if (d < 0) {
             magicNum = -magicNum;
         }
-        int shift = p - 32;
+        int shift = p;
         return ((long)magicNum << 32) | shift;
     }
 
