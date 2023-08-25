@@ -35,7 +35,7 @@ public final class V2843 {
                         if (outOfBounds == null) {
                             outOfBounds = Types.NBT.createEmptyList();
                         }
-                        outOfBounds.addMap(tick);
+                        outOfBounds.addMap(tick.copy());
                     }
                 }
 
