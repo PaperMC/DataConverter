@@ -24,7 +24,7 @@ public final class V3459 {
 
                 final MapType<String> endData = dimensionData.getMap("1");
                 if (endData != null) {
-                    data.setMap("DragonFight", endData.getMap("DragonFight", endData.getTypeUtil().createEmptyMap()));
+                    data.setMap("DragonFight", endData.getMap("DragonFight", endData.getTypeUtil().createEmptyMap()).copy());
                 }
 
                 return null;
