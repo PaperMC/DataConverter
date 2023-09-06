@@ -1826,5 +1826,4 @@ public final class HelperBlockFlatteningV1450 {
         register(4083, "{Name:'minecraft:structure_block',Properties:{mode:'data'}}", "{Name:'minecraft:structure_block',Properties:{mode:'data'}}");
         finalizeMaps();
     }
-
 }

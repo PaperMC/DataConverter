@@ -310,15 +310,24 @@ public final class V99 {
             return null;
         });
 
-        MCTypeRegistry.SAVED_DATA.addStructureWalker(VERSION, (final MapType<String> root, final long fromVersion, final long toVersion) -> {
+        MCTypeRegistry.SAVED_DATA_SCOREBOARD.addStructureWalker(VERSION, (final MapType<String> root, final long fromVersion, final long toVersion) -> {
+            final MapType<String> data = root.getMap("data");
+            if (data == null) {
+                return null;
+            }
+
+            WalkerUtils.convertList(MCTypeRegistry.OBJECTIVE, data, "Objectives", fromVersion, toVersion);
+            WalkerUtils.convertList(MCTypeRegistry.TEAM, data, "Teams", fromVersion, toVersion);
+
+            return null;
+        });
+        MCTypeRegistry.SAVED_DATA_STRUCTURE_FEATURE_INDICES.addStructureWalker(VERSION, (final MapType<String> root, final long fromVersion, final long toVersion) -> {
             final MapType<String> data = root.getMap("data");
             if (data == null) {
                 return null;
             }
 
             WalkerUtils.convertValues(MCTypeRegistry.STRUCTURE_FEATURE, data, "Features", fromVersion, toVersion);
-            WalkerUtils.convertList(MCTypeRegistry.OBJECTIVE, data, "Objectives", fromVersion, toVersion);
-            WalkerUtils.convertList(MCTypeRegistry.TEAM, data, "Teams", fromVersion, toVersion);
 
             return null;
         });

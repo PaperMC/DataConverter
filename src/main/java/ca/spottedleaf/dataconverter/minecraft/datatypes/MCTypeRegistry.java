@@ -15,7 +15,6 @@ public final class MCTypeRegistry {
     public static final MCDataType OPTIONS            = new MCDataType("Options");
     public static final MCDataType STRUCTURE          = new MCDataType("Structure");
     public static final MCDataType STATS              = new MCDataType("Stats");
-    public static final MCDataType SAVED_DATA         = new MCDataType("SavedData");
     public static final MCDataType ADVANCEMENTS       = new MCDataType("Advancements");
     public static final MCDataType POI_CHUNK          = new MCDataType("PoiChunk");
     public static final MCDataType ENTITY_CHUNK       = new MCDataType("EntityChunk");
@@ -34,7 +33,14 @@ public final class MCTypeRegistry {
     public static final MCValueType BIOME             = new MCValueType("Biome");
     public static final MCDataType WORLD_GEN_SETTINGS = new MCDataType("WorldGenSettings");
     public static final MCValueType GAME_EVENT_NAME   = new MCValueType("GameEventName");
-    public static final MCValueType MULTI_NOISE_BIOME_SOURCE_PARAMETER_LIST = new MCValueType("MULTI_NOISE_BIOME_SOURCE_PARAMETER_LIST");
+
+    public static final MCValueType MULTI_NOISE_BIOME_SOURCE_PARAMETER_LIST = new MCValueType("MultiNoiseBiomeSourceParameterList");
+
+    public static final MCDataType SAVED_DATA_RANDOM_SEQUENCES          = new MCDataType("SavedData/RandomSequences");
+    public static final MCDataType SAVED_DATA_SCOREBOARD                = new MCDataType("SavedData/Scoreboard");
+    public static final MCDataType SAVED_DATA_STRUCTURE_FEATURE_INDICES = new MCDataType("SavedData/StructureFeatureIndices");
+    public static final MCDataType SAVED_DATA_MAP_DATA                  = new MCDataType("SavedData/MapData");
+    public static final MCDataType SAVED_DATA_RAIDS                     = new MCDataType("SavedData/Raids");
 
     static {
         try {
@@ -253,6 +259,10 @@ public final class MCTypeRegistry {
         V3450.register();
         V3451.register();
         V3459.register();
+        V3564.register();
+        V3565.register();
+        V3566.register();
+        V3568.register();
     }
 
     private MCTypeRegistry() {}

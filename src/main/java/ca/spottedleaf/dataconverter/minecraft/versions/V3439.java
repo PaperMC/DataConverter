@@ -34,27 +34,58 @@ public final class V3439 {
 
             @Override
             public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+                // front text
                 final MapType<String> frontText = data.getTypeUtil().createEmptyMap();
                 data.setMap("front_text", frontText);
 
-                frontText.setList("messages", migrateToList(data, "Text"));
-                frontText.setList("filtered_messages", migrateToList(data, "FilteredText"));
+                final ListType frontMessages = migrateToList(data, "Text");
+                frontText.setList("messages", frontMessages);
+
+                ListType frontFilteredMessages = null;
+
+                for (int i = 0; i < 4; ++i) {
+                    final String filtered = data.getString("FilteredText" + i);
+                    if (filtered == null) {
+                        if (frontFilteredMessages != null) {
+                            frontFilteredMessages.addString(frontMessages.getString(i));
+                        }
+                        continue;
+                    }
+
+                    if (frontFilteredMessages == null) {
+                        frontFilteredMessages = data.getTypeUtil().createEmptyList();
+                        for (int k = 0; k < i; ++k) {
+                            frontFilteredMessages.addString(frontMessages.getString(k));
+                        }
+                    }
+
+                    frontFilteredMessages.addString(filtered);
+                }
+
+                if (frontFilteredMessages != null) {
+                    frontText.setList("filtered_messages", frontFilteredMessages);
+                }
+
                 frontText.setString("color", data.getString("Color", DEFAULT_COLOR));
                 frontText.setBoolean("has_glowing_text", data.getBoolean("GlowingText", false));
+                frontText.setBoolean("_filtered_correct", true);
 
+                // back text
                 final MapType<String> backText = data.getTypeUtil().createEmptyMap();
                 data.setMap("back_text", backText);
 
                 final ListType blankMessages = data.getTypeUtil().createEmptyList();
+                backText.setList("messages", blankMessages);
+
                 for (int i = 0; i < 4; ++i) {
                     blankMessages.addString(BLANK_TEXT_LINE);
                 }
 
-                backText.setList("messages", blankMessages);
-                backText.setList("filtered_messages", blankMessages.copy()); // need to copy so that the value isn't mapped to twice, so that updates to one do not reflect in the other
                 backText.setString("color", DEFAULT_COLOR);
                 backText.setBoolean("has_glowing_text", false);
 
+                // misc
+                data.setBoolean("is_waxed", false);
                 return null;
             }
         };

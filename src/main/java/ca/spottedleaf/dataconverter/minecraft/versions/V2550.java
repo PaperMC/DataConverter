@@ -17,17 +17,19 @@ public final class V2550 {
 
     protected static final int VERSION = MCVersions.V20W20B + 13;
 
-    private static final ImmutableMap<String, StructureFeatureConfiguration> DEFAULTS = ImmutableMap.<String, StructureFeatureConfiguration>builder()
-            .put("minecraft:village", new StructureFeatureConfiguration(32, 8, 10387312))
-            .put("minecraft:desert_pyramid", new StructureFeatureConfiguration(32, 8, 14357617))
-            .put("minecraft:igloo", new StructureFeatureConfiguration(32, 8, 14357618))
-            .put("minecraft:jungle_pyramid", new StructureFeatureConfiguration(32, 8, 14357619))
-            .put("minecraft:swamp_hut", new StructureFeatureConfiguration(32, 8, 14357620))
-            .put("minecraft:pillager_outpost", new StructureFeatureConfiguration(32, 8, 165745296))
-            .put("minecraft:monument", new StructureFeatureConfiguration(32, 5, 10387313))
-            .put("minecraft:endcity", new StructureFeatureConfiguration(20, 11, 10387313))
-            .put("minecraft:mansion", new StructureFeatureConfiguration(80, 20, 10387319))
-            .build();
+    private static final Map<String, StructureFeatureConfiguration> DEFAULTS = new HashMap<>(
+            ImmutableMap.<String, StructureFeatureConfiguration>builder()
+                    .put("minecraft:village", new StructureFeatureConfiguration(32, 8, 10387312))
+                    .put("minecraft:desert_pyramid", new StructureFeatureConfiguration(32, 8, 14357617))
+                    .put("minecraft:igloo", new StructureFeatureConfiguration(32, 8, 14357618))
+                    .put("minecraft:jungle_pyramid", new StructureFeatureConfiguration(32, 8, 14357619))
+                    .put("minecraft:swamp_hut", new StructureFeatureConfiguration(32, 8, 14357620))
+                    .put("minecraft:pillager_outpost", new StructureFeatureConfiguration(32, 8, 165745296))
+                    .put("minecraft:monument", new StructureFeatureConfiguration(32, 5, 10387313))
+                    .put("minecraft:endcity", new StructureFeatureConfiguration(20, 11, 10387313))
+                    .put("minecraft:mansion", new StructureFeatureConfiguration(80, 20, 10387319))
+                    .build()
+    );
 
     record StructureFeatureConfiguration(int spacing, int separation, int salt) {
 

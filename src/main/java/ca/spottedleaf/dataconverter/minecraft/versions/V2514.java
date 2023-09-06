@@ -516,7 +516,7 @@ public final class V2514 {
             }
         });
 
-        MCTypeRegistry.SAVED_DATA.addStructureConverter(new DataConverter<>(VERSION) {
+        MCTypeRegistry.SAVED_DATA_RAIDS.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
             public MapType<String> convert(final MapType<String> root, final long sourceVersion, final long toVersion) {
                 final MapType<String> data = root.getMap("data");

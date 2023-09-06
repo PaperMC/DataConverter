@@ -34,6 +34,11 @@ public final class V1451 {
 
     protected static final int VERSION = MCVersions.V17W47A;
 
+    public static String packWithDot(final String string) {
+        final ResourceLocation resourceLocation = ResourceLocation.tryParse(string);
+        return resourceLocation != null ? resourceLocation.getNamespace() + "." + resourceLocation.getPath() : string;
+    }
+
     public static void register() {
         // V0
         MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, 0, "minecraft:trapped_chest", new DataWalkerItemLists("Items"));
@@ -257,7 +262,8 @@ public final class V1451 {
         });
 
         // V6
-        MCTypeRegistry.STATS.addStructureConverter(new ConverterFlattenStats());
+        MCTypeRegistry.STATS.addStructureConverter(ConverterFlattenStats.makeStatsConverter());
+        MCTypeRegistry.OBJECTIVE.addStructureConverter(ConverterFlattenStats.makeObjectiveConverter());
         MCTypeRegistry.TILE_ENTITY.addConverterForId("minecraft:jukebox", new DataConverter<>(VERSION, 6) {
             @Override
             public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
@@ -304,11 +310,6 @@ public final class V1451 {
         });
 
         MCTypeRegistry.OBJECTIVE.addStructureHook(VERSION, 6, new DataHook<>() {
-            private static String packWithDot(final String string) {
-                final ResourceLocation resourceLocation = ResourceLocation.tryParse(string);
-                return resourceLocation != null ? resourceLocation.getNamespace() + "." + resourceLocation.getPath() : string;
-            }
-
             @Override
             public MapType<String> preHook(final MapType<String> data, final long fromVersion, final long toVersion) {
                 // unpack

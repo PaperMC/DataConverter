@@ -12,7 +12,6 @@ import ca.spottedleaf.dataconverter.types.ObjectType;
 import ca.spottedleaf.dataconverter.types.MapType;
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -20,10 +19,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.BlockState;
 import org.slf4j.Logger;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 public final class V704 {
@@ -32,7 +29,7 @@ public final class V704 {
 
     protected static final int VERSION = MCVersions.V1_10_2 + 192;
 
-    public static final Map<String, String> ITEM_ID_TO_TILE_ENTITY_ID = new HashMap<String, String>() {
+    public static final Map<String, String> ITEM_ID_TO_TILE_ENTITY_ID = new HashMap<>() {
         @Override
         public String put(final String key, final String value) {
             if (this.containsKey(key)) {

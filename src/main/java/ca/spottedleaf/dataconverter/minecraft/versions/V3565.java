@@ -4,26 +4,27 @@ import ca.spottedleaf.dataconverter.converters.DataConverter;
 import ca.spottedleaf.dataconverter.minecraft.MCVersions;
 import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
 import ca.spottedleaf.dataconverter.types.MapType;
-import ca.spottedleaf.dataconverter.types.Types;
 
-public final class V1925 {
+public final class V3565 {
 
-    protected static final int VERSION = MCVersions.V19W03C + 1;
+    private static final int VERSION = MCVersions.V1_20_1 + 100;
 
     public static void register() {
-        MCTypeRegistry.SAVED_DATA_MAP_DATA.addStructureConverter(new DataConverter<>(VERSION) {
+        MCTypeRegistry.SAVED_DATA_RANDOM_SEQUENCES.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
             public MapType<String> convert(final MapType<String> root, final long sourceVersion, final long toVersion) {
-                final MapType<String> data = root.getMap("data");
-                if (data == null) {
-                    final MapType<String> ret = Types.NBT.createEmptyMap();
-                    ret.setMap("data", root);
-
-                    return ret;
+                final MapType<String> oldData = root.getMap("data");
+                if (oldData == null) {
+                    return null;
                 }
+
+                final MapType<String> newData = root.getTypeUtil().createEmptyMap();
+                root.setMap("data", newData);
+
+                newData.setMap("sequences", oldData);
+
                 return null;
             }
         });
     }
-
 }

@@ -6,6 +6,7 @@ import ca.spottedleaf.dataconverter.minecraft.converters.itemname.ConverterAbstr
 import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
 import ca.spottedleaf.dataconverter.minecraft.walkers.itemstack.DataWalkerItemLists;
 import com.google.common.collect.ImmutableMap;
+import java.util.HashMap;
 import java.util.Map;
 
 public final class V1486 {
@@ -16,14 +17,18 @@ public final class V1486 {
         MCTypeRegistry.ENTITY.addWalker(VERSION, id, new DataWalkerItemLists("ArmorItems", "HandItems"));
     }
 
-    public static final Map<String, String> RENAMED_ENTITY_IDS = ImmutableMap.<String, String>builder()
-            .put("minecraft:salmon_mob", "minecraft:salmon")
-            .put("minecraft:cod_mob", "minecraft:cod")
-            .build();
-    public static final Map<String, String> RENAMED_ITEM_IDS = ImmutableMap.<String, String>builder()
-            .put("minecraft:salmon_mob_spawn_egg", "minecraft:salmon_spawn_egg")
-            .put("minecraft:cod_mob_spawn_egg", "minecraft:cod_spawn_egg")
-            .build();
+    public static final Map<String, String> RENAMED_ENTITY_IDS = new HashMap<>(
+            ImmutableMap.<String, String>builder()
+                    .put("minecraft:salmon_mob", "minecraft:salmon")
+                    .put("minecraft:cod_mob", "minecraft:cod")
+                    .build()
+    );
+    public static final Map<String, String> RENAMED_ITEM_IDS = new HashMap<>(
+            ImmutableMap.<String, String>builder()
+                    .put("minecraft:salmon_mob_spawn_egg", "minecraft:salmon_spawn_egg")
+                    .put("minecraft:cod_mob_spawn_egg", "minecraft:cod_spawn_egg")
+                    .build()
+    );
 
 
     public static void register() {
