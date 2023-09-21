@@ -46,7 +46,7 @@ public final class V3564 {
 
                 final ListType filteredMessages = text.getList("filtered_messages", ObjectType.STRING);
 
-                if (filteredMessages == null) {
+                if (filteredMessages == null || filteredMessages.size() == 0) {
                     return;
                 }
 
