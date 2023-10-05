@@ -201,6 +201,10 @@ public final class V3568 {
 
                 final MapType<String> tag = root.getMap("tag");
 
+                if (tag == null) {
+                    return null;
+                }
+
                 if ("minecraft:suspicious_stew".equals(id)) {
                     RenameHelper.renameSingle(tag, "Effects", "effects");
 
