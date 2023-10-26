@@ -290,6 +290,8 @@ public final class ConverterFlattenStats {
             public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
                 convertCriteriaName(data, "CriteriaName");
 
+                // We also need to update CriteriaType that is created by the data hook in V1451,
+                // otherwise that data hook will overwrite our CriteriaName
                 final MapType<String> criteriaType = data.getMap("CriteriaType");
                 if (criteriaType != null) {
                     if ("_special".equals(criteriaType.getString("type"))) {
