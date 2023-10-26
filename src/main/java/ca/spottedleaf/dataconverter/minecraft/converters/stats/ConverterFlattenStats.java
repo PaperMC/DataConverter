@@ -288,21 +288,31 @@ public final class ConverterFlattenStats {
         return new DataConverter<>(VERSION, VERSION_STEP) {
             @Override
             public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
-                final String criteriaName = data.getString("CriteriaName");
+                convertCriteriaName(data, "CriteriaName");
+
+                final MapType<String> criteriaType = data.getMap("CriteriaType");
+                if (criteriaType != null) {
+                    if ("_special".equals(criteriaType.getString("type"))) {
+                        convertCriteriaName(criteriaType, "id");
+                    }
+                }
+
+                return null;
+            }
+
+            private void convertCriteriaName(final MapType<String> data, final String key) {
+                final String criteriaName = data.getString(key);
 
                 if (criteriaName == null) {
-                    return null;
+                    return;
                 }
 
                 if (SPECIAL_OBJECTIVE_CRITERIA.contains(criteriaName)) {
-                    return null;
+                    return;
                 }
 
                 final StatType converted = convertLegacyKey(criteriaName);
-                data.setString("CriteriaName",
-                        converted == null ? "dummy" : V1451.packWithDot(converted.category()) + ":" + V1451.packWithDot(converted.key()));
-
-                return null;
+                data.setString(key, converted == null ? "dummy" : V1451.packWithDot(converted.category()) + ":" + V1451.packWithDot(converted.key()));
             }
         };
     }
