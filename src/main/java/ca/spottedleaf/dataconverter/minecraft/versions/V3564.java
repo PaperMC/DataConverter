@@ -3,11 +3,10 @@ package ca.spottedleaf.dataconverter.minecraft.versions;
 import ca.spottedleaf.dataconverter.converters.DataConverter;
 import ca.spottedleaf.dataconverter.minecraft.MCVersions;
 import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
+import ca.spottedleaf.dataconverter.minecraft.util.ComponentUtils;
 import ca.spottedleaf.dataconverter.types.ListType;
 import ca.spottedleaf.dataconverter.types.MapType;
 import ca.spottedleaf.dataconverter.types.ObjectType;
-import net.minecraft.network.chat.CommonComponents;
-import net.minecraft.network.chat.Component;
 
 public final class V3564 {
 
@@ -32,7 +31,6 @@ public final class V3564 {
                     "GlowingText"
             };
 
-            private static final String EMPTY = Component.Serializer.toJson(CommonComponents.EMPTY);
 
             private static void updateText(final MapType<String> text) {
                 if (text == null) {
@@ -58,13 +56,13 @@ public final class V3564 {
 
                 for (int i = 0, len = filteredMessages.size(); i < len; ++i) {
                     final String filtered = filteredMessages.getString(i);
-                    final String message = messages != null && i < messages.size() ? messages.getString(i) : EMPTY;
+                    final String message = messages != null && i < messages.size() ? messages.getString(i) : ComponentUtils.EMPTY;
 
-                    final String newFiltered = EMPTY.equals(filtered) ? message : filtered;
+                    final String newFiltered = ComponentUtils.EMPTY.equals(filtered) ? message : filtered;
 
                     newFilteredList.addString(newFiltered);
 
-                    newFilteredIsEmpty = newFilteredIsEmpty && EMPTY.equals(newFiltered);
+                    newFilteredIsEmpty = newFilteredIsEmpty && ComponentUtils.EMPTY.equals(newFiltered);
                 }
 
                 if (newFilteredIsEmpty) {

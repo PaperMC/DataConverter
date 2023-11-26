@@ -7,7 +7,7 @@
     "ChunkStorageMixin",
     "EntityStorageMixin",
     "PlayerDataStorageMixin",
-    "PrimaryLevelDataMixin",
+    "LevelStorageSourceMixin",
     "PrintTheFuckingErrorJesusChristMixin",
     "SectionStorageMixin",
     "StructureCheckMixin",

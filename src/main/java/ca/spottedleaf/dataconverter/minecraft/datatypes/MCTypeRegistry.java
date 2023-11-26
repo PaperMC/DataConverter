@@ -180,6 +180,7 @@ public final class MCTypeRegistry {
         V2531.register();
         V2533.register();
         V2535.register();
+        V2538.register();
         V2550.register();
         V2551.register();
         V2552.register();
@@ -263,6 +264,11 @@ public final class MCTypeRegistry {
         V3565.register();
         V3566.register();
         V3568.register();
+        V3682.register();
+        V3683.register();
+        V3685.register();
+        V3689.register();
+        V3692.register();
     }
 
     private MCTypeRegistry() {}

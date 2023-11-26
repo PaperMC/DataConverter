@@ -3,10 +3,10 @@ package ca.spottedleaf.dataconverter.minecraft.versions;
 import ca.spottedleaf.dataconverter.converters.DataConverter;
 import ca.spottedleaf.dataconverter.minecraft.MCVersions;
 import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
+import ca.spottedleaf.dataconverter.minecraft.util.ComponentUtils;
 import ca.spottedleaf.dataconverter.types.ListType;
 import ca.spottedleaf.dataconverter.types.MapType;
 import ca.spottedleaf.dataconverter.types.ObjectType;
-import net.minecraft.network.chat.Component;
 
 public final class V1803 {
 
@@ -36,7 +36,7 @@ public final class V1803 {
                 }
 
                 for (int i = 0, len = lore.size(); i < len; ++i) {
-                    lore.setString(i, Component.Serializer.toJson(Component.literal(lore.getString(i))));
+                    lore.setString(i, ComponentUtils.createPlainTextComponent(lore.getString(i)));
                 }
 
                 return null;

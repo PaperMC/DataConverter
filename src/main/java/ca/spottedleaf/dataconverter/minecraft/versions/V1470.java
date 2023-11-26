@@ -4,6 +4,7 @@ import ca.spottedleaf.dataconverter.minecraft.MCVersions;
 import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
 import ca.spottedleaf.dataconverter.minecraft.walkers.generic.DataWalkerTypePaths;
 import ca.spottedleaf.dataconverter.minecraft.walkers.itemstack.DataWalkerItemLists;
+import ca.spottedleaf.dataconverter.minecraft.walkers.itemstack.DataWalkerItems;
 
 public final class V1470 {
 
@@ -24,6 +25,7 @@ public final class V1470 {
         registerMob("minecraft:drowned");
 
         MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:trident", new DataWalkerTypePaths<>(MCTypeRegistry.BLOCK_STATE, "inBlockState"));
+        MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:trident", new DataWalkerItems("Trident"));
     }
 
     private V1470() {}

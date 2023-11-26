@@ -151,6 +151,7 @@ public final class MCVersionRegistry {
                 2531,
                 2533,
                 2535,
+                2538,
                 2550,
                 2551,
                 2552,
@@ -219,8 +220,11 @@ public final class MCVersionRegistry {
                 3564,
                 3565,
                 3566,
-                3568
-                // All up to 1.20.2
+                3568,
+                3683,
+                3685,
+                3692,
+                // All up to 1.20.3-pre2
         };
         Arrays.sort(converterVersions);
 

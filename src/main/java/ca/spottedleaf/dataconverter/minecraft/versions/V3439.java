@@ -3,10 +3,9 @@ package ca.spottedleaf.dataconverter.minecraft.versions;
 import ca.spottedleaf.dataconverter.converters.DataConverter;
 import ca.spottedleaf.dataconverter.minecraft.MCVersions;
 import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
+import ca.spottedleaf.dataconverter.minecraft.util.ComponentUtils;
 import ca.spottedleaf.dataconverter.types.ListType;
 import ca.spottedleaf.dataconverter.types.MapType;
-import net.minecraft.network.chat.CommonComponents;
-import net.minecraft.network.chat.Component;
 
 public final class V3439 {
 
@@ -14,7 +13,6 @@ public final class V3439 {
 
     public static void register() {
         final DataConverter<MapType<String>, MapType<String>> signTileUpdater = new DataConverter<>(VERSION) {
-            private static final String BLANK_TEXT_LINE = Component.Serializer.toJson(CommonComponents.EMPTY);
             private static final String DEFAULT_COLOR = "black";
 
             private static ListType migrateToList(final MapType<String> root, final String prefix) {
@@ -24,10 +22,10 @@ public final class V3439 {
 
                 final ListType ret = root.getTypeUtil().createEmptyList();
 
-                ret.addString(root.getString(prefix.concat("1"), BLANK_TEXT_LINE));
-                ret.addString(root.getString(prefix.concat("2"), BLANK_TEXT_LINE));
-                ret.addString(root.getString(prefix.concat("3"), BLANK_TEXT_LINE));
-                ret.addString(root.getString(prefix.concat("4"), BLANK_TEXT_LINE));
+                ret.addString(root.getString(prefix.concat("1"), ComponentUtils.EMPTY));
+                ret.addString(root.getString(prefix.concat("2"), ComponentUtils.EMPTY));
+                ret.addString(root.getString(prefix.concat("3"), ComponentUtils.EMPTY));
+                ret.addString(root.getString(prefix.concat("4"), ComponentUtils.EMPTY));
 
                 return ret;
             }
@@ -78,7 +76,7 @@ public final class V3439 {
                 backText.setList("messages", blankMessages);
 
                 for (int i = 0; i < 4; ++i) {
-                    blankMessages.addString(BLANK_TEXT_LINE);
+                    blankMessages.addString(ComponentUtils.EMPTY);
                 }
 
                 backText.setString("color", DEFAULT_COLOR);
