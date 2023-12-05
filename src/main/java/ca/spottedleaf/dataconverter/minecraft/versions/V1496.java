@@ -319,6 +319,8 @@ public final class V1496 {
 
             properties.setString("persistent", Boolean.toString(notDecayable));
             properties.setString("distance", Integer.toString(distance));
+            properties.setString("waterlogged", Boolean.toString(false));
+
 
             return ret;
         }
