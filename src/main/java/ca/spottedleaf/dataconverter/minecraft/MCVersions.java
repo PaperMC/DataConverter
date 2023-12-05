@@ -3,7 +3,7 @@ package ca.spottedleaf.dataconverter.minecraft;
 @SuppressWarnings("unused")
 public final class MCVersions {
 
-    /* https://minecraft.fandom.com/wiki/Data_version */
+    /* https://minecraft.wiki/w/Data_version */
 
     public static final int V15W32A               = 100;
     public static final int V15W32B               = 103;
@@ -491,5 +491,9 @@ public final class MCVersions {
     public static final int V23W46A               = 3691;
     public static final int V1_20_3_PRE1          = 3693;
     public static final int V1_20_3_PRE2          = 3694;
+    public static final int V1_20_3_PRE3          = 3695;
+    public static final int V1_20_3_PRE4          = 3696;
+    public static final int V1_20_3_RC1           = 3697;
+    public static final int V1_20_3               = 3698;
 
 }

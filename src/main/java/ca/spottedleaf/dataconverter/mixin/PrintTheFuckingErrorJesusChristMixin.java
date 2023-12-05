@@ -46,6 +46,7 @@ public abstract class PrintTheFuckingErrorJesusChristMixin extends ChunkStorage 
             Throwable throwable2 = reportedException.getCause();
             if (!(throwable2 instanceof IOException)) {
                 this.markPositionReplaceable(chunkPos);
+                LOGGER.error("Couldn't load chunk {} (Vanilla swallowed exception)", chunkPos, throwable2);
                 throw reportedException;
             }
 

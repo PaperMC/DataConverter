@@ -224,7 +224,7 @@ public final class MCVersionRegistry {
                 3683,
                 3685,
                 3692,
-                // All up to 1.20.3-pre2
+                // All up to 1.20.3
         };
         Arrays.sort(converterVersions);
 
