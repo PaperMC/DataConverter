@@ -6,12 +6,15 @@ import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
 import ca.spottedleaf.dataconverter.types.ListType;
 import ca.spottedleaf.dataconverter.types.MapType;
 import ca.spottedleaf.dataconverter.types.ObjectType;
+import ca.spottedleaf.dataconverter.util.CommandArgumentUpgrader;
+import com.google.common.base.Suppliers;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
+import java.util.function.Supplier;
 
 public final class V3818_Commands {
 
@@ -70,13 +73,17 @@ public final class V3818_Commands {
     public static void register_5() {
         // Command is already registered in walker for command blocks
         MCTypeRegistry.DATACONVERTER_CUSTOM_TYPE_COMMAND.addConverter(new DataConverter<>(VERSION, 5) {
+            final Supplier<CommandArgumentUpgrader> commandUpgrader = Suppliers.memoize(() ->
+                    CommandArgumentUpgrader.upgrader_1_20_4_to_1_20_5(999));
+
             @Override
             public Object convert(final Object data, final long sourceVersion, final long toVersion) {
                 if (!(data instanceof String cmd)) {
                     return null;
                 }
-                // TODO convert
-                return null;
+                // We use startsWith("/") because we aren't supporting WorldEdit style commands,
+                // and passing the context of whether the use supports leading slash would be high effort low return
+                return this.commandUpgrader.get().upgradeCommandArguments(cmd, cmd.startsWith("/"));
             }
         });
 
