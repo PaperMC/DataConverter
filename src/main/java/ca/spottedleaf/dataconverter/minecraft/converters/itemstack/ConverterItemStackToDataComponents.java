@@ -428,7 +428,7 @@ public final class ConverterItemStackToDataComponents {
     private static void convertBlockStatePredicates(final TransientItemStack item, final TypeUtil type,
                                                     final String tagKey, final String componentKey,
                                                     final boolean hideInTooltip) {
-        final ListType blocks = item.tagRemoveList(tagKey, ObjectType.UNDEFINED);
+        final ListType blocks = item.tagRemoveListUnchecked(tagKey);
         if (blocks == null) {
             return;
         }
@@ -517,7 +517,7 @@ public final class ConverterItemStackToDataComponents {
     }
 
     private static void convertAttributes(final TransientItemStack item, final TypeUtil type, final int flags) {
-        final ListType attributes = item.tagRemoveList("AttributeModifiers", ObjectType.UNDEFINED);
+        final ListType attributes = item.tagRemoveListUnchecked("AttributeModifiers");
         final ListType newAttributes = type.createEmptyList();
 
         if (attributes != null) {
@@ -541,7 +541,7 @@ public final class ConverterItemStackToDataComponents {
     private static void convertMap(final TransientItemStack item, final TypeUtil type) {
         item.tagMigrateToComponent("map", "minecraft:map_id");
 
-        final ListType decorations = item.tagRemoveList("Decorations", ObjectType.UNDEFINED);
+        final ListType decorations = item.tagRemoveListUnchecked("Decorations");
         if (decorations != null) {
             final MapType<String> newDecorations = type.createEmptyMap();
 
@@ -606,7 +606,7 @@ public final class ConverterItemStackToDataComponents {
     }
 
     private static ListType convertBookPages(final TransientItemStack item, final TypeUtil type) {
-        final ListType oldPages = item.tagRemoveList("pages", ObjectType.UNDEFINED);
+        final ListType oldPages = item.tagRemoveListUnchecked("pages");
 
         final MapType<String> filteredPages = item.tagRemoveMap("filtered_pages");
 
@@ -759,8 +759,7 @@ public final class ConverterItemStackToDataComponents {
         final int flight = fireworks.getInt("Flight", 0);
         newFireworks.setByte("flight_duration", (byte)flight);
 
-        // getOrCreateList creating a mapping will not matter, it will be removed later
-        final ListType explosions = fireworks.getOrCreateList("Explosions", ObjectType.UNDEFINED);
+        final ListType explosions = fireworks.getListUnchecked("Explosions", type.createEmptyList());
         newFireworks.setList("explosions", explosions);
 
         for (int i = 0, len = explosions.size(); i < len; ++i) {
@@ -841,7 +840,7 @@ public final class ConverterItemStackToDataComponents {
         final ListType ret = type.createEmptyList();
 
         for (final String propertyKey : properties.keys()) {
-            final ListType propertyValues = properties.getList(propertyKey, ObjectType.UNDEFINED);
+            final ListType propertyValues = properties.getListUnchecked(propertyKey);
 
             if (propertyValues == null) {
                 continue;
@@ -1109,6 +1108,14 @@ public final class ConverterItemStackToDataComponents {
 
         public String tagRemoveString(final String key, final String dfl) {
             final String ret = this.tag.getString(key, dfl);
+
+            this.tag.remove(key);
+
+            return ret;
+        }
+
+        public ListType tagRemoveListUnchecked(final String key) {
+            final ListType ret = this.tag.getListUnchecked(key);
 
             this.tag.remove(key);
 
