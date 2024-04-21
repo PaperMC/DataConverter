@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Stream;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSource;
@@ -173,6 +174,23 @@ public final class CommandArgumentUpgrader {
 			});
 		}
 		return upgradedCommand;
+	}
+
+	public String upgradeSingleArgument(
+			final Function<CommandBuildContext, ? extends ArgumentType<?>> argumentFactory,
+			final String input
+	) {
+		final ArgumentType<?> argument = argumentFactory.apply(this.context);
+		final ArgumentType<?> replaced = this.replaceArgumentType(this.context, argument);
+		if (argument == replaced) {
+			return input;
+		}
+		try {
+			final UpgradedArgument parsed = (UpgradedArgument) replaced.parse(new StringReader(input));
+			return parsed.upgraded();
+		} catch (final CommandSyntaxException e) {
+			return input;
+		}
 	}
 
 	private static void addArguments(
