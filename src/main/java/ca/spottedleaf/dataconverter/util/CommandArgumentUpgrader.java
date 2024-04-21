@@ -1,5 +1,8 @@
 package ca.spottedleaf.dataconverter.util;
 
+import ca.spottedleaf.dataconverter.minecraft.MCDataConverter;
+import ca.spottedleaf.dataconverter.minecraft.MCVersions;
+import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.ParseResults;
 import com.mojang.brigadier.StringReader;
@@ -23,6 +26,7 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
+import net.minecraft.SharedConstants;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSource;
 import net.minecraft.commands.CommandSourceStack;
@@ -32,8 +36,11 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.TagParser;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.commands.ExecuteCommand;
 import net.minecraft.server.commands.ReturnCommand;
 import net.minecraft.tags.TagKey;
@@ -137,7 +144,28 @@ public final class CommandArgumentUpgrader {
 	private static final class ItemParser_1_20_4 implements ArgumentType<UpgradedArgument> {
 		@Override
 		public UpgradedArgument parse(final StringReader reader) throws CommandSyntaxException {
-			return new UpgradedArgument("upgraded_item_input{" + reader.readString() + "}");
+			final ResourceLocation id = ResourceLocation.read(reader);
+
+			final CompoundTag itemNBT = new CompoundTag();
+			itemNBT.putString("id", id.toString());
+			itemNBT.putInt("Count", 1);
+
+			if (reader.canRead() && reader.peek() == '{') {
+				itemNBT.put("tag", new TagParser(reader).readStruct());
+			}
+
+			final CompoundTag converted = MCDataConverter.convertTag(
+					MCTypeRegistry.ITEM_STACK, itemNBT, MCVersions.V1_20_4, SharedConstants.getCurrentVersion().getDataVersion().getVersion()
+			);
+
+			final String newId = converted.getString("id");
+			final CompoundTag components = converted.getCompound("components");
+
+			if (!components.isEmpty()) {
+				return new UpgradedArgument(newId + components.toString());
+			} else {
+				return new UpgradedArgument(newId);
+			}
 		}
 	}
 
