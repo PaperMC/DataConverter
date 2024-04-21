@@ -1220,7 +1220,7 @@ public final class ConverterItemStackToDataComponents {
             ret.setString("id", this.id);
             ret.setInt("count", this.count);
             if (!this.tag.isEmpty()) {
-                ret.setMap("minecraft:custom_data", this.tag);
+                this.components.setMap("minecraft:custom_data", this.tag);
             }
 
             if (!this.components.isEmpty()) {
