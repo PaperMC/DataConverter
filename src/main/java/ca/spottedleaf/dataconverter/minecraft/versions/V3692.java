@@ -17,7 +17,9 @@ public final class V3692 {
     );
 
     public static void register() {
-        ConverterAbstractBlockRename.registerAndFixJigsaw(VERSION, GRASS_RENAME::get);
+        ConverterAbstractBlockRename.register(VERSION, GRASS_RENAME::get);
         ConverterAbstractItemRename.register(VERSION, GRASS_RENAME::get);
     }
+
+    private V3692() {}
 }

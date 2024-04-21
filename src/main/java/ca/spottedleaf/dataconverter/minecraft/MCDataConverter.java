@@ -3,6 +3,7 @@ package ca.spottedleaf.dataconverter.minecraft;
 import ca.spottedleaf.dataconverter.converters.DataConverter;
 import ca.spottedleaf.dataconverter.converters.datatypes.DataType;
 import ca.spottedleaf.dataconverter.minecraft.datatypes.MCDataType;
+import ca.spottedleaf.dataconverter.minecraft.versions.V99;
 import ca.spottedleaf.dataconverter.types.json.JsonMapType;
 import ca.spottedleaf.dataconverter.types.nbt.NBTMapType;
 import com.google.gson.JsonObject;
@@ -42,7 +43,7 @@ public final class MCDataConverter {
     public static <T, R> R convert(final DataType<T, R> type, final T data, int fromVersion, final int toVersion) {
         Object ret = data;
 
-        long currentVersion = DataConverter.encodeVersions(fromVersion < 99 ? 99 : fromVersion, Integer.MAX_VALUE);
+        long currentVersion = DataConverter.encodeVersions(fromVersion < V99.VERSION ? V99.VERSION : fromVersion, Integer.MAX_VALUE);
         final long nextVersion = DataConverter.encodeVersions(toVersion, Integer.MAX_VALUE);
 
         for (int i = 0, len = BREAKPOINTS.size(); i < len; ++i) {
@@ -75,5 +76,4 @@ public final class MCDataConverter {
     }
 
     private MCDataConverter() {}
-
 }

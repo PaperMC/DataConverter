@@ -53,4 +53,6 @@ public final class V3566 {
             }
         });
     }
+
+    private V3566() {}
 }

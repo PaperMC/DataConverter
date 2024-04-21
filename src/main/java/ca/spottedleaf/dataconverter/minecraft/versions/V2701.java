@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 
 public final class V2701 {
 
-    protected static final int VERSION = MCVersions.V21W10A + 2;
+    private static final int VERSION = MCVersions.V21W10A + 2;
 
     private static final Pattern INDEX_PATTERN = Pattern.compile("\\[(\\d+)\\]");
 
@@ -107,7 +107,7 @@ public final class V2701 {
         return current instanceof String ? (String)current : "";
     }
 
-    protected static String convertToString(final MapType<String> feature) {
+    private static String convertToString(final MapType<String> feature) {
         return getReplacement(
                 getNestedString(feature, "type"),
                 getNestedString(feature, "name"),
@@ -200,4 +200,6 @@ public final class V2701 {
 
         return null;
     }
+
+    private V2701() {}
 }

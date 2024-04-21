@@ -12,4 +12,6 @@ public final class V3441 {
         // See V3088 for why this converter is duplicated here and in V3088
         MCTypeRegistry.CHUNK.addStructureConverter(new ConverterAddBlendingData(VERSION));
     }
+
+    private V3441() {}
 }

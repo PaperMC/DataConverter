@@ -18,4 +18,6 @@ public final class V3319 {
             }
         });
     }
+
+    private V3319() {}
 }

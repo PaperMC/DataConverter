@@ -7,9 +7,7 @@ import ca.spottedleaf.dataconverter.types.MapType;
 
 public final class V1917 {
 
-    protected static final int VERSION = MCVersions.V18W49A + 1;
-
-    private V1917() {}
+    private static final int VERSION = MCVersions.V18W49A + 1;
 
     public static void register() {
         MCTypeRegistry.ENTITY.addConverterForId("minecraft:cat", new DataConverter<>(VERSION) {
@@ -23,4 +21,5 @@ public final class V1917 {
         });
     }
 
+    private V1917() {}
 }

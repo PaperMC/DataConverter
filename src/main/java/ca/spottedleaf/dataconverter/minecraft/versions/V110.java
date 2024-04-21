@@ -9,7 +9,7 @@ import ca.spottedleaf.dataconverter.types.Types;
 
 public final class V110 {
 
-    protected static final int VERSION = MCVersions.V15W32C + 6;
+    private static final int VERSION = MCVersions.V15W32C + 6;
 
     public static void register() {
         // Moves the Saddle boolean to be an actual saddle item. Note: The data walker for the SaddleItem exists
@@ -35,5 +35,4 @@ public final class V110 {
     }
 
     private V110() {}
-
 }

@@ -7,9 +7,7 @@ import ca.spottedleaf.dataconverter.minecraft.walkers.itemstack.DataWalkerItems;
 
 public final class V1906 {
 
-    protected static final int VERSION = MCVersions.V18W43C + 3;
-
-    private V1906() {}
+    private static final int VERSION = MCVersions.V18W43C + 3;
 
     public static void register() {
         MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, "minecraft:barrel", new DataWalkerItemLists("Items"));
@@ -18,4 +16,5 @@ public final class V1906 {
         MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, "minecraft:lectern", new DataWalkerItems("Book"));
     }
 
+    private V1906() {}
 }

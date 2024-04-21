@@ -9,14 +9,19 @@ import ca.spottedleaf.dataconverter.types.ListType;
 import ca.spottedleaf.dataconverter.types.MapType;
 import ca.spottedleaf.dataconverter.types.ObjectType;
 import ca.spottedleaf.dataconverter.types.Types;
+import java.util.HashMap;
 import java.util.Map;
 
 public final class V2843 {
 
-    protected static final int VERSION = MCVersions.V21W42A + 3;
+    private static final int VERSION = MCVersions.V21W42A + 3;
 
     public static void register() {
-        ConverterAbstractStringValueTypeRename.register(VERSION, MCTypeRegistry.BIOME, Map.of("minecraft:deep_warm_ocean", "minecraft:warm_ocean")::get);
+        ConverterAbstractStringValueTypeRename.register(VERSION, MCTypeRegistry.BIOME,
+                new HashMap<>(
+                        Map.of("minecraft:deep_warm_ocean", "minecraft:warm_ocean")
+                )::get
+        );
 
         MCTypeRegistry.CHUNK.addStructureConverter(new DataConverter<>(VERSION) {
             private static void moveOutOfBoundTicks(final ListType ticks, final MapType<String> chunkRoot, final int chunkX, final int chunkZ, final String intoKey) {
@@ -100,6 +105,7 @@ public final class V2843 {
 
             return null;
         });
-
     }
+
+    private V2843() {}
 }

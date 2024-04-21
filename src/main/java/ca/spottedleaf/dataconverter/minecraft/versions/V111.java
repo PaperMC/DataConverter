@@ -7,11 +7,12 @@ import ca.spottedleaf.dataconverter.types.MapType;
 
 public final class V111 {
 
-    protected static final int VERSION = MCVersions.V15W33B;
+    private static final int VERSION = MCVersions.V15W33B;
 
     public static void register() {
-        MCTypeRegistry.ENTITY.addConverterForId("Painting", new EntityRotationFix("Painting"));
-        MCTypeRegistry.ENTITY.addConverterForId("ItemFrame", new EntityRotationFix("ItemFrame"));
+        final EntityRotationFix rotationFix = new EntityRotationFix(VERSION);
+        MCTypeRegistry.ENTITY.addConverterForId("Painting", rotationFix);
+        MCTypeRegistry.ENTITY.addConverterForId("ItemFrame", rotationFix);
     }
 
     private V111() {}
@@ -25,11 +26,8 @@ public final class V111 {
                 {1, 0, 0}
         };
 
-        protected final String id;
-
-        public EntityRotationFix(final String id) {
-            super(VERSION);
-            this.id = id;
+        public EntityRotationFix(final int version) {
+            super(version);
         }
 
         @Override
@@ -63,5 +61,4 @@ public final class V111 {
             return null;
         }
     }
-
 }

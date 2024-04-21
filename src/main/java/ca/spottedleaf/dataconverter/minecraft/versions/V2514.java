@@ -13,7 +13,7 @@ import java.util.UUID;
 
 public final class V2514 {
 
-    protected static final int VERSION = MCVersions.V20W11A + 1;
+    private static final int VERSION = MCVersions.V20W11A + 1;
 
     private static final Set<String> ABSTRACT_HORSES = Sets.newHashSet();
     private static final Set<String> TAMEABLE_ANIMALS = Sets.newHashSet();
@@ -176,8 +176,6 @@ public final class V2514 {
             data.setInts(newPath, uuid);
         }
     }
-
-    private V2514() {}
 
     private static void updatePiglin(final MapType<String> data) {
         final MapType<String> brain = data.getMap("Brain");
@@ -587,4 +585,6 @@ public final class V2514 {
     private static void updateSkullOwner(final MapType<String> tag) {
         replaceUUIDString(tag.getMap("SkullOwner"), "Id", "Id");
     }
+
+    private V2514() {}
 }

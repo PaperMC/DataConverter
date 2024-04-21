@@ -7,16 +7,19 @@ import ca.spottedleaf.dataconverter.minecraft.converters.itemname.ConverterAbstr
 import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
 import ca.spottedleaf.dataconverter.types.MapType;
 import com.google.common.collect.ImmutableMap;
+import java.util.HashMap;
 import java.util.Map;
 
 public final class V1484 {
 
-    protected static final int VERSION = MCVersions.V18W19A;
+    private static final int VERSION = MCVersions.V18W19A;
 
     public static void register() {
-        final Map<String, String> renamed = ImmutableMap.of(
-                "minecraft:sea_grass", "minecraft:seagrass",
-                "minecraft:tall_sea_grass", "minecraft:tall_seagrass"
+        final Map<String, String> renamed = new HashMap<>(
+                ImmutableMap.of(
+                        "minecraft:sea_grass", "minecraft:seagrass",
+                        "minecraft:tall_sea_grass", "minecraft:tall_seagrass"
+                )
         );
 
         ConverterAbstractItemRename.register(VERSION, renamed::get);
@@ -69,5 +72,4 @@ public final class V1484 {
     }
 
     private V1484() {}
-
 }

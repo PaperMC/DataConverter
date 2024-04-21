@@ -19,9 +19,7 @@ import java.util.Set;
 
 public final class V1496 {
 
-    private V1496() {}
-
-    protected static final int VERSION = MCVersions.V18W21B;
+    private static final int VERSION = MCVersions.V18W21B;
 
     private static final int[][] DIRECTIONS = new int[][] {
             new int[] {-1, 0, 0},
@@ -224,6 +222,8 @@ public final class V1496 {
 
         return ret;
     }
+
+    private V1496() {}
 
     public abstract static class Section {
         protected final ListType palette;

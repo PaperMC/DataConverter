@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 
 public final class V1506 {
 
-    protected static final int VERSION = MCVersions.V1_13_PRE4 + 2;
+    private static final int VERSION = MCVersions.V1_13_PRE4 + 2;
 
     static final Map<String, String> MAP = new HashMap<>();
     static {
@@ -107,8 +107,6 @@ public final class V1506 {
         MAP.put("166", "minecraft:modified_wooded_badlands_plateau");
         MAP.put("167", "minecraft:modified_badlands_plateau");
     }
-
-    private V1506() {}
 
     public static void register() {
         MCTypeRegistry.LEVEL.addStructureConverter(new DataConverter<>(VERSION) {
@@ -216,4 +214,6 @@ public final class V1506 {
 
         return ret;
     }
+
+    private V1506() {}
 }

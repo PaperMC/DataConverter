@@ -10,9 +10,7 @@ import ca.spottedleaf.dataconverter.types.ObjectType;
 
 public final class V1803 {
 
-    protected static final int VERSION = MCVersions.V1_13_2 + 172;
-
-    private V1803() {}
+    private static final int VERSION = MCVersions.V1_13_2 + 172;
 
     public static void register() {
         MCTypeRegistry.ITEM_STACK.addStructureConverter(new DataConverter<>(VERSION) {
@@ -44,4 +42,5 @@ public final class V1803 {
         });
     }
 
+    private V1803() {}
 }

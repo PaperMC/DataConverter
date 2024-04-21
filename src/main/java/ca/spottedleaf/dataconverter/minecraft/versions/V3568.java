@@ -240,4 +240,6 @@ public final class V3568 {
 
         MCTypeRegistry.ITEM_STACK.addStructureConverter(itemConverter);
     }
+
+    private V3568() {}
 }

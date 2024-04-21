@@ -3,19 +3,14 @@ package ca.spottedleaf.dataconverter.minecraft.versions;
 import ca.spottedleaf.dataconverter.converters.DataConverter;
 import ca.spottedleaf.dataconverter.minecraft.MCVersions;
 import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
+import ca.spottedleaf.dataconverter.minecraft.util.ComponentUtils;
 import ca.spottedleaf.dataconverter.types.ObjectType;
 import ca.spottedleaf.dataconverter.types.ListType;
 import ca.spottedleaf.dataconverter.types.MapType;
-import com.google.gson.JsonParseException;
-import net.minecraft.network.chat.CommonComponents;
-import net.minecraft.network.chat.Component;
-import net.minecraft.util.GsonHelper;
-import net.minecraft.util.datafix.fixes.BlockEntitySignTextStrictJsonFix;
-import org.apache.commons.lang3.StringUtils;
 
 public final class V165 {
 
-    protected static final int VERSION = MCVersions.V1_9_PRE2;
+    private static final int VERSION = MCVersions.V1_9_PRE2;
 
     public static void register() {
         MCTypeRegistry.ITEM_STACK.addStructureConverter(new DataConverter<>(VERSION) {
@@ -33,40 +28,8 @@ public final class V165 {
 
                 for (int i = 0, len = pages.size(); i < len; ++i) {
                     final String page = pages.getString(i);
-                    Component component = null;
 
-                    if (!"null".equals(page) && !StringUtils.isEmpty(page)) {
-                        if (page.charAt(0) == '"' && page.charAt(page.length() - 1) == '"' || page.charAt(0) == '{' && page.charAt(page.length() - 1) == '}') {
-                            try {
-                                component = GsonHelper.fromNullableJson(BlockEntitySignTextStrictJsonFix.GSON, page, Component.class, true);
-                                if (component == null) {
-                                    component = CommonComponents.EMPTY;
-                                }
-                            } catch (final JsonParseException ignored) {}
-
-                            if (component == null) {
-                                try {
-                                    component = Component.Serializer.fromJson(page);
-                                } catch (final JsonParseException ignored) {}
-                            }
-
-                            if (component == null) {
-                                try {
-                                    component = Component.Serializer.fromJsonLenient(page);
-                                } catch (JsonParseException ignored) {}
-                            }
-
-                            if (component == null) {
-                                component = Component.literal(page);
-                            }
-                        } else {
-                            component = Component.literal(page);
-                        }
-                    } else {
-                        component = CommonComponents.EMPTY;
-                    }
-
-                    pages.setString(i, Component.Serializer.toJson(component));
+                    pages.setString(i, ComponentUtils.convertFromLenient(page));
                 }
 
                 return null;
@@ -75,5 +38,4 @@ public final class V165 {
     }
 
     private V165() {}
-
 }

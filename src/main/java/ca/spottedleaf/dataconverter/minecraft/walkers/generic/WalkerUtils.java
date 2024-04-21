@@ -40,6 +40,34 @@ public final class WalkerUtils {
         }
     }
 
+    public static void convertListPath(final MCDataType type, final MapType<String> data, final String listPath, final String elementPath,
+                                       final long fromVersion, final long toVersion) {
+        if (data == null) {
+            return;
+        }
+
+        final ListType list = data.getList(listPath, ObjectType.MAP);
+        if (list != null) {
+            for (int i = 0, len = list.size(); i < len; ++i) {
+                WalkerUtils.convert(type, list.getMap(i), elementPath, fromVersion, toVersion);
+            }
+        }
+    }
+
+    public static void convertListPath(final MCDataType type, final MapType<String> data, final String listPath, final String elementPath1,
+                                       final String elementPath2, final long fromVersion, final long toVersion) {
+        if (data == null) {
+            return;
+        }
+
+        final ListType list = data.getList(listPath, ObjectType.MAP);
+        if (list != null) {
+            for (int i = 0, len = list.size(); i < len; ++i) {
+                WalkerUtils.convert(type, list.getMap(i).getMap(elementPath1), elementPath2, fromVersion, toVersion);
+            }
+        }
+    }
+
     public static void convert(final MCValueType type, final MapType<String> data, final String path, final long fromVersion, final long toVersion) {
         if (data == null) {
             return;
@@ -76,6 +104,34 @@ public final class WalkerUtils {
         final ListType list = data.getListUnchecked(path);
         if (list != null) {
             convert(type, list, fromVersion, toVersion);
+        }
+    }
+
+    public static void convertListPath(final MCValueType type, final MapType<String> data, final String listPath, final String elementPath,
+                                       final long fromVersion, final long toVersion) {
+        if (data == null) {
+            return;
+        }
+
+        final ListType list = data.getList(listPath, ObjectType.MAP);
+        if (list != null) {
+            for (int i = 0, len = list.size(); i < len; ++i) {
+                WalkerUtils.convert(type, list.getMap(i), elementPath, fromVersion, toVersion);
+            }
+        }
+    }
+
+    public static void convertListPath(final MCValueType type, final MapType<String> data, final String listPath, final String elementPath1,
+                                       final String elementPath2, final long fromVersion, final long toVersion) {
+        if (data == null) {
+            return;
+        }
+
+        final ListType list = data.getList(listPath, ObjectType.MAP);
+        if (list != null) {
+            for (int i = 0, len = list.size(); i < len; ++i) {
+                WalkerUtils.convert(type, list.getMap(i).getMap(elementPath1), elementPath2, fromVersion, toVersion);
+            }
         }
     }
 

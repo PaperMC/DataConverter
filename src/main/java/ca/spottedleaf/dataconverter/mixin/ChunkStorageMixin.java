@@ -2,7 +2,10 @@ package ca.spottedleaf.dataconverter.mixin;
 
 import ca.spottedleaf.dataconverter.minecraft.MCDataConverter;
 import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import net.minecraft.CrashReport;
+import net.minecraft.CrashReportCategory;
+import net.minecraft.ReportedException;
 import net.minecraft.SharedConstants;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
@@ -29,23 +32,31 @@ public abstract class ChunkStorageMixin implements AutoCloseable {
      * @author Spottedleaf
      */
     @Overwrite
-    public CompoundTag upgradeChunkTag(ResourceKey<Level> resourceKey, Supplier<DimensionDataStorage> supplier, CompoundTag compoundTag, Optional<ResourceKey<Codec<? extends ChunkGenerator>>> optional) {
+    public CompoundTag upgradeChunkTag(ResourceKey<Level> resourceKey, Supplier<DimensionDataStorage> supplier, CompoundTag compoundTag, Optional<ResourceKey<MapCodec<? extends ChunkGenerator>>> optional) {
         int i = ChunkStorage.getVersion(compoundTag);
-        if (i < 1493) {
-            compoundTag = MCDataConverter.convertTag(MCTypeRegistry.CHUNK, compoundTag, i, 1493);
-            if (compoundTag.getCompound("Level").getBoolean("hasLegacyStructureData")) {
-                LegacyStructureDataHandler legacyStructureDataHandler = this.getLegacyStructureHandler(resourceKey, supplier);
-                compoundTag = legacyStructureDataHandler.updateFromLegacy(compoundTag);
+
+        try {
+            if (i < 1493) {
+                compoundTag = MCDataConverter.convertTag(MCTypeRegistry.CHUNK, compoundTag, i, 1493);
+                if (compoundTag.getCompound("Level").getBoolean("hasLegacyStructureData")) {
+                    LegacyStructureDataHandler legacyStructureDataHandler = this.getLegacyStructureHandler(resourceKey, supplier);
+                    compoundTag = legacyStructureDataHandler.updateFromLegacy(compoundTag);
+                }
             }
-        }
 
-        ChunkStorage.injectDatafixingContext(compoundTag, resourceKey, optional);
-        compoundTag = MCDataConverter.convertTag(MCTypeRegistry.CHUNK, compoundTag, Math.max(1493, i), SharedConstants.getCurrentVersion().getDataVersion().getVersion());
-        if (i < SharedConstants.getCurrentVersion().getDataVersion().getVersion()) {
-            NbtUtils.addCurrentDataVersion(compoundTag);
-        }
+            ChunkStorage.injectDatafixingContext(compoundTag, resourceKey, optional);
+            compoundTag = MCDataConverter.convertTag(MCTypeRegistry.CHUNK, compoundTag, Math.max(1493, i), SharedConstants.getCurrentVersion().getDataVersion().getVersion());
+            if (i < SharedConstants.getCurrentVersion().getDataVersion().getVersion()) {
+                NbtUtils.addCurrentDataVersion(compoundTag);
+            }
 
-        compoundTag.remove("__context");
-        return compoundTag;
+            compoundTag.remove("__context");
+            return compoundTag;
+        } catch (Exception var9) {
+            CrashReport crashReport = CrashReport.forThrowable(var9, "Updated chunk");
+            CrashReportCategory crashReportCategory = crashReport.addCategory("Updated chunk details");
+            crashReportCategory.setDetail("Data version", i);
+            throw new ReportedException(crashReport);
+        }
     }
 }

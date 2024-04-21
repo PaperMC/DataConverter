@@ -8,7 +8,7 @@ import java.util.Locale;
 
 public final class V816 {
 
-    protected static final int VERSION = MCVersions.V16W43A;
+    private static final int VERSION = MCVersions.V16W43A;
 
     public static void register() {
         MCTypeRegistry.OPTIONS.addStructureConverter(new DataConverter<>(VERSION) {
@@ -24,5 +24,4 @@ public final class V816 {
     }
 
     private V816() {}
-
 }

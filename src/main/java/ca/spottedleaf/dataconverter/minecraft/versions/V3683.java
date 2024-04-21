@@ -28,4 +28,6 @@ public final class V3683 {
 
         MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:tnt", new DataWalkerTypePaths<>(MCTypeRegistry.BLOCK_STATE, "block_state"));
     }
+
+    private V3683() {}
 }

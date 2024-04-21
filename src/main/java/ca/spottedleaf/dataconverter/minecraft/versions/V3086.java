@@ -11,9 +11,9 @@ import java.util.Map;
 
 public final class V3086 {
 
-    protected static final int VERSION = MCVersions.V22W13A + 1;
+    private static final int VERSION = MCVersions.V22W13A + 1;
 
-    protected static final Int2ObjectOpenHashMap<String> CAT_ID_CONVERSION = new Int2ObjectOpenHashMap<>();
+    private static final Int2ObjectOpenHashMap<String> CAT_ID_CONVERSION = new Int2ObjectOpenHashMap<>();
     static {
         CAT_ID_CONVERSION.defaultReturnValue("minecraft:tabby");
         CAT_ID_CONVERSION.put(0, "minecraft:tabby");
@@ -29,23 +29,26 @@ public final class V3086 {
         CAT_ID_CONVERSION.put(10, "minecraft:all_black");
     }
 
-    protected static final Map<String, String> CAT_ADVANCEMENTS_CONVERSION = new HashMap<>(ImmutableMap.<String, String>builder()
-            .put("textures/entity/cat/tabby.png", "minecraft:tabby")
-            .put("textures/entity/cat/black.png", "minecraft:black")
-            .put("textures/entity/cat/red.png", "minecraft:red")
-            .put("textures/entity/cat/siamese.png", "minecraft:siamese")
-            .put("textures/entity/cat/british_shorthair.png", "minecraft:british")
-            .put("textures/entity/cat/calico.png", "minecraft:calico")
-            .put("textures/entity/cat/persian.png", "minecraft:persian")
-            .put("textures/entity/cat/ragdoll.png", "minecraft:ragdoll")
-            .put("textures/entity/cat/white.png", "minecraft:white")
-            .put("textures/entity/cat/jellie.png", "minecraft:jellie")
-            .put("textures/entity/cat/all_black.png", "minecraft:all_black")
-            .build()
+    private static final Map<String, String> CAT_ADVANCEMENTS_CONVERSION = new HashMap<>(
+            ImmutableMap.<String, String>builder()
+                    .put("textures/entity/cat/tabby.png", "minecraft:tabby")
+                    .put("textures/entity/cat/black.png", "minecraft:black")
+                    .put("textures/entity/cat/red.png", "minecraft:red")
+                    .put("textures/entity/cat/siamese.png", "minecraft:siamese")
+                    .put("textures/entity/cat/british_shorthair.png", "minecraft:british")
+                    .put("textures/entity/cat/calico.png", "minecraft:calico")
+                    .put("textures/entity/cat/persian.png", "minecraft:persian")
+                    .put("textures/entity/cat/ragdoll.png", "minecraft:ragdoll")
+                    .put("textures/entity/cat/white.png", "minecraft:white")
+                    .put("textures/entity/cat/jellie.png", "minecraft:jellie")
+                    .put("textures/entity/cat/all_black.png", "minecraft:all_black")
+                    .build()
     );
 
     public static void register() {
         MCTypeRegistry.ENTITY.addConverterForId("minecraft:cat", new ConverterEntityToVariant(VERSION, "CatType", CAT_ID_CONVERSION::get));
         MCTypeRegistry.ADVANCEMENTS.addStructureConverter(new ConverterCriteriaRename(VERSION, "minecraft:husbandry/complete_catalogue", CAT_ADVANCEMENTS_CONVERSION::get));
     }
+
+    private V3086() {}
 }

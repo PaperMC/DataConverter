@@ -10,7 +10,7 @@ import java.util.Map;
 
 public final class V1800 {
 
-    protected static final int VERSION = MCVersions.V1_13_2 + 169;
+    private static final int VERSION = MCVersions.V1_13_2 + 169;
 
     public static final Map<String, String> RENAMED_ITEM_IDS = new HashMap<>(
             ImmutableMap.<String, String>builder()
@@ -20,17 +20,17 @@ public final class V1800 {
                     .build()
     );
 
-    private V1800() {}
-
     private static void registerMob(final String id) {
-        MCTypeRegistry.ENTITY.addWalker(VERSION, id, new DataWalkerItemLists("ArmorItems", "HandItems"));
+        V100.registerEquipment(VERSION, id);
     }
 
     public static void register() {
         ConverterAbstractItemRename.register(VERSION, RENAMED_ITEM_IDS::get);
 
         registerMob("minecraft:panda");
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:pillager", new DataWalkerItemLists("Inventory", "ArmorItems", "HandItems"));
+        MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:pillager", new DataWalkerItemLists("Inventory"));
+        V100.registerEquipment(VERSION, "minecraft:pillager");
     }
 
+    private V1800() {}
 }

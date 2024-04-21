@@ -115,7 +115,7 @@ public final class V1492 {
 
             .build();
 
-    protected static final int VERSION = MCVersions.V18W20B + 1;
+    private static final int VERSION = MCVersions.V18W20B + 1;
 
     public static void register() {
         MCTypeRegistry.STRUCTURE_FEATURE.addStructureConverter(new DataConverter<>(VERSION) {
@@ -148,5 +148,4 @@ public final class V1492 {
     }
 
     private V1492() {}
-
 }

@@ -10,7 +10,7 @@ import java.util.Map;
 
 public final class V1911 {
 
-    protected static final int VERSION = MCVersions.V18W46A + 1;
+    private static final int VERSION = MCVersions.V18W46A + 1;
 
     private static final Map<String, String> CHUNK_STATUS_REMAP = new HashMap<>(
             ImmutableMap.<String, String>builder()
@@ -26,9 +26,6 @@ public final class V1911 {
                     .put("fullchunk", "full")
                     .build()
     );
-
-
-    private V1911() {}
 
     public static void register() {
         MCTypeRegistry.CHUNK.addStructureConverter(new DataConverter<>(VERSION) {
@@ -48,4 +45,5 @@ public final class V1911 {
         });
     }
 
+    private V1911() {}
 }

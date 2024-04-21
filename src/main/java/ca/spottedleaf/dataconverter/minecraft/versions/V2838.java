@@ -9,7 +9,7 @@ import java.util.Map;
 
 public final class V2838 {
 
-    protected static final int VERSION = MCVersions.V21W40A;
+    private static final int VERSION = MCVersions.V21W40A;
 
     public static final Map<String, String> BIOME_UPDATE = new HashMap<>(
             ImmutableMap.<String, String>builder()
@@ -57,4 +57,6 @@ public final class V2838 {
     public static void register() {
         ConverterAbstractStringValueTypeRename.register(VERSION, MCTypeRegistry.BIOME, BIOME_UPDATE::get);
     }
+
+    private V2838() {}
 }

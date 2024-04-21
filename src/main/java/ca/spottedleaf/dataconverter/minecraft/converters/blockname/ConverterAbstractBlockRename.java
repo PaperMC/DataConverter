@@ -29,44 +29,35 @@ public final class ConverterAbstractBlockRename {
                 return null;
             }
         });
-    }
-
-    public static void registerAndFixJigsaw(final int version, final Function<String, String> renamer) {
-        registerAndFixJigsaw(version, 0, renamer);
-    }
-
-    public static void registerAndFixJigsaw(final int version, final int subVersion, final Function<String, String> renamer) {
-        register(version, subVersion, renamer);
-        // TODO check on update, minecraft:jigsaw can change
-        MCTypeRegistry.TILE_ENTITY.addConverterForId("minecraft:jigsaw", new DataConverter<>(version, subVersion) {
+        MCTypeRegistry.FLAT_BLOCK_STATE.addConverter(new DataConverter<>(version, subVersion) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
-                final String finalState = data.getString("final_state");
-                if (finalState == null || finalState.isEmpty()) {
+            public Object convert(final Object data, final long sourceVersion, final long toVersion) {
+                if (!(data instanceof String string)) {
                     return null;
                 }
 
-                final int nbtStart1 = finalState.indexOf('[');
-                final int nbtStart2 = finalState.indexOf('{');
-                int stateNameEnd = finalState.length();
+                if (string.isEmpty()) {
+                    return null;
+                }
+
+                final int nbtStart1 = string.indexOf('[');
+                final int nbtStart2 = string.indexOf('{');
+                int stateNameEnd = string.length();
                 if (nbtStart1 > 0) {
-                    stateNameEnd = Math.min(stateNameEnd, nbtStart1);
+                    stateNameEnd = nbtStart1;
                 }
 
                 if (nbtStart2 > 0) {
                     stateNameEnd = Math.min(stateNameEnd, nbtStart2);
                 }
 
-                final String blockStateName = finalState.substring(0, stateNameEnd);
+                final String blockStateName = string.substring(0, stateNameEnd);
                 final String converted = renamer.apply(blockStateName);
                 if (converted == null) {
                     return null;
                 }
 
-                final String convertedState = converted.concat(finalState.substring(stateNameEnd));
-                data.setString("final_state", convertedState);
-
-                return null;
+                return converted.concat(string.substring(stateNameEnd));
             }
         });
     }

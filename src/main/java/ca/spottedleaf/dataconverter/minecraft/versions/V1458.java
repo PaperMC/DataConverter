@@ -8,7 +8,7 @@ import ca.spottedleaf.dataconverter.types.MapType;
 
 public final class V1458 {
 
-    protected static final int VERSION = MCVersions.V17W50A + 1;
+    private static final int VERSION = MCVersions.V17W50A + 1;
 
     public static MapType<String> updateCustomName(final MapType<String> data) {
         final String customName = data.getString("CustomName", "");
@@ -58,13 +58,13 @@ public final class V1458 {
                 final String name = display.getString("Name");
                 if (name != null) {
                     display.setString("Name", ComponentUtils.createPlainTextComponent(name));
-                } else {
+                } /* In 1.20.5, Mojang removed this branch (ItemCustomNameToComponentFix) */ /*else {
                     final String localisedName = display.getString("LocName");
                     if (localisedName != null) {
                         display.setString("Name", ComponentUtils.createTranslatableComponent(localisedName));
                         display.remove("LocName");
                     }
-                }
+                }*/
 
                 return null;
             }
@@ -84,5 +84,4 @@ public final class V1458 {
     }
 
     private V1458() {}
-
 }

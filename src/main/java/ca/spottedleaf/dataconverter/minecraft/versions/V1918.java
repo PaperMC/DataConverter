@@ -8,9 +8,7 @@ import ca.spottedleaf.dataconverter.types.Types;
 
 public final class V1918 {
 
-    protected static final int VERSION = MCVersions.V18W49A + 2;
-
-    private V1918() {}
+    private static final int VERSION = MCVersions.V18W49A + 2;
 
     private static String getProfessionString(final int professionId, final int careerId) {
         if (professionId == 0) {
@@ -62,4 +60,6 @@ public final class V1918 {
         MCTypeRegistry.ENTITY.addConverterForId("minecraft:villager", converter);
         MCTypeRegistry.ENTITY.addConverterForId("minecraft:zombie_villager", converter);
     }
+
+    private V1918() {}
 }

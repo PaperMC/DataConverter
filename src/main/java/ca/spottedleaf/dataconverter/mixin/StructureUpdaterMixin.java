@@ -6,7 +6,6 @@ import com.mojang.datafixers.DataFixer;
 import net.minecraft.SharedConstants;
 import net.minecraft.data.structures.StructureUpdater;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtUtils;
 import net.minecraft.util.datafix.DataFixTypes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

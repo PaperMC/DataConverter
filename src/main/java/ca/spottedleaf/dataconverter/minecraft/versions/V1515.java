@@ -8,7 +8,7 @@ import java.util.Map;
 
 public final class V1515 {
 
-    protected static final int VERSION = MCVersions.V1_13_PRE7 + 2;
+    private static final int VERSION = MCVersions.V1_13_PRE7 + 2;
 
     public static final Map<String, String> RENAMED_BLOCK_IDS = new HashMap<>(
             ImmutableMap.<String, String>builder()
@@ -20,9 +20,9 @@ public final class V1515 {
                     .build()
     );
 
-    private V1515() {}
-
     public static void register() {
         ConverterAbstractBlockRename.register(VERSION, RENAMED_BLOCK_IDS::get);
     }
+
+    private V1515() {}
 }

@@ -10,21 +10,27 @@ import ca.spottedleaf.dataconverter.types.MapType;
 import ca.spottedleaf.dataconverter.types.ObjectType;
 import com.google.common.collect.ImmutableMap;
 
+import java.util.HashMap;
+
 public final class V1488 {
 
-    protected static final int VERSION = MCVersions.V18W19B + 3;
+    private static final int VERSION = MCVersions.V18W19B + 3;
 
-    protected static boolean isIglooPiece(final MapType<String> piece) {
+    private static boolean isIglooPiece(final MapType<String> piece) {
         return "Iglu".equals(piece.getString("id"));
     }
 
     public static void register() {
-        ConverterAbstractBlockRename.register(VERSION, ImmutableMap.of(
-                "minecraft:kelp_top", "minecraft:kelp",
-                "minecraft:kelp", "minecraft:kelp_plant"
+        ConverterAbstractBlockRename.register(VERSION, new HashMap<>(
+                ImmutableMap.of(
+                        "minecraft:kelp_top", "minecraft:kelp",
+                        "minecraft:kelp", "minecraft:kelp_plant"
+                )
         )::get);
-        ConverterAbstractItemRename.register(VERSION, ImmutableMap.of(
-                "minecraft:kelp_top", "minecraft:kelp"
+        ConverterAbstractItemRename.register(VERSION, new HashMap<>(
+                ImmutableMap.of(
+                        "minecraft:kelp_top", "minecraft:kelp"
+                )
         )::get);
 
         // Don't ask me why in V1458 they wrote the converter to NOT do command blocks and THEN in THIS version
@@ -84,5 +90,4 @@ public final class V1488 {
     }
 
     private V1488() {}
-
 }

@@ -8,7 +8,7 @@
     "Spottedleaf"
   ],
   "contact": {},
-  "license": "LGPL-3.0-only",
+  "license": "GPL-3.0-only",
   "icon": "assets/dataconverter/icon.png",
   "environment": "*",
   "entrypoints": {},
@@ -16,7 +16,7 @@
     "dataconverter.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.15.0",
-    "minecraft": "1.20.3"
+    "fabricloader": ">=${loader_version}",
+    "minecraft": "1.20.5-beta.2"
   }
 }

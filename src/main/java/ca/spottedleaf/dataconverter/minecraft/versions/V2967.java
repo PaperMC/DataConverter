@@ -7,7 +7,7 @@ import ca.spottedleaf.dataconverter.types.MapType;
 
 public final class V2967 {
 
-    protected static final int VERSION = MCVersions.V22W05A;
+    private static final int VERSION = MCVersions.V22W05A;
 
     public static void register() {
         MCTypeRegistry.WORLD_GEN_SETTINGS.addStructureConverter(new DataConverter<>(VERSION) {
@@ -53,4 +53,6 @@ public final class V2967 {
             }
         });
     }
+
+    private V2967() {}
 }

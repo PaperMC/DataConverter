@@ -2,8 +2,8 @@ package ca.spottedleaf.dataconverter.converters.datatypes;
 
 import ca.spottedleaf.dataconverter.types.MapType;
 
-public interface DataWalker<K> {
+public interface DataWalker<T> {
 
-    public MapType<String> walk(final MapType<K> data, final long fromVersion, final long toVersion);
+    public T walk(final T data, final long fromVersion, final long toVersion);
 
 }

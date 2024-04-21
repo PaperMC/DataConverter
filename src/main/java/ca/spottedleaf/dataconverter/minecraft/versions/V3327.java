@@ -14,4 +14,6 @@ public final class V3327 {
         MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, "minecraft:decorated_pot", new DataWalkerItems("item"));
         MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, "minecraft:suspicious_sand", new DataWalkerItems("item"));
     }
+
+    private V3327() {}
 }

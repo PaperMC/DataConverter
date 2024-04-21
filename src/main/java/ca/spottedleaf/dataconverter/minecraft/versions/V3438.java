@@ -16,7 +16,7 @@ public final class V3438 {
 
     public static void register() {
         // brushable block rename
-        MCTypeRegistry.TILE_ENTITY.copyWalkers(VERSION,"minecraft:suspicious_sand", "minecraft:brushable_block");
+        MCTypeRegistry.TILE_ENTITY.copyWalkers(VERSION, "minecraft:suspicious_sand", "minecraft:brushable_block");
 
         ConverterAbstractTileEntityRename.register(VERSION, new HashMap<>(Map.of(
                 "minecraft:suspicious_sand", "minecraft:brushable_block"
@@ -41,4 +41,6 @@ public final class V3438 {
                 )
         )::get);
     }
+
+    private V3438() {}
 }

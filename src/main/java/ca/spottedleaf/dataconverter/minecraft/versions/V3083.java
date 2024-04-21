@@ -7,14 +7,17 @@ import ca.spottedleaf.dataconverter.minecraft.walkers.itemstack.DataWalkerItemLi
 
 public final class V3083 {
 
-    protected static final int VERSION = MCVersions.V22W12A + 1;
+    private static final int VERSION = MCVersions.V22W12A + 1;
 
     private static void registerMob(final String id) {
-        MCTypeRegistry.ENTITY.addWalker(VERSION, id, new DataWalkerItemLists("ArmorItems", "HandItems"));
+        V100.registerEquipment(VERSION, id);
     }
 
     public static void register() {
         registerMob("minecraft:allay");
+        MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:allay", new DataWalkerItemLists("Inventory"));
         MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:allay", new GameEventListenerWalker());
     }
+
+    private V3083() {}
 }

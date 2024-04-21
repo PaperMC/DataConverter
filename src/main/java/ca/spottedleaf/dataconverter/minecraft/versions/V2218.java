@@ -7,9 +7,7 @@ import ca.spottedleaf.dataconverter.types.MapType;
 
 public final class V2218 {
 
-    protected static final int VERSION = MCVersions.V1_15_PRE1;
-
-    private V2218() {}
+    private static final int VERSION = MCVersions.V1_15_PRE1;
 
     public static void register() {
         MCTypeRegistry.POI_CHUNK.addStructureConverter(new DataConverter<>(VERSION) {
@@ -30,4 +28,6 @@ public final class V2218 {
             }
         });
     }
+
+    private V2218() {}
 }

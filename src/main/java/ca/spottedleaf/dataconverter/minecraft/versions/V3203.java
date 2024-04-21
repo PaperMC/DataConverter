@@ -9,10 +9,12 @@ public final class V3203 {
     private static final int VERSION = MCVersions.V1_19_2 + 83;
 
     private static void registerMob(final String id) {
-        MCTypeRegistry.ENTITY.addWalker(VERSION, id, new DataWalkerItemLists("ArmorItems", "HandItems"));
+        V100.registerEquipment(VERSION, id);
     }
 
     public static void register() {
         registerMob("minecraft:camel");
     }
+
+    private V3203() {}
 }

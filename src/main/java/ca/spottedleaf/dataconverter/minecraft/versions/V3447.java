@@ -44,4 +44,6 @@ public final class V3447 {
 
         ConverterAbstractItemRename.register(VERSION, rename::get);
     }
+
+    private V3447() {}
 }

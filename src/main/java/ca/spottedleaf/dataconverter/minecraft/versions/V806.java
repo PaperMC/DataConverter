@@ -9,7 +9,7 @@ import ca.spottedleaf.dataconverter.types.Types;
 
 public final class V806 {
 
-    protected static final int VERSION = MCVersions.V16W36A + 1;
+    private static final int VERSION = MCVersions.V16W36A + 1;
 
     public static void register() {
         final DataConverter<MapType<String>, MapType<String>> potionWaterUpdater = new DataConverter<>(VERSION) {
@@ -36,5 +36,4 @@ public final class V806 {
     }
 
     private V806() {}
-
 }

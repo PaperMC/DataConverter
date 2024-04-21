@@ -11,11 +11,7 @@ import java.util.Map;
 
 public final class V1486 {
 
-    protected static final int VERSION = MCVersions.V18W19B + 1;
-
-    private static void registerMob(final String id) {
-        MCTypeRegistry.ENTITY.addWalker(VERSION, id, new DataWalkerItemLists("ArmorItems", "HandItems"));
-    }
+    private static final int VERSION = MCVersions.V18W19B + 1;
 
     public static final Map<String, String> RENAMED_ENTITY_IDS = new HashMap<>(
             ImmutableMap.<String, String>builder()
@@ -40,5 +36,4 @@ public final class V1486 {
     }
 
     private V1486() {}
-
 }

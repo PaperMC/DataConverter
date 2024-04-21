@@ -20,7 +20,7 @@ public abstract class PlayerDataStorageMixin {
      * new types should be included here.
      */
     @Redirect(
-            method = "load",
+            method = "method_55788",
             at = @At(
                     target = "Lnet/minecraft/util/datafix/DataFixTypes;updateToCurrentVersion(Lcom/mojang/datafixers/DataFixer;Lnet/minecraft/nbt/CompoundTag;I)Lnet/minecraft/nbt/CompoundTag;",
                     value = "INVOKE"

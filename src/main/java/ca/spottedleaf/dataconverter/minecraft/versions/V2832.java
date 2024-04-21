@@ -24,7 +24,7 @@ public final class V2832 {
 
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    protected static final int VERSION = MCVersions.V1_17_1 + 102;
+    private static final int VERSION = MCVersions.V1_17_1 + 102;
 
     private static final String[] BIOMES_BY_ID = new String[256]; // rip datapacks
     static {
@@ -924,4 +924,6 @@ public final class V2832 {
 
         return ret;
     }
+
+    private V2832() {}
 }

@@ -11,7 +11,7 @@ import ca.spottedleaf.dataconverter.types.ObjectType;
 
 public final class V2842 {
 
-    protected static final int VERSION = MCVersions.V21W42A + 2;
+    private static final int VERSION = MCVersions.V21W42A + 2;
 
     public static void register() {
         MCTypeRegistry.CHUNK.addStructureConverter(new DataConverter<>(VERSION) {
@@ -23,7 +23,7 @@ public final class V2842 {
                 if (!root.isEmpty()) {
                     for (final String key : root.keys()) {
                         if (level.hasKey(key)) {
-                            // Don't clobber level's data
+                            // Don't clobber Level's data
                             continue;
                         }
                         level.setGeneric(key, root.getGeneric(key));
@@ -73,4 +73,6 @@ public final class V2842 {
             return null;
         });
     }
+
+    private V2842() {}
 }

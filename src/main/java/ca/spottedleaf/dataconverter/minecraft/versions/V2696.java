@@ -9,9 +9,9 @@ import java.util.Map;
 
 public final class V2696 {
 
-    protected static final int VERSION = MCVersions.V21W07A + 1;
+    private static final int VERSION = MCVersions.V21W07A + 1;
 
-    protected static final Map<String, String> RENAMES = new HashMap<>(
+    private static final Map<String, String> RENAMES = new HashMap<>(
             ImmutableMap.<String, String>builder()
                     .put("minecraft:grimstone", "minecraft:deepslate")
                     .put("minecraft:grimstone_slab", "minecraft:cobbled_deepslate_slab")
@@ -35,6 +35,8 @@ public final class V2696 {
 
     public static void register() {
         ConverterAbstractItemRename.register(VERSION, RENAMES::get);
-        ConverterAbstractBlockRename.registerAndFixJigsaw(VERSION, RENAMES::get);
+        ConverterAbstractBlockRename.register(VERSION, RENAMES::get);
     }
+
+    private V2696() {}
 }

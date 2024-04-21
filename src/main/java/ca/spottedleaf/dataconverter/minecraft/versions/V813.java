@@ -7,9 +7,9 @@ import ca.spottedleaf.dataconverter.types.MapType;
 
 public final class V813 {
 
-    protected static final int VERSION = MCVersions.V16W40A;
+    private static final int VERSION = MCVersions.V16W40A;
 
-    public static final String[] SHULKER_ID_BY_COLOUR = new String[] {
+    private static final String[] SHULKER_ID_BY_COLOUR = new String[] {
             "minecraft:white_shulker_box",
             "minecraft:orange_shulker_box",
             "minecraft:magenta_shulker_box",

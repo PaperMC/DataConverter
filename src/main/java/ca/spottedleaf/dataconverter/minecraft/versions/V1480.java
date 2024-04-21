@@ -9,7 +9,7 @@ import java.util.Map;
 
 public final class V1480 {
 
-    protected static final int VERSION = MCVersions.V18W14A + 1;
+    private static final int VERSION = MCVersions.V18W14A + 1;
 
     public static final Map<String, String> RENAMED_IDS = new HashMap<>(
             ImmutableMap.<String, String>builder()

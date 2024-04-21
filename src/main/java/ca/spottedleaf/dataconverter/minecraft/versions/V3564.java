@@ -88,4 +88,6 @@ public final class V3564 {
         MCTypeRegistry.TILE_ENTITY.addConverterForId("minecraft:sign", converter);
         MCTypeRegistry.TILE_ENTITY.addConverterForId("minecraft:hanging_sign", converter);
     }
+
+    private V3564() {}
 }

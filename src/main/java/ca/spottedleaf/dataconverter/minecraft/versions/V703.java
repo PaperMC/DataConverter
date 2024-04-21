@@ -9,7 +9,7 @@ import ca.spottedleaf.dataconverter.types.MapType;
 
 public final class V703 {
 
-    protected static final int VERSION = MCVersions.V1_10_2 + 191;
+    private static final int VERSION = MCVersions.V1_10_2 + 191;
 
     public static void register() {
         MCTypeRegistry.ENTITY.addConverterForId("EntityHorse", new DataConverter<>(VERSION) {
@@ -46,21 +46,22 @@ public final class V703 {
         });
 
         MCTypeRegistry.ENTITY.addWalker(VERSION, "Horse", new DataWalkerItems("ArmorItem", "SaddleItem"));
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "Horse", new DataWalkerItemLists("ArmorItems", "HandItems"));
+        V100.registerEquipment(VERSION, "Horse");
 
         MCTypeRegistry.ENTITY.addWalker(VERSION, "Donkey", new DataWalkerItems("SaddleItem"));
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "Donkey", new DataWalkerItemLists("Items", "ArmorItems", "HandItems"));
+        MCTypeRegistry.ENTITY.addWalker(VERSION, "Donkey", new DataWalkerItemLists("Items"));
+        V100.registerEquipment(VERSION, "Donkey");
 
         MCTypeRegistry.ENTITY.addWalker(VERSION, "Mule", new DataWalkerItems("SaddleItem"));
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "Mule", new DataWalkerItemLists("Items", "ArmorItems", "HandItems"));
+        MCTypeRegistry.ENTITY.addWalker(VERSION, "Mule", new DataWalkerItemLists("Items"));
+        V100.registerEquipment(VERSION, "Mule");
 
         MCTypeRegistry.ENTITY.addWalker(VERSION, "ZombieHorse", new DataWalkerItems("SaddleItem"));
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "ZombieHorse", new DataWalkerItemLists("ArmorItems", "HandItems"));
+        V100.registerEquipment(VERSION, "ZombieHorse");
 
         MCTypeRegistry.ENTITY.addWalker(VERSION, "SkeletonHorse", new DataWalkerItems("SaddleItem"));
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "SkeletonHorse", new DataWalkerItemLists("ArmorItems", "HandItems"));
+        V100.registerEquipment(VERSION, "SkeletonHorse");
     }
 
     private V703() {}
-
 }

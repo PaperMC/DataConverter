@@ -7,7 +7,7 @@ import ca.spottedleaf.dataconverter.types.MapType;
 
 public final class V1914 {
 
-    protected static final int VERSION = MCVersions.V18W48A;
+    private static final int VERSION = MCVersions.V18W48A;
 
     public static void register() {
         MCTypeRegistry.TILE_ENTITY.addConverterForId("minecraft:chest", new DataConverter<>(VERSION) {
@@ -24,4 +24,5 @@ public final class V1914 {
         });
     }
 
+    private V1914() {}
 }

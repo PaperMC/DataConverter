@@ -19,17 +19,9 @@ public final class V1460 {
         MOTIVE_REMAP.put("donkeykong", "donkey_kong");
         MOTIVE_REMAP.put("burningskull", "burning_skull");
         MOTIVE_REMAP.put("skullandroses", "skull_and_roses");
-    };
-
-    protected static final int VERSION = MCVersions.V18W01A + 1;
-
-    private static void registerMob(final String id) {
-        MCTypeRegistry.ENTITY.addWalker(VERSION, id, new DataWalkerItemLists("ArmorItems", "HandItems"));
     }
 
-    private static void registerThrowableProjectile(final String id) {
-        MCTypeRegistry.ENTITY.addWalker(VERSION, id, new DataWalkerBlockNames("inTile"));
-    }
+    private static final int VERSION = MCVersions.V18W01A + 1;
 
     public static void register() {
         MCTypeRegistry.ENTITY.addConverterForId("minecraft:painting", new DataConverter<>(VERSION) {
@@ -49,5 +41,4 @@ public final class V1460 {
     }
 
     private V1460() {}
-
 }

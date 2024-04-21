@@ -9,9 +9,7 @@ import ca.spottedleaf.dataconverter.types.ObjectType;
 
 public final class V2516 {
 
-    protected static final int VERSION = MCVersions.V20W12A + 1;
-
-    private V2516() {}
+    private static final int VERSION = MCVersions.V20W12A + 1;
 
     public static void register() {
         final DataConverter<MapType<String>, MapType<String>> gossipUUIDConverter = new DataConverter<>(VERSION) {
@@ -34,4 +32,6 @@ public final class V2516 {
         MCTypeRegistry.ENTITY.addConverterForId("minecraft:villager", gossipUUIDConverter);
         MCTypeRegistry.ENTITY.addConverterForId("minecraft:zombie_villager", gossipUUIDConverter);
     }
+
+    private V2516() {}
 }

@@ -14,9 +14,7 @@ public final class V1624 {
 
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    protected static final int VERSION = MCVersions.V18W32A + 1;
-
-    private V1624() {}
+    private static final int VERSION = MCVersions.V18W32A + 1;
 
     public static void register() {
         MCTypeRegistry.CHUNK.addStructureConverter(new DataConverter<>(VERSION) {
@@ -79,6 +77,8 @@ public final class V1624 {
             }
         });
     }
+
+    private V1624() {}
 
     public static final class TrappedChestSection extends V1496.Section {
 

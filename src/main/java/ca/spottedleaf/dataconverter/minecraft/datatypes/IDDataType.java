@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class IDDataType extends MCDataType {
 
-    protected final Map<String, Long2ObjectArraySortedMap<List<DataWalker<String>>>> walkersById = new HashMap<>();
+    protected final Map<String, Long2ObjectArraySortedMap<List<DataWalker<MapType<String>>>>> walkersById = new HashMap<>();
 
     public IDDataType(final String name) {
         super(name);
@@ -32,11 +32,11 @@ public class IDDataType extends MCDataType {
         });
     }
 
-    public void addWalker(final int minVersion, final String id, final DataWalker<String> walker) {
+    public void addWalker(final int minVersion, final String id, final DataWalker<MapType<String>> walker) {
         this.addWalker(minVersion, 0, id, walker);
     }
 
-    public void addWalker(final int minVersion, final int versionStep, final String id, final DataWalker<String> walker) {
+    public void addWalker(final int minVersion, final int versionStep, final String id, final DataWalker<MapType<String>> walker) {
         this.walkersById.computeIfAbsent(id, (final String keyInMap) -> {
             return new Long2ObjectArraySortedMap<>();
         }).computeIfAbsent(DataConverter.encodeVersions(minVersion, versionStep), (final long keyInMap) -> {
@@ -50,18 +50,18 @@ public class IDDataType extends MCDataType {
 
     public void copyWalkers(final int minVersion, final int versionStep, final String fromId, final String toId) {
         final long version = DataConverter.encodeVersions(minVersion, versionStep);
-        final Long2ObjectArraySortedMap<List<DataWalker<String>>> walkersForId = this.walkersById.get(fromId);
+        final Long2ObjectArraySortedMap<List<DataWalker<MapType<String>>>> walkersForId = this.walkersById.get(fromId);
         if (walkersForId == null) {
             return;
         }
 
-        final List<DataWalker<String>> nearest = walkersForId.getFloor(version);
+        final List<DataWalker<MapType<String>>> nearest = walkersForId.getFloor(version);
 
         if (nearest == null) {
             return;
         }
 
-        for (final DataWalker<String> walker : nearest) {
+        for (final DataWalker<MapType<String>> walker : nearest) {
             this.addWalker(minVersion, versionStep, toId, walker);
         }
     }
@@ -127,7 +127,7 @@ public class IDDataType extends MCDataType {
 
         // run all walkers
 
-        final List<DataWalker<String>> walkers = this.structureWalkers.getFloor(toVersion);
+        final List<DataWalker<MapType<String>>> walkers = this.structureWalkers.getFloor(toVersion);
         if (walkers != null) {
             for (int i = 0, len = walkers.size(); i < len; ++i) {
                 final MapType<String> replace = walkers.get(i).walk(data, fromVersion, toVersion);
@@ -137,9 +137,9 @@ public class IDDataType extends MCDataType {
             }
         }
 
-        final Long2ObjectArraySortedMap<List<DataWalker<String>>> walkersByVersion = this.walkersById.get(data.getString("id"));
+        final Long2ObjectArraySortedMap<List<DataWalker<MapType<String>>>> walkersByVersion = this.walkersById.get(data.getString("id"));
         if (walkersByVersion != null) {
-            final List<DataWalker<String>> walkersForId = walkersByVersion.getFloor(toVersion);
+            final List<DataWalker<MapType<String>>> walkersForId = walkersByVersion.getFloor(toVersion);
             if (walkersForId != null) {
                 for (int i = 0, len = walkersForId.size(); i < len; ++i) {
                     final MapType<String> replace = walkersForId.get(i).walk(data, fromVersion, toVersion);

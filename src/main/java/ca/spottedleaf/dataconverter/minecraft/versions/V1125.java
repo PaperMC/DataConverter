@@ -12,8 +12,8 @@ import ca.spottedleaf.dataconverter.types.Types;
 
 public final class V1125 {
 
-    protected static final int VERSION = MCVersions.V17W15A;
-    protected static final int BED_BLOCK_ID = 416;
+    private static final int VERSION = MCVersions.V17W15A;
+    private static final int BED_BLOCK_ID = 416;
 
     public static void register() {
         MCTypeRegistry.CHUNK.addStructureConverter(new DataConverter<>(VERSION) {
@@ -98,5 +98,4 @@ public final class V1125 {
     }
 
     private V1125() {}
-
 }

@@ -30,4 +30,6 @@ public final class V3201 {
             }
         });
     }
+
+    private V3201() {}
 }

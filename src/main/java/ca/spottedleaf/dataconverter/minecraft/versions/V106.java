@@ -11,7 +11,7 @@ import ca.spottedleaf.dataconverter.types.Types;
 
 public final class V106 {
 
-    protected static final int VERSION = MCVersions.V15W32C + 2;
+    private static final int VERSION = MCVersions.V15W32C + 2;
 
     public static void register() {
         // V106 -> V15W32C + 2
@@ -80,5 +80,4 @@ public final class V106 {
     }
 
     private V106() {}
-
 }

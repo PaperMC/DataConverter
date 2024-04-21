@@ -23,4 +23,6 @@ public final class V3440 {
                 )
         )));
     }
+
+    private V3440() {}
 }

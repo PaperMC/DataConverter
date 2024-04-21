@@ -11,9 +11,9 @@ import ca.spottedleaf.dataconverter.types.Types;
 
 public final class V1466 {
 
-    protected static final int VERSION = MCVersions.V18W06A;
+    private static final int VERSION = MCVersions.V18W06A;
 
-    protected static short packOffsetCoordinates(final int x, final int y, final int z) {
+    private static short packOffsetCoordinates(final int x, final int y, final int z) {
         return (short)((x & 15) | ((y & 15) << 4) | ((z & 15) << 8));
     }
 
@@ -139,5 +139,4 @@ public final class V1466 {
     }
 
     private V1466() {}
-
 }

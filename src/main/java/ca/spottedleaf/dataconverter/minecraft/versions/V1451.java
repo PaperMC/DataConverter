@@ -32,7 +32,7 @@ import java.util.stream.StreamSupport;
 
 public final class V1451 {
 
-    protected static final int VERSION = MCVersions.V17W47A;
+    private static final int VERSION = MCVersions.V17W47A;
 
     public static String packWithDot(final String string) {
         final ResourceLocation resourceLocation = ResourceLocation.tryParse(string);
@@ -113,7 +113,7 @@ public final class V1451 {
 
         MCTypeRegistry.ENTITY.addWalker(VERSION, 3, "minecraft:potion", new DataWalkerItems("Potion"));
         MCTypeRegistry.ENTITY.addWalker(VERSION, 3, "minecraft:arrow", new DataWalkerTypePaths<>(MCTypeRegistry.BLOCK_STATE, "inBlockState"));
-        MCTypeRegistry.ENTITY.addWalker(VERSION, 3, "minecraft:enderman", new DataWalkerItemLists("ArmorItems", "HandItems"));
+        V100.registerEquipment(VERSION, 3, "minecraft:enderman");
         MCTypeRegistry.ENTITY.addWalker(VERSION, 3, "minecraft:enderman", new DataWalkerTypePaths<>(MCTypeRegistry.BLOCK_STATE, "carriedBlockState"));
         MCTypeRegistry.ENTITY.addWalker(VERSION, 3, "minecraft:falling_block", new DataWalkerTypePaths<>(MCTypeRegistry.BLOCK_STATE, "BlockState"));
         MCTypeRegistry.ENTITY.addWalker(VERSION, 3, "minecraft:falling_block", new DataWalkerTileEntities("TileEntityData"));

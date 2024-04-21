@@ -5,7 +5,7 @@ import ca.spottedleaf.dataconverter.minecraft.converters.entity.ConverterAbstrac
 
 public final class V143 {
 
-    protected static final int VERSION = MCVersions.V15W44B;
+    private static final int VERSION = MCVersions.V15W44B;
 
     public static void register() {
         ConverterAbstractEntityRename.register(VERSION, (final String input) -> {
@@ -14,5 +14,4 @@ public final class V143 {
     }
 
     private V143() {}
-
 }

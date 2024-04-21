@@ -6,14 +6,13 @@ import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
 import ca.spottedleaf.dataconverter.types.MapType;
 import com.mojang.logging.LogUtils;
 import org.slf4j.Logger;
-
 import java.util.UUID;
 
 public final class V108 {
 
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    protected static final int VERSION = MCVersions.V15W32C + 4;
+    private static final int VERSION = MCVersions.V15W32C + 4;
 
     public static void register() {
         // Convert String UUID into UUIDMost and UUIDLeast
@@ -44,5 +43,4 @@ public final class V108 {
     }
 
     private V108() {}
-
 }

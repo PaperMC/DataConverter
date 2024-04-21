@@ -8,7 +8,7 @@ import java.util.Map;
 
 public final class V1501 {
 
-    protected static final int VERSION = MCVersions.V1_13_PRE1;
+    private static final int VERSION = MCVersions.V1_13_PRE1;
 
     private static final Map<String, String> RENAMES = new HashMap<>(
             ImmutableMap.<String, String>builder()
@@ -70,9 +70,9 @@ public final class V1501 {
                     .build()
     );
 
-    private V1501() {}
-
     public static void register() {
         ConverterAbstractAdvancementsRename.register(VERSION, RENAMES::get);
     }
+
+    private V1501() {}
 }

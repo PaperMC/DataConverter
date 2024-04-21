@@ -6,9 +6,11 @@ import ca.spottedleaf.dataconverter.minecraft.walkers.itemstack.DataWalkerItemLi
 
 public final class V3082 {
 
-    protected static final int VERSION = MCVersions.V22W11A + 2;
+    private static final int VERSION = MCVersions.V22W11A + 2;
 
     public static void register() {
         MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:chest_boat", new DataWalkerItemLists("Items"));
     }
+
+    private V3082() {}
 }

@@ -7,9 +7,7 @@ import ca.spottedleaf.dataconverter.types.MapType;
 
 public final class V2531 {
 
-    protected static final int VERSION = MCVersions.V20W17A + 2;
-
-    private V2531() {}
+    private static final int VERSION = MCVersions.V20W17A + 2;
 
     private static boolean isConnected(final String facing) {
         return !"none".equals(facing);
@@ -60,4 +58,6 @@ public final class V2531 {
             }
         });
     }
+
+    private V2531() {}
 }

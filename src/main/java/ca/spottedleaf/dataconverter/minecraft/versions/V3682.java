@@ -11,4 +11,6 @@ public final class V3682 {
     public static void register() {
         MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, "minecraft:crafter", new DataWalkerItemLists("Items"));
     }
+
+    private V3682() {}
 }

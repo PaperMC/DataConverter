@@ -38,4 +38,6 @@ public final class V2538 {
             }
         });
     }
+
+    private V2538() {}
 }

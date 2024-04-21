@@ -7,9 +7,9 @@ import ca.spottedleaf.dataconverter.types.MapType;
 
 public final class V1456 {
 
-    protected static final int VERSION = MCVersions.V17W49B + 1;
+    private static final int VERSION = MCVersions.V17W49B + 1;
 
-    protected static byte direction2dTo3d(final byte old) {
+    private static byte direction2dTo3d(final byte old) {
         switch (old) {
             case 0:
                 return 3;
@@ -34,5 +34,4 @@ public final class V1456 {
     }
 
     private V1456() {}
-
 }

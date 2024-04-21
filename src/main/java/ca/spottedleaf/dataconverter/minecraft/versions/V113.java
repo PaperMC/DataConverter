@@ -9,9 +9,9 @@ import ca.spottedleaf.dataconverter.types.MapType;
 
 public final class V113 {
 
-    protected static final int VERSION = MCVersions.V15W33C + 1;
+    private static final int VERSION = MCVersions.V15W33C + 1;
 
-    protected static void checkList(final MapType<String> data, final String id, final int requiredLength) {
+    private static void checkList(final MapType<String> data, final String id, final int requiredLength) {
         final ListType list = data.getList(id, ObjectType.FLOAT);
         if (list != null && list.size() == requiredLength) {
             for (int i = 0; i < requiredLength; ++i) {
@@ -37,5 +37,4 @@ public final class V113 {
     }
 
     private V113() {}
-
 }

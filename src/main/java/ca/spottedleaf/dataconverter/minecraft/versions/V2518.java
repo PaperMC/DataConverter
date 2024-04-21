@@ -10,7 +10,7 @@ import java.util.Map;
 
 public final class V2518 {
 
-    protected static final int VERSION = MCVersions.V20W12A + 3;
+    private static final int VERSION = MCVersions.V20W12A + 3;
 
     private static final Map<String, String> FACING_RENAMES = new HashMap<>(
             ImmutableMap.<String, String>builder()
@@ -22,9 +22,6 @@ public final class V2518 {
                     .put("east", "east_up")
                     .build()
     );
-
-
-    private V2518() {}
 
     public static void register() {
         MCTypeRegistry.TILE_ENTITY.addConverterForId("minecraft:jigsaw", new DataConverter<>(VERSION) {
@@ -63,4 +60,6 @@ public final class V2518 {
             }
         });
     }
+
+    private V2518() {}
 }

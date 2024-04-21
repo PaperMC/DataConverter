@@ -20,7 +20,7 @@ public abstract class LevelStorageSourceMixin {
      * new types should be included here.
      */
     @Redirect(
-            method = "readLevelDataTagFixed",
+            method = "method_59827",
             at = @At(
                     target = "Lnet/minecraft/util/datafix/DataFixTypes;updateToCurrentVersion(Lcom/mojang/datafixers/DataFixer;Lcom/mojang/serialization/Dynamic;I)Lcom/mojang/serialization/Dynamic;",
                     value = "INVOKE"

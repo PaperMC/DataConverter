@@ -5,21 +5,26 @@ import ca.spottedleaf.dataconverter.minecraft.converters.blockname.ConverterAbst
 import ca.spottedleaf.dataconverter.minecraft.converters.itemname.ConverterAbstractItemRename;
 import com.google.common.collect.ImmutableMap;
 
+import java.util.HashMap;
+
 public final class V1490 {
 
-    protected static final int VERSION = MCVersions.V18W20A + 1;
+    private static final int VERSION = MCVersions.V18W20A + 1;
 
     public static void register() {
-        ConverterAbstractBlockRename.register(VERSION, ImmutableMap.of(
-                "minecraft:melon_block", "minecraft:melon"
+        ConverterAbstractBlockRename.register(VERSION, new HashMap<>(
+                ImmutableMap.of(
+                        "minecraft:melon_block", "minecraft:melon"
+                )
         )::get);
-        ConverterAbstractItemRename.register(VERSION, ImmutableMap.of(
-                "minecraft:melon_block", "minecraft:melon",
-                "minecraft:melon", "minecraft:melon_slice",
-                "minecraft:speckled_melon", "minecraft:glistering_melon_slice"
+        ConverterAbstractItemRename.register(VERSION, new HashMap<>(
+                ImmutableMap.of(
+                        "minecraft:melon_block", "minecraft:melon",
+                        "minecraft:melon", "minecraft:melon_slice",
+                        "minecraft:speckled_melon", "minecraft:glistering_melon_slice"
+                )
         )::get);
     }
 
     private V1490() {}
-
 }
