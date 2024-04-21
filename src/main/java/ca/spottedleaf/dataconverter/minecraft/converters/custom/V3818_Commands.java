@@ -73,7 +73,7 @@ public final class V3818_Commands {
     public static void register_5() {
         // Command is already registered in walker for command blocks
         MCTypeRegistry.DATACONVERTER_CUSTOM_TYPE_COMMAND.addConverter(new DataConverter<>(VERSION, 5) {
-            final Supplier<CommandArgumentUpgrader> commandUpgrader = Suppliers.memoize(() ->
+            private static final Supplier<CommandArgumentUpgrader> COMMAND_UPGRADER = Suppliers.memoize(() ->
                     CommandArgumentUpgrader.upgrader_1_20_4_to_1_20_5(999));
 
             @Override
@@ -83,7 +83,7 @@ public final class V3818_Commands {
                 }
                 // We use startsWith("/") because we aren't supporting WorldEdit style commands,
                 // and passing the context of whether the use supports leading slash would be high effort low return
-                return this.commandUpgrader.get().upgradeCommandArguments(cmd, cmd.startsWith("/"));
+                return COMMAND_UPGRADER.get().upgradeCommandArguments(cmd, cmd.startsWith("/"));
             }
         });
 
