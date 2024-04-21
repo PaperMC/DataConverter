@@ -139,15 +139,18 @@ public final class V3818_Commands {
                 }
 
                 final ListType messages = text.getList("messages", ObjectType.STRING);
-
-                for (int i = 0, len = Math.min(4, messages.size()); i < len; ++i) {
-                    walkComponent(messages.getString(i), sourceVersion, toVersion);
+                if (messages != null) {
+                    for (int i = 0, len = Math.min(4, messages.size()); i < len; ++i) {
+                        walkComponent(messages.getString(i), sourceVersion, toVersion);
+                    }
                 }
 
                 final ListType filteredMessages = text.getList("filtered_messages", ObjectType.STRING);
 
-                for (int i = 0, len = Math.min(4, filteredMessages.size()); i < len; ++i) {
-                    walkComponent(filteredMessages.getString(i), sourceVersion, toVersion);
+                if (filteredMessages != null) {
+                    for (int i = 0, len = Math.min(4, filteredMessages.size()); i < len; ++i) {
+                        walkComponent(filteredMessages.getString(i), sourceVersion, toVersion);
+                    }
                 }
             }
 
