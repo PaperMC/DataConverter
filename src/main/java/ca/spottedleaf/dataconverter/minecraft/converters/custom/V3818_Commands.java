@@ -14,6 +14,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
+import net.minecraft.util.GsonHelper;
 import java.util.function.Supplier;
 
 public final class V3818_Commands {
@@ -59,14 +60,18 @@ public final class V3818_Commands {
         }
     }
 
-    private static void walkComponent(final String json, final long sourceVersion, final long toVersion) {
+    private static String walkComponent(final String json, final long sourceVersion, final long toVersion) {
         if (json == null || json.isEmpty()) {
-            return;
+            return json;
         }
 
         try {
-            walkComponent(JsonParser.parseString(json), sourceVersion, toVersion);
-        } catch (final JsonParseException ignored) {}
+            final JsonElement element = JsonParser.parseString(json);
+            walkComponent(element, sourceVersion, toVersion);
+            return GsonHelper.toStableString(element);
+        } catch (final JsonParseException ex) {
+            return json;
+        }
     }
 
     // this is AFTER all the converters for subversion 5, so these run AFTER them
@@ -94,6 +99,18 @@ public final class V3818_Commands {
         // books
         // note: at this stage, item is converted to components, so we can use the data components type
         MCTypeRegistry.DATA_COMPONENTS.addStructureConverter(new DataConverter<>(VERSION, 5) {
+            private static void walkPath(final MapType<String> data, final String path, final long sourceVersion, final long toVersion) {
+                final String str = data.getString(path);
+                if (str == null) {
+                    return;
+                }
+
+                final String newStr = walkComponent(str, sourceVersion, toVersion);
+                if (newStr != null) {
+                    data.setString(path, newStr);
+                }
+            }
+
             private static void walkBookContent(final MapType<String> data, final String path, final long sourceVersion, final long toVersion) {
                 if (data == null) {
                     return;
@@ -112,8 +129,8 @@ public final class V3818_Commands {
                 for (int i = 0, len = pages.size(); i < len; ++i) {
                     final MapType<String> text = pages.getMap(i);
 
-                    walkComponent(text.getString("raw"), sourceVersion, toVersion);
-                    walkComponent(text.getString("filtered"), sourceVersion, toVersion);
+                    walkPath(text, "raw", sourceVersion, toVersion);
+                    walkPath(text, "filtered", sourceVersion, toVersion);
                 }
             }
 
@@ -141,7 +158,7 @@ public final class V3818_Commands {
                 final ListType messages = text.getList("messages", ObjectType.STRING);
                 if (messages != null) {
                     for (int i = 0, len = Math.min(4, messages.size()); i < len; ++i) {
-                        walkComponent(messages.getString(i), sourceVersion, toVersion);
+                        messages.setString(i, walkComponent(messages.getString(i), sourceVersion, toVersion));
                     }
                 }
 
@@ -149,7 +166,7 @@ public final class V3818_Commands {
 
                 if (filteredMessages != null) {
                     for (int i = 0, len = Math.min(4, filteredMessages.size()); i < len; ++i) {
-                        walkComponent(filteredMessages.getString(i), sourceVersion, toVersion);
+                        filteredMessages.setString(i, walkComponent(filteredMessages.getString(i), sourceVersion, toVersion));
                     }
                 }
             }
