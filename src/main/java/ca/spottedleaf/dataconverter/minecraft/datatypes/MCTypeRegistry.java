@@ -49,7 +49,7 @@ public final class MCTypeRegistry {
     public static final MCDataType SAVED_DATA_FORCED_CHUNKS             = new MCDataType("SavedData/Chunks");
     public static final MCDataType SAVED_DATA_MAP_INDEX                 = new MCDataType("SavedData/IdCounts");
 
-    public static final MCDataType DATACONVERTER_CUSTOM_TYPE_COMMAND = new MCDataType("DC_Custom/Command");
+    public static final MCValueType DATACONVERTER_CUSTOM_TYPE_COMMAND = new MCValueType("DC_Custom/Command");
 
     static {
         try {
