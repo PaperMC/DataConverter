@@ -86,7 +86,7 @@ public final class V3818_Commands {
 
         // books
         // note: at this stage, item is converted to components, so we can use the data components type
-        MCTypeRegistry.DATA_COMPONENTS.addStructureConverter(new DataConverter<>(VERSION) {
+        MCTypeRegistry.DATA_COMPONENTS.addStructureConverter(new DataConverter<>(VERSION, 5) {
             private static void walkBookContent(final MapType<String> data, final String path, final long sourceVersion, final long toVersion) {
                 if (data == null) {
                     return;
