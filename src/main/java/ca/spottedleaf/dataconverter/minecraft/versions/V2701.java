@@ -6,7 +6,7 @@ import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
 import ca.spottedleaf.dataconverter.types.ListType;
 import ca.spottedleaf.dataconverter.types.MapType;
 import ca.spottedleaf.dataconverter.types.ObjectType;
-import com.google.common.collect.Sets;
+
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -17,14 +17,14 @@ public final class V2701 {
 
     private static final Pattern INDEX_PATTERN = Pattern.compile("\\[(\\d+)\\]");
 
-    private static final Set<String> PIECE_TYPE = Sets.newHashSet(
+    private static final Set<String> PIECE_TYPE = Set.of(
             "minecraft:jigsaw",
             "minecraft:nvi",
             "minecraft:pcp",
             "minecraft:bastionremnant",
             "minecraft:runtime"
     );
-    private static final Set<String> FEATURES = Sets.newHashSet(
+    private static final Set<String> FEATURES = Set.of(
             "minecraft:tree",
             "minecraft:flower",
             "minecraft:block_pile",
@@ -82,7 +82,7 @@ public final class V2701 {
 
             final Matcher indexMatcher = INDEX_PATTERN.matcher(path);
             if (!indexMatcher.matches()) {
-                current = (current instanceof MapType) ? ((MapType<String>)current).getGeneric(path) : null;
+                current = (current instanceof MapType) ? ((MapType<String>) current).getGeneric(path) : null;
                 if (current == null) {
                     break;
                 }
@@ -94,7 +94,7 @@ public final class V2701 {
                 current = null;
                 break;
             } else {
-                final ListType list = (ListType)current;
+                final ListType list = (ListType) current;
                 if (index >= 0 && index < list.size()) {
                     current = list.getGeneric(index);
                 } else {
@@ -104,7 +104,7 @@ public final class V2701 {
             }
         }
 
-        return current instanceof String ? (String)current : "";
+        return current instanceof String ? (String) current : "";
     }
 
     protected static String convertToString(final MapType<String> feature) {

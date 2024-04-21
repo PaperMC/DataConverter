@@ -7,10 +7,8 @@ import ca.spottedleaf.dataconverter.minecraft.converters.itemstack.ConverterFlat
 import ca.spottedleaf.dataconverter.minecraft.versions.V1451;
 import ca.spottedleaf.dataconverter.types.MapType;
 import ca.spottedleaf.dataconverter.types.Types;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
-import org.apache.commons.lang3.StringUtils;
-import java.util.HashMap;
+import ca.spottedleaf.dataconverter.util.StringUtil;
+
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -68,142 +66,133 @@ public final class ConverterFlattenStats {
             )
     );
 
-    private static final Set<String> SKIP = new HashSet<>(
-            ImmutableSet.<String>builder()
-                    .add("stat.craftItem.minecraft.spawn_egg")
-                    .add("stat.useItem.minecraft.spawn_egg")
-                    .add("stat.breakItem.minecraft.spawn_egg")
-                    .add("stat.pickup.minecraft.spawn_egg")
-                    .add("stat.drop.minecraft.spawn_egg")
-                    .build()
+    private static final Set<String> SKIP = Set.of(
+            "stat.craftItem.minecraft.spawn_egg",
+            "stat.useItem.minecraft.spawn_egg",
+            "stat.breakItem.minecraft.spawn_egg",
+            "stat.pickup.minecraft.spawn_egg",
+            "stat.drop.minecraft.spawn_egg"
     );
 
-    private static final Map<String, String> CUSTOM_MAP = new HashMap<>(
-            ImmutableMap.<String, String>builder()
-                    .put("stat.leaveGame", "minecraft:leave_game")
-                    .put("stat.playOneMinute", "minecraft:play_one_minute")
-                    .put("stat.timeSinceDeath", "minecraft:time_since_death")
-                    .put("stat.sneakTime", "minecraft:sneak_time")
-                    .put("stat.walkOneCm", "minecraft:walk_one_cm")
-                    .put("stat.crouchOneCm", "minecraft:crouch_one_cm")
-                    .put("stat.sprintOneCm", "minecraft:sprint_one_cm")
-                    .put("stat.swimOneCm", "minecraft:swim_one_cm")
-                    .put("stat.fallOneCm", "minecraft:fall_one_cm")
-                    .put("stat.climbOneCm", "minecraft:climb_one_cm")
-                    .put("stat.flyOneCm", "minecraft:fly_one_cm")
-                    .put("stat.diveOneCm", "minecraft:dive_one_cm")
-                    .put("stat.minecartOneCm", "minecraft:minecart_one_cm")
-                    .put("stat.boatOneCm", "minecraft:boat_one_cm")
-                    .put("stat.pigOneCm", "minecraft:pig_one_cm")
-                    .put("stat.horseOneCm", "minecraft:horse_one_cm")
-                    .put("stat.aviateOneCm", "minecraft:aviate_one_cm")
-                    .put("stat.jump", "minecraft:jump")
-                    .put("stat.drop", "minecraft:drop")
-                    .put("stat.damageDealt", "minecraft:damage_dealt")
-                    .put("stat.damageTaken", "minecraft:damage_taken")
-                    .put("stat.deaths", "minecraft:deaths")
-                    .put("stat.mobKills", "minecraft:mob_kills")
-                    .put("stat.animalsBred", "minecraft:animals_bred")
-                    .put("stat.playerKills", "minecraft:player_kills")
-                    .put("stat.fishCaught", "minecraft:fish_caught")
-                    .put("stat.talkedToVillager", "minecraft:talked_to_villager")
-                    .put("stat.tradedWithVillager", "minecraft:traded_with_villager")
-                    .put("stat.cakeSlicesEaten", "minecraft:eat_cake_slice")
-                    .put("stat.cauldronFilled", "minecraft:fill_cauldron")
-                    .put("stat.cauldronUsed", "minecraft:use_cauldron")
-                    .put("stat.armorCleaned", "minecraft:clean_armor")
-                    .put("stat.bannerCleaned", "minecraft:clean_banner")
-                    .put("stat.brewingstandInteraction", "minecraft:interact_with_brewingstand")
-                    .put("stat.beaconInteraction", "minecraft:interact_with_beacon")
-                    .put("stat.dropperInspected", "minecraft:inspect_dropper")
-                    .put("stat.hopperInspected", "minecraft:inspect_hopper")
-                    .put("stat.dispenserInspected", "minecraft:inspect_dispenser")
-                    .put("stat.noteblockPlayed", "minecraft:play_noteblock")
-                    .put("stat.noteblockTuned", "minecraft:tune_noteblock")
-                    .put("stat.flowerPotted", "minecraft:pot_flower")
-                    .put("stat.trappedChestTriggered", "minecraft:trigger_trapped_chest")
-                    .put("stat.enderchestOpened", "minecraft:open_enderchest")
-                    .put("stat.itemEnchanted", "minecraft:enchant_item")
-                    .put("stat.recordPlayed", "minecraft:play_record")
-                    .put("stat.furnaceInteraction", "minecraft:interact_with_furnace")
-                    .put("stat.craftingTableInteraction", "minecraft:interact_with_crafting_table")
-                    .put("stat.chestOpened", "minecraft:open_chest")
-                    .put("stat.sleepInBed", "minecraft:sleep_in_bed")
-                    .put("stat.shulkerBoxOpened", "minecraft:open_shulker_box")
-                    .build()
+    private static final Map<String, String> CUSTOM_MAP = Map.ofEntries(
+            Map.entry("stat.leaveGame", "minecraft:leave_game"),
+            Map.entry("stat.playOneMinute", "minecraft:play_one_minute"),
+            Map.entry("stat.timeSinceDeath", "minecraft:time_since_death"),
+            Map.entry("stat.sneakTime", "minecraft:sneak_time"),
+            Map.entry("stat.walkOneCm", "minecraft:walk_one_cm"),
+            Map.entry("stat.crouchOneCm", "minecraft:crouch_one_cm"),
+            Map.entry("stat.sprintOneCm", "minecraft:sprint_one_cm"),
+            Map.entry("stat.swimOneCm", "minecraft:swim_one_cm"),
+            Map.entry("stat.fallOneCm", "minecraft:fall_one_cm"),
+            Map.entry("stat.climbOneCm", "minecraft:climb_one_cm"),
+            Map.entry("stat.flyOneCm", "minecraft:fly_one_cm"),
+            Map.entry("stat.diveOneCm", "minecraft:dive_one_cm"),
+            Map.entry("stat.minecartOneCm", "minecraft:minecart_one_cm"),
+            Map.entry("stat.boatOneCm", "minecraft:boat_one_cm"),
+            Map.entry("stat.pigOneCm", "minecraft:pig_one_cm"),
+            Map.entry("stat.horseOneCm", "minecraft:horse_one_cm"),
+            Map.entry("stat.aviateOneCm", "minecraft:aviate_one_cm"),
+            Map.entry("stat.jump", "minecraft:jump"),
+            Map.entry("stat.drop", "minecraft:drop"),
+            Map.entry("stat.damageDealt", "minecraft:damage_dealt"),
+            Map.entry("stat.damageTaken", "minecraft:damage_taken"),
+            Map.entry("stat.deaths", "minecraft:deaths"),
+            Map.entry("stat.mobKills", "minecraft:mob_kills"),
+            Map.entry("stat.animalsBred", "minecraft:animals_bred"),
+            Map.entry("stat.playerKills", "minecraft:player_kills"),
+            Map.entry("stat.fishCaught", "minecraft:fish_caught"),
+            Map.entry("stat.talkedToVillager", "minecraft:talked_to_villager"),
+            Map.entry("stat.tradedWithVillager", "minecraft:traded_with_villager"),
+            Map.entry("stat.cakeSlicesEaten", "minecraft:eat_cake_slice"),
+            Map.entry("stat.cauldronFilled", "minecraft:fill_cauldron"),
+            Map.entry("stat.cauldronUsed", "minecraft:use_cauldron"),
+            Map.entry("stat.armorCleaned", "minecraft:clean_armor"),
+            Map.entry("stat.bannerCleaned", "minecraft:clean_banner"),
+            Map.entry("stat.brewingstandInteraction", "minecraft:interact_with_brewingstand"),
+            Map.entry("stat.beaconInteraction", "minecraft:interact_with_beacon"),
+            Map.entry("stat.dropperInspected", "minecraft:inspect_dropper"),
+            Map.entry("stat.hopperInspected", "minecraft:inspect_hopper"),
+            Map.entry("stat.dispenserInspected", "minecraft:inspect_dispenser"),
+            Map.entry("stat.noteblockPlayed", "minecraft:play_noteblock"),
+            Map.entry("stat.noteblockTuned", "minecraft:tune_noteblock"),
+            Map.entry("stat.flowerPotted", "minecraft:pot_flower"),
+            Map.entry("stat.trappedChestTriggered", "minecraft:trigger_trapped_chest"),
+            Map.entry("stat.enderchestOpened", "minecraft:open_enderchest"),
+            Map.entry("stat.itemEnchanted", "minecraft:enchant_item"),
+            Map.entry("stat.recordPlayed", "minecraft:play_record"),
+            Map.entry("stat.furnaceInteraction", "minecraft:interact_with_furnace"),
+            Map.entry("stat.craftingTableInteraction", "minecraft:interact_with_crafting_table"),
+            Map.entry("stat.chestOpened", "minecraft:open_chest"),
+            Map.entry("stat.sleepInBed", "minecraft:sleep_in_bed"),
+            Map.entry("stat.shulkerBoxOpened", "minecraft:open_shulker_box")
     );
 
     private static final String BLOCK_KEY = "stat.mineBlock";
     private static final String NEW_BLOCK_KEY = "minecraft:mined";
 
-    private static final Map<String, String> ITEM_KEYS = new HashMap<>(
-            ImmutableMap.<String, String>builder()
-                    .put("stat.craftItem", "minecraft:crafted")
-                    .put("stat.useItem", "minecraft:used")
-                    .put("stat.breakItem", "minecraft:broken")
-                    .put("stat.pickup", "minecraft:picked_up")
-                    .put("stat.drop", "minecraft:dropped")
-                    .build()
+    private static final Map<String, String> ITEM_KEYS = Map.of(
+            "stat.craftItem", "minecraft:crafted",
+            "stat.useItem", "minecraft:used",
+            "stat.breakItem", "minecraft:broken",
+            "stat.pickup", "minecraft:picked_up",
+            "stat.drop", "minecraft:dropped"
     );
 
-    private static final Map<String, String> ENTITY_KEYS = new HashMap<>(
-            ImmutableMap.<String, String>builder()
-                    .put("stat.entityKilledBy", "minecraft:killed_by")
-                    .put("stat.killEntity", "minecraft:killed")
-                    .build()
+    private static final Map<String, String> ENTITY_KEYS = Map.of(
+            "stat.entityKilledBy", "minecraft:killed_by",
+            "stat.killEntity", "minecraft:killed"
     );
 
-    private static final Map<String, String> ENTITIES = new HashMap<>(
-            ImmutableMap.<String, String>builder()
-                    .put("Bat", "minecraft:bat")
-                    .put("Blaze", "minecraft:blaze")
-                    .put("CaveSpider", "minecraft:cave_spider")
-                    .put("Chicken", "minecraft:chicken")
-                    .put("Cow", "minecraft:cow")
-                    .put("Creeper", "minecraft:creeper")
-                    .put("Donkey", "minecraft:donkey")
-                    .put("ElderGuardian", "minecraft:elder_guardian")
-                    .put("Enderman", "minecraft:enderman")
-                    .put("Endermite", "minecraft:endermite")
-                    .put("EvocationIllager", "minecraft:evocation_illager")
-                    .put("Ghast", "minecraft:ghast")
-                    .put("Guardian", "minecraft:guardian")
-                    .put("Horse", "minecraft:horse")
-                    .put("Husk", "minecraft:husk")
-                    .put("Llama", "minecraft:llama")
-                    .put("LavaSlime", "minecraft:magma_cube")
-                    .put("MushroomCow", "minecraft:mooshroom")
-                    .put("Mule", "minecraft:mule")
-                    .put("Ozelot", "minecraft:ocelot")
-                    .put("Parrot", "minecraft:parrot")
-                    .put("Pig", "minecraft:pig")
-                    .put("PolarBear", "minecraft:polar_bear")
-                    .put("Rabbit", "minecraft:rabbit")
-                    .put("Sheep", "minecraft:sheep")
-                    .put("Shulker", "minecraft:shulker")
-                    .put("Silverfish", "minecraft:silverfish")
-                    .put("SkeletonHorse", "minecraft:skeleton_horse")
-                    .put("Skeleton", "minecraft:skeleton")
-                    .put("Slime", "minecraft:slime")
-                    .put("Spider", "minecraft:spider")
-                    .put("Squid", "minecraft:squid")
-                    .put("Stray", "minecraft:stray")
-                    .put("Vex", "minecraft:vex")
-                    .put("Villager", "minecraft:villager")
-                    .put("VindicationIllager", "minecraft:vindication_illager")
-                    .put("Witch", "minecraft:witch")
-                    .put("WitherSkeleton", "minecraft:wither_skeleton")
-                    .put("Wolf", "minecraft:wolf")
-                    .put("ZombieHorse", "minecraft:zombie_horse")
-                    .put("PigZombie", "minecraft:zombie_pigman")
-                    .put("ZombieVillager", "minecraft:zombie_villager")
-                    .put("Zombie", "minecraft:zombie")
-                    .build()
+    private static final Map<String, String> ENTITIES = Map.ofEntries(
+            Map.entry("Bat", "minecraft:bat"),
+            Map.entry("Blaze", "minecraft:blaze"),
+            Map.entry("CaveSpider", "minecraft:cave_spider"),
+            Map.entry("Chicken", "minecraft:chicken"),
+            Map.entry("Cow", "minecraft:cow"),
+            Map.entry("Creeper", "minecraft:creeper"),
+            Map.entry("Donkey", "minecraft:donkey"),
+            Map.entry("ElderGuardian", "minecraft:elder_guardian"),
+            Map.entry("Enderman", "minecraft:enderman"),
+            Map.entry("Endermite", "minecraft:endermite"),
+            Map.entry("EvocationIllager", "minecraft:evocation_illager"),
+            Map.entry("Ghast", "minecraft:ghast"),
+            Map.entry("Guardian", "minecraft:guardian"),
+            Map.entry("Horse", "minecraft:horse"),
+            Map.entry("Husk", "minecraft:husk"),
+            Map.entry("Llama", "minecraft:llama"),
+            Map.entry("LavaSlime", "minecraft:magma_cube"),
+            Map.entry("MushroomCow", "minecraft:mooshroom"),
+            Map.entry("Mule", "minecraft:mule"),
+            Map.entry("Ozelot", "minecraft:ocelot"),
+            Map.entry("Parrot", "minecraft:parrot"),
+            Map.entry("Pig", "minecraft:pig"),
+            Map.entry("PolarBear", "minecraft:polar_bear"),
+            Map.entry("Rabbit", "minecraft:rabbit"),
+            Map.entry("Sheep", "minecraft:sheep"),
+            Map.entry("Shulker", "minecraft:shulker"),
+            Map.entry("Silverfish", "minecraft:silverfish"),
+            Map.entry("SkeletonHorse", "minecraft:skeleton_horse"),
+            Map.entry("Skeleton", "minecraft:skeleton"),
+            Map.entry("Slime", "minecraft:slime"),
+            Map.entry("Spider", "minecraft:spider"),
+            Map.entry("Squid", "minecraft:squid"),
+            Map.entry("Stray", "minecraft:stray"),
+            Map.entry("Vex", "minecraft:vex"),
+            Map.entry("Villager", "minecraft:villager"),
+            Map.entry("VindicationIllager", "minecraft:vindication_illager"),
+            Map.entry("Witch", "minecraft:witch"),
+            Map.entry("WitherSkeleton", "minecraft:wither_skeleton"),
+            Map.entry("Wolf", "minecraft:wolf"),
+            Map.entry("ZombieHorse", "minecraft:zombie_horse"),
+            Map.entry("PigZombie", "minecraft:zombie_pigman"),
+            Map.entry("ZombieVillager", "minecraft:zombie_villager"),
+            Map.entry("Zombie", "minecraft:zombie")
     );
 
     private static final String NEW_CUSTOM_KEY = "minecraft:custom";
 
-    private ConverterFlattenStats() {}
+    private ConverterFlattenStats() {
+    }
 
     private static String upgradeItem(final String itemName) {
         return ConverterFlattenItemStack.flattenItem(itemName, 0);
@@ -213,7 +202,8 @@ public final class ConverterFlattenStats {
         return HelperBlockFlatteningV1450.getNewBlockName(block);
     }
 
-    private static record StatType(String category, String key) {}
+    private static record StatType(String category, String key) {
+    }
 
     private static StatType convertLegacyKey(final String key) {
         if (SKIP.contains(key)) {
@@ -225,7 +215,7 @@ public final class ConverterFlattenStats {
             return new StatType(NEW_CUSTOM_KEY, custom);
         }
 
-        final int i = StringUtils.ordinalIndexOf(key, ".", 2);
+        final int i = StringUtil.ordinalIndexOf(key, ".", 2, false);
         if (i < 0) {
             return null;
         }

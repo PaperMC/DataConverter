@@ -7,72 +7,65 @@ import ca.spottedleaf.dataconverter.minecraft.converters.itemname.ConverterAbstr
 import ca.spottedleaf.dataconverter.minecraft.converters.recipe.ConverterAbstractRecipeRename;
 import ca.spottedleaf.dataconverter.minecraft.converters.stats.ConverterAbstractStatsRename;
 import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
-import com.google.common.collect.ImmutableMap;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public final class V1510 {
 
-    public static final Map<String, String> RENAMED_ENTITY_IDS = new HashMap<>(
-            ImmutableMap.<String, String>builder()
-                    .put("minecraft:commandblock_minecart", "minecraft:command_block_minecart")
-                    .put("minecraft:ender_crystal", "minecraft:end_crystal")
-                    .put("minecraft:snowman", "minecraft:snow_golem")
-                    .put("minecraft:evocation_illager", "minecraft:evoker")
-                    .put("minecraft:evocation_fangs", "minecraft:evoker_fangs")
-                    .put("minecraft:illusion_illager", "minecraft:illusioner")
-                    .put("minecraft:vindication_illager", "minecraft:vindicator")
-                    .put("minecraft:villager_golem", "minecraft:iron_golem")
-                    .put("minecraft:xp_orb", "minecraft:experience_orb")
-                    .put("minecraft:xp_bottle", "minecraft:experience_bottle")
-                    .put("minecraft:eye_of_ender_signal", "minecraft:eye_of_ender")
-                    .put("minecraft:fireworks_rocket", "minecraft:firework_rocket")
-                    .build()
+    public static final Map<String, String> RENAMED_ENTITY_IDS = Map.ofEntries(
+            Map.entry("minecraft:commandblock_minecart", "minecraft:command_block_minecart"),
+            Map.entry("minecraft:ender_crystal", "minecraft:end_crystal"),
+            Map.entry("minecraft:snowman", "minecraft:snow_golem"),
+            Map.entry("minecraft:evocation_illager", "minecraft:evoker"),
+            Map.entry("minecraft:evocation_fangs", "minecraft:evoker_fangs"),
+            Map.entry("minecraft:illusion_illager", "minecraft:illusioner"),
+            Map.entry("minecraft:vindication_illager", "minecraft:vindicator"),
+            Map.entry("minecraft:villager_golem", "minecraft:iron_golem"),
+            Map.entry("minecraft:xp_orb", "minecraft:experience_orb"),
+            Map.entry("minecraft:xp_bottle", "minecraft:experience_bottle"),
+            Map.entry("minecraft:eye_of_ender_signal", "minecraft:eye_of_ender"),
+            Map.entry("minecraft:fireworks_rocket", "minecraft:firework_rocket")
     );
 
-    public static final Map<String, String> RENAMED_BLOCKS = new HashMap<>(
-            ImmutableMap.<String, String>builder()
-                    .put("minecraft:portal", "minecraft:nether_portal")
-                    .put("minecraft:oak_bark", "minecraft:oak_wood")
-                    .put("minecraft:spruce_bark", "minecraft:spruce_wood")
-                    .put("minecraft:birch_bark", "minecraft:birch_wood")
-                    .put("minecraft:jungle_bark", "minecraft:jungle_wood")
-                    .put("minecraft:acacia_bark", "minecraft:acacia_wood")
-                    .put("minecraft:dark_oak_bark", "minecraft:dark_oak_wood")
-                    .put("minecraft:stripped_oak_bark", "minecraft:stripped_oak_wood")
-                    .put("minecraft:stripped_spruce_bark", "minecraft:stripped_spruce_wood")
-                    .put("minecraft:stripped_birch_bark", "minecraft:stripped_birch_wood")
-                    .put("minecraft:stripped_jungle_bark", "minecraft:stripped_jungle_wood")
-                    .put("minecraft:stripped_acacia_bark", "minecraft:stripped_acacia_wood")
-                    .put("minecraft:stripped_dark_oak_bark", "minecraft:stripped_dark_oak_wood")
-                    .put("minecraft:mob_spawner", "minecraft:spawner")
-                    .build()
+    public static final Map<String, String> RENAMED_BLOCKS = Map.ofEntries(
+            Map.entry("minecraft:portal", "minecraft:nether_portal"),
+            Map.entry("minecraft:oak_bark", "minecraft:oak_wood"),
+            Map.entry("minecraft:spruce_bark", "minecraft:spruce_wood"),
+            Map.entry("minecraft:birch_bark", "minecraft:birch_wood"),
+            Map.entry("minecraft:jungle_bark", "minecraft:jungle_wood"),
+            Map.entry("minecraft:acacia_bark", "minecraft:acacia_wood"),
+            Map.entry("minecraft:dark_oak_bark", "minecraft:dark_oak_wood"),
+            Map.entry("minecraft:stripped_oak_bark", "minecraft:stripped_oak_wood"),
+            Map.entry("minecraft:stripped_spruce_bark", "minecraft:stripped_spruce_wood"),
+            Map.entry("minecraft:stripped_birch_bark", "minecraft:stripped_birch_wood"),
+            Map.entry("minecraft:stripped_jungle_bark", "minecraft:stripped_jungle_wood"),
+            Map.entry("minecraft:stripped_acacia_bark", "minecraft:stripped_acacia_wood"),
+            Map.entry("minecraft:stripped_dark_oak_bark", "minecraft:stripped_dark_oak_wood"),
+            Map.entry("minecraft:mob_spawner", "minecraft:spawner")
     );
 
-    public static final Map<String, String> RENAMED_ITEMS = new HashMap<>(
-            ImmutableMap.<String, String>builder()
-                    .putAll(RENAMED_BLOCKS)
-                    .put("minecraft:clownfish", "minecraft:tropical_fish")
-                    .put("minecraft:chorus_fruit_popped", "minecraft:popped_chorus_fruit")
-                    .put("minecraft:evocation_illager_spawn_egg", "minecraft:evoker_spawn_egg")
-                    .put("minecraft:vindication_illager_spawn_egg", "minecraft:vindicator_spawn_egg")
-                    .build()
-    );
+    public static final Map<String, String> RENAMED_ITEMS = Map.copyOf(new HashMap<>() {{
+        putAll(RENAMED_BLOCKS);
+        put("minecraft:clownfish", "minecraft:tropical_fish");
+        put("minecraft:chorus_fruit_popped", "minecraft:popped_chorus_fruit");
+        put("minecraft:evocation_illager_spawn_egg", "minecraft:evoker_spawn_egg");
+        put("minecraft:vindication_illager_spawn_egg", "minecraft:vindicator_spawn_egg");
+    }});
 
-    private static final Map<String, String> RECIPES_UPDATES = new HashMap<>(
-            ImmutableMap.<String, String>builder()
-                    .put("minecraft:acacia_bark", "minecraft:acacia_wood")
-                    .put("minecraft:birch_bark", "minecraft:birch_wood")
-                    .put("minecraft:dark_oak_bark", "minecraft:dark_oak_wood")
-                    .put("minecraft:jungle_bark", "minecraft:jungle_wood")
-                    .put("minecraft:oak_bark", "minecraft:oak_wood")
-                    .put("minecraft:spruce_bark", "minecraft:spruce_wood")
-                    .build()
+    private static final Map<String, String> RECIPES_UPDATES = Map.of(
+            "minecraft:acacia_bark", "minecraft:acacia_wood",
+            "minecraft:birch_bark", "minecraft:birch_wood",
+            "minecraft:dark_oak_bark", "minecraft:dark_oak_wood",
+            "minecraft:jungle_bark", "minecraft:jungle_wood",
+            "minecraft:oak_bark", "minecraft:oak_wood",
+            "minecraft:spruce_bark", "minecraft:spruce_wood"
     );
 
     protected static final int VERSION = MCVersions.V1_13_PRE4 + 6;
 
-    private V1510() {}
+    private V1510() {
+    }
 
     public static void register() {
         ConverterAbstractBlockRename.register(VERSION, RENAMED_BLOCKS::get);
@@ -87,11 +80,9 @@ public final class V1510 {
             return RENAMED_ENTITY_IDS.get(input);
         });
 
-        ConverterAbstractStatsRename.register(VERSION, new HashMap<>(
-                ImmutableMap.of(
-                        "minecraft:swim_one_cm", "minecraft:walk_on_water_one_cm",
-                        "minecraft:dive_one_cm", "minecraft:walk_under_water_one_cm"
-                )
+        ConverterAbstractStatsRename.register(VERSION, Map.of(
+                "minecraft:swim_one_cm", "minecraft:walk_on_water_one_cm",
+                "minecraft:dive_one_cm", "minecraft:walk_under_water_one_cm"
         )::get);
 
 

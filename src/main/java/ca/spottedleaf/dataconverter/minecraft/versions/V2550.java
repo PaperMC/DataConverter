@@ -7,8 +7,8 @@ import ca.spottedleaf.dataconverter.types.ListType;
 import ca.spottedleaf.dataconverter.types.MapType;
 import ca.spottedleaf.dataconverter.types.ObjectType;
 import ca.spottedleaf.dataconverter.types.Types;
-import com.google.common.collect.ImmutableMap;
-import org.apache.commons.lang3.math.NumberUtils;
+import ca.spottedleaf.dataconverter.util.IntegerUtil;
+
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -17,18 +17,16 @@ public final class V2550 {
 
     protected static final int VERSION = MCVersions.V20W20B + 13;
 
-    private static final Map<String, StructureFeatureConfiguration> DEFAULTS = new HashMap<>(
-            ImmutableMap.<String, StructureFeatureConfiguration>builder()
-                    .put("minecraft:village", new StructureFeatureConfiguration(32, 8, 10387312))
-                    .put("minecraft:desert_pyramid", new StructureFeatureConfiguration(32, 8, 14357617))
-                    .put("minecraft:igloo", new StructureFeatureConfiguration(32, 8, 14357618))
-                    .put("minecraft:jungle_pyramid", new StructureFeatureConfiguration(32, 8, 14357619))
-                    .put("minecraft:swamp_hut", new StructureFeatureConfiguration(32, 8, 14357620))
-                    .put("minecraft:pillager_outpost", new StructureFeatureConfiguration(32, 8, 165745296))
-                    .put("minecraft:monument", new StructureFeatureConfiguration(32, 5, 10387313))
-                    .put("minecraft:endcity", new StructureFeatureConfiguration(20, 11, 10387313))
-                    .put("minecraft:mansion", new StructureFeatureConfiguration(80, 20, 10387319))
-                    .build()
+    private static final Map<String, StructureFeatureConfiguration> DEFAULTS = Map.ofEntries(
+            Map.entry("minecraft:village", new StructureFeatureConfiguration(32, 8, 10387312)),
+            Map.entry("minecraft:desert_pyramid", new StructureFeatureConfiguration(32, 8, 14357617)),
+            Map.entry("minecraft:igloo", new StructureFeatureConfiguration(32, 8, 14357618)),
+            Map.entry("minecraft:jungle_pyramid", new StructureFeatureConfiguration(32, 8, 14357619)),
+            Map.entry("minecraft:swamp_hut", new StructureFeatureConfiguration(32, 8, 14357620)),
+            Map.entry("minecraft:pillager_outpost", new StructureFeatureConfiguration(32, 8, 165745296)),
+            Map.entry("minecraft:monument", new StructureFeatureConfiguration(32, 5, 10387313)),
+            Map.entry("minecraft:endcity", new StructureFeatureConfiguration(20, 11, 10387313)),
+            Map.entry("minecraft:mansion", new StructureFeatureConfiguration(80, 20, 10387319))
     );
 
     record StructureFeatureConfiguration(int spacing, int separation, int salt) {
@@ -80,8 +78,8 @@ public final class V2550 {
                             if (layers == null) {
                                 layers = Types.NBT.createEmptyList();
 
-                                final int[] heights = new int[] { 1, 2, 1 };
-                                final String[] blocks = new String[] { "minecraft:bedrock", "minecraft:dirt", "minecraft:grass_block" };
+                                final int[] heights = new int[]{1, 2, 1};
+                                final String[] blocks = new String[]{"minecraft:bedrock", "minecraft:dirt", "minecraft:grass_block"};
                                 for (int i = 0; i < 3; ++i) {
                                     final MapType<String> layer = Types.NBT.createEmptyMap();
                                     layer.setInt("height", heights[i]);
@@ -105,7 +103,7 @@ public final class V2550 {
                         case "buffet": {
                             final MapType<String> generatorOptions = data.getMap("generatorOptions");
                             final MapType<String> chunkGenerator = generatorOptions == null ? null : generatorOptions.getMap("chunk_generator");
-                            final String chunkGeneratorType = chunkGenerator == null ? null  : chunkGenerator.getString("type");
+                            final String chunkGeneratorType = chunkGenerator == null ? null : chunkGenerator.getString("type");
 
                             final String newType;
                             if ("minecraft:caves".equals(chunkGeneratorType)) {
@@ -317,7 +315,7 @@ public final class V2550 {
         final MapType<String> endBiomeSource = Types.NBT.createEmptyMap();
         endBiomeSource.setString("type", "minecraft:the_end");
         endBiomeSource.setLong("seed", seed);
-        end.setMap("generator", noise(seed,"minecraft:end", endBiomeSource));
+        end.setMap("generator", noise(seed, "minecraft:end", endBiomeSource));
 
         return ret;
     }
@@ -327,7 +325,7 @@ public final class V2550 {
     }
 
     private static int getInt(final String value, final int dfl) {
-        return NumberUtils.toInt(value, dfl);
+        return IntegerUtil.toInt(value, dfl);
     }
 
     private static int getInt(final String value, final int dfl, final int minVal) {

@@ -1,7 +1,7 @@
 package ca.spottedleaf.dataconverter.minecraft.util;
 
+import ca.spottedleaf.dataconverter.util.GsonUtil;
 import com.google.gson.JsonObject;
-import net.minecraft.util.GsonHelper;
 
 public final class ComponentUtils {
 
@@ -12,7 +12,7 @@ public final class ComponentUtils {
 
         ret.addProperty("text", text);
 
-        return GsonHelper.toStableString(ret);
+        return GsonUtil.toStableString(ret);
     }
 
     public static String createTranslatableComponent(final String key) {
@@ -20,8 +20,9 @@ public final class ComponentUtils {
 
         ret.addProperty("translate", key);
 
-        return GsonHelper.toStableString(ret);
+        return GsonUtil.toStableString(ret);
     }
 
-    private ComponentUtils() {}
+    private ComponentUtils() {
+    }
 }

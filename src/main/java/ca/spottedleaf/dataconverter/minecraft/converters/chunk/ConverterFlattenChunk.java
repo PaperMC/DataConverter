@@ -8,28 +8,20 @@ import ca.spottedleaf.dataconverter.types.ListType;
 import ca.spottedleaf.dataconverter.types.MapType;
 import ca.spottedleaf.dataconverter.types.ObjectType;
 import ca.spottedleaf.dataconverter.types.Types;
+import ca.spottedleaf.dataconverter.util.PaletteData;
 import com.mojang.datafixers.DataFixUtils;
-import com.mojang.logging.LogUtils;
-import it.unimi.dsi.fastutil.ints.Int2ObjectLinkedOpenHashMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.ints.IntArrayList;
-import it.unimi.dsi.fastutil.ints.IntIterator;
+import it.unimi.dsi.fastutil.ints.*;
 import it.unimi.dsi.fastutil.objects.Reference2IntOpenHashMap;
-import net.minecraft.util.datafix.PackedBitStorage;
 import org.slf4j.Logger;
-import java.util.Arrays;
-import java.util.BitSet;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Objects;
+import org.slf4j.LoggerFactory;
+
+import java.util.*;
 
 import static it.unimi.dsi.fastutil.HashCommon.arraySize;
 
 public final class ConverterFlattenChunk extends DataConverter<MapType<String>, MapType<String>> {
 
-    private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = LoggerFactory.getLogger(ConverterFlattenChunk.class);
 
     static final BitSet VIRTUAL_SET = new BitSet(256);
     static final BitSet IDS_NEEDING_FIX_SET = new BitSet(256);
@@ -110,44 +102,46 @@ public final class ConverterFlattenChunk extends DataConverter<MapType<String>, 
         return ret;
     }
 
-    static final MapType<String> PUMPKIN          = HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:pumpkin'}");
-    static final MapType<String> SNOWY_PODZOL     = HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:podzol',Properties:{snowy:'true'}}");
-    static final MapType<String> SNOWY_GRASS      = HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:grass_block',Properties:{snowy:'true'}}");
-    static final MapType<String> SNOWY_MYCELIUM   = HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:mycelium',Properties:{snowy:'true'}}");
-    static final MapType<String> UPPER_SUNFLOWER  = HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:sunflower',Properties:{half:'upper'}}");
-    static final MapType<String> UPPER_LILAC      = HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:lilac',Properties:{half:'upper'}}");
+    static final MapType<String> PUMPKIN = HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:pumpkin'}");
+    static final MapType<String> SNOWY_PODZOL = HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:podzol',Properties:{snowy:'true'}}");
+    static final MapType<String> SNOWY_GRASS = HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:grass_block',Properties:{snowy:'true'}}");
+    static final MapType<String> SNOWY_MYCELIUM = HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:mycelium',Properties:{snowy:'true'}}");
+    static final MapType<String> UPPER_SUNFLOWER = HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:sunflower',Properties:{half:'upper'}}");
+    static final MapType<String> UPPER_LILAC = HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:lilac',Properties:{half:'upper'}}");
     static final MapType<String> UPPER_TALL_GRASS = HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:tall_grass',Properties:{half:'upper'}}");
     static final MapType<String> UPPER_LARGE_FERN = HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:large_fern',Properties:{half:'upper'}}");
-    static final MapType<String> UPPER_ROSE_BUSH  = HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:rose_bush',Properties:{half:'upper'}}");
-    static final MapType<String> UPPER_PEONY      = HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:peony',Properties:{half:'upper'}}");
+    static final MapType<String> UPPER_ROSE_BUSH = HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:rose_bush',Properties:{half:'upper'}}");
+    static final MapType<String> UPPER_PEONY = HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:peony',Properties:{half:'upper'}}");
 
     static final Map<String, MapType<String>> FLOWER_POT_MAP = new HashMap<>();
+
     static {
-        FLOWER_POT_MAP.put("minecraft:air0",            HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:flower_pot'}"));
-        FLOWER_POT_MAP.put("minecraft:red_flower0",     HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:potted_poppy'}"));
-        FLOWER_POT_MAP.put("minecraft:red_flower1",     HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:potted_blue_orchid'}"));
-        FLOWER_POT_MAP.put("minecraft:red_flower2",     HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:potted_allium'}"));
-        FLOWER_POT_MAP.put("minecraft:red_flower3",     HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:potted_azure_bluet'}"));
-        FLOWER_POT_MAP.put("minecraft:red_flower4",     HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:potted_red_tulip'}"));
-        FLOWER_POT_MAP.put("minecraft:red_flower5",     HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:potted_orange_tulip'}"));
-        FLOWER_POT_MAP.put("minecraft:red_flower6",     HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:potted_white_tulip'}"));
-        FLOWER_POT_MAP.put("minecraft:red_flower7",     HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:potted_pink_tulip'}"));
-        FLOWER_POT_MAP.put("minecraft:red_flower8",     HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:potted_oxeye_daisy'}"));
-        FLOWER_POT_MAP.put("minecraft:yellow_flower0",  HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:potted_dandelion'}"));
-        FLOWER_POT_MAP.put("minecraft:sapling0",        HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:potted_oak_sapling'}"));
-        FLOWER_POT_MAP.put("minecraft:sapling1",        HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:potted_spruce_sapling'}"));
-        FLOWER_POT_MAP.put("minecraft:sapling2",        HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:potted_birch_sapling'}"));
-        FLOWER_POT_MAP.put("minecraft:sapling3",        HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:potted_jungle_sapling'}"));
-        FLOWER_POT_MAP.put("minecraft:sapling4",        HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:potted_acacia_sapling'}"));
-        FLOWER_POT_MAP.put("minecraft:sapling5",        HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:potted_dark_oak_sapling'}"));
-        FLOWER_POT_MAP.put("minecraft:red_mushroom0",   HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:potted_red_mushroom'}"));
+        FLOWER_POT_MAP.put("minecraft:air0", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:flower_pot'}"));
+        FLOWER_POT_MAP.put("minecraft:red_flower0", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:potted_poppy'}"));
+        FLOWER_POT_MAP.put("minecraft:red_flower1", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:potted_blue_orchid'}"));
+        FLOWER_POT_MAP.put("minecraft:red_flower2", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:potted_allium'}"));
+        FLOWER_POT_MAP.put("minecraft:red_flower3", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:potted_azure_bluet'}"));
+        FLOWER_POT_MAP.put("minecraft:red_flower4", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:potted_red_tulip'}"));
+        FLOWER_POT_MAP.put("minecraft:red_flower5", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:potted_orange_tulip'}"));
+        FLOWER_POT_MAP.put("minecraft:red_flower6", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:potted_white_tulip'}"));
+        FLOWER_POT_MAP.put("minecraft:red_flower7", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:potted_pink_tulip'}"));
+        FLOWER_POT_MAP.put("minecraft:red_flower8", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:potted_oxeye_daisy'}"));
+        FLOWER_POT_MAP.put("minecraft:yellow_flower0", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:potted_dandelion'}"));
+        FLOWER_POT_MAP.put("minecraft:sapling0", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:potted_oak_sapling'}"));
+        FLOWER_POT_MAP.put("minecraft:sapling1", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:potted_spruce_sapling'}"));
+        FLOWER_POT_MAP.put("minecraft:sapling2", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:potted_birch_sapling'}"));
+        FLOWER_POT_MAP.put("minecraft:sapling3", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:potted_jungle_sapling'}"));
+        FLOWER_POT_MAP.put("minecraft:sapling4", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:potted_acacia_sapling'}"));
+        FLOWER_POT_MAP.put("minecraft:sapling5", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:potted_dark_oak_sapling'}"));
+        FLOWER_POT_MAP.put("minecraft:red_mushroom0", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:potted_red_mushroom'}"));
         FLOWER_POT_MAP.put("minecraft:brown_mushroom0", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:potted_brown_mushroom'}"));
-        FLOWER_POT_MAP.put("minecraft:deadbush0",       HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:potted_dead_bush'}"));
-        FLOWER_POT_MAP.put("minecraft:tallgrass2",      HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:potted_fern'}"));
-        FLOWER_POT_MAP.put("minecraft:cactus0",         HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:potted_cactus'}")); // we change default to empty
+        FLOWER_POT_MAP.put("minecraft:deadbush0", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:potted_dead_bush'}"));
+        FLOWER_POT_MAP.put("minecraft:tallgrass2", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:potted_fern'}"));
+        FLOWER_POT_MAP.put("minecraft:cactus0", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:potted_cactus'}")); // we change default to empty
     }
 
     static final Map<String, MapType<String>> SKULL_MAP = new HashMap<>();
+
     static {
         mapSkull(SKULL_MAP, 0, "skeleton", "skull");
         mapSkull(SKULL_MAP, 1, "wither_skeleton", "skull");
@@ -155,13 +149,15 @@ public final class ConverterFlattenChunk extends DataConverter<MapType<String>, 
         mapSkull(SKULL_MAP, 3, "player", "head");
         mapSkull(SKULL_MAP, 4, "creeper", "head");
         mapSkull(SKULL_MAP, 5, "dragon", "head");
-    };
+    }
+
+    ;
 
     private static void mapSkull(final Map<String, MapType<String>> into, final int oldId, final String newId, final String skullType) {
         into.put(oldId + "north", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + newId + "_wall_" + skullType + "',Properties:{facing:'north'}}"));
-        into.put(oldId + "east",  HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + newId + "_wall_" + skullType + "',Properties:{facing:'east'}}"));
+        into.put(oldId + "east", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + newId + "_wall_" + skullType + "',Properties:{facing:'east'}}"));
         into.put(oldId + "south", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + newId + "_wall_" + skullType + "',Properties:{facing:'south'}}"));
-        into.put(oldId + "west",  HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + newId + "_wall_" + skullType + "',Properties:{facing:'west'}}"));
+        into.put(oldId + "west", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + newId + "_wall_" + skullType + "',Properties:{facing:'west'}}"));
 
         for (int rotation = 0; rotation < 16; ++rotation) {
             into.put(oldId + "" + rotation,
@@ -170,6 +166,7 @@ public final class ConverterFlattenChunk extends DataConverter<MapType<String>, 
     }
 
     static final Map<String, MapType<String>> DOOR_MAP = new HashMap<>();
+
     static {
         mapDoor(DOOR_MAP, "oak_door", 1024);
         mapDoor(DOOR_MAP, "iron_door", 1136);
@@ -178,84 +175,88 @@ public final class ConverterFlattenChunk extends DataConverter<MapType<String>, 
         mapDoor(DOOR_MAP, "jungle_door", 3120);
         mapDoor(DOOR_MAP, "acacia_door", 3136);
         mapDoor(DOOR_MAP, "dark_oak_door", 3152);
-    };
+    }
+
+    ;
 
     private static void mapDoor(final Map<String, MapType<String>> into, final String type, final int oldId) {
-        into.put("minecraft:" + type + "eastlowerleftfalsefalse",   HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'east',half:'lower',hinge:'left',open:'false',powered:'false'}}"));
-        into.put("minecraft:" + type + "eastlowerleftfalsetrue",    HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'east',half:'lower',hinge:'left',open:'false',powered:'true'}}"));
-        into.put("minecraft:" + type + "eastlowerlefttruefalse",    HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'east',half:'lower',hinge:'left',open:'true',powered:'false'}}"));
-        into.put("minecraft:" + type + "eastlowerlefttruetrue",     HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'east',half:'lower',hinge:'left',open:'true',powered:'true'}}"));
-        into.put("minecraft:" + type + "eastlowerrightfalsefalse",  Objects.requireNonNull(HelperBlockFlatteningV1450.getNBTForId(oldId)));
-        into.put("minecraft:" + type + "eastlowerrightfalsetrue",   HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'east',half:'lower',hinge:'right',open:'false',powered:'true'}}"));
-        into.put("minecraft:" + type + "eastlowerrighttruefalse",   Objects.requireNonNull(HelperBlockFlatteningV1450.getNBTForId(oldId + 4)));
-        into.put("minecraft:" + type + "eastlowerrighttruetrue",    HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'east',half:'lower',hinge:'right',open:'true',powered:'true'}}"));
-        into.put("minecraft:" + type + "eastupperleftfalsefalse",   Objects.requireNonNull(HelperBlockFlatteningV1450.getNBTForId(oldId + 8)));
-        into.put("minecraft:" + type + "eastupperleftfalsetrue",    Objects.requireNonNull(HelperBlockFlatteningV1450.getNBTForId(oldId + 10)));
-        into.put("minecraft:" + type + "eastupperlefttruefalse",    HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'east',half:'upper',hinge:'left',open:'true',powered:'false'}}"));
-        into.put("minecraft:" + type + "eastupperlefttruetrue",     HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'east',half:'upper',hinge:'left',open:'true',powered:'true'}}"));
-        into.put("minecraft:" + type + "eastupperrightfalsefalse",  Objects.requireNonNull(HelperBlockFlatteningV1450.getNBTForId(oldId + 9)));
-        into.put("minecraft:" + type + "eastupperrightfalsetrue",   Objects.requireNonNull(HelperBlockFlatteningV1450.getNBTForId(oldId + 11)));
-        into.put("minecraft:" + type + "eastupperrighttruefalse",   HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'east',half:'upper',hinge:'right',open:'true',powered:'false'}}"));
-        into.put("minecraft:" + type + "eastupperrighttruetrue",    HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'east',half:'upper',hinge:'right',open:'true',powered:'true'}}"));
-        into.put("minecraft:" + type + "northlowerleftfalsefalse",  HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'north',half:'lower',hinge:'left',open:'false',powered:'false'}}"));
-        into.put("minecraft:" + type + "northlowerleftfalsetrue",   HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'north',half:'lower',hinge:'left',open:'false',powered:'true'}}"));
-        into.put("minecraft:" + type + "northlowerlefttruefalse",   HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'north',half:'lower',hinge:'left',open:'true',powered:'false'}}"));
-        into.put("minecraft:" + type + "northlowerlefttruetrue",    HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'north',half:'lower',hinge:'left',open:'true',powered:'true'}}"));
+        into.put("minecraft:" + type + "eastlowerleftfalsefalse", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'east',half:'lower',hinge:'left',open:'false',powered:'false'}}"));
+        into.put("minecraft:" + type + "eastlowerleftfalsetrue", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'east',half:'lower',hinge:'left',open:'false',powered:'true'}}"));
+        into.put("minecraft:" + type + "eastlowerlefttruefalse", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'east',half:'lower',hinge:'left',open:'true',powered:'false'}}"));
+        into.put("minecraft:" + type + "eastlowerlefttruetrue", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'east',half:'lower',hinge:'left',open:'true',powered:'true'}}"));
+        into.put("minecraft:" + type + "eastlowerrightfalsefalse", Objects.requireNonNull(HelperBlockFlatteningV1450.getNBTForId(oldId)));
+        into.put("minecraft:" + type + "eastlowerrightfalsetrue", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'east',half:'lower',hinge:'right',open:'false',powered:'true'}}"));
+        into.put("minecraft:" + type + "eastlowerrighttruefalse", Objects.requireNonNull(HelperBlockFlatteningV1450.getNBTForId(oldId + 4)));
+        into.put("minecraft:" + type + "eastlowerrighttruetrue", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'east',half:'lower',hinge:'right',open:'true',powered:'true'}}"));
+        into.put("minecraft:" + type + "eastupperleftfalsefalse", Objects.requireNonNull(HelperBlockFlatteningV1450.getNBTForId(oldId + 8)));
+        into.put("minecraft:" + type + "eastupperleftfalsetrue", Objects.requireNonNull(HelperBlockFlatteningV1450.getNBTForId(oldId + 10)));
+        into.put("minecraft:" + type + "eastupperlefttruefalse", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'east',half:'upper',hinge:'left',open:'true',powered:'false'}}"));
+        into.put("minecraft:" + type + "eastupperlefttruetrue", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'east',half:'upper',hinge:'left',open:'true',powered:'true'}}"));
+        into.put("minecraft:" + type + "eastupperrightfalsefalse", Objects.requireNonNull(HelperBlockFlatteningV1450.getNBTForId(oldId + 9)));
+        into.put("minecraft:" + type + "eastupperrightfalsetrue", Objects.requireNonNull(HelperBlockFlatteningV1450.getNBTForId(oldId + 11)));
+        into.put("minecraft:" + type + "eastupperrighttruefalse", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'east',half:'upper',hinge:'right',open:'true',powered:'false'}}"));
+        into.put("minecraft:" + type + "eastupperrighttruetrue", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'east',half:'upper',hinge:'right',open:'true',powered:'true'}}"));
+        into.put("minecraft:" + type + "northlowerleftfalsefalse", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'north',half:'lower',hinge:'left',open:'false',powered:'false'}}"));
+        into.put("minecraft:" + type + "northlowerleftfalsetrue", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'north',half:'lower',hinge:'left',open:'false',powered:'true'}}"));
+        into.put("minecraft:" + type + "northlowerlefttruefalse", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'north',half:'lower',hinge:'left',open:'true',powered:'false'}}"));
+        into.put("minecraft:" + type + "northlowerlefttruetrue", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'north',half:'lower',hinge:'left',open:'true',powered:'true'}}"));
         into.put("minecraft:" + type + "northlowerrightfalsefalse", Objects.requireNonNull(HelperBlockFlatteningV1450.getNBTForId(oldId + 3)));
-        into.put("minecraft:" + type + "northlowerrightfalsetrue",  HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'north',half:'lower',hinge:'right',open:'false',powered:'true'}}"));
-        into.put("minecraft:" + type + "northlowerrighttruefalse",  Objects.requireNonNull(HelperBlockFlatteningV1450.getNBTForId(oldId + 7)));
-        into.put("minecraft:" + type + "northlowerrighttruetrue",   HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'north',half:'lower',hinge:'right',open:'true',powered:'true'}}"));
-        into.put("minecraft:" + type + "northupperleftfalsefalse",  HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'north',half:'upper',hinge:'left',open:'false',powered:'false'}}"));
-        into.put("minecraft:" + type + "northupperleftfalsetrue",   HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'north',half:'upper',hinge:'left',open:'false',powered:'true'}}"));
-        into.put("minecraft:" + type + "northupperlefttruefalse",   HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'north',half:'upper',hinge:'left',open:'true',powered:'false'}}"));
-        into.put("minecraft:" + type + "northupperlefttruetrue",    HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'north',half:'upper',hinge:'left',open:'true',powered:'true'}}"));
+        into.put("minecraft:" + type + "northlowerrightfalsetrue", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'north',half:'lower',hinge:'right',open:'false',powered:'true'}}"));
+        into.put("minecraft:" + type + "northlowerrighttruefalse", Objects.requireNonNull(HelperBlockFlatteningV1450.getNBTForId(oldId + 7)));
+        into.put("minecraft:" + type + "northlowerrighttruetrue", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'north',half:'lower',hinge:'right',open:'true',powered:'true'}}"));
+        into.put("minecraft:" + type + "northupperleftfalsefalse", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'north',half:'upper',hinge:'left',open:'false',powered:'false'}}"));
+        into.put("minecraft:" + type + "northupperleftfalsetrue", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'north',half:'upper',hinge:'left',open:'false',powered:'true'}}"));
+        into.put("minecraft:" + type + "northupperlefttruefalse", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'north',half:'upper',hinge:'left',open:'true',powered:'false'}}"));
+        into.put("minecraft:" + type + "northupperlefttruetrue", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'north',half:'upper',hinge:'left',open:'true',powered:'true'}}"));
         into.put("minecraft:" + type + "northupperrightfalsefalse", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'north',half:'upper',hinge:'right',open:'false',powered:'false'}}"));
-        into.put("minecraft:" + type + "northupperrightfalsetrue",  HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'north',half:'upper',hinge:'right',open:'false',powered:'true'}}"));
-        into.put("minecraft:" + type + "northupperrighttruefalse",  HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'north',half:'upper',hinge:'right',open:'true',powered:'false'}}"));
-        into.put("minecraft:" + type + "northupperrighttruetrue",   HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'north',half:'upper',hinge:'right',open:'true',powered:'true'}}"));
-        into.put("minecraft:" + type + "southlowerleftfalsefalse",  HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'south',half:'lower',hinge:'left',open:'false',powered:'false'}}"));
-        into.put("minecraft:" + type + "southlowerleftfalsetrue",   HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'south',half:'lower',hinge:'left',open:'false',powered:'true'}}"));
-        into.put("minecraft:" + type + "southlowerlefttruefalse",   HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'south',half:'lower',hinge:'left',open:'true',powered:'false'}}"));
-        into.put("minecraft:" + type + "southlowerlefttruetrue",    HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'south',half:'lower',hinge:'left',open:'true',powered:'true'}}"));
+        into.put("minecraft:" + type + "northupperrightfalsetrue", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'north',half:'upper',hinge:'right',open:'false',powered:'true'}}"));
+        into.put("minecraft:" + type + "northupperrighttruefalse", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'north',half:'upper',hinge:'right',open:'true',powered:'false'}}"));
+        into.put("minecraft:" + type + "northupperrighttruetrue", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'north',half:'upper',hinge:'right',open:'true',powered:'true'}}"));
+        into.put("minecraft:" + type + "southlowerleftfalsefalse", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'south',half:'lower',hinge:'left',open:'false',powered:'false'}}"));
+        into.put("minecraft:" + type + "southlowerleftfalsetrue", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'south',half:'lower',hinge:'left',open:'false',powered:'true'}}"));
+        into.put("minecraft:" + type + "southlowerlefttruefalse", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'south',half:'lower',hinge:'left',open:'true',powered:'false'}}"));
+        into.put("minecraft:" + type + "southlowerlefttruetrue", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'south',half:'lower',hinge:'left',open:'true',powered:'true'}}"));
         into.put("minecraft:" + type + "southlowerrightfalsefalse", Objects.requireNonNull(HelperBlockFlatteningV1450.getNBTForId(oldId + 1)));
-        into.put("minecraft:" + type + "southlowerrightfalsetrue",  HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'south',half:'lower',hinge:'right',open:'false',powered:'true'}}"));
-        into.put("minecraft:" + type + "southlowerrighttruefalse",  Objects.requireNonNull(HelperBlockFlatteningV1450.getNBTForId(oldId + 5)));
-        into.put("minecraft:" + type + "southlowerrighttruetrue",   HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'south',half:'lower',hinge:'right',open:'true',powered:'true'}}"));
-        into.put("minecraft:" + type + "southupperleftfalsefalse",  HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'south',half:'upper',hinge:'left',open:'false',powered:'false'}}"));
-        into.put("minecraft:" + type + "southupperleftfalsetrue",   HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'south',half:'upper',hinge:'left',open:'false',powered:'true'}}"));
-        into.put("minecraft:" + type + "southupperlefttruefalse",   HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'south',half:'upper',hinge:'left',open:'true',powered:'false'}}"));
-        into.put("minecraft:" + type + "southupperlefttruetrue",    HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'south',half:'upper',hinge:'left',open:'true',powered:'true'}}"));
+        into.put("minecraft:" + type + "southlowerrightfalsetrue", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'south',half:'lower',hinge:'right',open:'false',powered:'true'}}"));
+        into.put("minecraft:" + type + "southlowerrighttruefalse", Objects.requireNonNull(HelperBlockFlatteningV1450.getNBTForId(oldId + 5)));
+        into.put("minecraft:" + type + "southlowerrighttruetrue", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'south',half:'lower',hinge:'right',open:'true',powered:'true'}}"));
+        into.put("minecraft:" + type + "southupperleftfalsefalse", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'south',half:'upper',hinge:'left',open:'false',powered:'false'}}"));
+        into.put("minecraft:" + type + "southupperleftfalsetrue", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'south',half:'upper',hinge:'left',open:'false',powered:'true'}}"));
+        into.put("minecraft:" + type + "southupperlefttruefalse", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'south',half:'upper',hinge:'left',open:'true',powered:'false'}}"));
+        into.put("minecraft:" + type + "southupperlefttruetrue", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'south',half:'upper',hinge:'left',open:'true',powered:'true'}}"));
         into.put("minecraft:" + type + "southupperrightfalsefalse", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'south',half:'upper',hinge:'right',open:'false',powered:'false'}}"));
-        into.put("minecraft:" + type + "southupperrightfalsetrue",  HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'south',half:'upper',hinge:'right',open:'false',powered:'true'}}"));
-        into.put("minecraft:" + type + "southupperrighttruefalse",  HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'south',half:'upper',hinge:'right',open:'true',powered:'false'}}"));
-        into.put("minecraft:" + type + "southupperrighttruetrue",   HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'south',half:'upper',hinge:'right',open:'true',powered:'true'}}"));
-        into.put("minecraft:" + type + "westlowerleftfalsefalse",   HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'west',half:'lower',hinge:'left',open:'false',powered:'false'}}"));
-        into.put("minecraft:" + type + "westlowerleftfalsetrue",    HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'west',half:'lower',hinge:'left',open:'false',powered:'true'}}"));
-        into.put("minecraft:" + type + "westlowerlefttruefalse",    HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'west',half:'lower',hinge:'left',open:'true',powered:'false'}}"));
-        into.put("minecraft:" + type + "westlowerlefttruetrue",     HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'west',half:'lower',hinge:'left',open:'true',powered:'true'}}"));
-        into.put("minecraft:" + type + "westlowerrightfalsefalse",  Objects.requireNonNull(HelperBlockFlatteningV1450.getNBTForId(oldId + 2)));
-        into.put("minecraft:" + type + "westlowerrightfalsetrue",   HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'west',half:'lower',hinge:'right',open:'false',powered:'true'}}"));
-        into.put("minecraft:" + type + "westlowerrighttruefalse",   Objects.requireNonNull(HelperBlockFlatteningV1450.getNBTForId(oldId + 6)));
-        into.put("minecraft:" + type + "westlowerrighttruetrue",    HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'west',half:'lower',hinge:'right',open:'true',powered:'true'}}"));
-        into.put("minecraft:" + type + "westupperleftfalsefalse",   HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'west',half:'upper',hinge:'left',open:'false',powered:'false'}}"));
-        into.put("minecraft:" + type + "westupperleftfalsetrue",    HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'west',half:'upper',hinge:'left',open:'false',powered:'true'}}"));
-        into.put("minecraft:" + type + "westupperlefttruefalse",    HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'west',half:'upper',hinge:'left',open:'true',powered:'false'}}"));
-        into.put("minecraft:" + type + "westupperlefttruetrue",     HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'west',half:'upper',hinge:'left',open:'true',powered:'true'}}"));
-        into.put("minecraft:" + type + "westupperrightfalsefalse",  HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'west',half:'upper',hinge:'right',open:'false',powered:'false'}}"));
-        into.put("minecraft:" + type + "westupperrightfalsetrue",   HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'west',half:'upper',hinge:'right',open:'false',powered:'true'}}"));
-        into.put("minecraft:" + type + "westupperrighttruefalse",   HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'west',half:'upper',hinge:'right',open:'true',powered:'false'}}"));
-        into.put("minecraft:" + type + "westupperrighttruetrue",    HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'west',half:'upper',hinge:'right',open:'true',powered:'true'}}"));
+        into.put("minecraft:" + type + "southupperrightfalsetrue", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'south',half:'upper',hinge:'right',open:'false',powered:'true'}}"));
+        into.put("minecraft:" + type + "southupperrighttruefalse", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'south',half:'upper',hinge:'right',open:'true',powered:'false'}}"));
+        into.put("minecraft:" + type + "southupperrighttruetrue", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'south',half:'upper',hinge:'right',open:'true',powered:'true'}}"));
+        into.put("minecraft:" + type + "westlowerleftfalsefalse", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'west',half:'lower',hinge:'left',open:'false',powered:'false'}}"));
+        into.put("minecraft:" + type + "westlowerleftfalsetrue", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'west',half:'lower',hinge:'left',open:'false',powered:'true'}}"));
+        into.put("minecraft:" + type + "westlowerlefttruefalse", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'west',half:'lower',hinge:'left',open:'true',powered:'false'}}"));
+        into.put("minecraft:" + type + "westlowerlefttruetrue", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'west',half:'lower',hinge:'left',open:'true',powered:'true'}}"));
+        into.put("minecraft:" + type + "westlowerrightfalsefalse", Objects.requireNonNull(HelperBlockFlatteningV1450.getNBTForId(oldId + 2)));
+        into.put("minecraft:" + type + "westlowerrightfalsetrue", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'west',half:'lower',hinge:'right',open:'false',powered:'true'}}"));
+        into.put("minecraft:" + type + "westlowerrighttruefalse", Objects.requireNonNull(HelperBlockFlatteningV1450.getNBTForId(oldId + 6)));
+        into.put("minecraft:" + type + "westlowerrighttruetrue", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'west',half:'lower',hinge:'right',open:'true',powered:'true'}}"));
+        into.put("minecraft:" + type + "westupperleftfalsefalse", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'west',half:'upper',hinge:'left',open:'false',powered:'false'}}"));
+        into.put("minecraft:" + type + "westupperleftfalsetrue", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'west',half:'upper',hinge:'left',open:'false',powered:'true'}}"));
+        into.put("minecraft:" + type + "westupperlefttruefalse", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'west',half:'upper',hinge:'left',open:'true',powered:'false'}}"));
+        into.put("minecraft:" + type + "westupperlefttruetrue", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'west',half:'upper',hinge:'left',open:'true',powered:'true'}}"));
+        into.put("minecraft:" + type + "westupperrightfalsefalse", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'west',half:'upper',hinge:'right',open:'false',powered:'false'}}"));
+        into.put("minecraft:" + type + "westupperrightfalsetrue", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'west',half:'upper',hinge:'right',open:'false',powered:'true'}}"));
+        into.put("minecraft:" + type + "westupperrighttruefalse", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'west',half:'upper',hinge:'right',open:'true',powered:'false'}}"));
+        into.put("minecraft:" + type + "westupperrighttruetrue", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'west',half:'upper',hinge:'right',open:'true',powered:'true'}}"));
     }
 
     static final Map<String, MapType<String>> NOTE_BLOCK_MAP = new HashMap<>();
+
     static {
-        for(int note = 0; note < 26; ++note) {
-            NOTE_BLOCK_MAP.put("true" + note,  HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:note_block',Properties:{powered:'true',note:'" + note + "'}}"));
+        for (int note = 0; note < 26; ++note) {
+            NOTE_BLOCK_MAP.put("true" + note, HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:note_block',Properties:{powered:'true',note:'" + note + "'}}"));
             NOTE_BLOCK_MAP.put("false" + note, HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:note_block',Properties:{powered:'false',note:'" + note + "'}}"));
         }
     }
 
     static final Int2ObjectOpenHashMap<String> DYE_COLOR_MAP = new Int2ObjectOpenHashMap<>();
+
     static {
         DYE_COLOR_MAP.put(0, "white");
         DYE_COLOR_MAP.put(1, "orange");
@@ -287,17 +288,17 @@ public final class ConverterFlattenChunk extends DataConverter<MapType<String>, 
 
     private static void addBeds(final Map<String, MapType<String>> into, final int colourId, final String colourName) {
         into.put("southfalsefoot" + colourId, HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + colourName + "_bed',Properties:{facing:'south',occupied:'false',part:'foot'}}"));
-        into.put("westfalsefoot" + colourId,  HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + colourName + "_bed',Properties:{facing:'west',occupied:'false',part:'foot'}}"));
+        into.put("westfalsefoot" + colourId, HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + colourName + "_bed',Properties:{facing:'west',occupied:'false',part:'foot'}}"));
         into.put("northfalsefoot" + colourId, HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + colourName + "_bed',Properties:{facing:'north',occupied:'false',part:'foot'}}"));
-        into.put("eastfalsefoot" + colourId,  HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + colourName + "_bed',Properties:{facing:'east',occupied:'false',part:'foot'}}"));
+        into.put("eastfalsefoot" + colourId, HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + colourName + "_bed',Properties:{facing:'east',occupied:'false',part:'foot'}}"));
         into.put("southfalsehead" + colourId, HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + colourName + "_bed',Properties:{facing:'south',occupied:'false',part:'head'}}"));
-        into.put("westfalsehead" + colourId,  HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + colourName + "_bed',Properties:{facing:'west',occupied:'false',part:'head'}}"));
+        into.put("westfalsehead" + colourId, HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + colourName + "_bed',Properties:{facing:'west',occupied:'false',part:'head'}}"));
         into.put("northfalsehead" + colourId, HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + colourName + "_bed',Properties:{facing:'north',occupied:'false',part:'head'}}"));
-        into.put("eastfalsehead" + colourId,  HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + colourName + "_bed',Properties:{facing:'east',occupied:'false',part:'head'}}"));
-        into.put("southtruehead" + colourId,  HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + colourName + "_bed',Properties:{facing:'south',occupied:'true',part:'head'}}"));
-        into.put("westtruehead" + colourId,   HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + colourName + "_bed',Properties:{facing:'west',occupied:'true',part:'head'}}"));
-        into.put("northtruehead" + colourId,  HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + colourName + "_bed',Properties:{facing:'north',occupied:'true',part:'head'}}"));
-        into.put("easttruehead" + colourId,   HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + colourName + "_bed',Properties:{facing:'east',occupied:'true',part:'head'}}"));
+        into.put("eastfalsehead" + colourId, HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + colourName + "_bed',Properties:{facing:'east',occupied:'false',part:'head'}}"));
+        into.put("southtruehead" + colourId, HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + colourName + "_bed',Properties:{facing:'south',occupied:'true',part:'head'}}"));
+        into.put("westtruehead" + colourId, HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + colourName + "_bed',Properties:{facing:'west',occupied:'true',part:'head'}}"));
+        into.put("northtruehead" + colourId, HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + colourName + "_bed',Properties:{facing:'north',occupied:'true',part:'head'}}"));
+        into.put("easttruehead" + colourId, HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + colourName + "_bed',Properties:{facing:'east',occupied:'true',part:'head'}}"));
     }
 
     static final Map<String, MapType<String>> BANNER_BLOCK_MAP = new HashMap<>();
@@ -311,14 +312,14 @@ public final class ConverterFlattenChunk extends DataConverter<MapType<String>, 
     }
 
     private static void addBanners(final Map<String, MapType<String>> into, final int colourId, final String colourName) {
-        for(int rotation = 0; rotation < 16; ++rotation) {
+        for (int rotation = 0; rotation < 16; ++rotation) {
             into.put("" + rotation + "_" + colourId, HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + colourName + "_banner',Properties:{rotation:'" + rotation + "'}}"));
         }
 
         into.put("north_" + colourId, HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + colourName + "_wall_banner',Properties:{facing:'north'}}"));
         into.put("south_" + colourId, HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + colourName + "_wall_banner',Properties:{facing:'south'}}"));
-        into.put("west_" + colourId,  HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + colourName + "_wall_banner',Properties:{facing:'west'}}"));
-        into.put("east_" + colourId,  HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + colourName + "_wall_banner',Properties:{facing:'east'}}"));
+        into.put("west_" + colourId, HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + colourName + "_wall_banner',Properties:{facing:'west'}}"));
+        into.put("east_" + colourId, HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + colourName + "_wall_banner',Properties:{facing:'east'}}"));
     }
 
     static final MapType<String> AIR = Objects.requireNonNull(HelperBlockFlatteningV1450.getNBTForId(0));
@@ -523,7 +524,7 @@ public final class ConverterFlattenChunk extends DataConverter<MapType<String>, 
 
                 final int yIndex = section.y << (8 + 4);
 
-                for (final Iterator<Int2ObjectMap.Entry<IntArrayList>> iterator = section.toFix.int2ObjectEntrySet().fastIterator(); iterator.hasNext();) {
+                for (final Iterator<Int2ObjectMap.Entry<IntArrayList>> iterator = section.toFix.int2ObjectEntrySet().fastIterator(); iterator.hasNext(); ) {
                     final Int2ObjectMap.Entry<IntArrayList> fixEntry = iterator.next();
                     final IntIterator positionIterator = fixEntry.getValue().iterator();
                     switch (fixEntry.getIntKey()) {
@@ -775,17 +776,17 @@ public final class ConverterFlattenChunk extends DataConverter<MapType<String>, 
 
         public static int relative(final int index, final Direction direction) {
             switch (direction.getAxis()) {
-            case X:
-                int j = (index & 15) + direction.getAxisDirection().getStep();
-                return j >= 0 && j <= 15 ? index & -16 | j : -1;
-            case Y:
-                int k = (index >> 8) + direction.getAxisDirection().getStep();
-                return k >= 0 && k <= 255 ? index & 255 | k << 8 : -1;
-            case Z:
-                int l = (index >> 4 & 15) + direction.getAxisDirection().getStep();
-                return l >= 0 && l <= 15 ? index & -241 | l << 4 : -1;
-            default:
-                return -1;
+                case X:
+                    int j = (index & 15) + direction.getAxisDirection().getStep();
+                    return j >= 0 && j <= 15 ? index & -16 | j : -1;
+                case Y:
+                    int k = (index >> 8) + direction.getAxisDirection().getStep();
+                    return k >= 0 && k <= 255 ? index & 255 | k << 8 : -1;
+                case Z:
+                    int l = (index >> 4 & 15) + direction.getAxisDirection().getStep();
+                    return l >= 0 && l <= 15 ? index & -241 | l << 4 : -1;
+                default:
+                    return -1;
             }
         }
 
@@ -835,7 +836,7 @@ public final class ConverterFlattenChunk extends DataConverter<MapType<String>, 
             this.level.setList("Sections", sections);
 
             final MapType<String> upgradeData = Types.NBT.createEmptyMap();
-            upgradeData.setByte("Sides", (byte)this.sides);
+            upgradeData.setByte("Sides", (byte) this.sides);
             upgradeData.setMap("Indices", indices);
 
             this.level.setMap("UpgradeData", upgradeData);
@@ -858,13 +859,13 @@ public final class ConverterFlattenChunk extends DataConverter<MapType<String>, 
                 final Object[] key = this.key;
                 int pos;
                 // The starting point.
-                if (((curr = (MapType<String>)key[pos = (it.unimi.dsi.fastutil.HashCommon.mix(System.identityHashCode(k))) & mask]) == (null)))
+                if (((curr = (MapType<String>) key[pos = (it.unimi.dsi.fastutil.HashCommon.mix(System.identityHashCode(k))) & mask]) == (null)))
                     return -(pos + 1);
                 if (((k) == (curr)))
                     return pos;
                 // There's always an unused entry.
                 while (true) {
-                    if (((curr = (MapType<String>)key[pos = (pos + 1) & mask]) == (null)))
+                    if (((curr = (MapType<String>) key[pos = (pos + 1) & mask]) == (null)))
                         return -(pos + 1);
                     if (((k) == (curr)))
                         return pos;
@@ -874,7 +875,7 @@ public final class ConverterFlattenChunk extends DataConverter<MapType<String>, 
             private void insert(final int pos, final MapType<String> k, final int v) {
                 if (pos == n)
                     containsNullKey = true;
-                ((Object[])key)[pos] = k;
+                ((Object[]) key)[pos] = k;
                 value[pos] = v;
                 if (size++ >= maxFill)
                     rehash(arraySize(size + 1, f));
@@ -998,9 +999,9 @@ public final class ConverterFlattenChunk extends DataConverter<MapType<String>, 
             this.section.setList("Palette", this.palette.paletteStates.copy()); // deep copy to ensure palette compound tags are NOT shared
 
             final int bitSize = Math.max(4, DataFixUtils.ceillog2(this.palette.size()));
-            final PackedBitStorage packedIds = new PackedBitStorage(bitSize, 4096);
+            final PaletteData packedIds = new PaletteData(bitSize, 4096);
 
-            for(int index = 0; index < this.buffer.length; ++index) {
+            for (int index = 0; index < this.buffer.length; ++index) {
                 packedIds.set(index, this.buffer[index]);
             }
 

@@ -6,16 +6,18 @@ import ca.spottedleaf.dataconverter.minecraft.converters.options.ConverterAbstra
 import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
 import ca.spottedleaf.dataconverter.types.MapType;
 import ca.spottedleaf.dataconverter.types.Types;
-import com.google.common.collect.ImmutableMap;
+
+import java.util.Map;
 
 public final class V2558 {
 
     protected static final int VERSION = MCVersions.V1_16_PRE2 + 1;
 
-    private V2558() {}
+    private V2558() {
+    }
 
     public static void register() {
-        ConverterAbstractOptionsRename.register(VERSION, ImmutableMap.of(
+        ConverterAbstractOptionsRename.register(VERSION, Map.of(
                 "key_key.swapHands", "key_key.swapOffhand"
         )::get);
 

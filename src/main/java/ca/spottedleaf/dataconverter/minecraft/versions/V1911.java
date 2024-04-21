@@ -4,31 +4,29 @@ import ca.spottedleaf.dataconverter.converters.DataConverter;
 import ca.spottedleaf.dataconverter.minecraft.MCVersions;
 import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
 import ca.spottedleaf.dataconverter.types.MapType;
-import com.google.common.collect.ImmutableMap;
-import java.util.HashMap;
+
 import java.util.Map;
 
 public final class V1911 {
 
     protected static final int VERSION = MCVersions.V18W46A + 1;
 
-    private static final Map<String, String> CHUNK_STATUS_REMAP = new HashMap<>(
-            ImmutableMap.<String, String>builder()
-                    .put("structure_references", "empty")
-                    .put("biomes", "empty")
-                    .put("base", "surface")
-                    .put("carved", "carvers")
-                    .put("liquid_carved", "liquid_carvers")
-                    .put("decorated", "features")
-                    .put("lighted", "light")
-                    .put("mobs_spawned", "spawn")
-                    .put("finalized", "heightmaps")
-                    .put("fullchunk", "full")
-                    .build()
+    private static final Map<String, String> CHUNK_STATUS_REMAP = Map.ofEntries(
+            Map.entry("structure_references", "empty"),
+            Map.entry("biomes", "empty"),
+            Map.entry("base", "surface"),
+            Map.entry("carved", "carvers"),
+            Map.entry("liquid_carved", "liquid_carvers"),
+            Map.entry("decorated", "features"),
+            Map.entry("lighted", "light"),
+            Map.entry("mobs_spawned", "spawn"),
+            Map.entry("finalized", "heightmaps"),
+            Map.entry("fullchunk", "full")
     );
 
 
-    private V1911() {}
+    private V1911() {
+    }
 
     public static void register() {
         MCTypeRegistry.CHUNK.addStructureConverter(new DataConverter<>(VERSION) {

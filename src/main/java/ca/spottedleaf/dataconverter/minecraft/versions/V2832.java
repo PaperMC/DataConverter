@@ -9,24 +9,26 @@ import ca.spottedleaf.dataconverter.types.ListType;
 import ca.spottedleaf.dataconverter.types.MapType;
 import ca.spottedleaf.dataconverter.types.ObjectType;
 import ca.spottedleaf.dataconverter.types.Types;
-import com.mojang.logging.LogUtils;
 import it.unimi.dsi.fastutil.ints.Int2IntLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.ints.IntIterator;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
-import org.apache.commons.lang3.mutable.MutableBoolean;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public final class V2832 {
 
-    private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = LoggerFactory.getLogger(V2832.class);
 
     protected static final int VERSION = MCVersions.V1_17_1 + 102;
 
     private static final String[] BIOMES_BY_ID = new String[256]; // rip datapacks
+
     static {
         BIOMES_BY_ID[0] = "minecraft:ocean";
         BIOMES_BY_ID[1] = "minecraft:plains";
@@ -117,7 +119,7 @@ public final class V2832 {
         BIOMES_BY_ID[182] = "minecraft:stony_peaks";
     }
 
-    private static final String[] HEIGHTMAP_TYPES = new String[] {
+    private static final String[] HEIGHTMAP_TYPES = new String[]{
             "WORLD_SURFACE_WG",
             "WORLD_SURFACE",
             "WORLD_SURFACE_IGNORE_SNOW",
@@ -282,8 +284,8 @@ public final class V2832 {
                 section.setLongs("BlockStates", resize(blockStates, gotBits, expectedBits));
             } catch (final Exception ex) {
                 LOGGER.error("Failed to rewrite mismatched palette and data storage for section y: " + sectionY
-                        + " for chunk [" + chunkX + "," + chunkZ + "], palette entries: " + palette.size() + ", data storage size: "
-                        + blockStates.length,
+                                + " for chunk [" + chunkX + "," + chunkZ + "], palette entries: " + palette.size() + ", data storage size: "
+                                + blockStates.length,
                         ex
                 );
             }
@@ -386,7 +388,7 @@ public final class V2832 {
                 final String generator = context == null ? "" : context.getString("generator", "");
                 final boolean isOverworld = "minecraft:overworld".equals(dimension);
                 final int minSection = isOverworld ? -4 : 0;
-                final MutableBoolean isAlreadyExtended = new MutableBoolean();
+                final AtomicBoolean isAlreadyExtended = new AtomicBoolean();
 
                 final MapType<String>[] newBiomes = createBiomeSections(level, isOverworld, minSection, isAlreadyExtended);
                 final MapType<String> wrappedEmptyBlockPalette = getEmptyBlockPalette();
@@ -454,7 +456,7 @@ public final class V2832 {
                     final MapType<String> newSection = Types.NBT.createEmptyMap();
                     sections.addMap(newSection);
 
-                    newSection.setByte("Y", (byte)sectionY);
+                    newSection.setByte("Y", (byte) sectionY);
                     // must write a palette now, copy so that later edits do not edit them all
                     newSection.setMap("block_states", wrappedEmptyBlockPalette.copy());
 
@@ -465,7 +467,7 @@ public final class V2832 {
                 predictChunkStatusBeforeSurface(level, allBlocks);
 
                 // done with sections, update the rest of the chunk
-                updateChunkData(level, isOverworld, isAlreadyExtended.getValue(), "minecraft:noise".equals(generator), bottomSection);
+                updateChunkData(level, isOverworld, isAlreadyExtended.get(), "minecraft:noise".equals(generator), bottomSection);
 
                 return null;
             }
@@ -792,13 +794,13 @@ public final class V2832 {
     }
 
     private static MapType<String>[] createBiomeSections(final MapType<String> level, final boolean wantExtendedHeight,
-                                                         final int minSection, final MutableBoolean isAlreadyExtended) {
+                                                         final int minSection, final AtomicBoolean isAlreadyExtended) {
         final MapType<String>[] ret = new MapType[wantExtendedHeight ? 24 : 16];
 
         final int[] biomes = level.getInts("Biomes");
 
         if (biomes != null && biomes.length == 1536) { // magic value for 24 sections of biomes (24 * 4^3)
-            isAlreadyExtended.setValue(true);
+            isAlreadyExtended.set(true);
             for (int sectionIndex = 0; sectionIndex < 24; ++sectionIndex) {
                 ret[sectionIndex] = createBiomeSection(biomes, sectionIndex * 64, -1); // -1 is all 1s
             }
@@ -841,7 +843,7 @@ public final class V2832 {
         }
 
         final ListType paletteString = Types.NBT.createEmptyList();
-        for (final IntIterator iterator = paletteId.keySet().iterator(); iterator.hasNext();) {
+        for (final IntIterator iterator = paletteId.keySet().iterator(); iterator.hasNext(); ) {
             final int biomeId = iterator.nextInt();
             final String biome = biomeId >= 0 && biomeId < BIOMES_BY_ID.length ? BIOMES_BY_ID[biomeId] : null;
             paletteString.addString(biome == null ? "minecraft:plains" : biome);
@@ -863,7 +865,7 @@ public final class V2832 {
         for (int biome_idx = 0; biome_idx < 64; ++biome_idx) {
             final int biome = biomes[offset + (biome_idx & mask)];
 
-            curr |= ((long)paletteId.get(biome)) << shift;
+            curr |= ((long) paletteId.get(biome)) << shift;
 
             shift += bitsPerObject;
 

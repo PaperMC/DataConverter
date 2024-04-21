@@ -85,12 +85,12 @@ public final class IntegerUtil {
 
     // from hacker's delight (signed division magic value)
     public static int getDivisorMultiple(final long numbers) {
-        return (int)(numbers >>> 32);
+        return (int) (numbers >>> 32);
     }
 
     // from hacker's delight (signed division magic value)
     public static int getDivisorShift(final long numbers) {
-        return (int)numbers;
+        return (int) numbers;
     }
 
     public static long getDivisorNumbers(final int d) {
@@ -123,23 +123,23 @@ public final class IntegerUtil {
 
         // all these variables are UNSIGNED!
         int t = two31 + (d >>> 31);
-        int anc = t - 1 - (int)((t & mask)%ad);
-        int q1 = (int)((two31 & mask)/(anc & mask));
-        int r1 = two31 - q1*anc;
-        int q2 = (int)((two31 & mask)/(ad & mask));
-        int r2 = two31 - q2*ad;
+        int anc = t - 1 - (int) ((t & mask) % ad);
+        int q1 = (int) ((two31 & mask) / (anc & mask));
+        int r1 = two31 - q1 * anc;
+        int q2 = (int) ((two31 & mask) / (ad & mask));
+        int r2 = two31 - q2 * ad;
         int delta;
 
         do {
             p = p + 1;
-            q1 = 2*q1;                        // Update q1 = 2**p/|nc|.
-            r1 = 2*r1;                        // Update r1 = rem(2**p, |nc|).
+            q1 = 2 * q1;                        // Update q1 = 2**p/|nc|.
+            r1 = 2 * r1;                        // Update r1 = rem(2**p, |nc|).
             if ((r1 & mask) >= (anc & mask)) {// (Must be an unsigned comparison here)
                 q1 = q1 + 1;
                 r1 = r1 - anc;
             }
-            q2 = 2*q2;                       // Update q2 = 2**p/|d|.
-            r2 = 2*r2;                       // Update r2 = rem(2**p, |d|).
+            q2 = 2 * q2;                       // Update q2 = 2**p/|d|.
+            r2 = 2 * r2;                       // Update r2 = rem(2**p, |d|).
             if ((r2 & mask) >= (ad & mask)) {// (Must be an unsigned comparison here)
                 q2 = q2 + 1;
                 r2 = r2 - ad;
@@ -152,7 +152,7 @@ public final class IntegerUtil {
             magicNum = -magicNum;
         }
         int shift = p;
-        return ((long)magicNum << 32) | shift;
+        return ((long) magicNum << 32) | shift;
     }
 
     public static int branchlessAbs(final int val) {
@@ -231,6 +231,18 @@ public final class IntegerUtil {
         x *= 0x1f9aba75a52db073L;
         x ^= x >>> 53;
         return x;
+    }
+
+    public static int toInt(String value) {
+        return toInt(value, 0);
+    }
+
+    public static int toInt(String value, int dfl) {
+        try {
+            return Integer.parseInt(value);
+        } catch (NumberFormatException e) {
+            return dfl;
+        }
     }
 
     private IntegerUtil() {

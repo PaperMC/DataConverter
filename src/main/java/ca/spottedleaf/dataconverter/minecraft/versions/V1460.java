@@ -6,7 +6,8 @@ import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
 import ca.spottedleaf.dataconverter.minecraft.walkers.block_name.DataWalkerBlockNames;
 import ca.spottedleaf.dataconverter.minecraft.walkers.itemstack.DataWalkerItemLists;
 import ca.spottedleaf.dataconverter.types.MapType;
-import net.minecraft.resources.ResourceLocation;
+import ca.spottedleaf.dataconverter.util.NamespaceUtil;
+
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -19,7 +20,9 @@ public final class V1460 {
         MOTIVE_REMAP.put("donkeykong", "donkey_kong");
         MOTIVE_REMAP.put("burningskull", "burning_skull");
         MOTIVE_REMAP.put("skullandroses", "skull_and_roses");
-    };
+    }
+
+    ;
 
     protected static final int VERSION = MCVersions.V18W01A + 1;
 
@@ -38,7 +41,7 @@ public final class V1460 {
                 String motive = data.getString("Motive");
                 if (motive != null) {
                     motive = motive.toLowerCase(Locale.ROOT);
-                    data.setString("Motive", new ResourceLocation(MOTIVE_REMAP.getOrDefault(motive, motive)).toString());
+                    data.setString("Motive", NamespaceUtil.correctNamespace(MOTIVE_REMAP.getOrDefault(motive, motive)));
                 }
                 return null;
             }
@@ -48,6 +51,7 @@ public final class V1460 {
         // the existing types.
     }
 
-    private V1460() {}
+    private V1460() {
+    }
 
 }

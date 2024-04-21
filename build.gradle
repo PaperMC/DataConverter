@@ -1,45 +1,28 @@
 plugins {
-    id 'fabric-loom' version '1.2.7'
+    id 'java'
     id 'maven-publish'
 }
 
-/*
- * Gets the version name from the latest Git tag
- */
-// https://stackoverflow.com/questions/28498688/gradle-script-to-autoversion-and-include-the-commit-hash-in-android
-def getGitCommit = { ->
-    def stdout = new ByteArrayOutputStream()
-    exec {
-        commandLine 'git', 'rev-parse', '--short', 'HEAD'
-        standardOutput = stdout
-    }
-    return stdout.toString().trim()
-}
+version = "1.0.0-SNAPSHOT"
+group = "ca.spottedleaf.dataconverter"
 
-archivesBaseName = project.archives_base_name
-version = project.mod_version + "+fabric." + getGitCommit()
-group = project.maven_group
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven { url = 'https://jitpack.io' }
+}
 
 dependencies {
-    //to change the versions see the gradle.properties file
-    minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    //mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-    mappings loom.officialMojangMappings()
-    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    implementation 'org.slf4j:slf4j-api:2.0.13'
 
-    // Fabric API. This is technically optional, but you probably want it anyway.
-    //modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    implementation 'it.unimi.dsi:fastutil:8.5.13'
+    implementation 'com.google.code.gson:gson:2.10.1'
+    implementation 'com.github.hollow-cube:datafixerupper:cf58e926a6'
 
-    // PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
-    // You may need to force-disable transitiveness on them.
-}
-
-processResources {
-    inputs.property "version", project.version
-
-    filesMatching("fabric.mod.json") {
-        expand "version": project.version
-    }
+    implementation("net.kyori:adventure-api:4.16.0")
+    implementation("net.kyori:adventure-key:4.16.0")
+    implementation("net.kyori:adventure-text-serializer-gson:4.16.0")
+    implementation("net.kyori:adventure-nbt:4.16.0")
 }
 
 // ensure that the encoding is set to UTF-8, no matter what the system default is
@@ -49,49 +32,8 @@ tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
 }
 
-loom {
-    accessWidenerPath = file("src/main/resources/dataconverter.accesswidener")
-}
-
-// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
-// if it is present.
-// If you remove this task, sources will not be generated.
 java {
-    // Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
-    // if it is present.
-    // If you remove this line, sources will not be generated.
     withSourcesJar()
 
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
-}
-jar {
-    from "LICENSE"
-}
-
-// make build reproducible
-tasks.withType(AbstractArchiveTask) {
-    preserveFileTimestamps = false
-    reproducibleFileOrder = true
-}
-
-// configure the maven publication
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            // add all the jars that should be included when publishing to maven
-            artifact(remapJar) {
-                builtBy remapJar
-            }
-            artifact(sourcesJar) {
-                builtBy remapSourcesJar
-            }
-        }
-    }
-
-    // select the repositories you want to publish to
-    repositories {
-        // uncomment to publish to the local maven
-        // mavenLocal()
-    }
+    toolchain.languageVersion = JavaLanguageVersion.of(21)
 }

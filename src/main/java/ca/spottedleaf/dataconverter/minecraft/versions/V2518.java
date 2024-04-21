@@ -4,27 +4,25 @@ import ca.spottedleaf.dataconverter.converters.DataConverter;
 import ca.spottedleaf.dataconverter.minecraft.MCVersions;
 import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
 import ca.spottedleaf.dataconverter.types.MapType;
-import com.google.common.collect.ImmutableMap;
-import java.util.HashMap;
+
 import java.util.Map;
 
 public final class V2518 {
 
     protected static final int VERSION = MCVersions.V20W12A + 3;
 
-    private static final Map<String, String> FACING_RENAMES = new HashMap<>(
-            ImmutableMap.<String, String>builder()
-                    .put("down", "down_south")
-                    .put("up", "up_north")
-                    .put("north", "north_up")
-                    .put("south", "south_up")
-                    .put("west", "west_up")
-                    .put("east", "east_up")
-                    .build()
+    private static final Map<String, String> FACING_RENAMES = Map.of(
+            "down", "down_south",
+            "up", "up_north",
+            "north", "north_up",
+            "south", "south_up",
+            "west", "west_up",
+            "east", "east_up"
     );
 
 
-    private V2518() {}
+    private V2518() {
+    }
 
     public static void register() {
         MCTypeRegistry.TILE_ENTITY.addConverterForId("minecraft:jigsaw", new DataConverter<>(VERSION) {

@@ -6,7 +6,7 @@ import ca.spottedleaf.dataconverter.minecraft.converters.blockname.ConverterAbst
 import ca.spottedleaf.dataconverter.minecraft.converters.itemname.ConverterAbstractItemRename;
 import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
 import ca.spottedleaf.dataconverter.types.MapType;
-import com.google.common.collect.ImmutableMap;
+
 import java.util.Map;
 
 public final class V1484 {
@@ -14,7 +14,7 @@ public final class V1484 {
     protected static final int VERSION = MCVersions.V18W19A;
 
     public static void register() {
-        final Map<String, String> renamed = ImmutableMap.of(
+        final Map<String, String> renamed = Map.of(
                 "minecraft:sea_grass", "minecraft:seagrass",
                 "minecraft:tall_sea_grass", "minecraft:tall_seagrass"
         );
@@ -68,6 +68,7 @@ public final class V1484 {
         });
     }
 
-    private V1484() {}
+    private V1484() {
+    }
 
 }

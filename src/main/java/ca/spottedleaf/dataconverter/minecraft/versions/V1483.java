@@ -5,7 +5,8 @@ import ca.spottedleaf.dataconverter.minecraft.converters.entity.ConverterAbstrac
 import ca.spottedleaf.dataconverter.minecraft.converters.itemname.ConverterAbstractItemRename;
 import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
 import ca.spottedleaf.dataconverter.minecraft.walkers.itemstack.DataWalkerItemLists;
-import com.google.common.collect.ImmutableMap;
+
+import java.util.Map;
 
 public final class V1483 {
 
@@ -16,16 +17,17 @@ public final class V1483 {
     }
 
     public static void register() {
-        ConverterAbstractEntityRename.register(VERSION, ImmutableMap.of(
+        ConverterAbstractEntityRename.register(VERSION, Map.of(
                 "minecraft:puffer_fish", "minecraft:pufferfish"
         )::get);
-        ConverterAbstractItemRename.register(VERSION, ImmutableMap.of(
+        ConverterAbstractItemRename.register(VERSION, Map.of(
                 "minecraft:puffer_fish_spawn_egg", "minecraft:pufferfish_spawn_egg"
         )::get);
 
         MCTypeRegistry.ENTITY.copyWalkers(VERSION, "minecraft:puffer_fish", "minecraft:pufferfish");
     }
 
-    private V1483() {}
+    private V1483() {
+    }
 
 }

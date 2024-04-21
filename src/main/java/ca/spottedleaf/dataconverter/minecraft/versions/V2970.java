@@ -7,39 +7,33 @@ import ca.spottedleaf.dataconverter.types.ListType;
 import ca.spottedleaf.dataconverter.types.MapType;
 import ca.spottedleaf.dataconverter.types.ObjectType;
 import ca.spottedleaf.dataconverter.types.Types;
-import com.google.common.collect.ImmutableMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+
+import java.util.*;
 
 public final class V2970 {
 
     protected static final int VERSION = MCVersions.V22W07A + 1;
-    private static final Map<String, BiomeRemap> CONVERSION_MAP = new HashMap<>(
-            ImmutableMap.<String, BiomeRemap>builder()
-                    .put("mineshaft", BiomeRemap.create(Map.of(List.of("minecraft:badlands", "minecraft:eroded_badlands", "minecraft:wooded_badlands"), "minecraft:mineshaft_mesa"), "minecraft:mineshaft"))
-                    .put("shipwreck", BiomeRemap.create(Map.of(List.of("minecraft:beach", "minecraft:snowy_beach"), "minecraft:shipwreck_beached"), "minecraft:shipwreck"))
-                    .put("ocean_ruin", BiomeRemap.create(Map.of(List.of("minecraft:warm_ocean", "minecraft:lukewarm_ocean", "minecraft:deep_lukewarm_ocean"), "minecraft:ocean_ruin_warm"), "minecraft:ocean_ruin_cold"))
-                    .put("village", BiomeRemap.create(Map.of(List.of("minecraft:desert"), "minecraft:village_desert", List.of("minecraft:savanna"), "minecraft:village_savanna", List.of("minecraft:snowy_plains"), "minecraft:village_snowy", List.of("minecraft:taiga"), "minecraft:village_taiga"), "minecraft:village_plains"))
-                    .put("ruined_portal", BiomeRemap.create(Map.of(List.of("minecraft:desert"), "minecraft:ruined_portal_desert", List.of("minecraft:badlands", "minecraft:eroded_badlands", "minecraft:wooded_badlands", "minecraft:windswept_hills", "minecraft:windswept_forest", "minecraft:windswept_gravelly_hills", "minecraft:savanna_plateau", "minecraft:windswept_savanna", "minecraft:stony_shore", "minecraft:meadow", "minecraft:frozen_peaks", "minecraft:jagged_peaks", "minecraft:stony_peaks", "minecraft:snowy_slopes"), "minecraft:ruined_portal_mountain", List.of("minecraft:bamboo_jungle", "minecraft:jungle", "minecraft:sparse_jungle"), "minecraft:ruined_portal_jungle", List.of("minecraft:deep_frozen_ocean", "minecraft:deep_cold_ocean", "minecraft:deep_ocean", "minecraft:deep_lukewarm_ocean", "minecraft:frozen_ocean", "minecraft:ocean", "minecraft:cold_ocean", "minecraft:lukewarm_ocean", "minecraft:warm_ocean"), "minecraft:ruined_portal_ocean"), "minecraft:ruined_portal")) // Fix MC-248814, ruined_portal_standard->ruined_portal
-                    .put("pillager_outpost", BiomeRemap.create("minecraft:pillager_outpost"))
-                    .put("mansion", BiomeRemap.create("minecraft:mansion"))
-                    .put("jungle_pyramid", BiomeRemap.create("minecraft:jungle_pyramid"))
-                    .put("desert_pyramid", BiomeRemap.create("minecraft:desert_pyramid"))
-                    .put("igloo", BiomeRemap.create("minecraft:igloo"))
-                    .put("swamp_hut", BiomeRemap.create("minecraft:swamp_hut"))
-                    .put("stronghold", BiomeRemap.create("minecraft:stronghold"))
-                    .put("monument", BiomeRemap.create("minecraft:monument"))
-                    .put("fortress", BiomeRemap.create("minecraft:fortress"))
-                    .put("endcity", BiomeRemap.create("minecraft:end_city"))
-                    .put("buried_treasure", BiomeRemap.create("minecraft:buried_treasure"))
-                    .put("nether_fossil", BiomeRemap.create("minecraft:nether_fossil"))
-                    .put("bastion_remnant", BiomeRemap.create("minecraft:bastion_remnant"))
-                    .build()
+    private static final Map<String, BiomeRemap> CONVERSION_MAP = Map.ofEntries(
+            Map.entry("mineshaft", BiomeRemap.create(Map.of(List.of("minecraft:badlands", "minecraft:eroded_badlands", "minecraft:wooded_badlands"), "minecraft:mineshaft_mesa"), "minecraft:mineshaft")),
+            Map.entry("shipwreck", BiomeRemap.create(Map.of(List.of("minecraft:beach", "minecraft:snowy_beach"), "minecraft:shipwreck_beached"), "minecraft:shipwreck")),
+            Map.entry("ocean_ruin", BiomeRemap.create(Map.of(List.of("minecraft:warm_ocean", "minecraft:lukewarm_ocean", "minecraft:deep_lukewarm_ocean"), "minecraft:ocean_ruin_warm"), "minecraft:ocean_ruin_cold")),
+            Map.entry("village", BiomeRemap.create(Map.of(List.of("minecraft:desert"), "minecraft:village_desert", List.of("minecraft:savanna"), "minecraft:village_savanna", List.of("minecraft:snowy_plains"), "minecraft:village_snowy", List.of("minecraft:taiga"), "minecraft:village_taiga"), "minecraft:village_plains")),
+            Map.entry("ruined_portal", BiomeRemap.create(Map.of(List.of("minecraft:desert"), "minecraft:ruined_portal_desert", List.of("minecraft:badlands", "minecraft:eroded_badlands", "minecraft:wooded_badlands", "minecraft:windswept_hills", "minecraft:windswept_forest", "minecraft:windswept_gravelly_hills", "minecraft:savanna_plateau", "minecraft:windswept_savanna", "minecraft:stony_shore", "minecraft:meadow", "minecraft:frozen_peaks", "minecraft:jagged_peaks", "minecraft:stony_peaks", "minecraft:snowy_slopes"), "minecraft:ruined_portal_mountain", List.of("minecraft:bamboo_jungle", "minecraft:jungle", "minecraft:sparse_jungle"), "minecraft:ruined_portal_jungle", List.of("minecraft:deep_frozen_ocean", "minecraft:deep_cold_ocean", "minecraft:deep_ocean", "minecraft:deep_lukewarm_ocean", "minecraft:frozen_ocean", "minecraft:ocean", "minecraft:cold_ocean", "minecraft:lukewarm_ocean", "minecraft:warm_ocean"), "minecraft:ruined_portal_ocean"), "minecraft:ruined_portal")), // Fix MC-248814, ruined_portal_standard->ruined_portal
+            Map.entry("pillager_outpost", BiomeRemap.create("minecraft:pillager_outpost")),
+            Map.entry("mansion", BiomeRemap.create("minecraft:mansion")),
+            Map.entry("jungle_pyramid", BiomeRemap.create("minecraft:jungle_pyramid")),
+            Map.entry("desert_pyramid", BiomeRemap.create("minecraft:desert_pyramid")),
+            Map.entry("igloo", BiomeRemap.create("minecraft:igloo")),
+            Map.entry("swamp_hut", BiomeRemap.create("minecraft:swamp_hut")),
+            Map.entry("stronghold", BiomeRemap.create("minecraft:stronghold")),
+            Map.entry("monument", BiomeRemap.create("minecraft:monument")),
+            Map.entry("fortress", BiomeRemap.create("minecraft:fortress")),
+            Map.entry("endcity", BiomeRemap.create("minecraft:end_city")),
+            Map.entry("buried_treasure", BiomeRemap.create("minecraft:buried_treasure")),
+            Map.entry("nether_fossil", BiomeRemap.create("minecraft:nether_fossil")),
+            Map.entry("bastion_remnant", BiomeRemap.create("minecraft:bastion_remnant"))
     );
 
     public static void register() {
@@ -87,7 +81,7 @@ public final class V2970 {
 
                 final Object2IntOpenHashMap<String> remapCount = new Object2IntOpenHashMap<>();
 
-                for (final Iterator<Object2IntMap.Entry<String>> iterator = biomeCount.object2IntEntrySet().fastIterator(); iterator.hasNext();) {
+                for (final Iterator<Object2IntMap.Entry<String>> iterator = biomeCount.object2IntEntrySet().fastIterator(); iterator.hasNext(); ) {
                     final Object2IntMap.Entry<String> entry = iterator.next();
                     final String remappedStructure = remap.biomeToNewStructure.get(entry.getKey());
                     if (remappedStructure != null) {
@@ -98,7 +92,7 @@ public final class V2970 {
                 String converted = remap.dfl;
                 int maxCount = 0;
 
-                for (final Iterator<Object2IntMap.Entry<String>> iterator = remapCount.object2IntEntrySet().fastIterator(); iterator.hasNext();) {
+                for (final Iterator<Object2IntMap.Entry<String>> iterator = remapCount.object2IntEntrySet().fastIterator(); iterator.hasNext(); ) {
                     final Object2IntMap.Entry<String> entry = iterator.next();
                     final int count = entry.getIntValue();
                     if (count > maxCount) {

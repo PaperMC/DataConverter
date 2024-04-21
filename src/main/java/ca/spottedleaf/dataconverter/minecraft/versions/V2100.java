@@ -8,17 +8,18 @@ import ca.spottedleaf.dataconverter.minecraft.walkers.generic.WalkerUtils;
 import ca.spottedleaf.dataconverter.minecraft.walkers.itemstack.DataWalkerItemLists;
 import ca.spottedleaf.dataconverter.types.ListType;
 import ca.spottedleaf.dataconverter.types.ObjectType;
-import com.google.common.collect.ImmutableMap;
+
 import java.util.Map;
 
 public final class V2100 {
 
     protected static final int VERSION = MCVersions.V1_14_4 + 124;
-    protected static final Map<String, String> RECIPE_RENAMES = ImmutableMap.of(
+    protected static final Map<String, String> RECIPE_RENAMES = Map.of(
             "minecraft:sugar", "sugar_from_sugar_cane"
     );
 
-    private V2100() {}
+    private V2100() {
+    }
 
     private static void registerMob(final String id) {
         MCTypeRegistry.ENTITY.addWalker(VERSION, id, new DataWalkerItemLists("ArmorItems", "HandItems"));
@@ -26,7 +27,7 @@ public final class V2100 {
 
     public static void register() {
         ConverterAbstractRecipeRename.register(VERSION, RECIPE_RENAMES::get);
-        ConverterAbstractAdvancementsRename.register(VERSION, ImmutableMap.of(
+        ConverterAbstractAdvancementsRename.register(VERSION, Map.of(
                 "minecraft:recipes/misc/sugar", "minecraft:recipes/misc/sugar_from_sugar_cane"
         )::get);
 

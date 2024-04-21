@@ -6,14 +6,14 @@ import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
 import ca.spottedleaf.dataconverter.types.ListType;
 import ca.spottedleaf.dataconverter.types.MapType;
 import ca.spottedleaf.dataconverter.types.ObjectType;
-import com.mojang.datafixers.DataFixUtils;
-import net.minecraft.util.Mth;
+import ca.spottedleaf.dataconverter.util.IntegerUtil;
 
 public final class V2527 {
 
     protected static final int VERSION = MCVersions.V20W16A + 1;
 
-    private V2527() {}
+    private V2527() {
+    }
 
     public static void register() {
         MCTypeRegistry.CHUNK.addStructureConverter(new DataConverter<>(VERSION) {
@@ -36,9 +36,9 @@ public final class V2527 {
                             continue;
                         }
 
-                        final int bits = Math.max(4, DataFixUtils.ceillog2(palette.size()));
+                        final int bits = Math.max(4, IntegerUtil.ceilLog2(palette.size()));
 
-                        if (Mth.isPowerOfTwo(bits)) {
+                        if (IntegerUtil.isPowerOfTwo(bits)) {
                             // fits perfectly
                             continue;
                         }
@@ -82,7 +82,7 @@ public final class V2527 {
             long s = old[0];
             long t = k > 1 ? old[1] : 0L;
 
-            for(int u = 0; u < indices; ++u) {
+            for (int u = 0; u < indices; ++u) {
                 int v = u * bits;
                 int w = v >> 6;
                 int x = (u + 1) * bits - 1 >> 6;

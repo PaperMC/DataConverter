@@ -4,11 +4,11 @@ import ca.spottedleaf.dataconverter.converters.DataConverter;
 import ca.spottedleaf.dataconverter.minecraft.MCVersions;
 import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
 import ca.spottedleaf.dataconverter.types.MapType;
+import ca.spottedleaf.dataconverter.util.GsonUtil;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
-import net.minecraft.network.chat.CommonComponents;
-import net.minecraft.network.chat.Component;
-import net.minecraft.util.GsonHelper;
-import net.minecraft.util.datafix.fixes.BlockEntitySignTextStrictJsonFix;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 
 public final class V101 {
 
@@ -17,7 +17,7 @@ public final class V101 {
     protected static void updateLine(final MapType<String> data, final String path) {
         final String textString = data.getString(path);
         if (textString == null || textString.isEmpty() || "null".equals(textString)) {
-            data.setString(path, Component.Serializer.toJson(CommonComponents.EMPTY));
+            data.setString(path, GsonComponentSerializer.gson().serialize(Component.empty()));
             return;
         }
 
@@ -25,33 +25,27 @@ public final class V101 {
 
         if (textString.charAt(0) == '"' && textString.charAt(textString.length() - 1) == '"'
                 || textString.charAt(0) == '{' && textString.charAt(textString.length() - 1) == '}') {
+
             try {
-                component = GsonHelper.fromNullableJson(BlockEntitySignTextStrictJsonFix.GSON, textString, Component.class, true);
-                if (component == null) {
-                    component = CommonComponents.EMPTY;
+                component = GsonComponentSerializer.gson().deserialize(textString);
+            } catch (final JsonParseException ignored) {
+            }
+
+            if (component == null) {
+                try {
+                    component = GsonComponentSerializer.gson().deserializeFromTree(GsonUtil.fromNullableJson(textString, JsonElement.class, true));
+                } catch (final JsonParseException ignored) {
                 }
-            } catch (final JsonParseException ignored) {}
-
-            if (component == null) {
-                try {
-                    component = Component.Serializer.fromJson(textString);
-                } catch (final JsonParseException ignored) {}
             }
 
             if (component == null) {
-                try {
-                    component = Component.Serializer.fromJsonLenient(textString);
-                } catch (final JsonParseException ignored) {}
-            }
-
-            if (component == null) {
-                component = Component.literal(textString);
+                component = Component.text(textString);
             }
         } else {
-            component = Component.literal(textString);
+            component = Component.text(textString);
         }
 
-        data.setString(path, Component.Serializer.toJson(component));
+        data.setString(path, GsonComponentSerializer.gson().serialize(component));
     }
 
     public static void register() {
@@ -68,6 +62,7 @@ public final class V101 {
         });
     }
 
-    private V101() {}
+    private V101() {
+    }
 
 }

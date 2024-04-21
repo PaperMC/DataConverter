@@ -4,15 +4,15 @@ import ca.spottedleaf.dataconverter.converters.DataConverter;
 import ca.spottedleaf.dataconverter.minecraft.MCVersions;
 import ca.spottedleaf.dataconverter.minecraft.converters.helpers.HelperItemNameV102;
 import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
-import ca.spottedleaf.dataconverter.types.ObjectType;
 import ca.spottedleaf.dataconverter.types.MapType;
+import ca.spottedleaf.dataconverter.types.ObjectType;
 import ca.spottedleaf.dataconverter.types.Types;
-import com.mojang.logging.LogUtils;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class V102 {
 
-    private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = LoggerFactory.getLogger(V102.class);
 
     protected static final int VERSION = MCVersions.V15W32A + 2;
 
@@ -27,7 +27,7 @@ public final class V102 {
                 if (!(data instanceof Number)) {
                     return null;
                 }
-                final int id = ((Number)data).intValue();
+                final int id = ((Number) data).intValue();
                 final String remap = HelperItemNameV102.getNameFromId(id);
                 if (remap == null) {
                     LOGGER.warn("Unknown legacy integer id (V102) " + id);
@@ -61,7 +61,7 @@ public final class V102 {
             public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
                 final short damage = data.getShort("Damage");
                 if (damage != 0) {
-                    data.setShort("Damage", (short)0);
+                    data.setShort("Damage", (short) 0);
                 }
                 MapType<String> tag = data.getMap("tag");
                 if (tag == null) {
@@ -82,6 +82,7 @@ public final class V102 {
         });
     }
 
-    private V102() {}
+    private V102() {
+    }
 
 }

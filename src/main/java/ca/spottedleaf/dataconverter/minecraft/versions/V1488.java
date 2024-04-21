@@ -8,7 +8,8 @@ import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
 import ca.spottedleaf.dataconverter.types.ListType;
 import ca.spottedleaf.dataconverter.types.MapType;
 import ca.spottedleaf.dataconverter.types.ObjectType;
-import com.google.common.collect.ImmutableMap;
+
+import java.util.Map;
 
 public final class V1488 {
 
@@ -19,11 +20,11 @@ public final class V1488 {
     }
 
     public static void register() {
-        ConverterAbstractBlockRename.register(VERSION, ImmutableMap.of(
+        ConverterAbstractBlockRename.register(VERSION, Map.of(
                 "minecraft:kelp_top", "minecraft:kelp",
                 "minecraft:kelp", "minecraft:kelp_plant"
         )::get);
-        ConverterAbstractItemRename.register(VERSION, ImmutableMap.of(
+        ConverterAbstractItemRename.register(VERSION, Map.of(
                 "minecraft:kelp_top", "minecraft:kelp"
         )::get);
 
@@ -68,7 +69,7 @@ public final class V1488 {
                 }
 
                 if (children != null) {
-                    for (int i = 0; i < children.size();) {
+                    for (int i = 0; i < children.size(); ) {
                         final MapType<String> child = children.getMap(i);
                         if (isIglooPiece(child)) {
                             children.remove(i);
@@ -83,6 +84,7 @@ public final class V1488 {
         });
     }
 
-    private V1488() {}
+    private V1488() {
+    }
 
 }

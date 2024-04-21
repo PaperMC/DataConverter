@@ -7,32 +7,35 @@ import ca.spottedleaf.dataconverter.types.ListType;
 import ca.spottedleaf.dataconverter.types.MapType;
 import ca.spottedleaf.dataconverter.types.ObjectType;
 import ca.spottedleaf.dataconverter.types.Types;
-import com.mojang.datafixers.DataFixUtils;
+import ca.spottedleaf.dataconverter.util.IntegerUtil;
+import ca.spottedleaf.dataconverter.util.PaletteData;
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
 import it.unimi.dsi.fastutil.ints.IntIterator;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import net.minecraft.util.datafix.PackedBitStorage;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
 public final class V1496 {
 
-    private V1496() {}
+    private V1496() {
+    }
 
     protected static final int VERSION = MCVersions.V18W21B;
 
-    private static final int[][] DIRECTIONS = new int[][] {
-            new int[] {-1, 0, 0},
-            new int[] {1, 0, 0},
-            new int[] {0, -1, 0},
-            new int[] {0, 1, 0},
-            new int[] {0, 0, -1},
-            new int[] {0, 0, 1}
+    private static final int[][] DIRECTIONS = new int[][]{
+            new int[]{-1, 0, 0},
+            new int[]{1, 0, 0},
+            new int[]{0, -1, 0},
+            new int[]{0, 1, 0},
+            new int[]{0, 0, -1},
+            new int[]{0, 0, 1}
     };
 
     private static final Object2IntOpenHashMap<String> LEAVES_TO_ID = new Object2IntOpenHashMap<>();
+
     static {
         LEAVES_TO_ID.put("minecraft:acacia_leaves", 0);
         LEAVES_TO_ID.put("minecraft:birch_leaves", 1);
@@ -121,7 +124,7 @@ public final class V1496 {
                     final IntOpenHashSet positionsLess = positionsByDistance[distance - 1];
                     final IntOpenHashSet positionsEqual = positionsByDistance[distance];
 
-                    for (final IntIterator iterator = positionsLess.iterator(); iterator.hasNext();) {
+                    for (final IntIterator iterator = positionsLess.iterator(); iterator.hasNext(); ) {
                         final int position = iterator.nextInt();
                         final int fromX = getX(position);
                         final int fromY = getY(position);
@@ -171,7 +174,7 @@ public final class V1496 {
                         level.setMap("UpgradeData", upgradeData = Types.NBT.createEmptyMap());
                     }
 
-                    upgradeData.setByte("Sides", (byte)(upgradeData.getByte("Sides") | newSides));
+                    upgradeData.setByte("Sides", (byte) (upgradeData.getByte("Sides") | newSides));
                 }
 
                 return null;
@@ -228,7 +231,7 @@ public final class V1496 {
     public abstract static class Section {
         protected final ListType palette;
         protected final int sectionY;
-        protected PackedBitStorage storage;
+        protected PaletteData storage;
 
         public Section(final MapType<String> section) {
             this.palette = section.getList("Palette", ObjectType.MAP);
@@ -241,8 +244,8 @@ public final class V1496 {
                 this.storage = null;
             } else {
                 final long[] states = section.getLongs("BlockStates");
-                final int bits = Math.max(4, DataFixUtils.ceillog2(this.palette.size()));
-                this.storage = new PackedBitStorage(bits, 4096, states);
+                final int bits = Math.max(4, IntegerUtil.ceilLog2(this.palette.size()));
+                this.storage = new PaletteData(bits, 4096, states);
             }
         }
 
@@ -290,7 +293,7 @@ public final class V1496 {
             this.stateToIdMap = new Int2IntOpenHashMap();
             this.stateToIdMap.defaultReturnValue(-1);
 
-            for(int i = 0; i < this.palette.size(); ++i) {
+            for (int i = 0; i < this.palette.size(); ++i) {
                 final MapType<String> blockState = this.palette.getMap(i);
                 final String name = blockState.getString("Name", "");
                 if (LEAVES_TO_ID.containsKey(name)) {
@@ -355,9 +358,9 @@ public final class V1496 {
 
             if (1 << this.storage.getBits() <= newStateId) {
                 // need to widen storage
-                final PackedBitStorage newStorage = new PackedBitStorage(this.storage.getBits() + 1, 4096);
+                final PaletteData newStorage = new PaletteData(this.storage.getBits() + 1, 4096);
 
-                for(int i = 0; i < 4096; ++i) {
+                for (int i = 0; i < 4096; ++i) {
                     newStorage.set(i, this.storage.get(i));
                 }
 

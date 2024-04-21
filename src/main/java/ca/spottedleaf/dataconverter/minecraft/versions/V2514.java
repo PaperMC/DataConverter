@@ -7,7 +7,7 @@ import ca.spottedleaf.dataconverter.types.ListType;
 import ca.spottedleaf.dataconverter.types.MapType;
 import ca.spottedleaf.dataconverter.types.ObjectType;
 import ca.spottedleaf.dataconverter.types.Types;
-import com.google.common.collect.Sets;
+
 import java.util.Set;
 import java.util.UUID;
 
@@ -15,108 +15,105 @@ public final class V2514 {
 
     protected static final int VERSION = MCVersions.V20W11A + 1;
 
-    private static final Set<String> ABSTRACT_HORSES = Sets.newHashSet();
-    private static final Set<String> TAMEABLE_ANIMALS = Sets.newHashSet();
-    private static final Set<String> ANIMALS = Sets.newHashSet();
-    private static final Set<String> MOBS = Sets.newHashSet();
-    private static final Set<String> LIVING_ENTITIES = Sets.newHashSet();
-    private static final Set<String> PROJECTILES = Sets.newHashSet();
-    static {
-        ABSTRACT_HORSES.add("minecraft:donkey");
-        ABSTRACT_HORSES.add("minecraft:horse");
-        ABSTRACT_HORSES.add("minecraft:llama");
-        ABSTRACT_HORSES.add("minecraft:mule");
-        ABSTRACT_HORSES.add("minecraft:skeleton_horse");
-        ABSTRACT_HORSES.add("minecraft:trader_llama");
-        ABSTRACT_HORSES.add("minecraft:zombie_horse");
-
-        TAMEABLE_ANIMALS.add("minecraft:cat");
-        TAMEABLE_ANIMALS.add("minecraft:parrot");
-        TAMEABLE_ANIMALS.add("minecraft:wolf");
-
-        ANIMALS.add("minecraft:bee");
-        ANIMALS.add("minecraft:chicken");
-        ANIMALS.add("minecraft:cow");
-        ANIMALS.add("minecraft:fox");
-        ANIMALS.add("minecraft:mooshroom");
-        ANIMALS.add("minecraft:ocelot");
-        ANIMALS.add("minecraft:panda");
-        ANIMALS.add("minecraft:pig");
-        ANIMALS.add("minecraft:polar_bear");
-        ANIMALS.add("minecraft:rabbit");
-        ANIMALS.add("minecraft:sheep");
-        ANIMALS.add("minecraft:turtle");
-        ANIMALS.add("minecraft:hoglin");
-
-        MOBS.add("minecraft:bat");
-        MOBS.add("minecraft:blaze");
-        MOBS.add("minecraft:cave_spider");
-        MOBS.add("minecraft:cod");
-        MOBS.add("minecraft:creeper");
-        MOBS.add("minecraft:dolphin");
-        MOBS.add("minecraft:drowned");
-        MOBS.add("minecraft:elder_guardian");
-        MOBS.add("minecraft:ender_dragon");
-        MOBS.add("minecraft:enderman");
-        MOBS.add("minecraft:endermite");
-        MOBS.add("minecraft:evoker");
-        MOBS.add("minecraft:ghast");
-        MOBS.add("minecraft:giant");
-        MOBS.add("minecraft:guardian");
-        MOBS.add("minecraft:husk");
-        MOBS.add("minecraft:illusioner");
-        MOBS.add("minecraft:magma_cube");
-        MOBS.add("minecraft:pufferfish");
-        MOBS.add("minecraft:zombified_piglin");
-        MOBS.add("minecraft:salmon");
-        MOBS.add("minecraft:shulker");
-        MOBS.add("minecraft:silverfish");
-        MOBS.add("minecraft:skeleton");
-        MOBS.add("minecraft:slime");
-        MOBS.add("minecraft:snow_golem");
-        MOBS.add("minecraft:spider");
-        MOBS.add("minecraft:squid");
-        MOBS.add("minecraft:stray");
-        MOBS.add("minecraft:tropical_fish");
-        MOBS.add("minecraft:vex");
-        MOBS.add("minecraft:villager");
-        MOBS.add("minecraft:iron_golem");
-        MOBS.add("minecraft:vindicator");
-        MOBS.add("minecraft:pillager");
-        MOBS.add("minecraft:wandering_trader");
-        MOBS.add("minecraft:witch");
-        MOBS.add("minecraft:wither");
-        MOBS.add("minecraft:wither_skeleton");
-        MOBS.add("minecraft:zombie");
-        MOBS.add("minecraft:zombie_villager");
-        MOBS.add("minecraft:phantom");
-        MOBS.add("minecraft:ravager");
-        MOBS.add("minecraft:piglin");
-
-        LIVING_ENTITIES.add("minecraft:armor_stand");
-
-        PROJECTILES.add("minecraft:arrow");
-        PROJECTILES.add("minecraft:dragon_fireball");
-        PROJECTILES.add("minecraft:firework_rocket");
-        PROJECTILES.add("minecraft:fireball");
-        PROJECTILES.add("minecraft:llama_spit");
-        PROJECTILES.add("minecraft:small_fireball");
-        PROJECTILES.add("minecraft:snowball");
-        PROJECTILES.add("minecraft:spectral_arrow");
-        PROJECTILES.add("minecraft:egg");
-        PROJECTILES.add("minecraft:ender_pearl");
-        PROJECTILES.add("minecraft:experience_bottle");
-        PROJECTILES.add("minecraft:potion");
-        PROJECTILES.add("minecraft:trident");
-        PROJECTILES.add("minecraft:wither_skull");
-    }
+    private static final Set<String> ABSTRACT_HORSES = Set.of(
+            "minecraft:donkey",
+            "minecraft:horse",
+            "minecraft:llama",
+            "minecraft:mule",
+            "minecraft:skeleton_horse",
+            "minecraft:trader_llama",
+            "minecraft:zombie_horse"
+    );
+    private static final Set<String> TAMEABLE_ANIMALS = Set.of(
+            "minecraft:cat",
+            "minecraft:parrot",
+            "minecraft:wolf"
+    );
+    private static final Set<String> ANIMALS = Set.of(
+            "minecraft:bee",
+            "minecraft:chicken",
+            "minecraft:cow",
+            "minecraft:fox",
+            "minecraft:mooshroom",
+            "minecraft:ocelot",
+            "minecraft:panda",
+            "minecraft:pig",
+            "minecraft:polar_bear",
+            "minecraft:rabbit",
+            "minecraft:sheep",
+            "minecraft:turtle",
+            "minecraft:hoglin"
+    );
+    private static final Set<String> MOBS = Set.of(
+            "minecraft:bat",
+            "minecraft:blaze",
+            "minecraft:cave_spider",
+            "minecraft:cod",
+            "minecraft:creeper",
+            "minecraft:dolphin",
+            "minecraft:drowned",
+            "minecraft:elder_guardian",
+            "minecraft:ender_dragon",
+            "minecraft:enderman",
+            "minecraft:endermite",
+            "minecraft:evoker",
+            "minecraft:ghast",
+            "minecraft:giant",
+            "minecraft:guardian",
+            "minecraft:husk",
+            "minecraft:illusioner",
+            "minecraft:magma_cube",
+            "minecraft:pufferfish",
+            "minecraft:zombified_piglin",
+            "minecraft:salmon",
+            "minecraft:shulker",
+            "minecraft:silverfish",
+            "minecraft:skeleton",
+            "minecraft:slime",
+            "minecraft:snow_golem",
+            "minecraft:spider",
+            "minecraft:squid",
+            "minecraft:stray",
+            "minecraft:tropical_fish",
+            "minecraft:vex",
+            "minecraft:villager",
+            "minecraft:iron_golem",
+            "minecraft:vindicator",
+            "minecraft:pillager",
+            "minecraft:wandering_trader",
+            "minecraft:witch",
+            "minecraft:wither",
+            "minecraft:wither_skeleton",
+            "minecraft:zombie",
+            "minecraft:zombie_villager",
+            "minecraft:phantom",
+            "minecraft:ravager",
+            "minecraft:piglin"
+    );
+    private static final Set<String> LIVING_ENTITIES = Set.of("minecraft:armor_stand");
+    private static final Set<String> PROJECTILES = Set.of(
+            "minecraft:arrow",
+            "minecraft:dragon_fireball",
+            "minecraft:firework_rocket",
+            "minecraft:fireball",
+            "minecraft:llama_spit",
+            "minecraft:small_fireball",
+            "minecraft:snowball",
+            "minecraft:spectral_arrow",
+            "minecraft:egg",
+            "minecraft:ender_pearl",
+            "minecraft:experience_bottle",
+            "minecraft:potion",
+            "minecraft:trident",
+            "minecraft:wither_skull"
+    );
 
     static int[] createUUIDArray(final long most, final long least) {
-        return new int[] {
-                (int)(most >>> 32),
-                (int)most,
-                (int)(least >>> 32),
-                (int)least
+        return new int[]{
+                (int) (most >>> 32),
+                (int) most,
+                (int) (least >>> 32),
+                (int) least
         };
     }
 
@@ -177,7 +174,8 @@ public final class V2514 {
         }
     }
 
-    private V2514() {}
+    private V2514() {
+    }
 
     private static void updatePiglin(final MapType<String> data) {
         final MapType<String> brain = data.getMap("Brain");

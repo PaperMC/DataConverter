@@ -4,14 +4,14 @@ import ca.spottedleaf.dataconverter.converters.DataConverter;
 import ca.spottedleaf.dataconverter.minecraft.MCVersions;
 import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
 import ca.spottedleaf.dataconverter.types.MapType;
-import com.mojang.logging.LogUtils;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.UUID;
 
 public final class V108 {
 
-    private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = LoggerFactory.getLogger(V108.class);
 
     protected static final int VERSION = MCVersions.V15W32C + 4;
 
@@ -43,6 +43,7 @@ public final class V108 {
         });
     }
 
-    private V108() {}
+    private V108() {
+    }
 
 }

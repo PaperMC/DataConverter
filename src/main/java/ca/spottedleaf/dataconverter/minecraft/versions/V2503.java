@@ -5,15 +5,15 @@ import ca.spottedleaf.dataconverter.minecraft.MCVersions;
 import ca.spottedleaf.dataconverter.minecraft.converters.advancements.ConverterAbstractAdvancementsRename;
 import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
 import ca.spottedleaf.dataconverter.types.MapType;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
+
+import java.util.Map;
 import java.util.Set;
 
 public final class V2503 {
 
     protected static final int VERSION = MCVersions.V1_15_2 + 273;
 
-    private static final Set<String> WALL_BLOCKS = ImmutableSet.of(
+    private static final Set<String> WALL_BLOCKS = Set.of(
             "minecraft:andesite_wall",
             "minecraft:brick_wall",
             "minecraft:cobblestone_wall",
@@ -60,7 +60,7 @@ public final class V2503 {
                 return null;
             }
         });
-        ConverterAbstractAdvancementsRename.register(VERSION, ImmutableMap.of(
+        ConverterAbstractAdvancementsRename.register(VERSION, Map.of(
                 "minecraft:recipes/misc/composter", "minecraft:recipes/decorations/composter"
         )::get);
     }

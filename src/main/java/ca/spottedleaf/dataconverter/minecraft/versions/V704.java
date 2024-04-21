@@ -4,28 +4,21 @@ import ca.spottedleaf.dataconverter.converters.DataConverter;
 import ca.spottedleaf.dataconverter.minecraft.MCVersions;
 import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
 import ca.spottedleaf.dataconverter.minecraft.hooks.DataHookEnforceNamespacedID;
-import ca.spottedleaf.dataconverter.minecraft.walkers.itemstack.DataWalkerItemLists;
-import ca.spottedleaf.dataconverter.minecraft.walkers.item_name.DataWalkerItemNames;
-import ca.spottedleaf.dataconverter.minecraft.walkers.itemstack.DataWalkerItems;
 import ca.spottedleaf.dataconverter.minecraft.walkers.generic.WalkerUtils;
-import ca.spottedleaf.dataconverter.types.ObjectType;
+import ca.spottedleaf.dataconverter.minecraft.walkers.item_name.DataWalkerItemNames;
+import ca.spottedleaf.dataconverter.minecraft.walkers.itemstack.DataWalkerItemLists;
+import ca.spottedleaf.dataconverter.minecraft.walkers.itemstack.DataWalkerItems;
 import ca.spottedleaf.dataconverter.types.MapType;
-import com.mojang.logging.LogUtils;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.EntityBlock;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityType;
+import ca.spottedleaf.dataconverter.types.ObjectType;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public final class V704 {
 
-    private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = LoggerFactory.getLogger(V704.class);
 
     protected static final int VERSION = MCVersions.V1_10_2 + 192;
 
@@ -39,6 +32,7 @@ public final class V704 {
             return super.put(key, value);
         }
     };
+
     static {
         ITEM_ID_TO_TILE_ENTITY_ID.put("minecraft:furnace", "minecraft:furnace");
         ITEM_ID_TO_TILE_ENTITY_ID.put("minecraft:lit_furnace", "minecraft:furnace");
@@ -185,47 +179,10 @@ public final class V704 {
     }
 
     // This class is responsible for also integrity checking the item id to tile id map here, we just use the item registry to figure it out
-
-    static {
-        for (final Item item : BuiltInRegistries.ITEM) {
-            if (!(item instanceof BlockItem)) {
-                continue;
-            }
-
-            if (!(((BlockItem)item).getBlock() instanceof EntityBlock entityBlock)) {
-                continue;
-            }
-
-            String possibleId;
-            try {
-                final BlockEntity entity = entityBlock.newBlockEntity(new BlockPos(0, 0, 0), ((Block)entityBlock).defaultBlockState());
-                if (entity != null) {
-                    possibleId = BlockEntityType.getKey(entity.getType()).toString();
-                } else {
-                    possibleId = null;
-                }
-            } catch (final Throwable th) {
-                possibleId = null;
-            }
-
-            final String itemName = BuiltInRegistries.ITEM.getKey(item).toString();
-            final String mappedTo = ITEM_ID_TO_TILE_ENTITY_ID.get(itemName);
-            if (mappedTo == null) {
-                LOGGER.error("Item id " + itemName + " does not contain tile mapping! (V704)");
-            } else if (possibleId != null && !mappedTo.equals(possibleId)) {
-                final boolean chestCase = mappedTo.equals("minecraft:chest") && possibleId.equals("minecraft:trapped_chest");
-                final boolean signCase = mappedTo.equals("minecraft:sign") && possibleId.equals("minecraft:hanging_sign");
-                // save data is identical for the chest and sign case, so we don't care
-                // it's also important to note that there is no versioning for this map, so it is possible
-                // that mapping them correctly could cause issues converting old data
-                if (!chestCase && !signCase) {
-                    LOGGER.error("Item id " + itemName + " is mapped to the wrong tile entity! Mapped to: " + mappedTo + ", expected: " + possibleId);
-                }
-            }
-        }
-    }
+    // WARNING: The validity check here is _not_ present anymore to save a requirement for external item and block lookup. May need to add it back.
 
     protected static final Map<String, String> TILE_ID_UPDATE = new HashMap<>();
+
     static {
         TILE_ID_UPDATE.put("Airportal", "minecraft:end_portal");
         TILE_ID_UPDATE.put("Banner", "minecraft:banner");
@@ -271,9 +228,8 @@ public final class V704 {
         });
 
 
-
-        registerInventory( "minecraft:furnace");
-        registerInventory( "minecraft:chest");
+        registerInventory("minecraft:furnace");
+        registerInventory("minecraft:chest");
         MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, "minecraft:jukebox", new DataWalkerItems("RecordItem"));
         registerInventory("minecraft:dispenser");
         registerInventory("minecraft:dropper");
@@ -390,5 +346,6 @@ public final class V704 {
         MCTypeRegistry.TILE_ENTITY.addStructureHook(VERSION, new DataHookEnforceNamespacedID());
     }
 
-    private V704() {}
+    private V704() {
+    }
 }

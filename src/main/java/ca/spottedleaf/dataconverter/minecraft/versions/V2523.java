@@ -6,38 +6,36 @@ import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
 import ca.spottedleaf.dataconverter.types.ListType;
 import ca.spottedleaf.dataconverter.types.MapType;
 import ca.spottedleaf.dataconverter.types.ObjectType;
-import com.google.common.collect.ImmutableMap;
-import java.util.HashMap;
+
 import java.util.Map;
 
 public final class V2523 {
 
     protected static final int VERSION = MCVersions.V20W13B + 2;
 
-    private static final Map<String, String> RENAMES = new HashMap<>(
-            ImmutableMap.<String, String>builder()
-                    .put("generic.maxHealth", "generic.max_health")
-                    .put("Max Health", "generic.max_health")
-                    .put("zombie.spawnReinforcements", "zombie.spawn_reinforcements")
-                    .put("Spawn Reinforcements Chance", "zombie.spawn_reinforcements")
-                    .put("horse.jumpStrength", "horse.jump_strength")
-                    .put("Jump Strength", "horse.jump_strength")
-                    .put("generic.followRange", "generic.follow_range")
-                    .put("Follow Range", "generic.follow_range")
-                    .put("generic.knockbackResistance", "generic.knockback_resistance")
-                    .put("Knockback Resistance", "generic.knockback_resistance")
-                    .put("generic.movementSpeed", "generic.movement_speed")
-                    .put("Movement Speed", "generic.movement_speed")
-                    .put("generic.flyingSpeed", "generic.flying_speed")
-                    .put("Flying Speed", "generic.flying_speed")
-                    .put("generic.attackDamage", "generic.attack_damage")
-                    .put("generic.attackKnockback", "generic.attack_knockback")
-                    .put("generic.attackSpeed", "generic.attack_speed")
-                    .put("generic.armorToughness", "generic.armor_toughness")
-                    .build()
+    private static final Map<String, String> RENAMES = Map.ofEntries(
+            Map.entry("generic.maxHealth", "generic.max_health"),
+            Map.entry("Max Health", "generic.max_health"),
+            Map.entry("zombie.spawnReinforcements", "zombie.spawn_reinforcements"),
+            Map.entry("Spawn Reinforcements Chance", "zombie.spawn_reinforcements"),
+            Map.entry("horse.jumpStrength", "horse.jump_strength"),
+            Map.entry("Jump Strength", "horse.jump_strength"),
+            Map.entry("generic.followRange", "generic.follow_range"),
+            Map.entry("Follow Range", "generic.follow_range"),
+            Map.entry("generic.knockbackResistance", "generic.knockback_resistance"),
+            Map.entry("Knockback Resistance", "generic.knockback_resistance"),
+            Map.entry("generic.movementSpeed", "generic.movement_speed"),
+            Map.entry("Movement Speed", "generic.movement_speed"),
+            Map.entry("generic.flyingSpeed", "generic.flying_speed"),
+            Map.entry("Flying Speed", "generic.flying_speed"),
+            Map.entry("generic.attackDamage", "generic.attack_damage"),
+            Map.entry("generic.attackKnockback", "generic.attack_knockback"),
+            Map.entry("generic.attackSpeed", "generic.attack_speed"),
+            Map.entry("generic.armorToughness", "generic.armor_toughness")
     );
 
-    private V2523() {}
+    private V2523() {
+    }
 
     private static void updateName(final MapType<String> data, final String path) {
         if (data == null) {

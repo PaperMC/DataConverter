@@ -4,7 +4,7 @@ import ca.spottedleaf.dataconverter.converters.DataConverter;
 import ca.spottedleaf.dataconverter.minecraft.MCVersions;
 import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
 import ca.spottedleaf.dataconverter.types.MapType;
-import com.google.common.collect.Sets;
+
 import java.util.Set;
 
 public final class V109 {
@@ -13,7 +13,7 @@ public final class V109 {
 
     // DFU declares this exact field but leaves it unused. Not sure why, legacy conversion system checked if the ID matched.
     // I'm going to leave it here unused as well, just in case it's needed in the future.
-    protected static final Set<String> ENTITIES = Sets.newHashSet(
+    protected static final Set<String> ENTITIES = Set.of(
             "ArmorStand",
             "Bat",
             "Blaze",
@@ -78,6 +78,7 @@ public final class V109 {
         });
     }
 
-    private V109() {}
+    private V109() {
+    }
 
 }

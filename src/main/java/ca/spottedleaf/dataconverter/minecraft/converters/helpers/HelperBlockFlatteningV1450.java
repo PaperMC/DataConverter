@@ -3,7 +3,8 @@ package ca.spottedleaf.dataconverter.minecraft.converters.helpers;
 import ca.spottedleaf.dataconverter.types.MapType;
 import ca.spottedleaf.dataconverter.types.nbt.NBTMapType;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import net.minecraft.nbt.TagParser;
+import net.kyori.adventure.nbt.TagStringIO;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,6 +23,7 @@ public final class HelperBlockFlatteningV1450 {
             return super.put(o, v);
         }
     };
+
     static {
         ID_BY_OLD_NBT.defaultReturnValue(-1);
     }
@@ -36,6 +38,7 @@ public final class HelperBlockFlatteningV1450 {
             return super.put(o, v);
         }
     };
+
     static {
         ID_BY_OLD_NAME.defaultReturnValue(-1);
     }
@@ -45,7 +48,7 @@ public final class HelperBlockFlatteningV1450 {
 
     public static MapType<String> parseTag(final String blockstate) {
         try {
-            final MapType<String> ret = new NBTMapType(TagParser.parseTag(blockstate.replace('\'', '"')));
+            final MapType<String> ret = new NBTMapType(TagStringIO.get().asCompound(blockstate.replace('\'', '"')));
 
             synchronized (IDENTITY_ENSURE) {
                 final MapType<String> identity = IDENTITY_ENSURE.putIfAbsent(ret, ret);
@@ -86,7 +89,7 @@ public final class HelperBlockFlatteningV1450 {
     }
 
     private static void finalizeMaps() {
-        for(int i = 0; i < FLATTENED_BY_ID.length; ++i) {
+        for (int i = 0; i < FLATTENED_BY_ID.length; ++i) {
             if (FLATTENED_BY_ID[i] == null) {
                 FLATTENED_BY_ID[i] = BLOCK_DEFAULTS[i >> 4];
             }
@@ -120,7 +123,8 @@ public final class HelperBlockFlatteningV1450 {
         return ret == null ? FLATTENED_BY_ID[0] : ret;
     }
 
-    private HelperBlockFlatteningV1450() {}
+    private HelperBlockFlatteningV1450() {
+    }
 
     static {
         ID_BY_OLD_NBT.defaultReturnValue(-1);

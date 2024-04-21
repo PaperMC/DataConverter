@@ -3,28 +3,29 @@ package ca.spottedleaf.dataconverter.minecraft.versions;
 import ca.spottedleaf.dataconverter.converters.DataConverter;
 import ca.spottedleaf.dataconverter.converters.datatypes.DataHook;
 import ca.spottedleaf.dataconverter.minecraft.MCVersions;
+import ca.spottedleaf.dataconverter.minecraft.converters.blockname.BlockStateData;
 import ca.spottedleaf.dataconverter.minecraft.converters.chunk.ConverterFlattenChunk;
+import ca.spottedleaf.dataconverter.minecraft.converters.entity.ConverterFlattenEntity;
+import ca.spottedleaf.dataconverter.minecraft.converters.entity.EntityBlockStateMap;
 import ca.spottedleaf.dataconverter.minecraft.converters.helpers.HelperBlockFlatteningV1450;
 import ca.spottedleaf.dataconverter.minecraft.converters.helpers.HelperItemNameV102;
 import ca.spottedleaf.dataconverter.minecraft.converters.itemstack.ConverterFlattenItemStack;
 import ca.spottedleaf.dataconverter.minecraft.converters.itemstack.ConverterFlattenSpawnEgg;
 import ca.spottedleaf.dataconverter.minecraft.converters.stats.ConverterFlattenStats;
-import ca.spottedleaf.dataconverter.minecraft.converters.entity.ConverterFlattenEntity;
 import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
 import ca.spottedleaf.dataconverter.minecraft.walkers.generic.DataWalkerTypePaths;
-import ca.spottedleaf.dataconverter.minecraft.walkers.itemstack.DataWalkerItemLists;
 import ca.spottedleaf.dataconverter.minecraft.walkers.generic.WalkerUtils;
+import ca.spottedleaf.dataconverter.minecraft.walkers.itemstack.DataWalkerItemLists;
 import ca.spottedleaf.dataconverter.minecraft.walkers.itemstack.DataWalkerItems;
 import ca.spottedleaf.dataconverter.minecraft.walkers.tile_entity.DataWalkerTileEntities;
 import ca.spottedleaf.dataconverter.types.ListType;
 import ca.spottedleaf.dataconverter.types.MapType;
 import ca.spottedleaf.dataconverter.types.ObjectType;
 import ca.spottedleaf.dataconverter.types.Types;
-import com.google.common.base.Splitter;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.datafix.fixes.BlockStateData;
-import net.minecraft.util.datafix.fixes.EntityBlockStateFix;
-import org.apache.commons.lang3.math.NumberUtils;
+import ca.spottedleaf.dataconverter.util.IntegerUtil;
+import ca.spottedleaf.dataconverter.util.NamespaceUtil;
+import ca.spottedleaf.dataconverter.util.Splitter;
+
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,8 +36,8 @@ public final class V1451 {
     protected static final int VERSION = MCVersions.V17W47A;
 
     public static String packWithDot(final String string) {
-        final ResourceLocation resourceLocation = ResourceLocation.tryParse(string);
-        return resourceLocation != null ? resourceLocation.getNamespace() + "." + resourceLocation.getPath() : string;
+        final String resourceLocation = NamespaceUtil.parse(string);
+        return resourceLocation != null ? resourceLocation : string;
     }
 
     public static void register() {
@@ -137,9 +138,9 @@ public final class V1451 {
             @Override
             public Object convert(final Object data, final long sourceVersion, final long toVersion) {
                 if (data instanceof Number) {
-                    return HelperBlockFlatteningV1450.getNameForId(((Number)data).intValue());
+                    return HelperBlockFlatteningV1450.getNameForId(((Number) data).intValue());
                 } else if (data instanceof String) {
-                    return HelperBlockFlatteningV1450.getNewBlockName((String)data); // structure hook ensured data is namespaced
+                    return HelperBlockFlatteningV1450.getNewBlockName((String) data); // structure hook ensured data is namespaced
                 }
                 return null;
             }
@@ -198,12 +199,12 @@ public final class V1451 {
                     return "minecraft:bedrock,2*minecraft:dirt,minecraft:grass_block;1;village";
                 } else {
                     Iterator<String> iterator = SPLITTER.split(generatorSettings).iterator();
-                    String string2 = (String)iterator.next();
+                    String string2 = (String) iterator.next();
                     int j;
                     String string4;
                     if (iterator.hasNext()) {
-                        j = NumberUtils.toInt(string2, 0);
-                        string4 = (String)iterator.next();
+                        j = IntegerUtil.toInt(string2, 0);
+                        string4 = (String) iterator.next();
                     } else {
                         j = 0;
                         string4 = string2;
@@ -217,24 +218,24 @@ public final class V1451 {
                             int k;
                             String string3;
                             if (list.size() == 2) {
-                                k = NumberUtils.toInt((String)list.get(0));
-                                string3 = (String)list.get(1);
+                                k = IntegerUtil.toInt(list.get(0));
+                                string3 = list.get(1);
                             } else {
                                 k = 1;
-                                string3 = (String)list.get(0);
+                                string3 = list.get(0);
                             }
 
                             List<String> list2 = BLOCK_SPLITTER.splitToList(string3);
-                            int l = ((String)list2.get(0)).equals("minecraft") ? 1 : 0;
-                            String string5 = (String)list2.get(l);
-                            int m = j == 3 ? EntityBlockStateFix.getBlockId("minecraft:" + string5) : NumberUtils.toInt(string5, 0);
+                            int l = "minecraft".equals(list2.get(0)) ? 1 : 0;
+                            String string5 = list2.get(l);
+                            int m = j == 3 ? EntityBlockStateMap.getBlockId("minecraft:" + string5) : IntegerUtil.toInt(string5, 0);
                             int n = l + 1;
-                            int o = list2.size() > n ? NumberUtils.toInt((String)list2.get(n), 0) : 0;
+                            int o = list2.size() > n ? IntegerUtil.toInt(list2.get(n), 0) : 0;
                             return (k == 1 ? "" : k + "*") + BlockStateData.getTag(m << 4 | o).get("Name").asString("");
                         }).collect(Collectors.joining(",")));
 
-                        while(iterator.hasNext()) {
-                            stringBuilder.append(';').append((String)iterator.next());
+                        while (iterator.hasNext()) {
+                            stringBuilder.append(';').append((String) iterator.next());
                         }
 
                         return stringBuilder.toString();
@@ -283,7 +284,7 @@ public final class V1451 {
                 data.setMap("RecordItem", recordItem);
 
                 recordItem.setString("id", newItemId);
-                recordItem.setByte("Count", (byte)1);
+                recordItem.setByte("Count", (byte) 1);
 
                 return null;
             }
@@ -324,8 +325,8 @@ public final class V1451 {
                         id = criteriaName;
                     } else {
                         try {
-                            type = ResourceLocation.of(criteriaName.substring(0, index), '.').toString();
-                            id = ResourceLocation.of(criteriaName.substring(index + 1), '.').toString();
+                            type = NamespaceUtil.parse(criteriaName.substring(0, index), '.');
+                            id = NamespaceUtil.parse(criteriaName.substring(index + 1), '.');
                         } catch (final Exception ex) {
                             type = "_special";
                             id = criteriaName;
@@ -509,5 +510,6 @@ public final class V1451 {
         });
     }
 
-    private V1451() {}
+    private V1451() {
+    }
 }

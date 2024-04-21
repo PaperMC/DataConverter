@@ -1,12 +1,12 @@
 package ca.spottedleaf.dataconverter.minecraft.datatypes;
 
 import ca.spottedleaf.dataconverter.minecraft.versions.*;
-import com.mojang.logging.LogUtils;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class MCTypeRegistry {
 
-    private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = LoggerFactory.getLogger(MCTypeRegistry.class);
 
     public static final MCDataType LEVEL              = new MCDataType("Level");
     public static final MCDataType PLAYER             = new MCDataType("Player");
@@ -45,10 +45,8 @@ public final class MCTypeRegistry {
     static {
         try {
             registerAll();
-        } catch (final ThreadDeath thr) {
-            throw thr;
         } catch (final Throwable thr) {
-            LOGGER.error(LogUtils.FATAL_MARKER, "Failed to register data converters", thr);
+            LOGGER.error("Failed to register data converters", thr);
             throw new RuntimeException(thr);
         }
     }

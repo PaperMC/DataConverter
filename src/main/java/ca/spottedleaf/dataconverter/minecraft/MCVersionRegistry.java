@@ -1,7 +1,6 @@
 package ca.spottedleaf.dataconverter.minecraft;
 
 import ca.spottedleaf.dataconverter.converters.DataConverter;
-import com.mojang.logging.LogUtils;
 import it.unimi.dsi.fastutil.ints.Int2ObjectLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntLinkedOpenHashSet;
@@ -10,13 +9,15 @@ import it.unimi.dsi.fastutil.longs.LongArrayList;
 import it.unimi.dsi.fastutil.longs.LongComparator;
 import it.unimi.dsi.fastutil.longs.LongLinkedOpenHashSet;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Locale;
 
 public final class MCVersionRegistry {
 
-    private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = LoggerFactory.getLogger(MCVersionRegistry.class);
 
     protected static final Int2ObjectLinkedOpenHashMap<String> VERSION_NAMES = new Int2ObjectLinkedOpenHashMap<>();
     protected static final IntArrayList VERSION_LIST;
@@ -27,10 +28,11 @@ public final class MCVersionRegistry {
     protected static final LongLinkedOpenHashSet DATACONVERTER_VERSIONS = new LongLinkedOpenHashSet();
     protected static final Int2ObjectLinkedOpenHashMap<IntArrayList> SUBVERSIONS = new Int2ObjectLinkedOpenHashMap<>();
     protected static final LongArrayList BREAKPOINTS = new LongArrayList();
+
     static {
         // Note: Some of these are nameless.
         // Unless a data version is specified here, it will NOT have converters ran for it. Please add them on update!
-        final int[] converterVersions = new int[] {
+        final int[] converterVersions = new int[]{
                 99,
                 100,
                 101,
@@ -265,7 +267,7 @@ public final class MCVersionRegistry {
             final String name = field.getName();
             final int value;
             try {
-                 value = field.getInt(null);
+                value = field.getInt(null);
             } catch (final Exception ex) {
                 throw new RuntimeException(ex);
             }
@@ -318,7 +320,7 @@ public final class MCVersionRegistry {
             }
         }
 
-        DATA_VERSION_LIST.sort((LongComparator)null);
+        DATA_VERSION_LIST.sort((LongComparator) null);
 
         for (final int version : DATACONVERTER_VERSIONS_MAJOR) {
             DATACONVERTER_VERSIONS.add(DataConverter.encodeVersions(version, 0));
