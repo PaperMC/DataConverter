@@ -2,6 +2,7 @@ package ca.spottedleaf.dataconverter.util;
 
 import ca.spottedleaf.dataconverter.minecraft.MCDataConverter;
 import ca.spottedleaf.dataconverter.minecraft.MCVersions;
+import ca.spottedleaf.dataconverter.minecraft.converters.custom.V3818_Commands;
 import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.ParseResults;
@@ -37,6 +38,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.nbt.TagParser;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.resources.ResourceKey;
@@ -159,10 +161,9 @@ public final class CommandArgumentUpgrader {
 			);
 
 			final String newId = converted.getString("id");
-			final CompoundTag components = converted.getCompound("components");
 
-			if (!components.isEmpty()) {
-				return new UpgradedArgument(newId + components.toString());
+			if (converted.contains("components", Tag.TAG_COMPOUND)) {
+				return new UpgradedArgument(newId + V3818_Commands.toCommandFormat(converted.getCompound("components")));
 			} else {
 				return new UpgradedArgument(newId);
 			}

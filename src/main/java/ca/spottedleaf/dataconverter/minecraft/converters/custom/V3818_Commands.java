@@ -1,6 +1,7 @@
 package ca.spottedleaf.dataconverter.minecraft.converters.custom;
 
 import ca.spottedleaf.dataconverter.converters.DataConverter;
+import ca.spottedleaf.dataconverter.minecraft.MCDataConverter;
 import ca.spottedleaf.dataconverter.minecraft.MCVersions;
 import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
 import ca.spottedleaf.dataconverter.types.ListType;
@@ -14,12 +15,44 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.serialization.Dynamic;
+import com.mojang.serialization.JsonOps;
+import net.minecraft.SharedConstants;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.TagParser;
 import net.minecraft.util.GsonHelper;
+import java.util.Iterator;
 import java.util.function.Supplier;
 
 public final class V3818_Commands {
 
     private static final int VERSION = MCVersions.V24W07A + 1;
+
+    public static String toCommandFormat(final CompoundTag components) {
+        final StringBuilder ret = new StringBuilder();
+        ret.append('[');
+        for (final Iterator<String> iterator = components.getAllKeys().iterator(); iterator.hasNext();) {
+            final String key = iterator.next();
+            ret.append(key);
+            ret.append('=');
+            ret.append(components.get(key).toString());
+            if (iterator.hasNext()) {
+                ret.append(',');
+            }
+        }
+        ret.append(']');
+
+        return ret.toString();
+    }
+
+    public static JsonElement convertToJson(final Tag tag) {
+        // We don't have conversion utilities, but DFU does...
+
+        return new Dynamic<>(NbtOps.INSTANCE, tag).convert(JsonOps.INSTANCE).getValue();
+    }
 
     private static void walkComponent(final JsonElement primitive, final long sourceVersion, final long toVersion) {
         if (!(primitive instanceof JsonObject root)) {
@@ -31,21 +64,57 @@ public final class V3818_Commands {
             return;
         }
 
-        final JsonElement clickEventElement = root.getAsJsonObject("clickEvent");
+        final JsonElement clickEventElement = root.get("clickEvent");
         if (clickEventElement instanceof JsonObject clickEvent) {
             final JsonElement actionElement = clickEvent.get("action");
-            if (actionElement instanceof JsonPrimitive action) {
-                switch (action.getAsString()) {
-                    case "run_command":
-                    case "suggest_command": {
-                        final JsonElement cmdElement = clickEvent.get("value");
-                        if (cmdElement instanceof JsonPrimitive cmd) {
-                            final Object res = MCTypeRegistry.DATACONVERTER_CUSTOM_TYPE_COMMAND.convert(
-                                    cmd.getAsString(), sourceVersion, toVersion
-                            );
-                            if (res instanceof String newCmd) {
-                                clickEvent.addProperty("value", newCmd);
-                            }
+            final JsonElement cmdElement = clickEvent.get("value");
+            if (actionElement instanceof JsonPrimitive action && cmdElement instanceof JsonPrimitive cmd) {
+                final String actionString = action.getAsString();
+                final String cmdString = cmd.getAsString();
+
+                if ((actionString.equals("suggest_command") && cmdString.startsWith("/")) || actionString.equals("run_command")) {
+                    final Object res = MCTypeRegistry.DATACONVERTER_CUSTOM_TYPE_COMMAND.convert(
+                            cmdString, sourceVersion, toVersion
+                    );
+                    if (res instanceof String newCmd) {
+                        clickEvent.addProperty("value", newCmd);
+                    }
+                }
+            }
+        }
+
+        final JsonElement hoverEventElement = root.get("hoverEvent");
+        if (hoverEventElement instanceof JsonObject hoverEvent) {
+            final JsonElement showText = hoverEvent.get("action");
+            if (showText instanceof JsonPrimitive showTextPrimitive && showTextPrimitive.getAsString().equals("show_item")) {
+                final JsonElement contentsElement = hoverEvent.get("contents");
+                if (contentsElement instanceof JsonObject contents) {
+                    final JsonElement idElement = contents.get("id");
+                    final JsonElement tagElement = contents.get("tag");
+
+                    if (idElement instanceof JsonPrimitive idPrimitive) {
+                        final CompoundTag itemNBT = new CompoundTag();
+                        itemNBT.putString("id", idPrimitive.getAsString());
+                        itemNBT.putInt("Count", 1);
+
+                        if (tagElement instanceof JsonPrimitive tagPrimitive) {
+                            try {
+                                final CompoundTag tag = TagParser.parseTag(tagPrimitive.getAsString());
+                                itemNBT.put("tag", tag);
+                            } catch (final CommandSyntaxException ignore) {}
+                        }
+
+                        final CompoundTag converted = MCDataConverter.convertTag(
+                                MCTypeRegistry.ITEM_STACK, itemNBT, MCVersions.V1_20_4,
+                                SharedConstants.getCurrentVersion().getDataVersion().getVersion()
+                        );
+
+                        contents.remove("tag");
+
+                        contents.addProperty("id", converted.getString("id"));
+
+                        if (converted.contains("components", Tag.TAG_COMPOUND)) {
+                            contents.add("components", convertToJson(converted.getCompound("components")));
                         }
                     }
                 }
