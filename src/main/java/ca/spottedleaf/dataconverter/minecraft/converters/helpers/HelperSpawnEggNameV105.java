@@ -35,8 +35,6 @@ public final class HelperSpawnEggNameV105 {
         ID_TO_STRING[46] = "MinecartHopper";
         ID_TO_STRING[47] = "MinecartSpawner";
         ID_TO_STRING[40] = "MinecartCommandBlock";
-        ID_TO_STRING[48] = "Mob";
-        ID_TO_STRING[49] = "Monster";
         ID_TO_STRING[50] = "Creeper";
         ID_TO_STRING[51] = "Skeleton";
         ID_TO_STRING[52] = "Spider";

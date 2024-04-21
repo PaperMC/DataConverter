@@ -49,6 +49,8 @@ public final class MCTypeRegistry {
     public static final MCDataType SAVED_DATA_FORCED_CHUNKS             = new MCDataType("SavedData/Chunks");
     public static final MCDataType SAVED_DATA_MAP_INDEX                 = new MCDataType("SavedData/IdCounts");
 
+    public static final MCDataType DATACONVERTER_CUSTOM_TYPE_COMMAND = new MCDataType("DC_Custom/Command");
+
     static {
         try {
             registerAll();
@@ -289,6 +291,7 @@ public final class MCTypeRegistry {
         V3820.register();
         V3825.register();
         V3828.register();
+        V3833.register();
     }
 
     private MCTypeRegistry() {}
