@@ -4,6 +4,7 @@ import ca.spottedleaf.dataconverter.converters.DataConverter;
 import ca.spottedleaf.dataconverter.minecraft.MCVersions;
 import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
 import ca.spottedleaf.dataconverter.minecraft.hooks.DataHookEnforceNamespacedID;
+import ca.spottedleaf.dataconverter.minecraft.walkers.generic.DataWalkerTypePaths;
 import ca.spottedleaf.dataconverter.minecraft.walkers.generic.WalkerUtils;
 import ca.spottedleaf.dataconverter.minecraft.walkers.item_name.DataWalkerItemNames;
 import ca.spottedleaf.dataconverter.minecraft.walkers.itemstack.DataWalkerItemLists;
@@ -294,6 +295,10 @@ public final class V704 {
         registerInventory("minecraft:brewing_stand");
         registerInventory("minecraft:hopper");
         MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, "minecraft:flower_pot", new DataWalkerItemNames("Item"));
+        MCTypeRegistry.TILE_ENTITY.addWalker(
+                VERSION, "minecraft:command_block",
+                new DataWalkerTypePaths<>(MCTypeRegistry.DATACONVERTER_CUSTOM_TYPE_COMMAND, "Command")
+        );
 
         MCTypeRegistry.ITEM_STACK.addStructureWalker(VERSION, (final MapType<String> data, final long fromVersion, final long toVersion) -> {
             WalkerUtils.convert(MCTypeRegistry.ITEM_NAME, data, "id", fromVersion, toVersion);

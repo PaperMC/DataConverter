@@ -2,6 +2,7 @@ package ca.spottedleaf.dataconverter.minecraft.versions;
 
 import ca.spottedleaf.dataconverter.converters.DataConverter;
 import ca.spottedleaf.dataconverter.minecraft.MCVersions;
+import ca.spottedleaf.dataconverter.minecraft.converters.custom.V3818_Commands;
 import ca.spottedleaf.dataconverter.minecraft.converters.helpers.RenameHelper;
 import ca.spottedleaf.dataconverter.minecraft.converters.itemstack.ConverterItemStackToDataComponents;
 import ca.spottedleaf.dataconverter.minecraft.converters.particle.ConverterParticleToNBT;
@@ -11,7 +12,6 @@ import ca.spottedleaf.dataconverter.types.ListType;
 import ca.spottedleaf.dataconverter.types.MapType;
 import ca.spottedleaf.dataconverter.types.ObjectType;
 import ca.spottedleaf.dataconverter.types.Types;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -292,6 +292,9 @@ public final class V3818 {
 
             return null;
         });
+
+        // Custom converter for converting commands inside signs, books, command blocks
+        V3818_Commands.register_5();
 
         // Step 6
         MCTypeRegistry.ENTITY.addConverterForId("minecraft:area_effect_cloud", new DataConverter<>(VERSION, 6) {

@@ -188,8 +188,12 @@ public final class V99 {
         });
         registerInventory("Cauldron");
         registerInventory("Hopper");
-        // Note: Vanilla does not properly handle this case, it will not convert int ids!
+        // Note: Vanilla does not properly handle this case for FlowerPot, it will not convert int ids!
         MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, "FlowerPot", new DataWalkerItemNames("Item"));
+        MCTypeRegistry.TILE_ENTITY.addWalker(
+                VERSION, "Control",
+                new DataWalkerTypePaths<>(MCTypeRegistry.DATACONVERTER_CUSTOM_TYPE_COMMAND, "Command")
+        );
 
         // rest
 
