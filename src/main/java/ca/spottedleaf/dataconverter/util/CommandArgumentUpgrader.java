@@ -4,7 +4,12 @@ import ca.spottedleaf.dataconverter.minecraft.MCDataConverter;
 import ca.spottedleaf.dataconverter.minecraft.MCVersions;
 import ca.spottedleaf.dataconverter.minecraft.converters.custom.V3818_Commands;
 import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+import com.google.gson.internal.Streams;
+import com.google.gson.stream.JsonReader;
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.LiteralMessage;
 import com.mojang.brigadier.ParseResults;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
@@ -12,11 +17,13 @@ import com.mojang.brigadier.context.CommandContextBuilder;
 import com.mojang.brigadier.context.ParsedArgument;
 import com.mojang.brigadier.context.StringRange;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.tree.ArgumentCommandNode;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.mojang.serialization.Lifecycle;
 import it.unimi.dsi.fastutil.Pair;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -28,10 +35,12 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
 import net.minecraft.SharedConstants;
+import net.minecraft.Util;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSource;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.commands.arguments.ComponentArgument;
 import net.minecraft.commands.arguments.item.ItemArgument;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
@@ -46,6 +55,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.commands.ExecuteCommand;
 import net.minecraft.server.commands.ReturnCommand;
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.GsonHelper;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
@@ -59,6 +69,7 @@ public final class CommandArgumentUpgrader {
 	public static CommandArgumentUpgrader upgrader_1_20_4_to_1_20_5(final int functionPermissionLevel) {
 		return new CommandArgumentUpgrader(functionPermissionLevel, builder -> {
 			builder.registerReplacement(ItemArgument.class, (argument, ctx) -> new ItemParser_1_20_4());
+			builder.registerReplacement(ComponentArgument.class, (argument, ctx) -> new ComponentParser_1_20_4());
 		});
 	}
 
@@ -166,6 +177,66 @@ public final class CommandArgumentUpgrader {
 				return new UpgradedArgument(newId + V3818_Commands.toCommandFormat(converted.getCompound("components")));
 			} else {
 				return new UpgradedArgument(newId);
+			}
+		}
+	}
+
+	private static final class ComponentParser_1_20_4 implements ArgumentType<UpgradedArgument> {
+		private static final Field JSON_READER_POS = Util.make(() -> {
+			try {
+				final Field field = JsonReader.class.getDeclaredField("pos");
+				field.setAccessible(true);
+				return field;
+			} catch (final NoSuchFieldException var1) {
+				throw new IllegalStateException("Couldn't get field 'pos' for JsonReader", var1);
+			}
+		});
+
+		private static final Field JSON_READER_LINESTART = Util.make(() -> {
+			try {
+				final Field field = JsonReader.class.getDeclaredField("lineStart");
+				field.setAccessible(true);
+				return field;
+			} catch (final NoSuchFieldException var1) {
+				throw new IllegalStateException("Couldn't get field 'lineStart' for JsonReader", var1);
+			}
+		});
+
+		@Override
+		public UpgradedArgument parse(final StringReader reader) throws CommandSyntaxException {
+			final JsonElement element;
+			try {
+				element = parseJson(reader);
+			} catch (final Exception e) {
+				throw new SimpleCommandExceptionType(new LiteralMessage(e.getMessage())).createWithContext(reader);
+			}
+			V3818_Commands.walkComponent(
+					element,
+					MCVersions.V1_20_4, SharedConstants.getCurrentVersion().getDataVersion().getVersion()
+			);
+			return new UpgradedArgument(GsonHelper.toStableString(element));
+		}
+
+		public static JsonElement parseJson(final StringReader stringReader) {
+			final JsonReader jsonReader = new JsonReader(new java.io.StringReader(stringReader.getRemaining()));
+			jsonReader.setLenient(false);
+
+			final JsonElement jsonElement;
+			try {
+				jsonElement = Streams.parse(jsonReader);
+			} catch (final StackOverflowError var9) {
+				throw new JsonParseException(var9);
+			} finally {
+				stringReader.setCursor(stringReader.getCursor() + getPos(jsonReader));
+			}
+			return jsonElement;
+		}
+
+		private static int getPos(final JsonReader jsonReader) {
+			try {
+				return JSON_READER_POS.getInt(jsonReader) - JSON_READER_LINESTART.getInt(jsonReader);
+			} catch (IllegalAccessException var2) {
+				throw new IllegalStateException("Couldn't read position of JsonReader", var2);
 			}
 		}
 	}
