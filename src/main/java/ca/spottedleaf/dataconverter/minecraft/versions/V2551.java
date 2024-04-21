@@ -9,7 +9,7 @@ import ca.spottedleaf.dataconverter.types.ObjectType;
 
 public final class V2551 {
 
-    protected static final int VERSION = MCVersions.V20W20B + 14;
+    private static final int VERSION = MCVersions.V20W20B + 14;
 
     public static void register() {
         MCTypeRegistry.WORLD_GEN_SETTINGS.addStructureWalker(VERSION, (final MapType<String> data, final long fromVersion, final long toVersion) -> {
@@ -98,4 +98,6 @@ public final class V2551 {
             return null;
         });
     }
+
+    private V2551() {}
 }

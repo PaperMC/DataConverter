@@ -15,9 +15,11 @@ public final class V3088 {
     // players load the chunk - they went through a different conversion process, which ultimately creates two versions.
     // Unfortunately this fix doesn't exactly resolve it, as anyone running Mojang's converters will now be different
     // from DataConverter's. It's broadly a dumb situation all around that could be avoided if Mojang wasn't being careless here.
-    protected static final int VERSION = MCVersions.V22W14A;
+    private static final int VERSION = MCVersions.V22W14A;
 
     public static void register() {
         MCTypeRegistry.CHUNK.addStructureConverter(new ConverterAddBlendingData(VERSION));
     }
+
+    private V3088() {}
 }

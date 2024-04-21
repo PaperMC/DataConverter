@@ -164,6 +164,10 @@ public interface MapType<K> {
 
     public String getString(final K key, final String dfl);
 
+    public String getForcedString(final K key);
+
+    public String getForcedString(final K key, final String dfl);
+
     public void setString(final K key, final String val);
 
     public default void setGeneric(final K key, final Object value) {

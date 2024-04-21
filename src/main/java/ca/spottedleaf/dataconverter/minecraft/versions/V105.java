@@ -10,7 +10,7 @@ import ca.spottedleaf.dataconverter.types.Types;
 
 public final class V105 {
 
-    protected static final int VERSION = MCVersions.V15W32C + 1;
+    private static final int VERSION = MCVersions.V15W32C + 1;
 
     public static void register() {
         MCTypeRegistry.ITEM_STACK.addConverterForId("minecraft:spawn_egg", new DataConverter<>(VERSION) {

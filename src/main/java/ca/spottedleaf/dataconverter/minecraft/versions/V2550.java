@@ -15,7 +15,7 @@ import java.util.Map;
 
 public final class V2550 {
 
-    protected static final int VERSION = MCVersions.V20W20B + 13;
+    private static final int VERSION = MCVersions.V20W20B + 13;
 
     private static final Map<String, StructureFeatureConfiguration> DEFAULTS = Map.ofEntries(
             Map.entry("minecraft:village", new StructureFeatureConfiguration(32, 8, 10387312)),
@@ -29,7 +29,7 @@ public final class V2550 {
             Map.entry("minecraft:mansion", new StructureFeatureConfiguration(80, 20, 10387319))
     );
 
-    record StructureFeatureConfiguration(int spacing, int separation, int salt) {
+    private static record StructureFeatureConfiguration(int spacing, int separation, int salt) {
 
         public MapType<String> serialize() {
             final MapType<String> ret = Types.NBT.createEmptyMap();
@@ -339,4 +339,6 @@ public final class V2550 {
 
         structures.put(structureName, new StructureFeatureConfiguration(newSpacing, structure.separation, structure.salt));
     }
+
+    private V2550() {}
 }

@@ -9,7 +9,7 @@ import java.util.Map;
 
 public final class V2518 {
 
-    protected static final int VERSION = MCVersions.V20W12A + 3;
+    private static final int VERSION = MCVersions.V20W12A + 3;
 
     private static final Map<String, String> FACING_RENAMES = Map.of(
             "down", "down_south",
@@ -19,10 +19,6 @@ public final class V2518 {
             "west", "west_up",
             "east", "east_up"
     );
-
-
-    private V2518() {
-    }
 
     public static void register() {
         MCTypeRegistry.TILE_ENTITY.addConverterForId("minecraft:jigsaw", new DataConverter<>(VERSION) {
@@ -61,4 +57,6 @@ public final class V2518 {
             }
         });
     }
+
+    private V2518() {}
 }

@@ -7,9 +7,7 @@ import ca.spottedleaf.dataconverter.types.MapType;
 
 public final class V1500 {
 
-    protected static final int VERSION = MCVersions.V18W22C + 1;
-
-    private V1500() {}
+    private static final int VERSION = MCVersions.V18W22C + 1;
 
     public static void register() {
         MCTypeRegistry.TILE_ENTITY.addConverterForId("DUMMY", new DataConverter<>(VERSION) {
@@ -21,4 +19,5 @@ public final class V1500 {
         });
     }
 
+    private V1500() {}
 }

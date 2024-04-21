@@ -7,7 +7,7 @@ import java.util.Map;
 
 public final class V1515 {
 
-    protected static final int VERSION = MCVersions.V1_13_PRE7 + 2;
+    private static final int VERSION = MCVersions.V1_13_PRE7 + 2;
 
     public static final Map<String, String> RENAMED_BLOCK_IDS = Map.of(
             "minecraft:tube_coral_fan", "minecraft:tube_coral_wall_fan",
@@ -17,10 +17,9 @@ public final class V1515 {
             "minecraft:horn_coral_fan", "minecraft:horn_coral_wall_fan"
     );
 
-    private V1515() {
-    }
-
     public static void register() {
         ConverterAbstractBlockRename.register(VERSION, RENAMED_BLOCK_IDS::get);
     }
+
+    private V1515() {}
 }

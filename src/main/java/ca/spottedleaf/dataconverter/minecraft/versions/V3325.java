@@ -14,4 +14,6 @@ public final class V3325 {
         MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:block_display", new DataWalkerTypePaths<>(MCTypeRegistry.BLOCK_STATE, "block_state"));
         // text_display is a simple entity
     }
+
+    private V3325() {}
 }

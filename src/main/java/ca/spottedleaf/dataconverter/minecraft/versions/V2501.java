@@ -9,9 +9,7 @@ import ca.spottedleaf.dataconverter.types.Types;
 
 public final class V2501 {
 
-    protected static final int VERSION = MCVersions.V1_15_2 + 271;
-
-    private V2501() {}
+    private static final int VERSION = MCVersions.V1_15_2 + 271;
 
     private static void registerFurnace(final String id) {
         MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, id, (data, fromVersion, toVersion) -> {
@@ -62,4 +60,6 @@ public final class V2501 {
         registerFurnace("minecraft:smoker");
         registerFurnace("minecraft:blast_furnace");
     }
+
+    private V2501() {}
 }

@@ -27,4 +27,6 @@ public final class V3565 {
             }
         });
     }
+
+    private V3565() {}
 }

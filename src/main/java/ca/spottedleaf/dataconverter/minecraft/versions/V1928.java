@@ -3,20 +3,17 @@ package ca.spottedleaf.dataconverter.minecraft.versions;
 import ca.spottedleaf.dataconverter.minecraft.MCVersions;
 import ca.spottedleaf.dataconverter.minecraft.converters.entity.ConverterAbstractEntityRename;
 import ca.spottedleaf.dataconverter.minecraft.converters.itemname.ConverterAbstractItemRename;
-import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
-import ca.spottedleaf.dataconverter.minecraft.walkers.itemstack.DataWalkerItemLists;
+
 
 import java.util.Map;
+import java.util.HashMap;
 
 public final class V1928 {
 
-    protected static final int VERSION = MCVersions.V19W04B + 1;
-
-    private V1928() {
-    }
+    private static final int VERSION = MCVersions.V19W04B + 1;
 
     private static void registerMob(final String id) {
-        MCTypeRegistry.ENTITY.addWalker(VERSION, id, new DataWalkerItemLists("ArmorItems", "HandItems"));
+        V100.registerEquipment(VERSION, id);
     }
 
     public static void register() {
@@ -29,4 +26,6 @@ public final class V1928 {
 
         registerMob("minecraft:ravager");
     }
+
+    private V1928() {}
 }

@@ -11,7 +11,7 @@ import ca.spottedleaf.dataconverter.types.Types;
 
 public final class V2831 {
 
-    protected static final int VERSION = MCVersions.V1_17_1 + 101;
+    private static final int VERSION = MCVersions.V1_17_1 + 101;
 
     public static void register() {
         MCTypeRegistry.UNTAGGED_SPAWNER.addStructureWalker(VERSION, (final MapType<String> root, final long fromVersion, final long toVersion) -> {
@@ -66,4 +66,6 @@ public final class V2831 {
             }
         });
     }
+
+    private V2831() {}
 }

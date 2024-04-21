@@ -5,7 +5,6 @@ import ca.spottedleaf.dataconverter.minecraft.converters.advancements.ConverterA
 import ca.spottedleaf.dataconverter.minecraft.converters.recipe.ConverterAbstractRecipeRename;
 import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
 import ca.spottedleaf.dataconverter.minecraft.walkers.generic.WalkerUtils;
-import ca.spottedleaf.dataconverter.minecraft.walkers.itemstack.DataWalkerItemLists;
 import ca.spottedleaf.dataconverter.types.ListType;
 import ca.spottedleaf.dataconverter.types.ObjectType;
 
@@ -13,23 +12,23 @@ import java.util.Map;
 
 public final class V2100 {
 
-    protected static final int VERSION = MCVersions.V1_14_4 + 124;
-    protected static final Map<String, String> RECIPE_RENAMES = Map.of(
+    private static final int VERSION = MCVersions.V1_14_4 + 124;
+    private static final Map<String, String> RECIPE_RENAMES = Map.of(
             "minecraft:sugar", "sugar_from_sugar_cane"
     );
-
-    private V2100() {
-    }
+    private static final Map<String, String> ADVANCEMENT_RENAMES = new HashMap<>(
+            ImmutableMap.of(
+                    "minecraft:recipes/misc/sugar", "minecraft:recipes/misc/sugar_from_sugar_cane"
+            )
+    );
 
     private static void registerMob(final String id) {
-        MCTypeRegistry.ENTITY.addWalker(VERSION, id, new DataWalkerItemLists("ArmorItems", "HandItems"));
+        V100.registerEquipment(VERSION, id);
     }
 
     public static void register() {
         ConverterAbstractRecipeRename.register(VERSION, RECIPE_RENAMES::get);
-        ConverterAbstractAdvancementsRename.register(VERSION, Map.of(
-                "minecraft:recipes/misc/sugar", "minecraft:recipes/misc/sugar_from_sugar_cane"
-        )::get);
+        ConverterAbstractAdvancementsRename.register(VERSION, ADVANCEMENT_RENAMES::get);
 
         registerMob("minecraft:bee");
         registerMob("minecraft:bee_stinger");
@@ -44,4 +43,6 @@ public final class V2100 {
             return null;
         });
     }
+
+    private V2100() {}
 }

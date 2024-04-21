@@ -9,6 +9,7 @@ import ca.spottedleaf.dataconverter.minecraft.walkers.item_name.DataWalkerItemNa
 import ca.spottedleaf.dataconverter.minecraft.walkers.itemstack.DataWalkerItemLists;
 import ca.spottedleaf.dataconverter.minecraft.walkers.itemstack.DataWalkerItems;
 import ca.spottedleaf.dataconverter.types.MapType;
+import ca.spottedleaf.dataconverter.util.Long2ObjectArraySortedMap;
 import ca.spottedleaf.dataconverter.types.ObjectType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +21,7 @@ public final class V704 {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(V704.class);
 
-    protected static final int VERSION = MCVersions.V1_10_2 + 192;
+    private static final int VERSION = MCVersions.V1_10_2 + 192;
 
     public static final Map<String, String> ITEM_ID_TO_TILE_ENTITY_ID = new HashMap<>() {
         @Override
@@ -181,8 +182,57 @@ public final class V704 {
     // This class is responsible for also integrity checking the item id to tile id map here, we just use the item registry to figure it out
     // WARNING: The validity check here is _not_ present anymore to save a requirement for external item and block lookup. May need to add it back.
 
-    protected static final Map<String, String> TILE_ID_UPDATE = new HashMap<>();
+    private static Long2ObjectArraySortedMap<String> makeSingle(final long k1, final String v1) {
+        final Long2ObjectArraySortedMap<String> ret = new Long2ObjectArraySortedMap<>();
 
+        ret.put(k1, v1);
+
+        return ret;
+    }
+
+    private static Long2ObjectArraySortedMap<String> makeDouble(final long k1, final String v1,
+                                                                final long k2, final String v2) {
+        final Long2ObjectArraySortedMap<String> ret = new Long2ObjectArraySortedMap<>();
+
+        ret.put(k1, v1);
+        ret.put(k2, v2);
+
+        return ret;
+    }
+
+    private static final Map<String, Long2ObjectArraySortedMap<String>> ITEM_ID_TO_ENTITY_ID = new HashMap<>();
+    static {
+        ITEM_ID_TO_ENTITY_ID.put("minecraft:armor_stand", makeDouble(V99.VERSION, "ArmorStand", V705.VERSION, "minecraft:armor_stand"));
+        ITEM_ID_TO_ENTITY_ID.put("minecraft:painting", makeDouble(V99.VERSION, "Painting", V705.VERSION, "minecraft:painting"));
+        ITEM_ID_TO_ENTITY_ID.put("minecraft:boat", makeDouble(V99.VERSION, "Boat", V705.VERSION, "minecraft:boat"));
+        ITEM_ID_TO_ENTITY_ID.put("minecraft:oak_boat", makeSingle(V705.VERSION, "minecraft:boat"));
+        ITEM_ID_TO_ENTITY_ID.put("minecraft:oak_chest_boat", makeSingle(V705.VERSION, "minecraft:chest_boat"));
+        ITEM_ID_TO_ENTITY_ID.put("minecraft:spruce_boat",makeSingle(V705.VERSION, "minecraft:boat"));
+        ITEM_ID_TO_ENTITY_ID.put("minecraft:spruce_chest_boat", makeSingle(V705.VERSION, "minecraft:chest_boat"));
+        ITEM_ID_TO_ENTITY_ID.put("minecraft:birch_boat", makeSingle(V705.VERSION, "minecraft:boat"));
+        ITEM_ID_TO_ENTITY_ID.put("minecraft:birch_chest_boat", makeSingle(V705.VERSION, "minecraft:chest_boat"));
+        ITEM_ID_TO_ENTITY_ID.put("minecraft:jungle_boat", makeSingle(V705.VERSION, "minecraft:boat"));
+        ITEM_ID_TO_ENTITY_ID.put("minecraft:jungle_chest_boat", makeSingle(V705.VERSION, "minecraft:chest_boat"));
+        ITEM_ID_TO_ENTITY_ID.put("minecraft:acacia_boat", makeSingle(V705.VERSION, "minecraft:boat"));
+        ITEM_ID_TO_ENTITY_ID.put("minecraft:acacia_chest_boat", makeSingle(V705.VERSION, "minecraft:chest_boat"));
+        ITEM_ID_TO_ENTITY_ID.put("minecraft:cherry_boat", makeSingle(V705.VERSION, "minecraft:boat"));
+        ITEM_ID_TO_ENTITY_ID.put("minecraft:cherry_chest_boat", makeSingle(V705.VERSION, "minecraft:chest_boat"));
+        ITEM_ID_TO_ENTITY_ID.put("minecraft:dark_oak_boat", makeSingle(V705.VERSION, "minecraft:boat"));
+        ITEM_ID_TO_ENTITY_ID.put("minecraft:dark_oak_chest_boat", makeSingle(V705.VERSION, "minecraft:chest_boat"));
+        ITEM_ID_TO_ENTITY_ID.put("minecraft:mangrove_boat", makeSingle(V705.VERSION, "minecraft:boat"));
+        ITEM_ID_TO_ENTITY_ID.put("minecraft:mangrove_chest_boat", makeSingle(V705.VERSION, "minecraft:chest_boat"));
+        ITEM_ID_TO_ENTITY_ID.put("minecraft:bamboo_raft", makeSingle(V705.VERSION, "minecraft:boat"));
+        ITEM_ID_TO_ENTITY_ID.put("minecraft:bamboo_chest_raft", makeSingle(V705.VERSION, "minecraft:chest_boat"));
+        ITEM_ID_TO_ENTITY_ID.put("minecraft:minecart", makeDouble(V99.VERSION, "MinecartRideable", V705.VERSION, "minecraft:minecart"));
+        ITEM_ID_TO_ENTITY_ID.put("minecraft:chest_minecart", makeDouble(V99.VERSION, "MinecartChest", V705.VERSION, "minecraft:chest_minecart"));
+        ITEM_ID_TO_ENTITY_ID.put("minecraft:furnace_minecart", makeDouble(V99.VERSION, "MinecartFurnace", V705.VERSION, "minecraft:furnace_minecart"));
+        ITEM_ID_TO_ENTITY_ID.put("minecraft:tnt_minecart", makeDouble(V99.VERSION, "MinecartTNT", V705.VERSION, "minecraft:tnt_minecart"));
+        ITEM_ID_TO_ENTITY_ID.put("minecraft:hopper_minecart", makeDouble(V99.VERSION, "MinecartHopper", V705.VERSION, "minecraft:hopper_minecart"));
+        ITEM_ID_TO_ENTITY_ID.put("minecraft:item_frame", makeDouble(V99.VERSION, "ItemFrame", V705.VERSION, "minecraft:item_frame"));
+        ITEM_ID_TO_ENTITY_ID.put("minecraft:glow_item_frame", makeSingle(V705.VERSION, "minecraft:glow_item_frame"));
+    }
+
+    private static final Map<String, String> TILE_ID_UPDATE = new HashMap<>();
     static {
         TILE_ID_UPDATE.put("Airportal", "minecraft:end_portal");
         TILE_ID_UPDATE.put("Banner", "minecraft:banner");
@@ -209,7 +259,7 @@ public final class V704 {
         TILE_ID_UPDATE.put("Trap", "minecraft:dispenser");
     }
 
-    protected static void registerInventory(final String id) {
+    private static void registerInventory(final String id) {
         MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, id, new DataWalkerItemLists("Items"));
     }
 
@@ -228,8 +278,12 @@ public final class V704 {
         });
 
 
-        registerInventory("minecraft:furnace");
-        registerInventory("minecraft:chest");
+        MCTypeRegistry.TILE_ENTITY.addStructureWalker(VERSION, (final MapType<String> data, final long fromVersion, final long toVersion) -> {
+            WalkerUtils.convert(MCTypeRegistry.DATA_COMPONENTS, data, "components", fromVersion, toVersion);
+            return null;
+        });
+        registerInventory( "minecraft:furnace");
+        registerInventory( "minecraft:chest");
         MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, "minecraft:jukebox", new DataWalkerItems("RecordItem"));
         registerInventory("minecraft:dispenser");
         registerInventory("minecraft:dropper");
@@ -252,43 +306,29 @@ public final class V704 {
             // only things here are in tag, if changed update if above
 
             WalkerUtils.convertList(MCTypeRegistry.ITEM_STACK, tag, "Items", fromVersion, toVersion);
+            WalkerUtils.convertList(MCTypeRegistry.ITEM_STACK, tag, "ChargedProjectiles", fromVersion, toVersion);
 
             MapType<String> entityTag = tag.getMap("EntityTag");
             if (entityTag != null) {
                 final String itemId = data.getString("id");
                 final String entityId;
-                if ("minecraft:armor_stand".equals(itemId)) {
-                    // The check for version id is changed here. For whatever reason, the legacy
-                    // data converters used entity id "minecraft:armor_stand" when version was greater-than 514,
-                    // but entity ids were not namespaced until V705! So somebody fucked up the legacy converters.
-                    // DFU agrees with my analysis here, it will only set the entityId here to the namespaced variant
-                    // with the V705 schema.
-                    entityId = DataConverter.getVersion(fromVersion) < 705 ? "ArmorStand" : "minecraft:armor_stand";
-                } else if (itemId != null && itemId.contains("_spawn_egg")) {
+                if (itemId != null && itemId.contains("_spawn_egg")) {
                     // V1451 changes spawn eggs to have the sub entity id be a part of the item id, but of course Mojang never
                     // bothered to write in logic to set the sub entity id, so we have to.
                     // format is ALWAYS <namespace>:<id>_spawn_egg post flattening
                     entityId = itemId.substring(0, itemId.indexOf("_spawn_egg"));
-                } else if ("minecraft:item_frame".equals(itemId)) {
-                    // add missing item_frame entity id
-                    // version check is same for armorstand, as both were namespaced at the same time
-                    entityId = DataConverter.getVersion(fromVersion) < 705 ? "ItemFrame" : "minecraft:item_frame";
-                } else if ("minecraft:glow_item_frame".equals(itemId)) {
-                    // add missing glow_item_frame entity id
-                    entityId = "minecraft:glow_item_frame";
                 } else {
-                    entityId = entityTag.getString("id");
+                    final Long2ObjectArraySortedMap<String> mappingByVersion = ITEM_ID_TO_ENTITY_ID.get(itemId);
+                    final String mapped = mappingByVersion == null ? null : mappingByVersion.getFloor(fromVersion);
+                    entityId = mapped == null ? entityTag.getString("id") : mapped;
                 }
 
-                final boolean removeId;
                 if (entityId == null) {
                     if (!"minecraft:air".equals(itemId)) {
                         LOGGER.warn("Unable to resolve Entity for ItemStack (V704): " + itemId);
                     }
-                    removeId = false;
                 } else {
-                    removeId = !entityTag.hasKey("id", ObjectType.STRING);
-                    if (removeId) {
+                    if (!entityTag.hasKey("id", ObjectType.STRING)) {
                         entityTag.setString("id", entityId);
                     }
                 }
@@ -298,9 +338,6 @@ public final class V704 {
                 if (replace != null) {
                     entityTag = replace;
                     tag.setMap("EntityTag", entityTag);
-                }
-                if (removeId) {
-                    entityTag.remove("id");
                 }
             }
 
@@ -314,25 +351,20 @@ public final class V704 {
                 } else {
                     entityId = ITEM_ID_TO_TILE_ENTITY_ID.get(itemId);
                 }
-                final boolean removeId;
+
                 if (entityId == null) {
                     if (!"minecraft:air".equals(itemId)) {
                         LOGGER.warn("Unable to resolve BlockEntity for ItemStack (V704): " + itemId);
                     }
-                    removeId = false;
                 } else {
-                    removeId = !blockEntityTag.hasKey("id", ObjectType.STRING);
-                    if (removeId) {
+                    if (!blockEntityTag.hasKey("id", ObjectType.STRING)) {
                         blockEntityTag.setString("id", entityId);
                     }
                 }
                 final MapType<String> replace = MCTypeRegistry.TILE_ENTITY.convert(blockEntityTag, fromVersion, toVersion);
                 if (replace != null) {
                     blockEntityTag = replace;
-                    tag.setMap("BlockEntityTag", entityTag);
-                }
-                if (removeId) {
-                    blockEntityTag.remove("id");
+                    tag.setMap("BlockEntityTag", blockEntityTag);
                 }
             }
 

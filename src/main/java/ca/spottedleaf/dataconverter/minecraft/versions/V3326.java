@@ -9,10 +9,12 @@ public final class V3326 {
     private static final int VERSION = MCVersions.V23W06A;
 
     private static void registerMob(final String id) {
-        MCTypeRegistry.ENTITY.addWalker(VERSION, id, new DataWalkerItemLists("ArmorItems", "HandItems"));
+        V100.registerEquipment(VERSION, id);
     }
 
     public static void register() {
         registerMob("minecraft:sniffer");
     }
+
+    private V3326() {}
 }

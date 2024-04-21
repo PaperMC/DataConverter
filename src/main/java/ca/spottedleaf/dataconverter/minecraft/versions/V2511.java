@@ -9,9 +9,7 @@ import ca.spottedleaf.dataconverter.types.Types;
 
 public final class V2511 {
 
-    protected static final int VERSION = MCVersions.V20W09A + 1;
-
-    private V2511() {}
+    private static final int VERSION = MCVersions.V20W09A + 1;
 
     private static int[] createUUIDArray(final long most, final long least) {
         return new int[] {
@@ -94,4 +92,6 @@ public final class V2511 {
         // Vanilla migrates the potion item but does not change the schema.
         MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:potion", new DataWalkerItems("Item"));
     }
+
+    private V2511() {}
 }

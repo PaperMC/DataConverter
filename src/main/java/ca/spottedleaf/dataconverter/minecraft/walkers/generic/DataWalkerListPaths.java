@@ -5,7 +5,7 @@ import ca.spottedleaf.dataconverter.converters.datatypes.DataWalker;
 import ca.spottedleaf.dataconverter.types.ListType;
 import ca.spottedleaf.dataconverter.types.MapType;
 
-public class DataWalkerListPaths<T, R> implements DataWalker<String> {
+public class DataWalkerListPaths<T, R> implements DataWalker<MapType<String>> {
 
     protected final DataType<T, R> type;
     protected final String[] paths;

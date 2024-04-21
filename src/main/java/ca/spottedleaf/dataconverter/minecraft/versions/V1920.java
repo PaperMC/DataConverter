@@ -9,9 +9,7 @@ import ca.spottedleaf.dataconverter.util.NamespaceUtil;
 
 public final class V1920 {
 
-    protected static final int VERSION = MCVersions.V18W50A + 1;
-
-    private V1920() {}
+    private static final int VERSION = MCVersions.V18W50A + 1;
 
     public static void register() {
         MCTypeRegistry.CHUNK.addStructureConverter(new DataConverter<>(VERSION) {
@@ -72,4 +70,6 @@ public final class V1920 {
 
         MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, "minecraft:campfire", new DataWalkerItemLists("Items"));
     }
+
+    private V1920() {}
 }

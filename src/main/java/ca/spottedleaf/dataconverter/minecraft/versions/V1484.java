@@ -11,7 +11,7 @@ import java.util.Map;
 
 public final class V1484 {
 
-    protected static final int VERSION = MCVersions.V18W19A;
+    private static final int VERSION = MCVersions.V18W19A;
 
     public static void register() {
         final Map<String, String> renamed = Map.of(
@@ -70,5 +70,4 @@ public final class V1484 {
 
     private V1484() {
     }
-
 }

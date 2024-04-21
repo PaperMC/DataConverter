@@ -3,15 +3,14 @@ package ca.spottedleaf.dataconverter.minecraft.versions;
 import ca.spottedleaf.dataconverter.minecraft.MCVersions;
 import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
 import ca.spottedleaf.dataconverter.minecraft.walkers.generic.DataWalkerTypePaths;
-import ca.spottedleaf.dataconverter.minecraft.walkers.itemstack.DataWalkerItemLists;
 import ca.spottedleaf.dataconverter.minecraft.walkers.itemstack.DataWalkerItems;
 
 public final class V1470 {
 
-    protected static final int VERSION = MCVersions.V18W08A;
+    private static final int VERSION = MCVersions.V18W08A;
 
     private static void registerMob(final String id) {
-        MCTypeRegistry.ENTITY.addWalker(VERSION, id, new DataWalkerItemLists("ArmorItems", "HandItems"));
+        V100.registerEquipment(VERSION, id);
     }
 
     public static void register() {
@@ -29,5 +28,4 @@ public final class V1470 {
     }
 
     private V1470() {}
-
 }

@@ -7,7 +7,7 @@ import ca.spottedleaf.dataconverter.types.MapType;
 
 public final class V147 {
 
-    protected static final int VERSION = MCVersions.V15W46A + 1;
+    private static final int VERSION = MCVersions.V15W46A + 1;
 
     public static void register() {
         MCTypeRegistry.ENTITY.addConverterForId("ArmorStand", new DataConverter<>(VERSION) {
@@ -23,5 +23,4 @@ public final class V147 {
     }
 
     private V147() {}
-
 }

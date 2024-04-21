@@ -8,9 +8,9 @@ import java.util.Map;
 
 public final class V2696 {
 
-    protected static final int VERSION = MCVersions.V21W07A + 1;
+    private static final int VERSION = MCVersions.V21W07A + 1;
 
-    protected static final Map<String, String> RENAMES = Map.ofEntries(
+    private static final Map<String, String> RENAMES = Map.ofEntries(
             Map.entry("minecraft:grimstone", "minecraft:deepslate"),
             Map.entry("minecraft:grimstone_slab", "minecraft:cobbled_deepslate_slab"),
             Map.entry("minecraft:grimstone_stairs", "minecraft:cobbled_deepslate_stairs"),
@@ -32,6 +32,8 @@ public final class V2696 {
 
     public static void register() {
         ConverterAbstractItemRename.register(VERSION, RENAMES::get);
-        ConverterAbstractBlockRename.registerAndFixJigsaw(VERSION, RENAMES::get);
+        ConverterAbstractBlockRename.register(VERSION, RENAMES::get);
     }
+
+    private V2696() {}
 }

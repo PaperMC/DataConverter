@@ -59,4 +59,6 @@ public final class V3685 {
         registerArrowEntity("minecraft:spectral_arrow");
         registerArrowEntity("minecraft:arrow");
     }
+
+    private V3685() {}
 }

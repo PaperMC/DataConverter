@@ -7,10 +7,12 @@ import ca.spottedleaf.dataconverter.minecraft.hooks.DataHookEnforceNamespacedID;
 import ca.spottedleaf.dataconverter.minecraft.hooks.DataHookValueTypeEnforceNamespaced;
 import ca.spottedleaf.dataconverter.minecraft.walkers.block_name.DataWalkerBlockNames;
 import ca.spottedleaf.dataconverter.minecraft.walkers.generic.WalkerUtils;
+import ca.spottedleaf.dataconverter.minecraft.walkers.generic.DataWalkerTypePaths;
 import ca.spottedleaf.dataconverter.minecraft.walkers.itemstack.DataWalkerItemLists;
 import ca.spottedleaf.dataconverter.minecraft.walkers.itemstack.DataWalkerItems;
 import ca.spottedleaf.dataconverter.minecraft.walkers.tile_entity.DataWalkerTileEntities;
 import ca.spottedleaf.dataconverter.types.ListType;
+import ca.spottedleaf.dataconverter.minecraft.walkers.generic.WalkerUtils;
 import ca.spottedleaf.dataconverter.types.MapType;
 import ca.spottedleaf.dataconverter.types.ObjectType;
 import org.slf4j.Logger;
@@ -23,10 +25,9 @@ public final class V705 {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(V705.class);
 
-    protected static final int VERSION = MCVersions.V1_10_2 + 193;
+    public static final int VERSION = MCVersions.V1_10_2 + 193;
 
-    protected static final Map<String, String> ENTITY_ID_UPDATE = new HashMap<>();
-
+    private static final Map<String, String> ENTITY_ID_UPDATE = new HashMap<>();
     static {
         ENTITY_ID_UPDATE.put("AreaEffectCloud", "minecraft:area_effect_cloud");
         ENTITY_ID_UPDATE.put("ArmorStand", "minecraft:armor_stand");
@@ -106,7 +107,7 @@ public final class V705 {
     }
 
     private static void registerMob(final String id) {
-        MCTypeRegistry.ENTITY.addWalker(VERSION, id, new DataWalkerItemLists("ArmorItems", "HandItems"));
+        V100.registerEquipment(VERSION, id);
     }
 
     private static void registerThrowableProjectile(final String id) {
@@ -116,6 +117,7 @@ public final class V705 {
     public static void register() {
         ConverterAbstractEntityRename.register(VERSION, ENTITY_ID_UPDATE::get);
 
+        MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:area_effect_cloud", new DataWalkerTypePaths<>(MCTypeRegistry.PARTICLE, "Particle"));
         registerMob("minecraft:armor_stand");
         MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:arrow", new DataWalkerBlockNames("inTile"));
         registerMob("minecraft:bat");
@@ -127,12 +129,13 @@ public final class V705 {
         MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:commandblock_minecart", new DataWalkerBlockNames("DisplayTile"));
         registerMob("minecraft:cow");
         registerMob("minecraft:creeper");
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:donkey", new DataWalkerItemLists("Items", "ArmorItems", "HandItems"));
+        MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:donkey", new DataWalkerItemLists("Items"));
+        V100.registerEquipment(VERSION, "minecraft:donkey");
         MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:donkey", new DataWalkerItems("SaddleItem"));
         registerThrowableProjectile("minecraft:egg");
         registerMob("minecraft:elder_guardian");
         registerMob("minecraft:ender_dragon");
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:enderman", new DataWalkerItemLists("ArmorItems", "HandItems"));
+        V100.registerEquipment(VERSION, "minecraft:enderman");
         MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:enderman", new DataWalkerBlockNames("carried"));
         registerMob("minecraft:endermite");
         registerThrowableProjectile("minecraft:ender_pearl");
@@ -147,14 +150,15 @@ public final class V705 {
         MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:hopper_minecart", new DataWalkerBlockNames("DisplayTile"));
         MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:hopper_minecart", new DataWalkerItemLists("Items"));
         MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:horse", new DataWalkerItems("ArmorItem", "SaddleItem"));
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:horse", new DataWalkerItemLists("ArmorItems", "HandItems"));
+        V100.registerEquipment(VERSION, "minecraft:horse");
         registerMob("minecraft:husk");
         MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:item", new DataWalkerItems("Item"));
         MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:item_frame", new DataWalkerItems("Item"));
         registerMob("minecraft:magma_cube");
         MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:minecart", new DataWalkerBlockNames("DisplayTile"));
         registerMob("minecraft:mooshroom");
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:mule", new DataWalkerItemLists("Items", "ArmorItems", "HandItems"));
+        MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:mule", new DataWalkerItemLists("Items"));
+        V100.registerEquipment(VERSION, "minecraft:mule");
         MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:mule", new DataWalkerItems("SaddleItem"));
         registerMob("minecraft:ocelot");
         registerMob("minecraft:pig");
@@ -166,7 +170,7 @@ public final class V705 {
         registerMob("minecraft:shulker");
         registerMob("minecraft:silverfish");
         registerMob("minecraft:skeleton");
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:skeleton_horse", new DataWalkerItemLists("ArmorItems", "HandItems"));
+        V100.registerEquipment(VERSION, "minecraft:skeleton_horse");
         MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:skeleton_horse", new DataWalkerItems("SaddleItem"));
         registerMob("minecraft:slime");
         registerThrowableProjectile("minecraft:small_fireball");
@@ -185,24 +189,11 @@ public final class V705 {
         MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:villager", (final MapType<String> data, final long fromVersion, final long toVersion) -> {
             WalkerUtils.convertList(MCTypeRegistry.ITEM_STACK, data, "Inventory", fromVersion, toVersion);
 
-            final MapType<String> offers = data.getMap("Offers");
-            if (offers != null) {
-                final ListType recipes = offers.getList("Recipes", ObjectType.MAP);
-                if (recipes != null) {
-                    for (int i = 0, len = recipes.size(); i < len; ++i) {
-                        final MapType<String> recipe = recipes.getMap(i);
-                        WalkerUtils.convert(MCTypeRegistry.ITEM_STACK, recipe, "buy", fromVersion, toVersion);
-                        WalkerUtils.convert(MCTypeRegistry.ITEM_STACK, recipe, "buyB", fromVersion, toVersion);
-                        WalkerUtils.convert(MCTypeRegistry.ITEM_STACK, recipe, "sell", fromVersion, toVersion);
-                    }
-                }
-            }
-
-            WalkerUtils.convertList(MCTypeRegistry.ITEM_STACK, data, "ArmorItems", fromVersion, toVersion);
-            WalkerUtils.convertList(MCTypeRegistry.ITEM_STACK, data, "HandItems", fromVersion, toVersion);
+            WalkerUtils.convertList(MCTypeRegistry.VILLAGER_TRADE, data.getMap("Offers"), "Recipes", fromVersion, toVersion);
 
             return null;
         });
+        V100.registerEquipment(VERSION, "minecraft:villager");
         registerMob("minecraft:villager_golem");
         registerMob("minecraft:witch");
         registerMob("minecraft:wither");
@@ -212,11 +203,17 @@ public final class V705 {
         registerThrowableProjectile("minecraft:xp_bottle");
         registerMob("minecraft:zombie");
         MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:zombie_horse", new DataWalkerItems("SaddleItem"));
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:zombie_horse", new DataWalkerItemLists("ArmorItems", "HandItems"));
+        V100.registerEquipment(VERSION, "minecraft:zombie_horse");
         registerMob("minecraft:zombie_pigman");
         registerMob("minecraft:zombie_villager");
+        MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:zombie_villager", (final MapType<String> data, final long fromVersion, final long toVersion) -> {
+            WalkerUtils.convertList(MCTypeRegistry.VILLAGER_TRADE, data.getMap("Offers"), "Recipes", fromVersion, toVersion);
+
+            return null;
+        });
         registerMob("minecraft:evocation_illager");
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:llama", new DataWalkerItemLists("Items", "ArmorItems", "HandItems"));
+        MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:llama", new DataWalkerItemLists("Items"));
+        V100.registerEquipment(VERSION, "minecraft:llama");
         MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:llama", new DataWalkerItems("SaddleItem", "DecorItem"));
         registerMob("minecraft:vex");
         registerMob("minecraft:vindication_illager");
@@ -230,5 +227,4 @@ public final class V705 {
 
     private V705() {
     }
-
 }

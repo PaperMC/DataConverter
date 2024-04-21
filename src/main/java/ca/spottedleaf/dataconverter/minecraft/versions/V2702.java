@@ -7,7 +7,7 @@ import ca.spottedleaf.dataconverter.types.MapType;
 
 public final class V2702 {
 
-    protected static final int VERSION = MCVersions.V21W10A + 3;
+    private static final int VERSION = MCVersions.V21W10A + 3;
 
     public static void register() {
         final DataConverter<MapType<String>, MapType<String>> arrowConverter = new DataConverter<>(VERSION) {
@@ -30,4 +30,6 @@ public final class V2702 {
         MCTypeRegistry.ENTITY.addConverterForId("minecraft:spectral_arrow", arrowConverter);
         MCTypeRegistry.ENTITY.addConverterForId("minecraft:trident", arrowConverter);
     }
+
+    private V2702() {}
 }

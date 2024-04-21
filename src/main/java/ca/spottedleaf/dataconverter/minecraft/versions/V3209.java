@@ -13,4 +13,6 @@ public final class V3209 {
         // remapped this version
         MCTypeRegistry.ITEM_STACK.addConverterForId("minecraft:pig_spawn_egg", new ConverterFlattenSpawnEgg(VERSION, 0));
     }
+
+    private V3209() {}
 }

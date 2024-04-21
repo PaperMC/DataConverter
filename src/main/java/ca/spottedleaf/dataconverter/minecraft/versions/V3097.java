@@ -58,4 +58,6 @@ public final class V3097 {
         MCTypeRegistry.ADVANCEMENTS.addStructureConverter(new ConverterCriteriaRename(VERSION, "minecraft:husbandry/complete_catalogue", britishRenamer::get));
         MCTypeRegistry.POI_CHUNK.addStructureConverter(new ConverterPoiDelete(VERSION, poiRemove::contains));
     }
+
+    private V3097() {}
 }

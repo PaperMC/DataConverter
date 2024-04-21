@@ -11,4 +11,6 @@ public final class V3204 {
     public static void register() {
         MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, "minecraft:chiseled_bookshelf", new DataWalkerItemLists("Items"));
     }
+
+    private V3204() {}
 }

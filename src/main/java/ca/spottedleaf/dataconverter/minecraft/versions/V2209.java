@@ -9,10 +9,7 @@ import java.util.Map;
 
 public final class V2209 {
 
-    protected static final int VERSION = MCVersions.V19W40A + 1;
-
-    private V2209() {
-    }
+    private static final int VERSION = MCVersions.V19W40A + 1;
 
     public static void register() {
         final Map<String, String> renamedIds = Map.of(
@@ -24,4 +21,5 @@ public final class V2209 {
         ConverterAbstractPOIRename.register(VERSION, renamedIds::get);
     }
 
+    private V2209() {}
 }

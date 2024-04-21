@@ -4,10 +4,11 @@ import ca.spottedleaf.dataconverter.minecraft.MCVersions;
 import ca.spottedleaf.dataconverter.minecraft.converters.itemname.ConverterAbstractItemRename;
 
 import java.util.Map;
+import java.util.HashMap;
 
 public final class V820 {
 
-    protected static final int VERSION = MCVersions.V1_11 + 1;
+    private static final int VERSION = MCVersions.V1_11 + 1;
 
     public static void register() {
         ConverterAbstractItemRename.register(VERSION, Map.of(
@@ -17,5 +18,4 @@ public final class V820 {
 
     private V820() {
     }
-
 }

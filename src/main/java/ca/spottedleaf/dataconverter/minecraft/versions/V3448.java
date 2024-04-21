@@ -23,4 +23,6 @@ public final class V3448 {
             }
         });
     }
+
+    private V3448() {}
 }

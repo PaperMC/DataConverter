@@ -8,7 +8,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 
 public final class V1344 {
 
-    protected static final int VERSION = MCVersions.V1_12_2 + 1;
+    private static final int VERSION = MCVersions.V1_12_2 + 1;
 
     private static final Int2ObjectOpenHashMap<String> BUTTON_ID_TO_NAME = new Int2ObjectOpenHashMap<>();
     static {
@@ -173,5 +173,4 @@ public final class V1344 {
     }
 
     private V1344() {}
-
 }

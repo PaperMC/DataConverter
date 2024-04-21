@@ -9,9 +9,7 @@ import ca.spottedleaf.dataconverter.types.ObjectType;
 
 public final class V2533 {
 
-    protected static final int VERSION = MCVersions.V20W18A + 1;
-
-    private V2533() {}
+    private static final int VERSION = MCVersions.V20W18A + 1;
 
     public static void register() {
         MCTypeRegistry.ENTITY.addConverterForId("minecraft:villager", new DataConverter<>(VERSION) {
@@ -40,4 +38,5 @@ public final class V2533 {
         });
     }
 
+    private V2533() {}
 }

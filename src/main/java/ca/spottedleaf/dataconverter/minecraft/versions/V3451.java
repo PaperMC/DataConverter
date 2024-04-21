@@ -33,4 +33,6 @@ public final class V3451 {
             }
         });
     }
+
+    private V3451() {}
 }

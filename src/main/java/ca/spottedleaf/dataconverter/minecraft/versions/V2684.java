@@ -6,9 +6,11 @@ import ca.spottedleaf.dataconverter.minecraft.walkers.game_event.GameEventListen
 
 public final class V2684 {
 
-    protected static final int VERSION = MCVersions.V20W48A + 1;
+    private static final int VERSION = MCVersions.V20W48A + 1;
 
     public static void register() {
         MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, "minecraft:sculk_sensor", new GameEventListenerWalker());
     }
+
+    private V2684() {}
 }

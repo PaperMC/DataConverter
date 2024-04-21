@@ -13,7 +13,7 @@ import java.util.UUID;
 
 public final class V2514 {
 
-    protected static final int VERSION = MCVersions.V20W11A + 1;
+    private static final int VERSION = MCVersions.V20W11A + 1;
 
     private static final Set<String> ABSTRACT_HORSES = Set.of(
             "minecraft:donkey",
@@ -172,9 +172,6 @@ public final class V2514 {
             data.remove(leastPath);
             data.setInts(newPath, uuid);
         }
-    }
-
-    private V2514() {
     }
 
     private static void updatePiglin(final MapType<String> data) {
@@ -585,4 +582,6 @@ public final class V2514 {
     private static void updateSkullOwner(final MapType<String> tag) {
         replaceUUIDString(tag.getMap("SkullOwner"), "Id", "Id");
     }
+
+    private V2514() {}
 }

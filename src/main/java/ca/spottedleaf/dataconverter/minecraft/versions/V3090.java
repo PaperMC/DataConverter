@@ -8,7 +8,7 @@ import ca.spottedleaf.dataconverter.types.MapType;
 
 public final class V3090 {
 
-    protected static final int VERSION = MCVersions.V22W15A + 1;
+    private static final int VERSION = MCVersions.V22W15A + 1;
 
     public static void register() {
         MCTypeRegistry.ENTITY.addConverterForId("minecraft:painting", new DataConverter<>(VERSION) {
@@ -20,4 +20,6 @@ public final class V3090 {
             }
         });
     }
+
+    private V3090() {}
 }

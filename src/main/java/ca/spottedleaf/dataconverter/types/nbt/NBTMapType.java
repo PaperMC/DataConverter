@@ -438,6 +438,20 @@ public final class NBTMapType implements MapType<String> {
     }
 
     @Override
+    public String getForcedString(final String key) {
+        return this.getForcedString(key, null);
+    }
+
+    @Override
+    public String getForcedString(final String key, final String dfl) {
+        final Tag tag = this.map.get(key);
+        if (tag != null) {
+            return tag.getAsString();
+        }
+        return dfl;
+    }
+
+    @Override
     public void setString(final String key, final String val) {
         this.map = this.map = this.map.putString(key, val);
     }

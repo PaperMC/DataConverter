@@ -79,4 +79,6 @@ public final class V3322 {
             }
         });
     }
+
+    private V3322() {}
 }

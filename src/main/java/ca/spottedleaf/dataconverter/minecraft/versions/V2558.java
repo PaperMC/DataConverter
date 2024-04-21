@@ -8,13 +8,11 @@ import ca.spottedleaf.dataconverter.types.MapType;
 import ca.spottedleaf.dataconverter.types.Types;
 
 import java.util.Map;
+import java.util.HashMap;
 
 public final class V2558 {
 
-    protected static final int VERSION = MCVersions.V1_16_PRE2 + 1;
-
-    private V2558() {
-    }
+    private static final int VERSION = MCVersions.V1_16_PRE2 + 1;
 
     public static void register() {
         ConverterAbstractOptionsRename.register(VERSION, Map.of(
@@ -44,4 +42,6 @@ public final class V2558 {
 
         return V2550.vanillaLevels(seed, V2550.defaultOverworld(seed), false);
     }
+
+    private V2558() {}
 }

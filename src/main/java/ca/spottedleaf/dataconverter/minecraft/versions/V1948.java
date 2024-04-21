@@ -7,9 +7,7 @@ import ca.spottedleaf.dataconverter.types.MapType;
 
 public final class V1948 {
 
-    protected static final int VERSION = MCVersions.V1_14_PRE2;
-
-    private V1948() {}
+    private static final int VERSION = MCVersions.V1_14_PRE2;
 
     public static void register() {
         MCTypeRegistry.ITEM_STACK.addConverterForId("minecraft:white_banner", new DataConverter<>(VERSION) {
@@ -36,4 +34,6 @@ public final class V1948 {
             }
         });
     }
+
+    private V1948() {}
 }

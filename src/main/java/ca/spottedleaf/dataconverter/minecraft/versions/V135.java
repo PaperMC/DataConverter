@@ -12,7 +12,7 @@ import ca.spottedleaf.dataconverter.types.Types;
 
 public final class V135 {
 
-    protected static final int VERSION = MCVersions.V15W40B + 1;
+    private static final int VERSION = MCVersions.V15W40B + 1;
 
     public static void register() {
         // In this update they changed the "Riding" value to be "Passengers", which is now a list. So it added
@@ -57,5 +57,4 @@ public final class V135 {
     }
 
     private V135() {}
-
 }

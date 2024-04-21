@@ -21,16 +21,15 @@ public final class MCVersionRegistry {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MCVersionRegistry.class);
 
-    protected static final Int2ObjectLinkedOpenHashMap<String> VERSION_NAMES = new Int2ObjectLinkedOpenHashMap<>();
-    protected static final IntArrayList VERSION_LIST;
-    protected static final LongArrayList DATA_VERSION_LIST;
+    private static final Int2ObjectLinkedOpenHashMap<String> VERSION_NAMES = new Int2ObjectLinkedOpenHashMap<>();
+    private static final IntArrayList VERSION_LIST;
+    private static final LongArrayList DATA_VERSION_LIST;
 
-    protected static final IntArrayList DATACONVERTER_VERSIONS_LIST;
-    protected static final IntLinkedOpenHashSet DATACONVERTER_VERSIONS_MAJOR = new IntLinkedOpenHashSet();
-    protected static final LongLinkedOpenHashSet DATACONVERTER_VERSIONS = new LongLinkedOpenHashSet();
-    protected static final Int2ObjectLinkedOpenHashMap<IntArrayList> SUBVERSIONS = new Int2ObjectLinkedOpenHashMap<>();
-    protected static final LongArrayList BREAKPOINTS = new LongArrayList();
-
+    private static final IntArrayList DATACONVERTER_VERSIONS_LIST;
+    private static final IntLinkedOpenHashSet DATACONVERTER_VERSIONS_MAJOR = new IntLinkedOpenHashSet();
+    private static final LongLinkedOpenHashSet DATACONVERTER_VERSIONS = new LongLinkedOpenHashSet();
+    private static final Int2ObjectLinkedOpenHashMap<IntArrayList> SUBVERSIONS = new Int2ObjectLinkedOpenHashMap<>();
+    private static final LongArrayList BREAKPOINTS = new LongArrayList();
     static {
         // Note: Some of these are nameless.
         // Unless a data version is specified here, it will NOT have converters ran for it. Please add them on update!
@@ -228,7 +227,19 @@ public final class MCVersionRegistry {
                 3683,
                 3685,
                 3692,
-                // All up to 1.20.3
+                3800,
+                3803,
+                3807,
+                3808,
+                3809,
+                3812,
+                3813,
+                3814,
+                3818,
+                3820,
+                3825,
+                3828,
+                // All up to 1.20.5-pre2
         };
         List<Integer> converterVersions = new ArrayList<>(mcConverterVersions.length);
         for (final int version : mcConverterVersions) {
@@ -250,22 +261,35 @@ public final class MCVersionRegistry {
         registerSubVersion(MCVersions.V17W47A, 6);
         registerSubVersion(MCVersions.V17W47A, 7);
 
+        registerSubVersion(MCVersions.V24W04A + 1, 1);
+        registerSubVersion(MCVersions.V24W04A + 2, 1);
+
+        registerSubVersion(MCVersions.V24W07A + 1, 1);
+        registerSubVersion(MCVersions.V24W07A + 1, 2);
+        registerSubVersion(MCVersions.V24W07A + 1, 4);
+        registerSubVersion(MCVersions.V24W07A + 1, 5);
+        registerSubVersion(MCVersions.V24W07A + 1, 6);
+
         // register breakpoints here
         // for all major releases after 1.16, add them. this reduces the work required to determine if a breakpoint
         // is needed for new converters
 
         // Too much changed in this version.
         registerBreakpoint(MCVersions.V17W47A);
-        registerBreakpoint(MCVersions.V17W47A, Integer.MAX_VALUE);
+        registerBreakpointAfter(MCVersions.V17W47A, Integer.MAX_VALUE);
 
         // final release of major version
-        registerBreakpoint(MCVersions.V1_17_1, Integer.MAX_VALUE);
+        registerBreakpointAfter(MCVersions.V1_17_1, Integer.MAX_VALUE);
 
         // final release of major version
-        registerBreakpoint(MCVersions.V1_18_2, Integer.MAX_VALUE);
+        registerBreakpointAfter(MCVersions.V1_18_2, Integer.MAX_VALUE);
 
         // final release of major version
-        registerBreakpoint(MCVersions.V1_19_4, Integer.MAX_VALUE);
+        registerBreakpointAfter(MCVersions.V1_19_4, Integer.MAX_VALUE);
+
+        // Too much changed in this version.
+        registerBreakpoint(MCVersions.V24W07A + 1, 5);
+        registerBreakpointAfter(MCVersions.V24W07A + 1, Integer.MAX_VALUE);
     }
 
     static {
@@ -361,6 +385,14 @@ public final class MCVersionRegistry {
         BREAKPOINTS.add(DataConverter.encodeVersions(version, step));
     }
 
+    private static void registerBreakpointAfter(final int version) {
+        registerBreakpointAfter(version, 0);
+    }
+
+    private static void registerBreakpointAfter(final int version, final int step) {
+        BREAKPOINTS.add(DataConverter.encodeVersions(version, step) + 1L);
+    }
+
     // returns only versions that have dataconverters
     public static boolean hasDataConverters(final int version) {
         return DATACONVERTER_VERSIONS_MAJOR.contains(version);
@@ -395,4 +427,6 @@ public final class MCVersionRegistry {
             throw new IllegalStateException("Version " + DataConverter.encodedToString(version) + " is not registered to have dataconverters, yet has a dataconverter");
         }
     }
+
+    private MCVersionRegistry() {}
 }

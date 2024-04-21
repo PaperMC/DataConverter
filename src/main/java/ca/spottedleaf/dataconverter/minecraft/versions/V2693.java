@@ -6,10 +6,11 @@ import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
 
 public final class V2693 {
 
-    protected static final int VERSION = MCVersions.V21W05B + 1;
+    private static final int VERSION = MCVersions.V21W05B + 1;
 
     public static void register() {
         MCTypeRegistry.WORLD_GEN_SETTINGS.addStructureConverter(new AddFlagIfAbsent(VERSION, "has_increased_height_already", false));
     }
 
+    private V2693() {}
 }

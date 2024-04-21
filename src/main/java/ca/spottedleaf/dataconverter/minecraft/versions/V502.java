@@ -9,7 +9,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public final class V502 {
 
-    protected static final int VERSION = MCVersions.V16W20A + 1;
+    private static final int VERSION = MCVersions.V16W20A + 1;
 
     public static void register() {
         ConverterAbstractItemRename.register(VERSION, (final String name) -> {
@@ -42,5 +42,4 @@ public final class V502 {
     }
 
     private V502() {}
-
 }

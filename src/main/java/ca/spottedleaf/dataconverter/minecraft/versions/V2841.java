@@ -15,15 +15,17 @@ import java.util.Set;
 
 public final class V2841 {
 
-    protected static final int VERSION = MCVersions.V21W42A + 1;
+    private static final int VERSION = MCVersions.V21W42A + 1;
 
-    protected static final Set<String> ALWAYS_WATERLOGGED = new HashSet<>(Arrays.asList(
-            "minecraft:bubble_column",
-            "minecraft:kelp",
-            "minecraft:kelp_plant",
-            "minecraft:seagrass",
-            "minecraft:tall_seagrass"
-    ));
+    private static final Set<String> ALWAYS_WATERLOGGED = new HashSet<>(
+            Arrays.asList(
+                    "minecraft:bubble_column",
+                    "minecraft:kelp",
+                    "minecraft:kelp_plant",
+                    "minecraft:seagrass",
+                    "minecraft:tall_seagrass"
+            )
+    );
 
     public static void register() {
         MCTypeRegistry.CHUNK.addStructureConverter(new DataConverter<>(VERSION) {
@@ -143,14 +145,17 @@ public final class V2841 {
         }
 
         final MapType<String> properties = blockState.getMap("Properties");
+        // Correctly read block state properties as strings - https://github.com/PaperMC/DataConverter/issues/6
         if ("minecraft:water".equals(name)) {
-            return properties != null && properties.getInt("level") == 0 ? "minecraft:water" : "minecraft:flowing_water";
+            return properties != null && "0".equals(properties.getString("level")) ? "minecraft:water" : "minecraft:flowing_water";
         } else if ("minecraft:lava".equals(name)) {
-            return properties != null && properties.getInt("level") == 0 ? "minecraft:lava" : "minecraft:flowing_lava";
+            return properties != null && "0".equals(properties.getString("level")) ? "minecraft:lava" : "minecraft:flowing_lava";
         }
 
-        return (properties != null && properties.getBoolean("waterlogged")) ? "minecraft:water" : "minecraft:empty";
+        return (properties != null && "true".equals(properties.getString("waterlogged"))) ? "minecraft:water" : "minecraft:empty";
     }
+
+    private V2841() {}
 
     public static final class SimplePaletteReader {
 

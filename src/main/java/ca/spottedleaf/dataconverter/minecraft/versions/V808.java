@@ -9,7 +9,7 @@ import ca.spottedleaf.dataconverter.types.MapType;
 
 public final class V808 {
 
-    protected static final int VERSION = MCVersions.V16W38A + 1;
+    private static final int VERSION = MCVersions.V16W38A + 1;
 
     public static void register() {
         MCTypeRegistry.ENTITY.addConverterForId("minecraft:shulker", new DataConverter<>(VERSION, 1) {
@@ -26,5 +26,4 @@ public final class V808 {
     }
 
     private V808() {}
-
 }

@@ -10,4 +10,6 @@ public final class V3328 {
     public static void register() {
         // registers simple entity "minecraft:interaction"
     }
+
+    private V3328() {}
 }

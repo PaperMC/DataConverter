@@ -7,14 +7,11 @@ import ca.spottedleaf.dataconverter.types.MapType;
 
 public final class V1022 {
 
-    protected static final int VERSION = MCVersions.V17W06A;
+    private static final int VERSION = MCVersions.V17W06A;
 
     public static void register() {
         MCTypeRegistry.PLAYER.addStructureWalker(VERSION, (final MapType<String> data, final long fromVersion, final long toVersion) -> {
-            final MapType<String> rootVehicle = data.getMap("RootVehicle");
-            if (rootVehicle != null) {
-                WalkerUtils.convert(MCTypeRegistry.ENTITY, rootVehicle, "Entity", fromVersion, toVersion);
-            }
+            WalkerUtils.convert(MCTypeRegistry.ENTITY, data.getMap("RootVehicle"), "Entity", fromVersion, toVersion);
 
             WalkerUtils.convertList(MCTypeRegistry.ITEM_STACK, data, "Inventory", fromVersion, toVersion);
             WalkerUtils.convertList(MCTypeRegistry.ITEM_STACK, data, "EnderItems", fromVersion, toVersion);
@@ -41,5 +38,4 @@ public final class V1022 {
     }
 
     private V1022() {}
-
 }

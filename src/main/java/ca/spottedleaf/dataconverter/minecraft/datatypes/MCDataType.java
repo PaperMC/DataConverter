@@ -15,7 +15,7 @@ public class MCDataType extends DataType<MapType<String>, MapType<String>> {
     public final String name;
 
     protected final ArrayList<DataConverter<MapType<String>, MapType<String>>> structureConverters = new ArrayList<>();
-    protected final Long2ObjectArraySortedMap<List<DataWalker<String>>> structureWalkers = new Long2ObjectArraySortedMap<>();
+    protected final Long2ObjectArraySortedMap<List<DataWalker<MapType<String>>>> structureWalkers = new Long2ObjectArraySortedMap<>();
     protected final Long2ObjectArraySortedMap<List<DataHook<MapType<String>, MapType<String>>>> structureHooks = new Long2ObjectArraySortedMap<>();
 
     public MCDataType(final String name) {
@@ -28,11 +28,11 @@ public class MCDataType extends DataType<MapType<String>, MapType<String>> {
         this.structureConverters.sort(DataConverter.LOWEST_VERSION_COMPARATOR);
     }
 
-    public void addStructureWalker(final int minVersion, final DataWalker<String> walker) {
+    public void addStructureWalker(final int minVersion, final DataWalker<MapType<String>> walker) {
         this.addStructureWalker(minVersion, 0, walker);
     }
 
-    public void addStructureWalker(final int minVersion, final int versionStep, final DataWalker<String> walker) {
+    public void addStructureWalker(final int minVersion, final int versionStep, final DataWalker<MapType<String>> walker) {
         this.structureWalkers.computeIfAbsent(DataConverter.encodeVersions(minVersion, versionStep), (final long keyInMap) -> {
             return new ArrayList<>();
         }).add(walker);
@@ -105,7 +105,7 @@ public class MCDataType extends DataType<MapType<String>, MapType<String>> {
             }
         }
 
-        final List<DataWalker<String>> walkers = this.structureWalkers.getFloor(toVersion);
+        final List<DataWalker<MapType<String>>> walkers = this.structureWalkers.getFloor(toVersion);
         if (walkers != null) {
             for (int i = 0, len = walkers.size(); i < len; ++i) {
                 final MapType<String> replace = walkers.get(i).walk(data, fromVersion, toVersion);

@@ -24,11 +24,15 @@ public final class V3459 {
 
                 final MapType<String> endData = dimensionData.getMap("1");
                 if (endData != null) {
-                    data.setMap("DragonFight", endData.getMap("DragonFight", endData.getTypeUtil().createEmptyMap()).copy());
+                    final MapType<String> dragonFight = endData.<String>getMap("DragonFight", endData.getTypeUtil().createEmptyMap()).copy();
+                    V3807.flattenBlockPos(dragonFight, "ExitPortalLocation");
+                    data.setMap("DragonFight", dragonFight);
                 }
 
                 return null;
             }
         });
     }
+
+    private V3459() {}
 }

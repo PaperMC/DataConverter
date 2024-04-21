@@ -7,7 +7,7 @@ import ca.spottedleaf.dataconverter.types.MapType;
 
 public final class V107 {
 
-    protected static final int VERSION = MCVersions.V15W32C + 3;
+    private static final int VERSION = MCVersions.V15W32C + 3;
 
     public static void register() {
         MCTypeRegistry.ENTITY.addConverterForId("Minecart", new DataConverter<>(VERSION) {
@@ -40,5 +40,4 @@ public final class V107 {
     }
 
     private V107() {}
-
 }

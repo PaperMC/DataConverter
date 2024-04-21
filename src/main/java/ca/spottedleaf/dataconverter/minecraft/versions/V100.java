@@ -4,6 +4,7 @@ import ca.spottedleaf.dataconverter.converters.DataConverter;
 import ca.spottedleaf.dataconverter.minecraft.MCVersions;
 import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
 import ca.spottedleaf.dataconverter.minecraft.walkers.block_name.DataWalkerBlockNames;
+import ca.spottedleaf.dataconverter.minecraft.walkers.generic.DataWalkerTypePaths;
 import ca.spottedleaf.dataconverter.minecraft.walkers.itemstack.DataWalkerItemLists;
 import ca.spottedleaf.dataconverter.minecraft.walkers.itemstack.DataWalkerItems;
 import ca.spottedleaf.dataconverter.minecraft.walkers.generic.WalkerUtils;
@@ -14,10 +15,22 @@ import ca.spottedleaf.dataconverter.types.Types;
 
 public final class V100 {
 
-    protected static final int VERSION = MCVersions.V15W32A;
+    private static final int VERSION = MCVersions.V15W32A;
+
+    static void registerEquipment(final int version, final String id) {
+        registerEquipment(version, 0, id);
+    }
+
+    private static final DataWalkerItemLists EQUIPMENT_ITEM_LISTS = new DataWalkerItemLists("ArmorItems", "HandItems");
+    private static final DataWalkerItems EQUIPMENT_ITEMS = new DataWalkerItems("body_armor_item");
+
+    static void registerEquipment(final int version, final int versionStep, final String id) {
+        MCTypeRegistry.ENTITY.addWalker(version, versionStep, id, EQUIPMENT_ITEM_LISTS);
+        MCTypeRegistry.ENTITY.addWalker(version, versionStep, id, EQUIPMENT_ITEMS);
+    }
 
     private static void registerMob(final String id) {
-        MCTypeRegistry.ENTITY.addWalker(VERSION, id, new DataWalkerItemLists("ArmorItems", "HandItems"));
+        registerEquipment(VERSION, 0, id);
     }
 
     public static void register() {
@@ -113,18 +126,7 @@ public final class V100 {
         MCTypeRegistry.ENTITY.addWalker(VERSION, "Villager", (final MapType<String> data, final long fromVersion, final long toVersion) -> {
             WalkerUtils.convertList(MCTypeRegistry.ITEM_STACK, data, "Inventory", fromVersion, toVersion);
 
-            final MapType<String> offers = data.getMap("Offers");
-            if (offers != null) {
-                final ListType recipes = offers.getList("Recipes", ObjectType.MAP);
-                if (recipes != null) {
-                    for (int i = 0, len = recipes.size(); i < len; ++i) {
-                        final MapType<String> recipe = recipes.getMap(i);
-                        WalkerUtils.convert(MCTypeRegistry.ITEM_STACK, recipe, "buy", fromVersion, toVersion);
-                        WalkerUtils.convert(MCTypeRegistry.ITEM_STACK, recipe, "buyB", fromVersion, toVersion);
-                        WalkerUtils.convert(MCTypeRegistry.ITEM_STACK, recipe, "sell", fromVersion, toVersion);
-                    }
-                }
-            }
+            WalkerUtils.convertList(MCTypeRegistry.VILLAGER_TRADE, data.getMap("Offers"), "Recipes", fromVersion, toVersion);
 
             WalkerUtils.convertList(MCTypeRegistry.ITEM_STACK, data, "ArmorItems", fromVersion, toVersion);
             WalkerUtils.convertList(MCTypeRegistry.ITEM_STACK, data, "HandItems", fromVersion, toVersion);
@@ -132,6 +134,7 @@ public final class V100 {
             return null;
         });
         registerMob("Shulker");
+        MCTypeRegistry.ENTITY.addWalker(VERSION, "AreaEffectCloud", new DataWalkerTypePaths<>(MCTypeRegistry.PARTICLE, "Particle"));
 
         MCTypeRegistry.STRUCTURE.addStructureWalker(VERSION, (final MapType<String> data, final long fromVersion, final long toVersion) -> {
             final ListType entities = data.getList("entities", ObjectType.MAP);
@@ -155,5 +158,4 @@ public final class V100 {
     }
 
     private V100() {}
-
 }

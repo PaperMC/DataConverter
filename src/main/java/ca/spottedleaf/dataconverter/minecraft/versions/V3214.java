@@ -25,4 +25,6 @@ public final class V3214 {
             }
         });
     }
+
+    private V3214() {}
 }

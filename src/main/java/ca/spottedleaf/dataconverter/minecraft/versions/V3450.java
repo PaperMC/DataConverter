@@ -18,4 +18,6 @@ public final class V3450 {
                 )
         )::get));
     }
+
+    private V3450() {}
 }

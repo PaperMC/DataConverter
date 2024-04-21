@@ -5,10 +5,11 @@ import ca.spottedleaf.dataconverter.minecraft.converters.blockname.ConverterAbst
 import ca.spottedleaf.dataconverter.minecraft.converters.itemname.ConverterAbstractItemRename;
 
 import java.util.Map;
+import java.util.HashMap;
 
 public final class V2680 {
 
-    protected static final int VERSION = MCVersions.V1_16_5 + 94;
+    private static final int VERSION = MCVersions.V1_16_5 + 94;
 
     public static void register() {
         ConverterAbstractItemRename.register(VERSION, Map.of(
@@ -19,4 +20,5 @@ public final class V2680 {
         )::get);
     }
 
+    private V2680() {}
 }

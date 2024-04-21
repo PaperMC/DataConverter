@@ -7,7 +7,7 @@ import ca.spottedleaf.dataconverter.types.MapType;
 
 public final class V3094 {
 
-    public static final int VERSION = MCVersions.V22W17A + 1;
+    private static final int VERSION = MCVersions.V22W17A + 1;
 
     private static final String[] SOUND_VARIANT_TO_INSTRUMENT = new String[] {
             "minecraft:ponder_goat_horn",
@@ -39,4 +39,6 @@ public final class V3094 {
             }
         });
     }
+
+    private V3094() {}
 }

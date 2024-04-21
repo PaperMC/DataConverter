@@ -9,7 +9,7 @@ import ca.spottedleaf.dataconverter.types.MapType;
 
 public final class V1474 {
 
-    protected static final int VERSION = MCVersions.V18W10B;
+    private static final int VERSION = MCVersions.V18W10B;
 
     public static void register() {
         MCTypeRegistry.ENTITY.addConverterForId("minecraft:shulker", new DataConverter<>(VERSION) {
@@ -28,9 +28,7 @@ public final class V1474 {
         ConverterAbstractItemRename.register(VERSION, (final String old) -> {
             return "minecraft:purple_shulker_box".equals(old) ? "minecraft:shulker_box" : null;
         });
-
     }
 
     private V1474() {}
-
 }

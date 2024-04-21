@@ -11,11 +11,13 @@ import ca.spottedleaf.dataconverter.types.ObjectType;
 
 import java.util.Map;
 
+import java.util.HashMap;
+
 public final class V1488 {
 
-    protected static final int VERSION = MCVersions.V18W19B + 3;
+    private static final int VERSION = MCVersions.V18W19B + 3;
 
-    protected static boolean isIglooPiece(final MapType<String> piece) {
+    private static boolean isIglooPiece(final MapType<String> piece) {
         return "Iglu".equals(piece.getString("id"));
     }
 
@@ -86,5 +88,4 @@ public final class V1488 {
 
     private V1488() {
     }
-
 }

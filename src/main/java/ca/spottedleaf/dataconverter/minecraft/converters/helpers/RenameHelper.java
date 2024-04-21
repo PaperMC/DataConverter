@@ -1,6 +1,8 @@
 package ca.spottedleaf.dataconverter.minecraft.converters.helpers;
 
+import ca.spottedleaf.dataconverter.types.ListType;
 import ca.spottedleaf.dataconverter.types.MapType;
+import ca.spottedleaf.dataconverter.types.ObjectType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -84,6 +86,21 @@ public final class RenameHelper {
         data.setString(key, renamed);
     }
 
-    private RenameHelper() {}
+    public static void renameListMapItems(final MapType<String> data, final String listPath, final String mapPath,
+                                          final Function<String, String> renamer) {
+        if (data == null) {
+            return;
+        }
 
+        final ListType list = data.getList(listPath, ObjectType.MAP);
+        if (list == null) {
+            return;
+        }
+
+        for (int i = 0, len = list.size(); i < len; ++i) {
+            RenameHelper.renameString(list.getMap(i), mapPath, renamer);
+        }
+    }
+
+    private RenameHelper() {}
 }

@@ -4,10 +4,11 @@ import ca.spottedleaf.dataconverter.minecraft.MCVersions;
 import ca.spottedleaf.dataconverter.minecraft.converters.stats.ConverterAbstractStatsRename;
 
 import java.util.Map;
+import java.util.HashMap;
 
 public final class V2710 {
 
-    protected static final int VERSION = MCVersions.V21W15A + 1;
+    private static final int VERSION = MCVersions.V21W15A + 1;
 
     public static void register() {
         ConverterAbstractStatsRename.register(VERSION, Map.of(
@@ -15,4 +16,5 @@ public final class V2710 {
         )::get);
     }
 
+    private V2710() {}
 }

@@ -8,9 +8,7 @@ import ca.spottedleaf.dataconverter.types.Types;
 
 public final class V1946 {
 
-    protected static final int VERSION = MCVersions.V19W14B + 1;
-
-    private V1946() {}
+    private static final int VERSION = MCVersions.V19W14B + 1;
 
     public static void register() {
         MCTypeRegistry.POI_CHUNK.addStructureConverter(new DataConverter<>(VERSION) {
@@ -39,4 +37,5 @@ public final class V1946 {
         });
     }
 
+    private V1946() {}
 }

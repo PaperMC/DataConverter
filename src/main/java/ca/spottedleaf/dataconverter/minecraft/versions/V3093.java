@@ -7,7 +7,7 @@ import ca.spottedleaf.dataconverter.types.MapType;
 
 public final class V3093 {
 
-    protected static final int VERSION = MCVersions.V22W17A;
+    private static final int VERSION = MCVersions.V22W17A;
 
     public static void register() {
         MCTypeRegistry.ENTITY.addConverterForId("minecraft:goat", new DataConverter<>(VERSION) {
@@ -19,4 +19,6 @@ public final class V3093 {
             }
         });
     }
+
+    private V3093() {}
 }

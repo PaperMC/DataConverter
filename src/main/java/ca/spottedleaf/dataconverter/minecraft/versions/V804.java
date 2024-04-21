@@ -9,7 +9,7 @@ import ca.spottedleaf.dataconverter.types.MapType;
 
 public final class V804 {
 
-    protected static final int VERSION = MCVersions.V16W35A + 1;
+    private static final int VERSION = MCVersions.V16W35A + 1;
 
     public static void register() {
         MCTypeRegistry.ITEM_STACK.addConverterForId("minecraft:banner", new DataConverter<>(VERSION) {
@@ -56,5 +56,4 @@ public final class V804 {
     }
 
     private V804() {}
-
 }

@@ -14,7 +14,7 @@ public final class V102 {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(V102.class);
 
-    protected static final int VERSION = MCVersions.V15W32A + 2;
+    private static final int VERSION = MCVersions.V15W32A + 2;
 
     public static void register() {
         // V102 -> V15W32A + 2
@@ -84,5 +84,4 @@ public final class V102 {
 
     private V102() {
     }
-
 }

@@ -10,7 +10,7 @@ import ca.spottedleaf.dataconverter.types.Types;
 
 public final class V1955 {
 
-    protected static final int VERSION = MCVersions.V1_14_1_PRE1;
+    private static final int VERSION = MCVersions.V1_14_1_PRE1;
 
     private static final int[] LEVEL_XP_THRESHOLDS = new int[]{
             0,
@@ -20,14 +20,11 @@ public final class V1955 {
             150
     };
 
-    private V1955() {
-    }
-
-    static int getMinXpPerLevel(final int level) {
+    private static int getMinXpPerLevel(final int level) {
         return LEVEL_XP_THRESHOLDS[Math.clamp(level - 1, 0, LEVEL_XP_THRESHOLDS.length - 1)];
     }
 
-    static void addLevel(final MapType<String> data, final int level) {
+    private static void addLevel(final MapType<String> data, final int level) {
         MapType<String> villagerData = data.getMap("VillagerData");
         if (villagerData == null) {
             villagerData = Types.NBT.createEmptyMap();
@@ -36,7 +33,7 @@ public final class V1955 {
         villagerData.setInt("level", level);
     }
 
-    static void addXpFromLevel(final MapType<String> data, final int level) {
+    private static void addXpFromLevel(final MapType<String> data, final int level) {
         data.setInt("Xp", getMinXpPerLevel(level));
     }
 
@@ -91,4 +88,5 @@ public final class V1955 {
         });
     }
 
+    private V1955() {}
 }

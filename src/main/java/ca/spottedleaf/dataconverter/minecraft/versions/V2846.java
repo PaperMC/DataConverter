@@ -4,10 +4,11 @@ import ca.spottedleaf.dataconverter.minecraft.MCVersions;
 import ca.spottedleaf.dataconverter.minecraft.converters.advancements.ConverterAbstractAdvancementsRename;
 
 import java.util.Map;
+import java.util.HashMap;
 
 public final class V2846 {
 
-    protected static final int VERSION = MCVersions.V21W44A + 1;
+    private static final int VERSION = MCVersions.V21W44A + 1;
 
     public static void register() {
         ConverterAbstractAdvancementsRename.register(VERSION, Map.of(
@@ -16,4 +17,6 @@ public final class V2846 {
                 "minecraft:adventure/ride_strider_in_overworld_lava", "minecraft:nether/ride_strider_in_overworld_lava"
         )::get);
     }
+
+    private V2846() {}
 }

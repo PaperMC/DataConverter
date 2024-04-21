@@ -8,7 +8,7 @@ import java.util.Map;
 
 public final class V1487 {
 
-    protected static final int VERSION = MCVersions.V18W19B + 2;
+    private static final int VERSION = MCVersions.V18W19B + 2;
 
     public static void register() {
         final Map<String, String> remap = Map.of(
@@ -22,5 +22,4 @@ public final class V1487 {
 
     private V1487() {
     }
-
 }

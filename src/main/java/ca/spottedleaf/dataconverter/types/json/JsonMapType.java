@@ -444,6 +444,30 @@ public final class JsonMapType implements MapType<String> {
     }
 
     @Override
+    public String getForcedString(final String key) {
+        return this.getForcedString(key, null);
+    }
+
+    @Override
+    public String getForcedString(final String key, final String dfl) {
+        final JsonElement element = this.map.get(key);
+        if (element instanceof JsonPrimitive) {
+            final JsonPrimitive primitive = (JsonPrimitive)element;
+            if (primitive.isString()) {
+                return primitive.getAsString();
+            } else if (primitive.isNumber()) {
+                return primitive.getAsString();
+            }
+
+            return primitive.toString();
+        } else if (element != null) {
+            return element.toString();
+        }
+
+        return dfl;
+    }
+
+    @Override
     public void setString(final String key, final String val) {
         this.map.addProperty(key, val);
     }

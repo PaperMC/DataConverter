@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 
 public final class V1506 {
 
-    protected static final int VERSION = MCVersions.V1_13_PRE4 + 2;
+    private static final int VERSION = MCVersions.V1_13_PRE4 + 2;
 
     static final Map<String, String> MAP = new HashMap<>();
 
@@ -99,9 +99,6 @@ public final class V1506 {
         MAP.put("165", "minecraft:eroded_badlands");
         MAP.put("166", "minecraft:modified_wooded_badlands_plateau");
         MAP.put("167", "minecraft:modified_badlands_plateau");
-    }
-
-    private V1506() {
     }
 
     public static void register() {
@@ -210,4 +207,6 @@ public final class V1506 {
 
         return ret;
     }
+
+    private V1506() {}
 }

@@ -8,12 +8,10 @@ import ca.spottedleaf.dataconverter.types.MapType;
 
 public final class V1904 {
 
-    protected static final int VERSION = MCVersions.V18W43C + 1;
-
-    private V1904() {}
+    private static final int VERSION = MCVersions.V18W43C + 1;
 
     private static void registerMob(final String id) {
-        MCTypeRegistry.ENTITY.addWalker(VERSION, id, new DataWalkerItemLists("ArmorItems", "HandItems"));
+        V100.registerEquipment(VERSION, id);
     }
 
     public static void register() {
@@ -40,5 +38,5 @@ public final class V1904 {
         registerMob("minecraft:cat");
     }
 
-
+    private V1904() {}
 }

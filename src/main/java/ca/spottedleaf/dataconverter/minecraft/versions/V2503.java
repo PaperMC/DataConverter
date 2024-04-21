@@ -7,11 +7,13 @@ import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
 import ca.spottedleaf.dataconverter.types.MapType;
 
 import java.util.Map;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 
 public final class V2503 {
 
-    protected static final int VERSION = MCVersions.V1_15_2 + 273;
+    private static final int VERSION = MCVersions.V1_15_2 + 273;
 
     private static final Set<String> WALL_BLOCKS = Set.of(
             "minecraft:andesite_wall",
@@ -29,8 +31,6 @@ public final class V2503 {
             "minecraft:sandstone_wall",
             "minecraft:stone_brick_wall"
     );
-
-    private V2503() {}
 
     private static void changeWallProperty(final MapType<String> properties, final String path) {
         final String property = properties.getString(path);
@@ -64,4 +64,6 @@ public final class V2503 {
                 "minecraft:recipes/misc/composter", "minecraft:recipes/decorations/composter"
         )::get);
     }
+
+    private V2503() {}
 }

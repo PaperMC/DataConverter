@@ -10,10 +10,7 @@ import ca.spottedleaf.dataconverter.util.IntegerUtil;
 
 public final class V2527 {
 
-    protected static final int VERSION = MCVersions.V20W16A + 1;
-
-    private V2527() {
-    }
+    private static final int VERSION = MCVersions.V20W16A + 1;
 
     public static void register() {
         MCTypeRegistry.CHUNK.addStructureConverter(new DataConverter<>(VERSION) {
@@ -120,4 +117,6 @@ public final class V2527 {
             return padded;
         }
     }
+
+    private V2527() {}
 }

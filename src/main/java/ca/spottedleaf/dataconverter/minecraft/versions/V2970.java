@@ -14,7 +14,9 @@ import java.util.*;
 
 public final class V2970 {
 
-    protected static final int VERSION = MCVersions.V22W07A + 1;
+    private static final Logger LOGGER = LogUtils.getLogger();
+
+    private static final int VERSION = MCVersions.V22W07A + 1;
     private static final Map<String, BiomeRemap> CONVERSION_MAP = Map.ofEntries(
             Map.entry("mineshaft", BiomeRemap.create(Map.of(List.of("minecraft:badlands", "minecraft:eroded_badlands", "minecraft:wooded_badlands"), "minecraft:mineshaft_mesa"), "minecraft:mineshaft")),
             Map.entry("shipwreck", BiomeRemap.create(Map.of(List.of("minecraft:beach", "minecraft:snowy_beach"), "minecraft:shipwreck_beached"), "minecraft:shipwreck")),
@@ -73,7 +75,7 @@ public final class V2970 {
                 id = id.toLowerCase(Locale.ROOT);
                 final BiomeRemap remap = CONVERSION_MAP.get(id);
                 if (remap == null) {
-                    throw new IllegalArgumentException("Unknown structure " + id);
+                    return null;
                 }
                 if (remap.biomeToNewStructure == null || biomeCount == null) {
                     return remap.dfl;
@@ -117,7 +119,7 @@ public final class V2970 {
                 final MapType<String> references = structures.getMap("References");
 
                 if (starts != null) {
-                    final MapType<String> newStarts = Types.NBT.createEmptyMap();
+                    final MapType<String> newStarts = data.getTypeUtil().createEmptyMap();
                     structures.setMap("starts", newStarts);
 
                     for (final String key : starts.keys()) {
@@ -127,6 +129,12 @@ public final class V2970 {
                         }
 
                         final String remapped = getStructureConverted(key, biomeCounts);
+
+                        if (remapped == null) {
+                            LOGGER.warn("Encountered unknown structure in dataconverter: " + key);
+                            continue;
+                        }
+
                         value.setString("id", remapped);
                         newStarts.setMap(remapped, value);
                     }
@@ -134,7 +142,7 @@ public final class V2970 {
 
                 // This TRULY is a guess, no idea what biomes the referent has.
                 if (references != null) {
-                    final MapType<String> newReferences = Types.NBT.createEmptyMap();
+                    final MapType<String> newReferences = data.getTypeUtil().createEmptyMap();
                     structures.setMap("References", newReferences);
                     for (final String key : references.keys()) {
                         final long[] value = references.getLongs(key);
@@ -142,7 +150,13 @@ public final class V2970 {
                             continue;
                         }
 
-                        newReferences.setLongs(getStructureConverted(key, biomeCounts), value);
+                        final String newKey = getStructureConverted(key, biomeCounts);
+                        if (newKey == null) {
+                            LOGGER.warn("Encountered unknown structure reference in dataconverter: " + key);
+                            continue;
+                        }
+
+                        newReferences.setLongs(newKey, value);
                     }
                 }
 
@@ -150,6 +164,8 @@ public final class V2970 {
             }
         });
     }
+
+    private V2970() {}
 
     private static final class BiomeRemap {
 

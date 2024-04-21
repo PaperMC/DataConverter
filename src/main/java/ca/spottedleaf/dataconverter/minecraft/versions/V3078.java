@@ -7,10 +7,10 @@ import ca.spottedleaf.dataconverter.minecraft.walkers.itemstack.DataWalkerItemLi
 
 public final class V3078 {
 
-    protected static final int VERSION = MCVersions.V1_18_2 + 103;
+    private static final int VERSION = MCVersions.V1_18_2 + 103;
 
     private static void registerMob(final String id) {
-        MCTypeRegistry.ENTITY.addWalker(VERSION, id, new DataWalkerItemLists("ArmorItems", "HandItems"));
+        V100.registerEquipment(VERSION, id);
     }
 
     public static void register() {
@@ -18,4 +18,6 @@ public final class V3078 {
         registerMob("minecraft:tadpole");
         MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, "minecraft:sculk_shrieker", new GameEventListenerWalker());
     }
+
+    private V3078() {}
 }

@@ -5,13 +5,11 @@ import ca.spottedleaf.dataconverter.minecraft.converters.blockname.ConverterAbst
 import ca.spottedleaf.dataconverter.minecraft.converters.itemname.ConverterAbstractItemRename;
 
 import java.util.Map;
+import java.util.HashMap;
 
 public final class V1802 {
 
-    protected static final int VERSION = MCVersions.V1_13_2 + 171;
-
-    private V1802() {
-    }
+    private static final int VERSION = MCVersions.V1_13_2 + 171;
 
     public static void register() {
         ConverterAbstractBlockRename.register(VERSION, Map.of(
@@ -21,7 +19,9 @@ public final class V1802 {
         ConverterAbstractItemRename.register(VERSION, Map.of(
                 "minecraft:stone_slab", "minecraft:smooth_stone_slab",
                 "minecraft:sign", "minecraft:oak_sign"
+        )
         )::get);
     }
 
+    private V1802() {}
 }

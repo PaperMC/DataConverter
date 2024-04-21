@@ -7,7 +7,7 @@ import java.util.Map;
 
 public final class V1501 {
 
-    protected static final int VERSION = MCVersions.V1_13_PRE1;
+    private static final int VERSION = MCVersions.V1_13_PRE1;
 
     private static final Map<String, String> RENAMES = Map.ofEntries(
             Map.entry("minecraft:recipes/brewing/speckled_melon", "minecraft:recipes/brewing/glistering_melon_slice"),
@@ -67,10 +67,9 @@ public final class V1501 {
             Map.entry("minecraft:recipes/transportation/golden_rail", "minecraft:recipes/transportation/powered_rail")
     );
 
-    private V1501() {
-    }
-
     public static void register() {
         ConverterAbstractAdvancementsRename.register(VERSION, RENAMES::get);
     }
+
+    private V1501() {}
 }

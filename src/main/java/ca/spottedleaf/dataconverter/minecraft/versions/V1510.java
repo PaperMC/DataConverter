@@ -62,10 +62,7 @@ public final class V1510 {
             "minecraft:spruce_bark", "minecraft:spruce_wood"
     );
 
-    protected static final int VERSION = MCVersions.V1_13_PRE4 + 6;
-
-    private V1510() {
-    }
+    private static final int VERSION = MCVersions.V1_13_PRE4 + 6;
 
     public static void register() {
         ConverterAbstractBlockRename.register(VERSION, RENAMED_BLOCKS::get);
@@ -99,4 +96,6 @@ public final class V1510 {
         MCTypeRegistry.ENTITY.copyWalkers(VERSION, "minecraft:eye_of_ender_signal", "minecraft:eye_of_ender");
         MCTypeRegistry.ENTITY.copyWalkers(VERSION, "minecraft:fireworks_rocket", "minecraft:firework_rocket");
     }
+
+    private V1510() {}
 }

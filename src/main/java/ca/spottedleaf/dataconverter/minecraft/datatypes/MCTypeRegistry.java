@@ -21,6 +21,10 @@ public final class MCTypeRegistry {
     public static final IDDataType TILE_ENTITY        = new IDDataType("TileEntity");
     public static final IDDataType ITEM_STACK         = new IDDataType("ItemStack");
     public static final MCDataType BLOCK_STATE        = new MCDataType("BlockState");
+    public static final MCValueType FLAT_BLOCK_STATE  = new MCValueType("FlatBlockState");
+    public static final MCDataType DATA_COMPONENTS    = new MCDataType("DataComponents");
+    public static final MCDataType VILLAGER_TRADE     = new MCDataType("VillagerTrade");
+    public static final DynamicDataType PARTICLE      = new DynamicDataType("Particle");
     public static final MCValueType ENTITY_NAME       = new MCValueType("EntityName");
     public static final IDDataType ENTITY             = new IDDataType("Entity");
     public static final MCValueType BLOCK_NAME        = new MCValueType("BlockName");
@@ -41,6 +45,9 @@ public final class MCTypeRegistry {
     public static final MCDataType SAVED_DATA_STRUCTURE_FEATURE_INDICES = new MCDataType("SavedData/StructureFeatureIndices");
     public static final MCDataType SAVED_DATA_MAP_DATA                  = new MCDataType("SavedData/MapData");
     public static final MCDataType SAVED_DATA_RAIDS                     = new MCDataType("SavedData/Raids");
+    public static final MCDataType SAVED_DATA_COMMAND_STORAGE           = new MCDataType("SavedData/CommandStorage");
+    public static final MCDataType SAVED_DATA_FORCED_CHUNKS             = new MCDataType("SavedData/Chunks");
+    public static final MCDataType SAVED_DATA_MAP_INDEX                 = new MCDataType("SavedData/IdCounts");
 
     static {
         try {
@@ -135,7 +142,7 @@ public final class MCTypeRegistry {
         V1904.register();
         V1905.register();
         V1906.register();
-        // V1909 is just adding a simple block entity (jigsaw)
+        V1909.register();
         V1911.register();
         V1914.register();
         V1917.register();
@@ -267,6 +274,21 @@ public final class MCTypeRegistry {
         V3685.register();
         V3689.register();
         V3692.register();
+        // V1.20.5
+        V3799.register();
+        V3800.register();
+        V3803.register();
+        V3807.register();
+        V3808.register();
+        V3809.register();
+        V3812.register();
+        V3813.register();
+        V3814.register();
+        V3816.register();
+        V3818.register();
+        V3820.register();
+        V3825.register();
+        V3828.register();
     }
 
     private MCTypeRegistry() {}
