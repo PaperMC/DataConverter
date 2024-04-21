@@ -6,26 +6,26 @@ import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
 import ca.spottedleaf.dataconverter.types.MapType;
 import ca.spottedleaf.dataconverter.util.NamespaceUtil;
 
-public final class V3828 {
+public final class V3833 {
 
-    private static final int VERSION = MCVersions.V24W14A + 1;
+    private static final int VERSION = MCVersions.V1_20_5_PRE4 + 1;
 
     public static void register() {
-        MCTypeRegistry.VILLAGER_TRADE.addStructureConverter(new DataConverter<>(VERSION) {
+        MCTypeRegistry.TILE_ENTITY.addConverterForId("minecraft:brushable_block", new DataConverter<>(VERSION) {
             @Override
             public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
-                final MapType<String> buyB = data.getMap("buyB");
-
-                if (buyB == null) {
+                final MapType<String> item = data.getMap("item");
+                if (item == null) {
                     return null;
                 }
 
-                final String id = NamespaceUtil.correctNamespace(buyB.getString("id", "minecraft:air"));
-                final int count = buyB.getInt("count", 0);
+
+                final String id = NamespaceUtil.correctNamespace(item.getString("id", "minecraft:air"));
+                final int count = item.getInt("count", 0);
 
                 // Fix DFU: use count <= 0 instead of count == 0
                 if ("minecraft:air".equals(id) || count <= 0) {
-                    data.remove("buyB");
+                    data.remove("item");
                 }
 
                 return null;
@@ -33,5 +33,5 @@ public final class V3828 {
         });
     }
 
-    private V3828() {}
+    private V3833() {}
 }
