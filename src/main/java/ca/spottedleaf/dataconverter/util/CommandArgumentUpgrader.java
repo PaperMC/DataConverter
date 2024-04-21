@@ -14,10 +14,13 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.mojang.serialization.Lifecycle;
 import it.unimi.dsi.fastutil.Pair;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSource;
@@ -41,19 +44,35 @@ public final class CommandArgumentUpgrader {
 	private final CommandDispatcher<CommandSourceStack> dispatcher;
 	private final CommandBuildContext context;
 	private final CommandSourceStack source;
+	private final Map<Class<?>, BiFunction<ArgumentType<?>, CommandBuildContext, ArgumentType<?>>> replacements;
 
-	public CommandArgumentUpgrader(final int functionPermissionLevel) {
+	public static CommandArgumentUpgrader upgrader_1_20_4_to_1_20_5(final int functionPermissionLevel) {
+		return new CommandArgumentUpgrader(functionPermissionLevel, builder -> {
+			builder.registerReplacement(ItemArgument.class, (argument, ctx) -> new ItemParser_1_20_4());
+		});
+	}
+
+	public CommandArgumentUpgrader(
+			final int functionPermissionLevel,
+			final Consumer<ReplacementsBuilder> consumer
+	) {
 		this(
-				new Commands(Commands.CommandSelection.DEDICATED, makeDummyContext()).getDispatcher(),
-				functionPermissionLevel
+				new Commands(Commands.CommandSelection.DEDICATED, makeDummyCommandBuildContext()).getDispatcher(),
+				functionPermissionLevel,
+				consumer
 		);
 	}
 
 	private CommandArgumentUpgrader(
 			final CommandDispatcher<CommandSourceStack> dispatcher,
-			final int functionPermissionLevel
+			final int functionPermissionLevel,
+			final Consumer<ReplacementsBuilder> consumer
 	) {
-		final CommandBuildContext context = makeDummyContext();
+		final ReplacementsBuilder builder = new ReplacementsBuilder();
+		consumer.accept(builder);
+		this.replacements = Map.copyOf(builder.replacements);
+
+		final CommandBuildContext context = makeDummyCommandBuildContext();
 		this.dispatcher = new CommandDispatcher<>();
 		this.context = context;
 		final List<CommandNode<CommandSourceStack>> aliases = new ArrayList<>();
@@ -96,53 +115,29 @@ public final class CommandArgumentUpgrader {
 		);
 	}
 
-	private static CommandBuildContext makeDummyContext() {
-		return Commands.createValidationContext(
-				new HolderLookup.Provider() {
+	public static final class ReplacementsBuilder {
+		private final Map<Class<?>, BiFunction<ArgumentType<?>, CommandBuildContext, ArgumentType<?>>> replacements =
+				new HashMap<>();
 
-					@Override
-					public Stream<ResourceKey<? extends Registry<?>>> listRegistries() {
-						return Stream.of();
-					}
+		private ReplacementsBuilder() {
+		}
 
-					@Override
-					public <T> Optional<HolderLookup.RegistryLookup<T>> lookup(
-							final ResourceKey<? extends Registry<? extends T>> registryRef
-					) {
-						return Optional.of(new HolderLookup.RegistryLookup<T>() {
-							@Override
-							public ResourceKey<? extends Registry<? extends T>> key() {
-								return registryRef;
-							}
+		@SuppressWarnings({"unchecked", "rawtypes"})
+		public <A extends ArgumentType<?>> void registerReplacement(
+				final Class<A> type,
+				final BiFunction<A, CommandBuildContext, ? extends ArgumentType<UpgradedArgument>> upgrader
+		) {
+			this.replacements.put(type, (BiFunction) upgrader);
+		}
+	}
 
-							@Override
-							public Lifecycle registryLifecycle() {
-								return Lifecycle.stable();
-							}
+	public record UpgradedArgument(String upgraded) {}
 
-							@Override
-							public Stream<Holder.Reference<T>> listElements() {
-								return Stream.of();
-							}
-
-							@Override
-							public Stream<HolderSet.Named<T>> listTags() {
-								return Stream.of();
-							}
-
-							@Override
-							public Optional<Holder.Reference<T>> get(final ResourceKey<T> key) {
-								return Optional.of(Holder.Reference.createStandAlone(this, key));
-							}
-
-							@Override
-							public Optional<HolderSet.Named<T>> get(final TagKey<T> tag) {
-								return Optional.of(HolderSet.emptyNamed(this, tag));
-							}
-						});
-					}
-				}
-		);
+	private static final class ItemParser_1_20_4 implements ArgumentType<UpgradedArgument> {
+		@Override
+		public UpgradedArgument parse(final StringReader reader) throws CommandSyntaxException {
+			return new UpgradedArgument("upgraded_item_input{" + reader.readString() + "}");
+		}
 	}
 
 	// important: leadingSlash should not just be the result of a startsWith on command,
@@ -191,18 +186,11 @@ public final class CommandArgumentUpgrader {
 		addArguments(mergedArguments, context.getChild());
 	}
 
-	private record UpgradedArgument(String upgraded) {}
-
-	private static final class ItemParser_1_20_4 implements ArgumentType<UpgradedArgument> {
-		@Override
-		public UpgradedArgument parse(final StringReader reader) throws CommandSyntaxException {
-			return new UpgradedArgument("upgraded_item_input{" + reader.readString() + "}");
-		}
-	}
-
 	private ArgumentType<?> replaceArgumentType(final CommandBuildContext ctx, final ArgumentType<?> type) {
-		if (type instanceof ItemArgument) {
-			return new ItemParser_1_20_4();
+		final BiFunction<ArgumentType<?>, CommandBuildContext, ArgumentType<?>> upgrader =
+				this.replacements.get(type.getClass());
+		if (upgrader != null) {
+			return upgrader.apply(type, ctx);
 		}
 		return type;
 	}
@@ -279,5 +267,54 @@ public final class CommandArgumentUpgrader {
 			parent.addChild(copy);
 		}
 		return result;
+	}
+
+	private static CommandBuildContext makeDummyCommandBuildContext() {
+		return Commands.createValidationContext(
+				new HolderLookup.Provider() {
+
+					@Override
+					public Stream<ResourceKey<? extends Registry<?>>> listRegistries() {
+						return Stream.of();
+					}
+
+					@Override
+					public <T> Optional<HolderLookup.RegistryLookup<T>> lookup(
+							final ResourceKey<? extends Registry<? extends T>> registryRef
+					) {
+						return Optional.of(new HolderLookup.RegistryLookup<T>() {
+							@Override
+							public ResourceKey<? extends Registry<? extends T>> key() {
+								return registryRef;
+							}
+
+							@Override
+							public Lifecycle registryLifecycle() {
+								return Lifecycle.stable();
+							}
+
+							@Override
+							public Stream<Holder.Reference<T>> listElements() {
+								return Stream.of();
+							}
+
+							@Override
+							public Stream<HolderSet.Named<T>> listTags() {
+								return Stream.of();
+							}
+
+							@Override
+							public Optional<Holder.Reference<T>> get(final ResourceKey<T> key) {
+								return Optional.of(Holder.Reference.createStandAlone(this, key));
+							}
+
+							@Override
+							public Optional<HolderSet.Named<T>> get(final TagKey<T> tag) {
+								return Optional.of(HolderSet.emptyNamed(this, tag));
+							}
+						});
+					}
+				}
+		);
 	}
 }
