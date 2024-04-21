@@ -618,7 +618,7 @@ public final class ConverterItemStackToDataComponents {
 
         for (int i = 0, len = oldPages.size(); i < len; ++i) {
             final String page = oldPages.getGeneric(i) instanceof String str ? str : "";
-            final String filtered = filteredPages.getString(Integer.toString(i));
+            final String filtered = filteredPages == null ? null : filteredPages.getString(Integer.toString(i));
 
             ret.addMap(makeFilteredText(page, filtered, type));
         }
