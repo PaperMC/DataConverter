@@ -1,18 +1,20 @@
 package ca.spottedleaf.dataconverter.minecraft;
 
 import ca.spottedleaf.dataconverter.converters.DataConverter;
+import ca.spottedleaf.dataconverter.util.ExternalDataProvider;
 import it.unimi.dsi.fastutil.ints.Int2ObjectLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntLinkedOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntRBTreeSet;
 import it.unimi.dsi.fastutil.longs.LongArrayList;
-import it.unimi.dsi.fastutil.longs.LongComparator;
 import it.unimi.dsi.fastutil.longs.LongLinkedOpenHashSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Locale;
 
 public final class MCVersionRegistry {
@@ -32,7 +34,7 @@ public final class MCVersionRegistry {
     static {
         // Note: Some of these are nameless.
         // Unless a data version is specified here, it will NOT have converters ran for it. Please add them on update!
-        final int[] converterVersions = new int[]{
+        final int[] mcConverterVersions = new int[]{
                 99,
                 100,
                 101,
@@ -228,7 +230,12 @@ public final class MCVersionRegistry {
                 3692,
                 // All up to 1.20.3
         };
-        Arrays.sort(converterVersions);
+        List<Integer> converterVersions = new ArrayList<>(mcConverterVersions.length);
+        for (final int version : mcConverterVersions) {
+            converterVersions.add(version);
+        }
+        converterVersions.addAll(ExternalDataProvider.get().extraConverterVersions());
+        converterVersions.sort(Comparator.naturalOrder());
 
         DATACONVERTER_VERSIONS_MAJOR.addAll(DATACONVERTER_VERSIONS_LIST = new IntArrayList(converterVersions));
 
@@ -262,7 +269,8 @@ public final class MCVersionRegistry {
     }
 
     static {
-        final Field[] fields = MCVersions.class.getDeclaredFields();
+        final List<Field> fields = new ArrayList<>(List.of(MCVersions.class.getDeclaredFields()));
+        fields.addAll(List.of(ExternalDataProvider.get().extraVersionsClass().getDeclaredFields()));
         for (final Field field : fields) {
             final String name = field.getName();
             final int value;
@@ -320,7 +328,7 @@ public final class MCVersionRegistry {
             }
         }
 
-        DATA_VERSION_LIST.sort((LongComparator) null);
+        DATA_VERSION_LIST.sort(null);
 
         for (final int version : DATACONVERTER_VERSIONS_MAJOR) {
             DATACONVERTER_VERSIONS.add(DataConverter.encodeVersions(version, 0));

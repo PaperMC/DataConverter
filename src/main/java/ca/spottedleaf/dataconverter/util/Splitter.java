@@ -8,18 +8,60 @@ import java.util.List;
 public class Splitter {
 
     public static Splitter on(char c) {
-        throw new UnsupportedOperationException("not implemented");
+        return new Splitter(c);
+    }
+
+    private final char c;
+    private int limit = -1;
+
+    private Splitter(char c) {
+        this.c = c;
     }
 
     public @NotNull Splitter limit(int count) {
-        throw new UnsupportedOperationException("not implemented");
+        if (count <= 0) {
+            throw new IllegalArgumentException("limit must be positive");
+        }
+        this.limit = count;
+        return this;
     }
 
     public Iterable<String> split(String input) {
-        throw new UnsupportedOperationException("not implemented");
+        return splitToList(input);
     }
 
     public List<String> splitToList(String input) {
-        throw new UnsupportedOperationException("not implemented");
+        return splitToList(input, limit);
     }
+
+    public List<String> splitToList(String input, int limit) {
+        if (input.isEmpty()) {
+            return List.of();
+        }
+
+        if (limit == 1) {
+            return List.of(input);
+        }
+
+        var result = new java.util.ArrayList<String>();
+
+        int start = 0;
+        while (true) {
+            int end = input.indexOf(c, start);
+            if (end == -1) {
+                break;
+            }
+
+            if (limit > 0 && result.size() + 1 >= limit) {
+                end = input.length();
+            }
+
+            result.add(input.substring(start, end));
+            start = end + 1;
+        }
+
+        result.add(input.substring(start));
+        return result;
+    }
+
 }

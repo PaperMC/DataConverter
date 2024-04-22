@@ -9,15 +9,14 @@ import com.google.gson.JsonObject;
 import it.unimi.dsi.fastutil.longs.LongArrayList;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 
+@SuppressWarnings("unchecked")
 public final class MCDataConverter {
 
     private static final LongArrayList BREAKPOINTS = MCVersionRegistry.getBreakpoints();
 
     public static <T> T copy(final T type) {
-        if (type instanceof JsonObject) {
-            return (T) ((JsonObject) type).deepCopy();
-        }
-
+        if (type instanceof JsonObject obj)
+            return (T) obj.deepCopy();
         return type;
     }
 
@@ -40,7 +39,7 @@ public final class MCDataConverter {
     public static <T, R> R convert(final DataType<T, R> type, final T data, int fromVersion, final int toVersion) {
         Object ret = data;
 
-        long currentVersion = DataConverter.encodeVersions(fromVersion < 99 ? 99 : fromVersion, Integer.MAX_VALUE);
+        long currentVersion = DataConverter.encodeVersions(Math.max(fromVersion, 99), Integer.MAX_VALUE);
         final long nextVersion = DataConverter.encodeVersions(toVersion, Integer.MAX_VALUE);
 
         for (int i = 0, len = BREAKPOINTS.size(); i < len; ++i) {
