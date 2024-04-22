@@ -210,10 +210,7 @@ public final class CommandArgumentUpgrader {
             } catch (final Exception e) {
                 throw new SimpleCommandExceptionType(new LiteralMessage(e.getMessage())).createWithContext(reader);
             }
-            V3818_Commands.walkComponent(
-                element,
-                MCVersions.V1_20_4, SharedConstants.getCurrentVersion().getDataVersion().getVersion()
-            );
+            V3818_Commands.walkComponent(element);
             return new UpgradedArgument(GsonHelper.toStableString(element));
         }
 
