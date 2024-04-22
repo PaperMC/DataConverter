@@ -5,21 +5,19 @@ import ca.spottedleaf.dataconverter.types.MapType;
 import ca.spottedleaf.dataconverter.types.TypeUtil;
 import ca.spottedleaf.dataconverter.types.nbt.NBTMapType;
 import ca.spottedleaf.dataconverter.util.NamespaceUtil;
-import com.mojang.brigadier.StringReader;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.logging.LogUtils;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.TagParser;
-import net.minecraft.util.Mth;
+import ca.spottedleaf.dataconverter.util.StringReader;
+import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.kyori.adventure.nbt.TagStringIO;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class ConverterParticleToNBT {
 
-    private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = LoggerFactory.getLogger(ConverterParticleToNBT.class);
 
-    private static CompoundTag parseNBT(final String flat) {
+    private static CompoundBinaryTag parseNBT(final String flat) {
         try {
-            return TagParser.parseTag(flat);
+            return TagStringIO.get().asCompound(flat);
         } catch (final Exception ex) {
             LOGGER.warn("Failed to parse nbt: " + flat, ex);
             return null;
@@ -40,7 +38,7 @@ public final class ConverterParticleToNBT {
         // itemname{tagNBT}
         itemNBT.setString("id", NamespaceUtil.correctNamespace(data.substring(0, nbtStart)));
 
-        final CompoundTag tag = parseNBT(data.substring(nbtStart));
+        final CompoundBinaryTag tag = parseNBT(data.substring(nbtStart));
         if (tag != null) {
             // do we need to worry about type conversion?
             itemNBT.setMap("tag", new NBTMapType(tag));
@@ -107,7 +105,7 @@ public final class ConverterParticleToNBT {
         }
     }
 
-    private static ListType parseFloatVector(final StringReader reader, final TypeUtil type) throws CommandSyntaxException {
+    private static ListType parseFloatVector(final StringReader reader, final TypeUtil type) {
         final float x = reader.readFloat();
 
         reader.expect(' ');
@@ -197,9 +195,9 @@ public final class ConverterParticleToNBT {
             final ListType pos = nbt.getTypeUtil().createEmptyList();
             destination.setList("pos", pos);
 
-            pos.addInt(Mth.floor(posX));
-            pos.addInt(Mth.floor(posY));
-            pos.addInt(Mth.floor(posZ));
+            pos.addInt((int) Math.floor(posX));
+            pos.addInt((int) Math.floor(posY));
+            pos.addInt((int) Math.floor(posZ));
         } catch (final Exception ex) {
             LOGGER.warn("Failed to parse vibration particle: " + data, ex);
         }
@@ -264,5 +262,6 @@ public final class ConverterParticleToNBT {
         return ret;
     }
 
-    private ConverterParticleToNBT() {}
+    private ConverterParticleToNBT() {
+    }
 }

@@ -16,10 +16,8 @@ public final class V2100 {
     private static final Map<String, String> RECIPE_RENAMES = Map.of(
             "minecraft:sugar", "minecraft:sugar_from_sugar_cane"
     );
-    private static final Map<String, String> ADVANCEMENT_RENAMES = new HashMap<>(
-            ImmutableMap.of(
-                    "minecraft:recipes/misc/sugar", "minecraft:recipes/misc/sugar_from_sugar_cane"
-            )
+    private static final Map<String, String> ADVANCEMENT_RENAMES = Map.of(
+            "minecraft:recipes/misc/sugar", "minecraft:recipes/misc/sugar_from_sugar_cane"
     );
 
     private static void registerMob(final String id) {
@@ -44,5 +42,6 @@ public final class V2100 {
         });
     }
 
-    private V2100() {}
+    private V2100() {
+    }
 }

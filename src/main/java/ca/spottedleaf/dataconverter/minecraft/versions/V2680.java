@@ -5,7 +5,6 @@ import ca.spottedleaf.dataconverter.minecraft.converters.blockname.ConverterAbst
 import ca.spottedleaf.dataconverter.minecraft.converters.itemname.ConverterAbstractItemRename;
 
 import java.util.Map;
-import java.util.HashMap;
 
 public final class V2680 {
 
@@ -15,10 +14,11 @@ public final class V2680 {
         ConverterAbstractItemRename.register(VERSION, Map.of(
                 "minecraft:grass_path", "minecraft:dirt_path"
         )::get);
-        ConverterAbstractBlockRename.registerAndFixJigsaw(VERSION, Map.of(
+        ConverterAbstractBlockRename.register(VERSION, Map.of(
                 "minecraft:grass_path", "minecraft:dirt_path"
         )::get);
     }
 
-    private V2680() {}
+    private V2680() {
+    }
 }

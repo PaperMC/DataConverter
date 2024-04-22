@@ -6,15 +6,16 @@ import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
 import ca.spottedleaf.dataconverter.types.ListType;
 import ca.spottedleaf.dataconverter.types.MapType;
 import ca.spottedleaf.dataconverter.types.ObjectType;
-import ca.spottedleaf.dataconverter.types.Types;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
 public final class V2970 {
 
-    private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = LoggerFactory.getLogger(V2970.class);
 
     private static final int VERSION = MCVersions.V22W07A + 1;
     private static final Map<String, BiomeRemap> CONVERSION_MAP = Map.ofEntries(
@@ -165,7 +166,8 @@ public final class V2970 {
         });
     }
 
-    private V2970() {}
+    private V2970() {
+    }
 
     private static final class BiomeRemap {
 

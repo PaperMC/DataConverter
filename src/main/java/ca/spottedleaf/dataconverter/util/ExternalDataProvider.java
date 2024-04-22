@@ -17,6 +17,8 @@ public interface ExternalDataProvider {
         return Holder.INSTANCE;
     }
 
+    int dataVersion();
+
     @NotNull List<Integer> extraConverterVersions();
     @NotNull Class<?> extraVersionsClass();
 

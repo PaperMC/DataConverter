@@ -8,7 +8,7 @@ import ca.spottedleaf.dataconverter.types.MapType;
 import ca.spottedleaf.dataconverter.types.ObjectType;
 import ca.spottedleaf.dataconverter.types.TypeUtil;
 import ca.spottedleaf.dataconverter.util.NamespaceUtil;
-import net.minecraft.util.Mth;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -26,7 +26,7 @@ public final class ConverterItemStackToDataComponents {
 
     private static final int DEFAULT_LEATHER_COLOUR = (160 << 16) | (101 << 8) | (64 << 0); // r, g, b
 
-    private static final String[] BUCKETED_MOB_TAGS = new String[] {
+    private static final String[] BUCKETED_MOB_TAGS = new String[]{
             "NoAI",
             "Silent",
             "NoGravity",
@@ -90,6 +90,7 @@ public final class ConverterItemStackToDataComponents {
             )
     );
     private static final String[] MAP_DECORATION_CONVERSION_TABLE = new String[34];
+
     static {
         MAP_DECORATION_CONVERSION_TABLE[0] = "player";
         MAP_DECORATION_CONVERSION_TABLE[1] = "frame";
@@ -137,7 +138,7 @@ public final class ConverterItemStackToDataComponents {
             final Object value = properties.getGeneric(key);
             if (value instanceof Number number) {
                 if (BOOLEAN_BLOCK_STATE_PROPERTIES.contains(key)) {
-                    properties.setString(key, Boolean.toString(number.byteValue() != (byte)0));
+                    properties.setString(key, Boolean.toString(number.byteValue() != (byte) 0));
                 } else {
                     properties.setString(key, number.toString());
                 }
@@ -243,7 +244,7 @@ public final class ConverterItemStackToDataComponents {
 
                     for (int i = 0, len = items.size(); i < len; ++i) {
                         final MapType<String> item = items.getMap(i);
-                        final int slot = (int)item.getByte("Slot", (byte)0) & 0xFF;
+                        final int slot = (int) item.getByte("Slot", (byte) 0) & 0xFF;
                         item.remove("Slot");
 
                         final MapType<String> wrappedItem = item.getTypeUtil().createEmptyMap();
@@ -294,7 +295,7 @@ public final class ConverterItemStackToDataComponents {
                     continue;
                 }
 
-                newEnchantments.setInt(id, Mth.clamp(level.intValue(), 0, 0xFF));
+                newEnchantments.setInt(id, Math.clamp(level.intValue(), 0, 0xFF));
             }
 
             if (!newEnchantments.isEmpty() || hideToolTip) {
@@ -480,7 +481,7 @@ public final class ConverterItemStackToDataComponents {
     }
 
     private static MapType<String> convertAttribute(final Object inputGeneric, final TypeUtil type) {
-        final MapType<String> input = inputGeneric instanceof MapType<?> casted ? (MapType<String>)casted : null;
+        final MapType<String> input = inputGeneric instanceof MapType<?> casted ? (MapType<String>) casted : null;
 
         final MapType<String> ret = type.createEmptyMap();
         ret.setString("name", "");
@@ -548,7 +549,7 @@ public final class ConverterItemStackToDataComponents {
             for (int i = 0, len = decorations.size(); i < len; ++i) {
                 final Object decorationGeneric = decorations.getGeneric(i);
 
-                final MapType<String> decoration = decorationGeneric instanceof MapType<?> casted ? (MapType<String>)casted : null;
+                final MapType<String> decoration = decorationGeneric instanceof MapType<?> casted ? (MapType<String>) casted : null;
 
                 // note: getForcedString mirrors DFU converting to string for key
                 final String id = decoration == null ? "" : decoration.getForcedString("id", "");
@@ -560,7 +561,7 @@ public final class ConverterItemStackToDataComponents {
                 final int typeId = decoration == null ? 0 : decoration.getInt("type", 0);
                 final double x = decoration == null ? 0.0 : decoration.getDouble("x", 0.0);
                 final double z = decoration == null ? 0.0 : decoration.getDouble("z", 0.0);
-                final float rot = decoration == null ? 0.0f : (float)decoration.getDouble("rot", 0.0);
+                final float rot = decoration == null ? 0.0f : (float) decoration.getDouble("rot", 0.0);
 
                 final MapType<String> newDecoration = type.createEmptyMap();
                 newDecorations.setMap(id, newDecoration);
@@ -697,7 +698,7 @@ public final class ConverterItemStackToDataComponents {
             return;
         }
 
-        final MapType<String> input = (MapType<String>)inputGeneric;
+        final MapType<String> input = (MapType<String>) inputGeneric;
 
         RenameHelper.renameSingle(input, "Colors", "colors");
         RenameHelper.renameSingle(input, "FadeColors", "fade_colors");
@@ -746,18 +747,18 @@ public final class ConverterItemStackToDataComponents {
             item.componentSetMap("minecraft:fireworks", newFireworks);
 
             newFireworks.setList("explosions", type.createEmptyList());
-            newFireworks.setByte("flight_duration", (byte)0);
+            newFireworks.setByte("flight_duration", (byte) 0);
 
             return;
         }
 
-        final MapType<String> fireworks = (MapType<String>)fireworksGeneric;
+        final MapType<String> fireworks = (MapType<String>) fireworksGeneric;
 
         final MapType<String> newFireworks = type.createEmptyMap();
         item.componentSetMap("minecraft:fireworks", newFireworks);
 
         final int flight = fireworks.getInt("Flight", 0);
-        newFireworks.setByte("flight_duration", (byte)flight);
+        newFireworks.setByte("flight_duration", (byte) flight);
 
         final ListType explosions = fireworks.getListUnchecked("Explosions", type.createEmptyList());
         newFireworks.setList("explosions", explosions);
@@ -804,7 +805,7 @@ public final class ConverterItemStackToDataComponents {
             return;
         }
 
-        final MapType<String> explosion = (MapType<String>)explosionGeneric;
+        final MapType<String> explosion = (MapType<String>) explosionGeneric;
 
         final MapType<String> explosionCopy = explosion.copy();
         item.componentSetGeneric("minecraft:firework_explosion", explosionCopy);
@@ -847,7 +848,7 @@ public final class ConverterItemStackToDataComponents {
             }
 
             for (int i = 0, len = propertyValues.size(); i < len; ++i) {
-                final MapType<String> property = propertyValues.getGeneric(i) instanceof MapType<?> casted ? (MapType<String>)casted : null;
+                final MapType<String> property = propertyValues.getGeneric(i) instanceof MapType<?> casted ? (MapType<String>) casted : null;
 
                 final String value = property == null ? "" : property.getString("Value", "");
                 final String signature = property == null ? null : property.getString("Signature");
@@ -879,7 +880,7 @@ public final class ConverterItemStackToDataComponents {
             return ret;
         }
 
-        final MapType<String> input = inputGeneric instanceof MapType<?> casted ? (MapType<String>)casted : null;
+        final MapType<String> input = inputGeneric instanceof MapType<?> casted ? (MapType<String>) casted : null;
 
         final String name = input == null ? "" : input.getString("Name", "");
 
@@ -964,7 +965,7 @@ public final class ConverterItemStackToDataComponents {
         if (trim != null) {
             // note: DFU set does nothing if not map
             if ((flags & TOOLTIP_FLAG_HIDE_UPGRADES) != 0 && trim instanceof MapType) {
-                ((MapType<String>)trim).setBoolean("show_in_tooltip", false);
+                ((MapType<String>) trim).setBoolean("show_in_tooltip", false);
             }
 
             item.componentSetGeneric("minecraft:trim", trim);
@@ -1056,7 +1057,8 @@ public final class ConverterItemStackToDataComponents {
         return item.serialize();
     }
 
-    private ConverterItemStackToDataComponents() {}
+    private ConverterItemStackToDataComponents() {
+    }
 
     private static final class TransientItemStack {
 
