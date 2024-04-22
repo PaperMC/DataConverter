@@ -54,7 +54,7 @@ public final class V3818_Commands {
         return new Dynamic<>(NbtOps.INSTANCE, tag).convert(JsonOps.INSTANCE).getValue();
     }
 
-    private static void walkComponent(final JsonElement primitive, final long sourceVersion, final long toVersion) {
+    public static void walkComponent(final JsonElement primitive, final long sourceVersion, final long toVersion) {
         if (!(primitive instanceof JsonObject root)) {
             if (primitive instanceof JsonArray array) {
                 for (final JsonElement component : array) {
