@@ -46,11 +46,11 @@ public final class V3818_Commands {
         return new Dynamic<>(ExternalDataProvider.get().nbtOps(), tag).convert(JsonOps.INSTANCE).getValue();
     }
 
-    public static void walkComponent(final JsonElement primitive, final long sourceVersion, final long toVersion) {
+    public static void walkComponent(final JsonElement primitive) {
         if (!(primitive instanceof JsonObject root)) {
             if (primitive instanceof JsonArray array) {
                 for (final JsonElement component : array) {
-                    walkComponent(component, sourceVersion, toVersion);
+                    walkComponent(component);
                 }
             }
             return;
@@ -66,7 +66,7 @@ public final class V3818_Commands {
 
                 if ((actionString.equals("suggest_command") && cmdString.startsWith("/")) || actionString.equals("run_command")) {
                     final Object res = MCTypeRegistry.DATACONVERTER_CUSTOM_TYPE_COMMAND.convert(
-                            cmdString, sourceVersion, toVersion
+                            cmdString, MCVersions.V1_20_4, SharedConstants.getCurrentVersion().getDataVersion().getVersion()
                     );
                     if (res instanceof String newCmd) {
                         clickEvent.addProperty("value", newCmd);
@@ -147,19 +147,19 @@ public final class V3818_Commands {
         final JsonElement extra = root.get("extra");
         if (extra instanceof JsonArray array) {
             for (final JsonElement component : array) {
-                walkComponent(component, sourceVersion, toVersion);
+                walkComponent(component);
             }
         }
     }
 
-    private static String walkComponent(final String json, final long sourceVersion, final long toVersion) {
+    private static String walkComponent(final String json) {
         if (json == null || json.isEmpty()) {
             return json;
         }
 
         try {
             final JsonElement element = JsonParser.parseString(json);
-            walkComponent(element, sourceVersion, toVersion);
+            walkComponent(element);
             return GsonUtil.toStableString(element);
         } catch (final JsonParseException ex) {
             return json;
@@ -198,7 +198,7 @@ public final class V3818_Commands {
                     return;
                 }
 
-                final String newStr = walkComponent(str, sourceVersion, toVersion);
+                final String newStr = walkComponent(str);
                 if (newStr != null) {
                     data.setString(path, newStr);
                 }
@@ -251,7 +251,7 @@ public final class V3818_Commands {
                 final ListType messages = text.getList("messages", ObjectType.STRING);
                 if (messages != null) {
                     for (int i = 0, len = Math.min(4, messages.size()); i < len; ++i) {
-                        messages.setString(i, walkComponent(messages.getString(i), sourceVersion, toVersion));
+                        messages.setString(i, walkComponent(messages.getString(i)));
                     }
                 }
 
@@ -259,7 +259,7 @@ public final class V3818_Commands {
 
                 if (filteredMessages != null) {
                     for (int i = 0, len = Math.min(4, filteredMessages.size()); i < len; ++i) {
-                        filteredMessages.setString(i, walkComponent(filteredMessages.getString(i), sourceVersion, toVersion));
+                        filteredMessages.setString(i, walkComponent(filteredMessages.getString(i)));
                     }
                 }
             }
