@@ -14,7 +14,7 @@ public final class V2100 {
 
     private static final int VERSION = MCVersions.V1_14_4 + 124;
     private static final Map<String, String> RECIPE_RENAMES = Map.of(
-            "minecraft:sugar", "sugar_from_sugar_cane"
+            "minecraft:sugar", "minecraft:sugar_from_sugar_cane"
     );
     private static final Map<String, String> ADVANCEMENT_RENAMES = new HashMap<>(
             ImmutableMap.of(
