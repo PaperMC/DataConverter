@@ -111,6 +111,36 @@ public final class V3818_Commands {
                         }
                     }
                 }
+                final JsonElement valueElement = hoverEvent.get("value");
+                if (valueElement instanceof JsonPrimitive valuePrimitive) {
+                    try {
+                        final CompoundTag itemNBT = TagParser.parseTag(valuePrimitive.getAsString());
+                        if (itemNBT.contains("id", Tag.TAG_STRING)) {
+                            final boolean explicitCount = itemNBT.contains("Count", Tag.TAG_ANY_NUMERIC);
+                            if (!explicitCount) {
+                                itemNBT.putInt("Count", 1);
+                            }
+                            final CompoundTag converted = MCDataConverter.convertTag(
+                                MCTypeRegistry.ITEM_STACK, itemNBT, MCVersions.V1_20_4,
+                                SharedConstants.getCurrentVersion().getDataVersion().getVersion()
+                            );
+
+                            hoverEvent.remove("value");
+
+                            final JsonObject contents = new JsonObject();
+                            hoverEvent.add("contents", contents);
+
+                            contents.addProperty("id", converted.getString("id"));
+                            if (explicitCount) {
+                                contents.addProperty("count", converted.getInt("count"));
+                            }
+
+                            if (converted.contains("components", Tag.TAG_COMPOUND)) {
+                                contents.add("components", convertToJson(converted.getCompound("components")));
+                            }
+                        }
+                    } catch (final CommandSyntaxException ignore) {}
+                }
             }
         }
 
