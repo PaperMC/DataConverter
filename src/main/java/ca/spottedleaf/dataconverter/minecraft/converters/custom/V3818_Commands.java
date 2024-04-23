@@ -31,6 +31,8 @@ public final class V3818_Commands {
 
     private static final int VERSION = MCVersions.V24W07A + 1;
 
+    private static final boolean DISABLE_COMMAND_CONVERTER = Boolean.getBoolean("Paper.DisableCommandConverter");
+
     public static String toCommandFormat(final CompoundTag components) {
         final StringBuilder ret = new StringBuilder();
         ret.append('[');
@@ -175,6 +177,9 @@ public final class V3818_Commands {
 
     // this is AFTER all the converters for subversion 5, so these run AFTER them
     public static void register_5() {
+        if (DISABLE_COMMAND_CONVERTER) {
+            return;
+        }
         // Command is already registered in walker for command blocks
         MCTypeRegistry.DATACONVERTER_CUSTOM_TYPE_COMMAND.addConverter(new DataConverter<>(VERSION, 5) {
             private static final Supplier<CommandArgumentUpgrader> COMMAND_UPGRADER = Suppliers.memoize(() ->
@@ -198,7 +203,7 @@ public final class V3818_Commands {
         // books
         // note: at this stage, item is converted to components, so we can use the data components type
         MCTypeRegistry.DATA_COMPONENTS.addStructureConverter(new DataConverter<>(VERSION, 5) {
-            private static void walkPath(final MapType<String> data, final String path, final long sourceVersion, final long toVersion) {
+            private static void walkPath(final MapType<String> data, final String path) {
                 final String str = data.getString(path);
                 if (str == null) {
                     return;
@@ -210,7 +215,7 @@ public final class V3818_Commands {
                 }
             }
 
-            private static void walkBookContent(final MapType<String> data, final String path, final long sourceVersion, final long toVersion) {
+            private static void walkBookContent(final MapType<String> data, final String path) {
                 if (data == null) {
                     return;
                 }
@@ -228,14 +233,14 @@ public final class V3818_Commands {
                 for (int i = 0, len = pages.size(); i < len; ++i) {
                     final MapType<String> text = pages.getMap(i);
 
-                    walkPath(text, "raw", sourceVersion, toVersion);
-                    walkPath(text, "filtered", sourceVersion, toVersion);
+                    walkPath(text, "raw");
+                    walkPath(text, "filtered");
                 }
             }
 
             @Override
             public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
-                walkBookContent(data, "minecraft:written_book_content", sourceVersion, toVersion);
+                walkBookContent(data, "minecraft:written_book_content");
                 return null;
             }
         });
@@ -243,7 +248,7 @@ public final class V3818_Commands {
         // signs
 
         final DataConverter<MapType<String>, MapType<String>> signTileConverter = new DataConverter<>(VERSION, 5) {
-            private static void walkText(final MapType<String> data, final String path, final long sourceVersion, final long toVersion) {
+            private static void walkText(final MapType<String> data, final String path) {
                 if (data == null) {
                     return;
                 }
@@ -271,8 +276,8 @@ public final class V3818_Commands {
 
             @Override
             public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
-                walkText(data, "front_text", sourceVersion, toVersion);
-                walkText(data, "back_text", sourceVersion, toVersion);
+                walkText(data, "front_text");
+                walkText(data, "back_text");
                 return null;
             }
         };
