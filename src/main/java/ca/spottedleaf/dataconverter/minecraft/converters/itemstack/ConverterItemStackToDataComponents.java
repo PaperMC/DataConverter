@@ -407,7 +407,7 @@ public final class ConverterItemStackToDataComponents {
                     }
 
                     final String propertyKey = property.substring(0, separatorIdx).trim();
-                    final String propertyValue = property.substring(separatorIdx);
+                    final String propertyValue = property.substring(separatorIdx + 1);
 
                     state.setString(propertyKey, propertyValue);
                 }
