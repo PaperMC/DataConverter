@@ -30,7 +30,7 @@ public final class V3807 {
             return;
         }
 
-        pos.setInts(path, new int[] { x.intValue(), y.intValue(), z.intValue() });
+        data.setInts(path, new int[] { x.intValue(), y.intValue(), z.intValue() });
     }
 
     public static void register() {
