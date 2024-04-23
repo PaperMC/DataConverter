@@ -235,7 +235,6 @@ public final class V3818_Commands {
 
             @Override
             public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
-                walkBookContent(data, "minecraft:writable_book_content", sourceVersion, toVersion);
                 walkBookContent(data, "minecraft:written_book_content", sourceVersion, toVersion);
                 return null;
             }
