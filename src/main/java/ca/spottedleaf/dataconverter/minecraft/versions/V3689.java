@@ -28,7 +28,7 @@ public final class V3689 {
                 }
             }
 
-            WalkerUtils.convert(MCTypeRegistry.ENTITY, data, "spawn_data", fromVersion, toVersion);
+            WalkerUtils.convert(MCTypeRegistry.ENTITY, data.getMap("spawn_data"), "entity", fromVersion, toVersion);
             return null;
         });
     }

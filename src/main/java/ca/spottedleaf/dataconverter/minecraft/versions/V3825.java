@@ -4,8 +4,11 @@ import ca.spottedleaf.dataconverter.converters.DataConverter;
 import ca.spottedleaf.dataconverter.minecraft.MCVersions;
 import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
 import ca.spottedleaf.dataconverter.minecraft.util.ComponentUtils;
+import ca.spottedleaf.dataconverter.minecraft.walkers.generic.WalkerUtils;
 import ca.spottedleaf.dataconverter.minecraft.walkers.itemstack.DataWalkerItems;
+import ca.spottedleaf.dataconverter.types.ListType;
 import ca.spottedleaf.dataconverter.types.MapType;
+import ca.spottedleaf.dataconverter.types.ObjectType;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -97,6 +100,20 @@ public final class V3825 {
 
                 return null;
             }
+        });
+        // DFU does not change the schema, even though it moves spawn_potentials
+        MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, "minecraft:trial_spawner", (final MapType<String> data, final long fromVersion, final long toVersion) -> {
+            final MapType<String> normalConfig = data.getMap("normal_config");
+            if (normalConfig != null) {
+                WalkerUtils.convertListPath(MCTypeRegistry.ENTITY, normalConfig, "spawn_potentials", "data", "entity", fromVersion, toVersion);
+            }
+            final MapType<String> ominousConfig = data.getMap("ominous_config");
+            if (ominousConfig != null) {
+                WalkerUtils.convertListPath(MCTypeRegistry.ENTITY, normalConfig, "spawn_potentials", "data", "entity", fromVersion, toVersion);
+            }
+
+            WalkerUtils.convert(MCTypeRegistry.ENTITY, data.getMap("spawn_data"), "entity", fromVersion, toVersion);
+            return null;
         });
         MCTypeRegistry.TILE_ENTITY.addConverterForId("minecraft:trial_spawner", new DataConverter<>(VERSION) {
             private static final String[] NORMAL_CONFIG_KEYS = new String[] {
