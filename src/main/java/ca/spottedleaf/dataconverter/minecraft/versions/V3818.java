@@ -1,6 +1,7 @@
 package ca.spottedleaf.dataconverter.minecraft.versions;
 
 import ca.spottedleaf.dataconverter.converters.DataConverter;
+import ca.spottedleaf.dataconverter.converters.datatypes.DataWalker;
 import ca.spottedleaf.dataconverter.minecraft.MCVersions;
 import ca.spottedleaf.dataconverter.minecraft.converters.custom.V3818_Commands;
 import ca.spottedleaf.dataconverter.minecraft.converters.helpers.RenameHelper;
@@ -206,50 +207,53 @@ public final class V3818 {
         });
 
         // Step 3
-        MCTypeRegistry.DATA_COMPONENTS.addStructureWalker(VERSION, (final MapType<String> root, final long fromVersion, final long toVersion) -> {
-            WalkerUtils.convertListPath(MCTypeRegistry.ENTITY, root, "minecraft:bees", "entity_data", fromVersion, toVersion);
-
-            WalkerUtils.convert(MCTypeRegistry.TILE_ENTITY, root, "minecraft:block_entity_data", fromVersion, toVersion);
-            WalkerUtils.convertList(MCTypeRegistry.ITEM_STACK, root, "minecraft:bundle_contents", fromVersion, toVersion);
-
-            final MapType<String> canBreak = root.getMap("minecraft:can_break");
-            if (canBreak != null) {
-                final ListType predicates = canBreak.getList("predicates", ObjectType.MAP);
-                if (predicates != null) {
-                    for (int i = 0, len = predicates.size(); i < len; ++i) {
-                        final MapType<String> predicate = predicates.getMap(i);
-
-                        if (predicate.hasKey("blocks", ObjectType.STRING)) {
-                            WalkerUtils.convert(MCTypeRegistry.BLOCK_NAME, predicate, "blocks", fromVersion, toVersion);
-                        } else if (predicate.hasKey("blocks", ObjectType.LIST)) {
-                            WalkerUtils.convertList(MCTypeRegistry.BLOCK_NAME, predicate, "blocks", fromVersion, toVersion);
-                        }
-                    }
+        MCTypeRegistry.DATA_COMPONENTS.addStructureWalker(VERSION, new DataWalker<>() {
+            private static void walkBlockPredicates(final MapType<String> root, final long fromVersion, final long toVersion) {
+                if (root.hasKey("blocks", ObjectType.STRING)) {
+                    WalkerUtils.convert(MCTypeRegistry.BLOCK_NAME, root, "blocks", fromVersion, toVersion);
+                } else if (root.hasKey("blocks", ObjectType.LIST)) {
+                    WalkerUtils.convertList(MCTypeRegistry.BLOCK_NAME, root, "blocks", fromVersion, toVersion);
                 }
             }
 
-            final MapType<String> canPlaceOn = root.getMap("minecraft:can_break");
-            if (canPlaceOn != null) {
-                final ListType predicates = canPlaceOn.getList("predicates", ObjectType.MAP);
-                if (predicates != null) {
-                    for (int i = 0, len = predicates.size(); i < len; ++i) {
-                        final MapType<String> predicate = predicates.getMap(i);
+            @Override
+            public MapType<String> walk(final MapType<String> root, final long fromVersion, final long toVersion) {
+                WalkerUtils.convertListPath(MCTypeRegistry.ENTITY, root, "minecraft:bees", "entity_data", fromVersion, toVersion);
 
-                        if (predicate.hasKey("blocks", ObjectType.STRING)) {
-                            WalkerUtils.convert(MCTypeRegistry.BLOCK_NAME, predicate, "blocks", fromVersion, toVersion);
-                        } else if (predicate.hasKey("blocks", ObjectType.LIST)) {
-                            WalkerUtils.convertList(MCTypeRegistry.BLOCK_NAME, predicate, "blocks", fromVersion, toVersion);
+                WalkerUtils.convert(MCTypeRegistry.TILE_ENTITY, root, "minecraft:block_entity_data", fromVersion, toVersion);
+                WalkerUtils.convertList(MCTypeRegistry.ITEM_STACK, root, "minecraft:bundle_contents", fromVersion, toVersion);
+
+                final MapType<String> canBreak = root.getMap("minecraft:can_break");
+                if (canBreak != null) {
+                    final ListType predicates = canBreak.getList("predicates", ObjectType.MAP);
+                    if (predicates != null) {
+                        for (int i = 0, len = predicates.size(); i < len; ++i) {
+                            walkBlockPredicates(predicates.getMap(i), fromVersion, toVersion);
                         }
                     }
+                    // Not handled by DFU: simple encoding does not require "predicates"
+                    walkBlockPredicates(canBreak, fromVersion, toVersion);
                 }
+
+                final MapType<String> canPlaceOn = root.getMap("minecraft:can_break");
+                if (canPlaceOn != null) {
+                    final ListType predicates = canPlaceOn.getList("predicates", ObjectType.MAP);
+                    if (predicates != null) {
+                        for (int i = 0, len = predicates.size(); i < len; ++i) {
+                            walkBlockPredicates(predicates.getMap(i), fromVersion, toVersion);
+                        }
+                    }
+                    // Not handled by DFU: simple encoding does not require "predicates"
+                    walkBlockPredicates(canPlaceOn, fromVersion, toVersion);
+                }
+
+                WalkerUtils.convertList(MCTypeRegistry.ITEM_STACK, root, "minecraft:charged_projectiles", fromVersion, toVersion);
+                WalkerUtils.convertListPath(MCTypeRegistry.ITEM_STACK, root, "minecraft:container", "item", fromVersion, toVersion);
+                WalkerUtils.convert(MCTypeRegistry.ENTITY, root, "minecraft:entity_data", fromVersion, toVersion);
+                WalkerUtils.convertList(MCTypeRegistry.ITEM_NAME, root, "minecraft:pot_decorations", fromVersion, toVersion);
+
+                return null;
             }
-
-            WalkerUtils.convertList(MCTypeRegistry.ITEM_STACK, root, "minecraft:charged_projectiles", fromVersion, toVersion);
-            WalkerUtils.convertListPath(MCTypeRegistry.ITEM_STACK, root, "minecraft:container", "item", fromVersion, toVersion);
-            WalkerUtils.convert(MCTypeRegistry.ENTITY, root, "minecraft:entity_data", fromVersion, toVersion);
-            WalkerUtils.convertList(MCTypeRegistry.ITEM_NAME, root, "minecraft:pot_decorations", fromVersion, toVersion);
-
-            return null;
         });
 
         // Step 4
