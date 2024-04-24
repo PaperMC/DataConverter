@@ -45,15 +45,13 @@ public final class V3820 {
                     return null;
                 }
 
-                final MapType<String> oldTarget = data.getMap("minecraft:lodestone_target");
+                final MapType<String> oldTarget = components.getMap("minecraft:lodestone_target");
                 if (oldTarget == null) {
                     return null;
                 }
 
-                data.remove("minecraft:lodestone_target");
-                data.setMap("minecraft:lodestone_tracker", oldTarget);
-
-                RenameHelper.renameSingle(data, "minecraft:lodestone_target", "minecraft:lodestone_tracker");
+                components.remove("minecraft:lodestone_target");
+                components.setMap("minecraft:lodestone_tracker", oldTarget);
 
                 final Object pos = oldTarget.getMap("pos");
                 final Object dim = oldTarget.getMap("dimension");
