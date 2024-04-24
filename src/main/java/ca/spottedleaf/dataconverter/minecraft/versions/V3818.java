@@ -190,7 +190,7 @@ public final class V3818 {
                     return null;
                 }
 
-                final MapType<String> tag = data.getOrCreateMap("tag");
+                final MapType<String> tag = item.getOrCreateMap("tag");
 
                 if (potion != null) {
                     tag.setGeneric("Potion", potion);
