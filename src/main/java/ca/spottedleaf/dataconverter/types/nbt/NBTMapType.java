@@ -2,6 +2,7 @@ package ca.spottedleaf.dataconverter.types.nbt;
 
 import ca.spottedleaf.dataconverter.types.*;
 import net.kyori.adventure.nbt.*;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
@@ -111,7 +112,7 @@ public final class NBTMapType implements MapType<String> {
             case LONG:
             case FLOAT:
             case DOUBLE:
-                return ((DoubleBinaryTag) tag).value();
+                return numberValue((NumberBinaryTag) tag);
             case MAP:
                 return new NBTMapType((CompoundBinaryTag) tag);
             case LIST:
@@ -139,22 +140,7 @@ public final class NBTMapType implements MapType<String> {
     public Number getNumber(final String key, final Number dfl) {
         final BinaryTag tag = this.map.get(key);
         if (tag instanceof NumberBinaryTag) {
-            switch (tag) {
-                case ByteBinaryTag byteTag:
-                    return byteTag.value();
-                case ShortBinaryTag shortTag:
-                    return shortTag.value();
-                case IntBinaryTag intTag:
-                    return intTag.value();
-                case LongBinaryTag longTag:
-                    return longTag.value();
-                case FloatBinaryTag floatTag:
-                    return floatTag.value();
-                case DoubleBinaryTag doubleTag:
-                    return doubleTag.value();
-                default:
-                    throw new IllegalStateException("Unrecognized type " + tag);
-            }
+            return numberValue((NumberBinaryTag) tag);
         }
         return dfl;
     }
@@ -454,5 +440,17 @@ public final class NBTMapType implements MapType<String> {
     @Override
     public void setString(final String key, final String val) {
         this.map = this.map.putString(key, val);
+    }
+
+    private Number numberValue(@NotNull NumberBinaryTag tag) {
+        return switch (tag) {
+            case ByteBinaryTag byteTag -> byteTag.value();
+            case ShortBinaryTag shortTag -> shortTag.value();
+            case IntBinaryTag intTag -> intTag.value();
+            case LongBinaryTag longTag -> longTag.value();
+            case FloatBinaryTag floatTag -> floatTag.value();
+            case DoubleBinaryTag doubleTag -> doubleTag.value();
+            default -> throw new IllegalStateException("Unrecognized type " + tag);
+        };
     }
 }
