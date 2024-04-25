@@ -12,9 +12,7 @@ import ca.spottedleaf.dataconverter.util.GsonUtil;
 import com.google.gson.*;
 import com.mojang.serialization.Dynamic;
 import com.mojang.serialization.JsonOps;
-import net.kyori.adventure.nbt.BinaryTag;
-import net.kyori.adventure.nbt.CompoundBinaryTag;
-import net.kyori.adventure.nbt.TagStringIO;
+import net.kyori.adventure.nbt.*;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -68,7 +66,7 @@ public final class V3818_Commands {
 
                 if ((actionString.equals("suggest_command") && cmdString.startsWith("/")) || actionString.equals("run_command")) {
                     final Object res = MCTypeRegistry.DATACONVERTER_CUSTOM_TYPE_COMMAND.convert(
-                            cmdString, MCVersions.V1_20_4, SharedConstants.getCurrentVersion().getDataVersion().getVersion()
+                            cmdString, MCVersions.V1_20_4, ExternalDataProvider.get().dataVersion()
                     );
                     if (res instanceof String newCmd) {
                         clickEvent.addProperty("value", newCmd);
@@ -116,15 +114,15 @@ public final class V3818_Commands {
                 final JsonElement valueElement = hoverEvent.get("value");
                 if (valueElement instanceof JsonPrimitive valuePrimitive) {
                     try {
-                        final CompoundTag itemNBT = TagParser.parseTag(valuePrimitive.getAsString());
-                        if (itemNBT.contains("id", Tag.TAG_STRING)) {
-                            final boolean explicitCount = itemNBT.contains("Count", Tag.TAG_ANY_NUMERIC);
+                        final CompoundBinaryTag itemNBT = TagStringIO.get().asCompound(valuePrimitive.getAsString());
+                        if (itemNBT.get("id") instanceof StringBinaryTag idTag) {
+                            final boolean explicitCount = itemNBT.get("Count") instanceof NumberBinaryTag;
                             if (!explicitCount) {
                                 itemNBT.putInt("Count", 1);
                             }
-                            final CompoundTag converted = MCDataConverter.convertTag(
-                                MCTypeRegistry.ITEM_STACK, itemNBT, MCVersions.V1_20_4,
-                                SharedConstants.getCurrentVersion().getDataVersion().getVersion()
+                            final CompoundBinaryTag converted = MCDataConverter.convertTag(
+                                    MCTypeRegistry.ITEM_STACK, itemNBT, MCVersions.V1_20_4,
+                                    ExternalDataProvider.get().dataVersion()
                             );
 
                             hoverEvent.remove("value");
@@ -137,11 +135,12 @@ public final class V3818_Commands {
                                 contents.addProperty("count", converted.getInt("count"));
                             }
 
-                            if (converted.contains("components", Tag.TAG_COMPOUND)) {
-                                contents.add("components", convertToJson(converted.getCompound("components")));
+                            if (converted.getCompound("components") instanceof CompoundBinaryTag componentsTag) {
+                                contents.add("components", convertToJson(componentsTag));
                             }
                         }
-                    } catch (final CommandSyntaxException ignore) {}
+                    } catch (final IOException ignore) {
+                    }
                 }
             }
         }
