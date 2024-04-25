@@ -6,9 +6,7 @@ import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
 import ca.spottedleaf.dataconverter.minecraft.util.ComponentUtils;
 import ca.spottedleaf.dataconverter.minecraft.walkers.generic.WalkerUtils;
 import ca.spottedleaf.dataconverter.minecraft.walkers.itemstack.DataWalkerItems;
-import ca.spottedleaf.dataconverter.types.ListType;
 import ca.spottedleaf.dataconverter.types.MapType;
-import ca.spottedleaf.dataconverter.types.ObjectType;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -109,7 +107,7 @@ public final class V3825 {
             }
             final MapType<String> ominousConfig = data.getMap("ominous_config");
             if (ominousConfig != null) {
-                WalkerUtils.convertListPath(MCTypeRegistry.ENTITY, normalConfig, "spawn_potentials", "data", "entity", fromVersion, toVersion);
+                WalkerUtils.convertListPath(MCTypeRegistry.ENTITY, ominousConfig, "spawn_potentials", "data", "entity", fromVersion, toVersion);
             }
 
             WalkerUtils.convert(MCTypeRegistry.ENTITY, data.getMap("spawn_data"), "entity", fromVersion, toVersion);
