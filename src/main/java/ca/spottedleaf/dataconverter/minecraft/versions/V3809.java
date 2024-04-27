@@ -32,6 +32,7 @@ public final class V3809 {
         };
 
         MCTypeRegistry.ENTITY.addConverterForId("minecraft:llama", slotConverter);
+        MCTypeRegistry.ENTITY.addConverterForId("minecraft:trader_llama", slotConverter);
         MCTypeRegistry.ENTITY.addConverterForId("minecraft:mule", slotConverter);
         MCTypeRegistry.ENTITY.addConverterForId("minecraft:donkey", slotConverter);
     }

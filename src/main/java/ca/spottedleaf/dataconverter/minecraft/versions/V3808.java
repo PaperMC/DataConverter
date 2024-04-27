@@ -70,6 +70,12 @@ public final class V3808 {
         MCTypeRegistry.ENTITY.addWalker(VERSION, 1, "minecraft:llama", new DataWalkerItemLists("Items"));
         MCTypeRegistry.ENTITY.addWalker(VERSION, 1, "minecraft:llama", new DataWalkerItems("SaddleItem"));
         V100.registerEquipment(VERSION, 1, "minecraft:llama");
+
+        // Step 2
+        MCTypeRegistry.ENTITY.addConverterForId("minecraft:trader_llama", new BodyArmorConverter(VERSION, 2, "DecorItem", false));
+        MCTypeRegistry.ENTITY.addWalker(VERSION, 2, "minecraft:trader_llama", new DataWalkerItemLists("Items"));
+        MCTypeRegistry.ENTITY.addWalker(VERSION, 2, "minecraft:trader_llama", new DataWalkerItems("SaddleItem"));
+        V100.registerEquipment(VERSION, 2, "minecraft:trader_llama");
     }
 
     private V3808() {}
