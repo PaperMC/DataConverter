@@ -235,7 +235,7 @@ public final class V3818 {
                     walkBlockPredicates(canBreak, fromVersion, toVersion);
                 }
 
-                final MapType<String> canPlaceOn = root.getMap("minecraft:can_break");
+                final MapType<String> canPlaceOn = root.getMap("minecraft:can_place_on");
                 if (canPlaceOn != null) {
                     final ListType predicates = canPlaceOn.getList("predicates", ObjectType.MAP);
                     if (predicates != null) {
