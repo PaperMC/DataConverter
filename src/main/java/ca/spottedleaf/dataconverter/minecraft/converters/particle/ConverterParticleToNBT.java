@@ -56,27 +56,29 @@ public final class ConverterParticleToNBT {
             reader.expect('[');
             reader.skipWhitespace();
 
-            while (reader.canRead() && reader.peek() != ']') {
-                reader.skipWhitespace();
-
-                final String property = reader.readString();
-
-                reader.skipWhitespace();
-                reader.expect('=');
-                reader.skipWhitespace();
-
-                final String value = reader.readString();
-                ret.setString(property, value);
-
-                reader.skipWhitespace();
-                if (reader.canRead()) {
-                    if (reader.peek() != ',') {
-                        // invalid character or ']'
-                        break;
+            if (reader.canRead() && reader.peek() != ']') {
+                while (reader.canRead()) {
+                    final String property = reader.readString();
+    
+                    reader.skipWhitespace();
+                    reader.expect('=');
+                    reader.skipWhitespace();
+    
+                    final String value = reader.readString();
+                    ret.setString(property, value);
+    
+                    reader.skipWhitespace();
+                    if (reader.canRead()) {
+                        if (reader.peek() != ',') {
+                            // invalid character or ']'
+                            break;
+                        }
+    
+                        // skip ',' and move onto next entry
+                        reader.skip();
                     }
-
-                    // skip ',' and move onto next entry
-                    reader.peek();
+                    
+                    reader.skipWhitespace();
                 }
             }
 
