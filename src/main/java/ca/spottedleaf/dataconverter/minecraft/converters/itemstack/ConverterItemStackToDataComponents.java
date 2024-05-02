@@ -238,7 +238,7 @@ public final class ConverterItemStackToDataComponents {
             case "minecraft:crafter": {
                 final ListType items = tileEntity.getList("Items", ObjectType.MAP);
                 tileEntity.remove("Items");
-                if (items != null && items.size() > 1) {
+                if (items != null && items.size() > 0) {
                     transientItem.componentSetList("minecraft:container", items);
 
                     for (int i = 0, len = items.size(); i < len; ++i) {
