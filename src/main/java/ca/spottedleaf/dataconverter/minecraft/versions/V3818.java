@@ -207,7 +207,7 @@ public final class V3818 {
         });
 
         // Step 3
-        MCTypeRegistry.DATA_COMPONENTS.addStructureWalker(VERSION, new DataWalker<>() {
+        MCTypeRegistry.DATA_COMPONENTS.addStructureWalker(VERSION, 3, new DataWalker<>() {
             private static void walkBlockPredicates(final MapType<String> root, final long fromVersion, final long toVersion) {
                 if (root.hasKey("blocks", ObjectType.STRING)) {
                     WalkerUtils.convert(MCTypeRegistry.BLOCK_NAME, root, "blocks", fromVersion, toVersion);
