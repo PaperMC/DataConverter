@@ -53,10 +53,10 @@ public final class V3820 {
                 components.remove("minecraft:lodestone_target");
                 components.setMap("minecraft:lodestone_tracker", oldTarget);
 
-                final Object pos = oldTarget.getMap("pos");
-                final Object dim = oldTarget.getMap("dimension");
+                final Object pos = oldTarget.getGeneric("pos");
+                final Object dim = oldTarget.getGeneric("dimension");
 
-                if (pos == null && dim == null) {
+                if (pos == null || dim == null) {
                     return null;
                 }
 
