@@ -8,6 +8,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.google.gson.internal.Streams;
 import com.google.gson.stream.JsonReader;
+import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.LiteralMessage;
 import com.mojang.brigadier.ParseResults;
@@ -41,12 +42,17 @@ import net.minecraft.commands.CommandSource;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.ComponentArgument;
+import net.minecraft.commands.arguments.CompoundTagArgument;
+import net.minecraft.commands.arguments.ResourceLocationArgument;
+import net.minecraft.commands.arguments.coordinates.Vec3Argument;
 import net.minecraft.commands.arguments.item.ItemArgument;
+import net.minecraft.commands.synchronization.SuggestionProviders;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.SnbtPrinterTagVisitor;
 import net.minecraft.nbt.Tag;
 import net.minecraft.nbt.TagParser;
 import net.minecraft.network.chat.CommonComponents;
@@ -70,6 +76,7 @@ public final class CommandArgumentUpgrader {
         return new CommandArgumentUpgrader(functionPermissionLevel, builder -> {
             builder.registerReplacement(ItemArgument.class, (argument, ctx) -> new ItemParser_1_20_4());
             builder.registerReplacement(ComponentArgument.class, (argument, ctx) -> new ComponentParser_1_20_4());
+            builder.registerExtraCommand(CommandArgumentUpgrader::registerSummon_1_20_4_to_1_20_5);
         });
     }
 
@@ -120,6 +127,9 @@ public final class CommandArgumentUpgrader {
                 );
             }
         });
+        for (final Consumer<CommandDispatcher<CommandSourceStack>> extra : builder.extra) {
+            extra.accept(this.dispatcher);
+        }
         ExecuteCommand.register(this.dispatcher, context);
         ReturnCommand.register(this.dispatcher);
         // This looks weird, but it's what vanilla does when loading functions for datapacks
@@ -139,6 +149,7 @@ public final class CommandArgumentUpgrader {
     public static final class ReplacementsBuilder {
         private final Map<Class<?>, BiFunction<ArgumentType<?>, CommandBuildContext, ArgumentType<?>>> replacements =
             new HashMap<>();
+        private final List<Consumer<CommandDispatcher<CommandSourceStack>>> extra = new ArrayList<>();
 
         private ReplacementsBuilder() {
         }
@@ -150,6 +161,14 @@ public final class CommandArgumentUpgrader {
         ) {
             this.replacements.put(type, (BiFunction) upgrader);
         }
+
+        public void registerExtraCommand(final Consumer<CommandDispatcher<CommandSourceStack>> consumer) {
+            this.extra.add(consumer);
+        }
+    }
+
+    public interface UpgradableArgument {
+        String upgrade(int index, List<Pair<String, ParsedArgument<CommandSourceStack, ?>>> arguments);
     }
 
     public record UpgradedArgument(String upgraded) {}
@@ -252,11 +271,14 @@ public final class CommandArgumentUpgrader {
         final Map<StringRange, String> replacements = new LinkedHashMap<>();
         final List<Pair<String, ParsedArgument<CommandSourceStack, ?>>> mergedArguments = new ArrayList<>();
         addArguments(mergedArguments, parseResult.getContext());
-        mergedArguments.forEach(pair -> {
+        for (int i = 0; i < mergedArguments.size(); i++) {
+            final Pair<String, ParsedArgument<CommandSourceStack, ?>> pair = mergedArguments.get(i);
             if (pair.value().getResult() instanceof UpgradedArgument upgraded) {
                 replacements.put(pair.value().getRange(), upgraded.upgraded());
+            } else if (pair.value().getResult() instanceof UpgradableArgument upgradable) {
+                replacements.put(pair.value().getRange(), upgradable.upgrade(i, mergedArguments));
             }
-        });
+        }
         String upgradedCommand = command;
         while (!replacements.isEmpty()) {
             final Map.Entry<StringRange, String> next = replacements.entrySet().iterator().next();
@@ -382,6 +404,45 @@ public final class CommandArgumentUpgrader {
             parent.addChild(copy);
         }
         return result;
+    }
+
+    public static void registerSummon_1_20_4_to_1_20_5(final CommandDispatcher<CommandSourceStack> dispatcher) {
+        dispatcher.register(
+            Commands.literal("summon")
+                .requires(commandSourceStack -> commandSourceStack.hasPermission(2))
+                .then(Commands.argument("entity", ResourceLocationArgument.id())
+                    .suggests(SuggestionProviders.SUMMONABLE_ENTITIES)
+                    .executes(commandContext -> Command.SINGLE_SUCCESS)
+                    .then(Commands.argument("pos", Vec3Argument.vec3())
+                        .executes(commandContext -> Command.SINGLE_SUCCESS)
+                        .then(Commands.argument("nbt", new ArgumentType<UpgradableArgument>() {
+                                @Override
+                                public UpgradableArgument parse(final StringReader reader) throws CommandSyntaxException {
+                                    final CompoundTag tag = CompoundTagArgument.compoundTag().parse(reader);
+
+                                    return (index, args) -> {
+                                        final CompoundTag tagCopy = tag.copy();
+
+                                        final Pair<String, ParsedArgument<CommandSourceStack, ?>> entityTypePair =
+                                            args.get(index - 2);
+                                        final ResourceLocation entityType =
+                                            (ResourceLocation) entityTypePair.value().getResult();
+
+                                        tagCopy.putString("id", entityType.toString());
+
+                                        final CompoundTag convertedTag = MCDataConverter.convertTag(
+                                            MCTypeRegistry.ENTITY,
+                                            tagCopy,
+                                            3700, SharedConstants.getCurrentVersion().getDataVersion().getVersion()
+                                        );
+
+                                        final SnbtPrinterTagVisitor visitor = new SnbtPrinterTagVisitor("", 0, new ArrayList<>());
+                                        return visitor.visit(convertedTag);
+                                    };
+                                }
+                            })
+                            .executes(commandContext -> Command.SINGLE_SUCCESS))))
+        );
     }
 
     private static CommandBuildContext makeDummyCommandBuildContext() {
