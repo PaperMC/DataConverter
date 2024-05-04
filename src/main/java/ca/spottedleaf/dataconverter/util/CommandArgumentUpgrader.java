@@ -46,7 +46,6 @@ import net.minecraft.commands.arguments.CompoundTagArgument;
 import net.minecraft.commands.arguments.ResourceLocationArgument;
 import net.minecraft.commands.arguments.coordinates.Vec3Argument;
 import net.minecraft.commands.arguments.item.ItemArgument;
-import net.minecraft.commands.synchronization.SuggestionProviders;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.HolderSet;
@@ -409,9 +408,7 @@ public final class CommandArgumentUpgrader {
     public static void registerSummon_1_20_4_to_1_20_5(final CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(
             Commands.literal("summon")
-                .requires(commandSourceStack -> commandSourceStack.hasPermission(2))
                 .then(Commands.argument("entity", ResourceLocationArgument.id())
-                    .suggests(SuggestionProviders.SUMMONABLE_ENTITIES)
                     .executes(commandContext -> Command.SINGLE_SUCCESS)
                     .then(Commands.argument("pos", Vec3Argument.vec3())
                         .executes(commandContext -> Command.SINGLE_SUCCESS)
