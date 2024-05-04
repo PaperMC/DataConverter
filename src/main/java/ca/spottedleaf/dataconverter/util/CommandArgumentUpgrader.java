@@ -429,12 +429,12 @@ public final class CommandArgumentUpgrader {
                                             (ResourceLocation) entityTypePair.value().getResult();
 
                                         tagCopy.putString("id", entityType.toString());
-
                                         final CompoundTag convertedTag = MCDataConverter.convertTag(
                                             MCTypeRegistry.ENTITY,
                                             tagCopy,
                                             3700, SharedConstants.getCurrentVersion().getDataVersion().getVersion()
                                         );
+                                        convertedTag.remove("id");
 
                                         final SnbtPrinterTagVisitor visitor = new SnbtPrinterTagVisitor("", 0, new ArrayList<>());
                                         return visitor.visit(convertedTag);
