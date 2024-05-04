@@ -432,7 +432,7 @@ public final class CommandArgumentUpgrader {
                                         final CompoundTag convertedTag = MCDataConverter.convertTag(
                                             MCTypeRegistry.ENTITY,
                                             tagCopy,
-                                            3700, SharedConstants.getCurrentVersion().getDataVersion().getVersion()
+                                            MCVersions.V1_20_4, SharedConstants.getCurrentVersion().getDataVersion().getVersion()
                                         );
                                         convertedTag.remove("id");
 
