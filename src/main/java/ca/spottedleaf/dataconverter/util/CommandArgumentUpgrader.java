@@ -51,7 +51,6 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.SnbtPrinterTagVisitor;
 import net.minecraft.nbt.Tag;
 import net.minecraft.nbt.TagParser;
 import net.minecraft.network.chat.CommonComponents;
@@ -433,8 +432,7 @@ public final class CommandArgumentUpgrader {
                                         );
                                         convertedTag.remove("id");
 
-                                        final SnbtPrinterTagVisitor visitor = new SnbtPrinterTagVisitor("", 0, new ArrayList<>());
-                                        return visitor.visit(convertedTag);
+                                        return convertedTag.toString();
                                     };
                                 }
                             })
