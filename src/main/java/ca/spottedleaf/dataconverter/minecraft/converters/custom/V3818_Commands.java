@@ -75,8 +75,8 @@ public final class V3818_Commands {
                 final String cmdString = cmd.getAsString();
 
                 if ((actionString.equals("suggest_command") && cmdString.startsWith("/")) || actionString.equals("run_command")) {
-                    final Object res = MCTypeRegistry.DATACONVERTER_CUSTOM_TYPE_COMMAND.convert(
-                            cmdString, MCVersions.V1_20_4, SharedConstants.getCurrentVersion().getDataVersion().getVersion()
+                    final Object res = MCDataConverter.convert(
+                        MCTypeRegistry.DATACONVERTER_CUSTOM_TYPE_COMMAND, cmdString, MCVersions.V1_20_4, SharedConstants.getCurrentVersion().getDataVersion().getVersion()
                     );
                     if (res instanceof String newCmd) {
                         clickEvent.addProperty("value", newCmd);
