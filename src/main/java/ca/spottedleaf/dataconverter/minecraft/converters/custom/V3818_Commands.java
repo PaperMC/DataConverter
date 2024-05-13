@@ -16,6 +16,7 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Dynamic;
 import com.mojang.serialization.JsonOps;
 import net.minecraft.SharedConstants;
@@ -24,6 +25,7 @@ import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.nbt.TagParser;
 import net.minecraft.util.GsonHelper;
+import org.slf4j.Logger;
 import java.util.Iterator;
 import java.util.function.Supplier;
 
@@ -32,6 +34,8 @@ public final class V3818_Commands {
     private static final int VERSION = MCVersions.V24W07A + 1;
 
     private static final boolean DISABLE_COMMAND_CONVERTER = Boolean.getBoolean("Paper.DisableCommandConverter");
+
+    private static final Logger LOGGER = LogUtils.getLogger();
 
     public static String toCommandFormat(final CompoundTag components) {
         final StringBuilder ret = new StringBuilder();
@@ -75,11 +79,15 @@ public final class V3818_Commands {
                 final String cmdString = cmd.getAsString();
 
                 if ((actionString.equals("suggest_command") && cmdString.startsWith("/")) || actionString.equals("run_command")) {
-                    final Object res = MCDataConverter.convert(
-                        MCTypeRegistry.DATACONVERTER_CUSTOM_TYPE_COMMAND, cmdString, MCVersions.V1_20_4, SharedConstants.getCurrentVersion().getDataVersion().getVersion()
-                    );
-                    if (res instanceof String newCmd) {
-                        clickEvent.addProperty("value", newCmd);
+                    try {
+                        final Object res = MCDataConverter.convert(
+                            MCTypeRegistry.DATACONVERTER_CUSTOM_TYPE_COMMAND, cmdString, MCVersions.V1_20_4, SharedConstants.getCurrentVersion().getDataVersion().getVersion()
+                        );
+                        if (res instanceof String newCmd) {
+                            clickEvent.addProperty("value", newCmd);
+                        }
+                    } catch (final Exception ex) {
+                        LOGGER.error("Failed to convert command '" + cmdString + "'", ex);
                     }
                 }
             }
@@ -172,6 +180,9 @@ public final class V3818_Commands {
             return GsonHelper.toStableString(element);
         } catch (final JsonParseException ex) {
             return json;
+        } catch (final Exception ex) {
+            LOGGER.error("Failed to convert text component '" + json + "'", ex);
+            return json;
         }
     }
 
@@ -192,7 +203,12 @@ public final class V3818_Commands {
                 }
                 // We use startsWith("/") because we aren't supporting WorldEdit style commands,
                 // and passing the context of whether the use supports leading slash would be high effort low return
-                return COMMAND_UPGRADER.get().upgradeCommandArguments(cmd, cmd.startsWith("/"));
+                try {
+                    return COMMAND_UPGRADER.get().upgradeCommandArguments(cmd, cmd.startsWith("/"));
+                } catch (final Exception ex) {
+                    LOGGER.error("Failed to convert command '" + cmd + "'", ex);
+                    return null;
+                }
             }
         });
 
