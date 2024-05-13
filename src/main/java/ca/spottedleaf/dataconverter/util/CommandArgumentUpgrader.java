@@ -117,7 +117,7 @@ public final class CommandArgumentUpgrader {
                     new LiteralCommandNode<>(
                         redirectNode.getName(),
                         null,
-                        null,
+                        toNode.getRequirement(),
                         toNode,
                         redirectNode.getRedirectModifier(),
                         redirectNode.isFork()
