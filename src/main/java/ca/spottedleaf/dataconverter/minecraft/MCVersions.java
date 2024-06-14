@@ -522,6 +522,18 @@ public final class MCVersions {
     public static final int V1_20_5               = 3837;
     public static final int V1_20_6_RC1           = 3838;
     public static final int V1_20_6               = 3839;
+    public static final int V2418WA               = 3940;
+    public static final int V2419WA               = 3941;
+    public static final int V2419WB               = 3942;
+    public static final int V2420WA               = 3944;
+    public static final int V2421WA               = 3946;
+    public static final int V2421WB               = 3947;
+    public static final int V_1_21_PRE1           = 3948;
+    public static final int V_1_21_PRE2           = 3949;
+    public static final int V_1_21_PRE3           = 3950;
+    public static final int V_1_21_PRE4           = 3951;
+    public static final int V_1_21_RC1            = 3952;
+    public static final int V_1_21                = 3953;
 
     private MCVersions() {}
 }

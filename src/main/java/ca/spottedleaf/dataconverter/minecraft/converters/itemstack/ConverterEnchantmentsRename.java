@@ -3,6 +3,7 @@ package ca.spottedleaf.dataconverter.minecraft.converters.itemstack;
 import ca.spottedleaf.dataconverter.converters.DataConverter;
 import ca.spottedleaf.dataconverter.minecraft.converters.helpers.RenameHelper;
 import ca.spottedleaf.dataconverter.types.MapType;
+import ca.spottedleaf.dataconverter.util.NamespaceUtil;
 import java.util.function.Function;
 
 public final class ConverterEnchantmentsRename extends DataConverter<MapType<String>, MapType<String>> {
@@ -16,7 +17,9 @@ public final class ConverterEnchantmentsRename extends DataConverter<MapType<Str
     public ConverterEnchantmentsRename(final int toVersion, final int versionStep, final Function<String, String> renamer) {
         super(toVersion, versionStep);
 
-        this.renamer = renamer;
+        this.renamer = (final String input) -> {
+            return renamer.apply(NamespaceUtil.correctNamespace(input));
+        };
     }
 
     @Override

@@ -6,6 +6,7 @@ import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
 import ca.spottedleaf.dataconverter.minecraft.walkers.block_name.DataWalkerBlockNames;
 import ca.spottedleaf.dataconverter.minecraft.walkers.itemstack.DataWalkerItemLists;
 import ca.spottedleaf.dataconverter.types.MapType;
+import ca.spottedleaf.dataconverter.util.NamespaceUtil;
 import net.minecraft.resources.ResourceLocation;
 import java.util.HashMap;
 import java.util.Locale;
@@ -30,7 +31,7 @@ public final class V1460 {
                 String motive = data.getString("Motive");
                 if (motive != null) {
                     motive = motive.toLowerCase(Locale.ROOT);
-                    data.setString("Motive", new ResourceLocation(MOTIVE_REMAP.getOrDefault(motive, motive)).toString());
+                    data.setString("Motive", NamespaceUtil.correctNamespace(MOTIVE_REMAP.getOrDefault(motive, motive)));
                 }
                 return null;
             }

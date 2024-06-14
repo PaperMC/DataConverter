@@ -324,8 +324,8 @@ public final class V1451 {
                         id = criteriaName;
                     } else {
                         try {
-                            type = ResourceLocation.of(criteriaName.substring(0, index), '.').toString();
-                            id = ResourceLocation.of(criteriaName.substring(index + 1), '.').toString();
+                            type = ResourceLocation.bySeparator(criteriaName.substring(0, index), '.').toString();
+                            id = ResourceLocation.bySeparator(criteriaName.substring(index + 1), '.').toString();
                         } catch (final Exception ex) {
                             type = "_special";
                             id = criteriaName;

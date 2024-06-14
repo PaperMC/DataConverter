@@ -251,6 +251,7 @@ public final class V3818 {
                 WalkerUtils.convertListPath(MCTypeRegistry.ITEM_STACK, root, "minecraft:container", "item", fromVersion, toVersion);
                 WalkerUtils.convert(MCTypeRegistry.ENTITY, root, "minecraft:entity_data", fromVersion, toVersion);
                 WalkerUtils.convertList(MCTypeRegistry.ITEM_NAME, root, "minecraft:pot_decorations", fromVersion, toVersion);
+                WalkerUtils.convert(MCTypeRegistry.ITEM_STACK, root.getMap("minecraft:food"), "using_converts_to", fromVersion, toVersion);
 
                 return null;
             }

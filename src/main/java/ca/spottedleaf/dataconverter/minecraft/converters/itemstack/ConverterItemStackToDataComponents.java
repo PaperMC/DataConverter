@@ -526,12 +526,13 @@ public final class ConverterItemStackToDataComponents {
             }
         }
 
-        final boolean hideModifiers = (flags & TOOLTIP_FLAG_HIDE_MODIFIERS) != 0;
-        if (newAttributes.size() > 0 || hideModifiers) {
+        if (newAttributes.size() > 0) {
             final MapType<String> newModifiers = type.createEmptyMap();
             item.componentSetMap("minecraft:attribute_modifiers", newModifiers);
 
             newModifiers.setList("modifiers", newAttributes);
+
+            final boolean hideModifiers = (flags & TOOLTIP_FLAG_HIDE_MODIFIERS) != 0;
             if (hideModifiers) {
                 newModifiers.setBoolean("show_in_tooltip", false);
             }
