@@ -44,12 +44,12 @@ public final class V3808 {
 
                 if (this.clearArmor) {
                     final ListType armor = data.getList("ArmorItems", ObjectType.MAP);
-                    if (armor.size() > 2) {
+                    if (armor != null && armor.size() > 2) {
                         armor.setMap(2, data.getTypeUtil().createEmptyMap());
                     }
 
                     final ListType chances = data.getList("ArmorDropChances", ObjectType.FLOAT);
-                    if (chances.size() > 2) {
+                    if (chances != null && chances.size() > 2) {
                         chances.setFloat(2, 0.085F);
                     }
                 }
