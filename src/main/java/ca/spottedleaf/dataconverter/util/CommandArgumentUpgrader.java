@@ -44,6 +44,7 @@ import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.ComponentArgument;
 import net.minecraft.commands.arguments.CompoundTagArgument;
 import net.minecraft.commands.arguments.ResourceLocationArgument;
+import net.minecraft.commands.arguments.blocks.BlockStateArgument;
 import net.minecraft.commands.arguments.coordinates.Vec3Argument;
 import net.minecraft.commands.arguments.item.ItemArgument;
 import net.minecraft.core.Holder;
@@ -74,6 +75,7 @@ public final class CommandArgumentUpgrader {
         return new CommandArgumentUpgrader(functionPermissionLevel, builder -> {
             builder.registerReplacement(ItemArgument.class, (argument, ctx) -> new ItemParser_1_20_4());
             builder.registerReplacement(ComponentArgument.class, (argument, ctx) -> new ComponentParser_1_20_4());
+            builder.registerReplacement(BlockStateArgument.class, (argument, ctx) -> new BlockStateParser_1_20_4());
             builder.registerExtraCommand(CommandArgumentUpgrader::registerSummon_1_20_4_to_1_20_5);
         });
     }
@@ -252,6 +254,40 @@ public final class CommandArgumentUpgrader {
             } catch (IllegalAccessException var2) {
                 throw new IllegalStateException("Couldn't read position of JsonReader", var2);
             }
+        }
+    }
+
+    private static class BlockStateParser_1_20_4 implements ArgumentType<UpgradedArgument> {
+        @Override
+        public UpgradedArgument parse(final StringReader reader) throws CommandSyntaxException {
+            String block = ResourceLocation.read(reader).toString();
+
+            StringBuilder proprieties = new StringBuilder();
+            if (reader.canRead() && reader.peek() == '[') {
+                char c;
+                do {
+                    c = reader.read();
+                    proprieties.append(c);
+                } while (reader.canRead() && c != ']');
+            }
+
+            if (!reader.canRead() || reader.peek() != '{') {
+                return new UpgradedArgument(block + proprieties);
+            }
+
+            CompoundTag tag = new TagParser(reader).readStruct();
+            boolean missId = !tag.contains("id", Tag.TAG_STRING);
+            if (missId) { // Data converter can't upgrade tile entities without it
+                tag.putString("id", block);
+            }
+            tag = MCDataConverter.convertTag(
+                MCTypeRegistry.TILE_ENTITY, tag, MCVersions.V1_20_4, SharedConstants.getCurrentVersion().getDataVersion().getVersion()
+            );
+            if (missId) {
+                tag.remove("id");
+            }
+
+            return new UpgradedArgument(block + proprieties + tag);
         }
     }
 
