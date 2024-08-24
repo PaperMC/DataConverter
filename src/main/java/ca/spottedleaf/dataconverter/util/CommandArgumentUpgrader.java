@@ -262,17 +262,17 @@ public final class CommandArgumentUpgrader {
         public UpgradedArgument parse(final StringReader reader) throws CommandSyntaxException {
             String block = ResourceLocation.read(reader).toString();
 
-            StringBuilder proprieties = new StringBuilder();
+            StringBuilder properties = new StringBuilder();
             if (reader.canRead() && reader.peek() == '[') {
                 char c;
                 do {
                     c = reader.read();
-                    proprieties.append(c);
+                    properties.append(c);
                 } while (reader.canRead() && c != ']');
             }
 
             if (!reader.canRead() || reader.peek() != '{') {
-                return new UpgradedArgument(block + proprieties);
+                return new UpgradedArgument(block + properties);
             }
 
             CompoundTag tag = new TagParser(reader).readStruct();
@@ -287,7 +287,7 @@ public final class CommandArgumentUpgrader {
                 tag.remove("id");
             }
 
-            return new UpgradedArgument(block + proprieties + tag);
+            return new UpgradedArgument(block + properties + tag);
         }
     }
 
