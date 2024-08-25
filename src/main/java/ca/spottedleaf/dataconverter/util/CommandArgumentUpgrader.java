@@ -44,6 +44,7 @@ import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.ComponentArgument;
 import net.minecraft.commands.arguments.CompoundTagArgument;
 import net.minecraft.commands.arguments.ResourceLocationArgument;
+import net.minecraft.commands.arguments.blocks.BlockStateArgument;
 import net.minecraft.commands.arguments.coordinates.Vec3Argument;
 import net.minecraft.commands.arguments.item.ItemArgument;
 import net.minecraft.core.Holder;
@@ -74,6 +75,7 @@ public final class CommandArgumentUpgrader {
         return new CommandArgumentUpgrader(functionPermissionLevel, builder -> {
             builder.registerReplacement(ItemArgument.class, (argument, ctx) -> new ItemParser_1_20_4());
             builder.registerReplacement(ComponentArgument.class, (argument, ctx) -> new ComponentParser_1_20_4());
+            builder.registerReplacement(BlockStateArgument.class, (argument, ctx) -> new BlockStateParser_1_20_4());
             builder.registerExtraCommand(CommandArgumentUpgrader::registerSummon_1_20_4_to_1_20_5);
         });
     }
@@ -253,6 +255,105 @@ public final class CommandArgumentUpgrader {
                 throw new IllegalStateException("Couldn't read position of JsonReader", var2);
             }
         }
+    }
+
+    private static class BlockStateParser_1_20_4 implements ArgumentType<UpgradedArgument> {
+        @Override
+        public UpgradedArgument parse(final StringReader reader) throws CommandSyntaxException {
+            String block = ResourceLocation.read(reader).toString();
+
+            StringBuilder properties = new StringBuilder();
+            if (reader.canRead() && reader.peek() == '[') {
+                char c;
+                do {
+                    c = reader.read();
+                    properties.append(c);
+                } while (reader.canRead() && c != ']');
+            }
+
+            if (!reader.canRead() || reader.peek() != '{') {
+                return new UpgradedArgument(block + properties);
+            }
+
+            CompoundTag tag = new TagParser(reader).readStruct();
+            boolean missId = !tag.contains("id", Tag.TAG_STRING);
+            if (missId) { // Data converter can't upgrade tile entities without it
+                tag.putString("id", CommandArgumentUpgrader.blockToTileEntity(block));
+            }
+            tag = MCDataConverter.convertTag(
+                MCTypeRegistry.TILE_ENTITY, tag, MCVersions.V1_20_4, SharedConstants.getCurrentVersion().getDataVersion().getVersion()
+            );
+            if (missId) {
+                tag.remove("id");
+            }
+
+            return new UpgradedArgument(block + properties + tag);
+        }
+    }
+
+    private static String blockToTileEntity(String block) {
+        return switch (block) {
+            case "minecraft:acacia_sign", "minecraft:jungle_wall_sign", "minecraft:oak_sign",
+                 "minecraft:cherry_sign", "minecraft:birch_wall_sign", "minecraft:dark_oak_sign",
+                 "minecraft:mangrove_wall_sign", "minecraft:cherry_wall_sign", "minecraft:jungle_sign",
+                 "minecraft:mangrove_sign", "minecraft:spruce_wall_sign", "minecraft:crimson_sign",
+                 "minecraft:oak_wall_sign", "minecraft:crimson_wall_sign", "minecraft:bamboo_sign",
+                 "minecraft:warped_wall_sign", "minecraft:bamboo_wall_sign", "minecraft:acacia_wall_sign",
+                 "minecraft:spruce_sign", "minecraft:warped_sign", "minecraft:dark_oak_wall_sign",
+                 "minecraft:birch_sign"
+                -> "minecraft:sign";
+            case "minecraft:acacia_hanging_sign", "minecraft:crimson_wall_hanging_sign",
+                 "minecraft:jungle_wall_hanging_sign", "minecraft:dark_oak_wall_hanging_sign",
+                 "minecraft:crimson_hanging_sign", "minecraft:bamboo_wall_hanging_sign",
+                 "minecraft:bamboo_hanging_sign", "minecraft:oak_wall_hanging_sign",
+                 "minecraft:cherry_wall_hanging_sign", "minecraft:warped_wall_hanging_sign",
+                 "minecraft:birch_hanging_sign", "minecraft:mangrove_hanging_sign",
+                 "minecraft:birch_wall_hanging_sign", "minecraft:jungle_hanging_sign",
+                 "minecraft:cherry_hanging_sign", "minecraft:spruce_hanging_sign",
+                 "minecraft:warped_hanging_sign", "minecraft:mangrove_wall_hanging_sign",
+                 "minecraft:spruce_wall_hanging_sign", "minecraft:dark_oak_hanging_sign",
+                 "minecraft:oak_hanging_sign", "minecraft:acacia_wall_hanging_sign"
+                -> "minecraft:hanging_sign";
+            case "minecraft:spawner" -> "minecraft:mob_spawner";
+            case "minecraft:moving_piston" -> "minecraft:piston";
+            case "minecraft:skeleton_skull" , "minecraft:skeleton_wall_skull", "minecraft:player_wall_head",
+                 "minecraft:creeper_wall_head", "minecraft:zombie_head", "minecraft:wither_skeleton_skull",
+                 "minecraft:creeper_head", "minecraft:wither_skeleton_wall_skull", "minecraft:dragon_head",
+                 "minecraft:piglin_wall_head", "minecraft:dragon_wall_head", "minecraft:player_head",
+                 "minecraft:zombie_wall_head", "minecraft:piglin_head"
+                -> "minecraft:skull";
+            case "minecraft:black_banner", "minecraft:orange_wall_banner", "minecraft:gray_wall_banner",
+                 "minecraft:magenta_banner", "minecraft:red_banner", "minecraft:brown_wall_banner",
+                 "minecraft:pink_banner", "minecraft:light_blue_banner", "minecraft:cyan_wall_banner",
+                 "minecraft:purple_banner", "minecraft:brown_banner", "minecraft:light_gray_wall_banner",
+                 "minecraft:black_wall_banner", "minecraft:gray_banner", "minecraft:yellow_wall_banner",
+                 "minecraft:light_gray_banner", "minecraft:red_wall_banner", "minecraft:light_blue_wall_banner",
+                 "minecraft:pink_wall_banner", "minecraft:white_banner", "minecraft:green_wall_banner",
+                 "minecraft:white_wall_banner", "minecraft:magenta_wall_banner", "minecraft:green_banner",
+                 "minecraft:orange_banner", "minecraft:blue_wall_banner", "minecraft:cyan_banner",
+                 "minecraft:purple_wall_banner", "minecraft:lime_wall_banner", "minecraft:yellow_banner",
+                 "minecraft:lime_banner", "minecraft:blue_banner"
+                -> "minecraft:banner";
+            case "minecraft:repeating_command_block", "minecraft:chain_command_block"
+                -> "minecraft:command_block";
+            case "minecraft:brown_shulker_box", "minecraft:light_blue_shulker_box", "minecraft:white_shulker_box",
+                 "minecraft:green_shulker_box", "minecraft:black_shulker_box", "minecraft:lime_shulker_box",
+                 "minecraft:pink_shulker_box", "minecraft:light_gray_shulker_box", "minecraft:magenta_shulker_box",
+                 "minecraft:orange_shulker_box", "minecraft:purple_shulker_box", "minecraft:cyan_shulker_box",
+                 "minecraft:yellow_shulker_box", "minecraft:red_shulker_box", "minecraft:blue_shulker_box",
+                 "minecraft:gray_shulker_box"
+                -> "minecraft:shulker_box";
+            case "minecraft:purple_bed", "minecraft:light_blue_bed", "minecraft:yellow_bed",
+                 "minecraft:orange_bed", "minecraft:light_gray_bed", "minecraft:red_bed",
+                 "minecraft:gray_bed", "minecraft:brown_bed", "minecraft:cyan_bed", "minecraft:magenta_bed",
+                 "minecraft:green_bed", "minecraft:white_bed", "minecraft:black_bed", "minecraft:blue_bed",
+                 "minecraft:pink_bed", "minecraft:lime_bed"
+                -> "minecraft:bed";
+            case "minecraft:soul_campfire" -> "minecraft:campfire";
+            case "minecraft:bee_nest" -> "minecraft:beehive";
+            case "minecraft:suspicious_sand", "minecraft:suspicious_gravel" -> "minecraft:brushable_block";
+            default -> block;
+        };
     }
 
     // important: leadingSlash should not just be the result of a startsWith on command,
