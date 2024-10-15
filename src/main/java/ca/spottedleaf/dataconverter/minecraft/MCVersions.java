@@ -522,18 +522,31 @@ public final class MCVersions {
     public static final int V1_20_5               = 3837;
     public static final int V1_20_6_RC1           = 3838;
     public static final int V1_20_6               = 3839;
-    public static final int V2418WA               = 3940;
-    public static final int V2419WA               = 3941;
-    public static final int V2419WB               = 3942;
-    public static final int V2420WA               = 3944;
-    public static final int V2421WA               = 3946;
-    public static final int V2421WB               = 3947;
-    public static final int V_1_21_PRE1           = 3948;
-    public static final int V_1_21_PRE2           = 3949;
-    public static final int V_1_21_PRE3           = 3950;
-    public static final int V_1_21_PRE4           = 3951;
-    public static final int V_1_21_RC1            = 3952;
-    public static final int V_1_21                = 3953;
+    public static final int V24W18A               = 3940;
+    public static final int V24W19A               = 3941;
+    public static final int V24W19B               = 3942;
+    public static final int V24W20A               = 3944;
+    public static final int V24W21A               = 3946;
+    public static final int V24W21B               = 3947;
+    public static final int V1_21_PRE1            = 3948;
+    public static final int V1_21_PRE2            = 3949;
+    public static final int V1_21_PRE3            = 3950;
+    public static final int V1_21_PRE4            = 3951;
+    public static final int V1_21_RC1             = 3952;
+    public static final int V1_21                 = 3953;
+    public static final int V1_21_RC              = 3954;
+    public static final int V1_21_1               = 3955;
+    public static final int V24W33A               = 4058;
+    public static final int V24W34A               = 4060;
+    public static final int V24W35A               = 4062;
+    public static final int V24W36A               = 4063;
+    public static final int V24W37A               = 4065;
+    public static final int V24W38A               = 4066;
+    public static final int V24W39A               = 4069;
+    public static final int V24W40A               = 4072;
+    public static final int V1_21_2_PRE1          = 4073;
+    public static final int V1_21_2_PRE2          = 4074;
+    public static final int V1_21_2_PRE3          = 4075;
 
     private MCVersions() {}
 }

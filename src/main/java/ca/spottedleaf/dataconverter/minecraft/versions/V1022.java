@@ -13,6 +13,8 @@ public final class V1022 {
         MCTypeRegistry.PLAYER.addStructureWalker(VERSION, (final MapType<String> data, final long fromVersion, final long toVersion) -> {
             WalkerUtils.convert(MCTypeRegistry.ENTITY, data.getMap("RootVehicle"), "Entity", fromVersion, toVersion);
 
+            WalkerUtils.convertList(MCTypeRegistry.ENTITY, data, "ender_pearls", fromVersion, toVersion);
+
             WalkerUtils.convertList(MCTypeRegistry.ITEM_STACK, data, "Inventory", fromVersion, toVersion);
             WalkerUtils.convertList(MCTypeRegistry.ITEM_STACK, data, "EnderItems", fromVersion, toVersion);
 

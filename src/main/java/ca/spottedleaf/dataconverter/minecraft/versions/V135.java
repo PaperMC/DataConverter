@@ -45,6 +45,8 @@ public final class V135 {
                 WalkerUtils.convert(MCTypeRegistry.ENTITY, rootVehicle, "Entity", fromVersion, toVersion);
             }
 
+            WalkerUtils.convertList(MCTypeRegistry.ENTITY, data, "ender_pearls", fromVersion, toVersion);
+
             return null;
         });
 

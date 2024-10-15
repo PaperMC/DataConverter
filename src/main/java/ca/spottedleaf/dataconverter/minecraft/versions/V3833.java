@@ -19,7 +19,6 @@ public final class V3833 {
                     return null;
                 }
 
-
                 final String id = NamespaceUtil.correctNamespace(item.getString("id", "minecraft:air"));
                 final int count = item.getInt("count", 0);
 

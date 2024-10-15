@@ -1,7 +1,7 @@
 package ca.spottedleaf.dataconverter.minecraft.versions;
 
 import ca.spottedleaf.dataconverter.minecraft.MCVersions;
-import ca.spottedleaf.dataconverter.minecraft.converters.attributes.ConverterAbstractAttributesRename;
+import ca.spottedleaf.dataconverter.minecraft.converters.attributes.ConverterAbstractOldAttributesRename;
 import com.google.common.collect.ImmutableMap;
 import java.util.HashMap;
 import java.util.Map;
@@ -34,7 +34,7 @@ public final class V2523 {
     );
 
     public static void register() {
-        ConverterAbstractAttributesRename.register(VERSION, RENAMES::get);
+        ConverterAbstractOldAttributesRename.register(VERSION, RENAMES::get);
     }
 
     private V2523() {}

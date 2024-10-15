@@ -16,7 +16,7 @@ import java.util.UUID;
 
 public final class V3945 {
 
-    private static final int VERSION = MCVersions.V2420WA + 1;
+    private static final int VERSION = MCVersions.V24W20A + 1;
 
     private static final Map<UUID, String> UUID_TO_ID = new HashMap<>(
         ImmutableMap.<UUID, String>builder()
@@ -134,9 +134,7 @@ public final class V3945 {
         return retList;
     }
 
-
     public static void register() {
-
         MCTypeRegistry.ITEM_STACK.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
             public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {

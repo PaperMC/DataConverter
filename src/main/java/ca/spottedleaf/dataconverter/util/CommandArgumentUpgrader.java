@@ -546,7 +546,7 @@ public final class CommandArgumentUpgrader {
             new HolderLookup.Provider() {
 
                 @Override
-                public Stream<ResourceKey<? extends Registry<?>>> listRegistries() {
+                public Stream<ResourceKey<? extends Registry<?>>> listRegistryKeys() {
                     return Stream.of();
                 }
 

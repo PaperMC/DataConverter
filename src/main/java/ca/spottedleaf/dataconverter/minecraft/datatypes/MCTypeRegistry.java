@@ -3,6 +3,7 @@ package ca.spottedleaf.dataconverter.minecraft.datatypes;
 import ca.spottedleaf.dataconverter.minecraft.versions.*;
 import com.mojang.logging.LogUtils;
 import org.slf4j.Logger;
+import java.text.DecimalFormat;
 
 public final class MCTypeRegistry {
 
@@ -52,12 +53,20 @@ public final class MCTypeRegistry {
     public static final MCValueType DATACONVERTER_CUSTOM_TYPE_COMMAND = new MCValueType("DC_Custom/Command");
 
     static {
+        LOGGER.info("Initialising converters for DataConverter...");
+
+        final long start = System.nanoTime();
         try {
             registerAll();
         } catch (final Throwable thr) {
             LOGGER.error(LogUtils.FATAL_MARKER, "Failed to register data converters", thr);
             throw new RuntimeException(thr);
         }
+        final long end = System.nanoTime();
+
+        final DecimalFormat oneDecimalFormat = new DecimalFormat("#,##0.0");
+
+        LOGGER.info("Finished initialising converters for DataConverter in " + oneDecimalFormat.format((double)(end - start) / 1.0E6) + "ms");
     }
 
     private static void registerAll() {
@@ -297,6 +306,17 @@ public final class MCTypeRegistry {
         V3939.register();
         V3943.register();
         V3945.register();
+        // V1.21.2
+        V4054.register();
+        V4055.register();
+        V4057.register();
+        V4059.register();
+        V4061.register();
+        V4064.register();
+        V4067.register();
+        V4068.register();
+        V4070.register();
+        V4071.register();
     }
 
     private MCTypeRegistry() {}

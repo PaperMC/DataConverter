@@ -1,7 +1,7 @@
 package ca.spottedleaf.dataconverter.minecraft.versions;
 
 import ca.spottedleaf.dataconverter.minecraft.MCVersions;
-import ca.spottedleaf.dataconverter.minecraft.converters.attributes.ConverterAbstractAttributesRename;
+import ca.spottedleaf.dataconverter.minecraft.converters.attributes.ConverterAbstractOldAttributesRename;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,7 +14,7 @@ public final class V3814 {
                 Map.of("minecraft:horse.jump_strength", "minecraft:generic.jump_strength")
         );
 
-        ConverterAbstractAttributesRename.register(VERSION, renames::get);
+        ConverterAbstractOldAttributesRename.register(VERSION, renames::get);
     }
 
     private V3814() {}

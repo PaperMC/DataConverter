@@ -15,17 +15,37 @@ public final class ConverterAbstractAttributesRename {
     }
 
     public static void register(final int version, final int versionStep, final Function<String, String> renamer) {
-        final DataConverter<MapType<String>, MapType<String>> entityConverter = new DataConverter<>(version, versionStep) {
+        MCTypeRegistry.DATA_COMPONENTS.addStructureConverter(new DataConverter<>(version, versionStep) {
             @Override
             public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
-                final ListType attributes = data.getList("Attributes", ObjectType.MAP);
-
-                if (attributes == null) {
+                final MapType<String> attributeModifiers = data.getMap("minecraft:attribute_modifiers");
+                if (attributeModifiers == null) {
                     return null;
                 }
 
-                for (int i = 0, len = attributes.size(); i < len; ++i) {
-                    RenameHelper.renameString(attributes.getMap(i), "Name", renamer);
+                final ListType modifiers = attributeModifiers.getList("modifiers", ObjectType.MAP);
+                if (modifiers == null) {
+                    return null;
+                }
+
+                for (int i = 0, len = modifiers.size(); i < len; ++i) {
+                    RenameHelper.renameString(modifiers.getMap(i), "type", renamer);
+                }
+
+                return null;
+            }
+        });
+
+        final DataConverter<MapType<String>, MapType<String>> entityConverter = new DataConverter<>(version, versionStep) {
+            @Override
+            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+                final ListType modifiers = data.getList("attributes", ObjectType.MAP);
+                if (modifiers == null) {
+                    return null;
+                }
+
+                for (int i = 0, len = modifiers.size(); i < len; ++i) {
+                    RenameHelper.renameString(modifiers.getMap(i), "id", renamer);
                 }
 
                 return null;
@@ -34,23 +54,6 @@ public final class ConverterAbstractAttributesRename {
 
         MCTypeRegistry.ENTITY.addStructureConverter(entityConverter);
         MCTypeRegistry.PLAYER.addStructureConverter(entityConverter);
-
-        MCTypeRegistry.ITEM_STACK.addStructureConverter(new DataConverter<>(version, versionStep) {
-            @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
-                final ListType attributes = data.getList("AttributeModifiers", ObjectType.MAP);
-
-                if (attributes == null) {
-                    return null;
-                }
-
-                for (int i = 0, len = attributes.size(); i < len; ++i) {
-                    RenameHelper.renameString(attributes.getMap(i), "AttributeName", renamer);
-                }
-
-                return null;
-            }
-        });
     }
 
     private ConverterAbstractAttributesRename() {}

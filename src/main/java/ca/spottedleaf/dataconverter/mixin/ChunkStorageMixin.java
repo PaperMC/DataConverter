@@ -27,6 +27,17 @@ public abstract class ChunkStorageMixin implements AutoCloseable {
     @Shadow
     protected abstract LegacyStructureDataHandler getLegacyStructureHandler(ResourceKey<Level> resourceKey, Supplier<DimensionDataStorage> supplier);
 
+    @Shadow
+    private static void removeDatafixingContext(final CompoundTag compoundTag) {
+        throw new InternalError();
+    }
+
+    @Shadow
+    public static void injectDatafixingContext(final CompoundTag compoundTag, final ResourceKey<Level> resourceKey,
+                                               final Optional<ResourceKey<MapCodec<? extends ChunkGenerator>>> optional) {
+        throw new InternalError();
+    }
+
     /**
      * @reason DFU is slow :(
      * @author Spottedleaf
@@ -44,13 +55,13 @@ public abstract class ChunkStorageMixin implements AutoCloseable {
                 }
             }
 
-            ChunkStorage.injectDatafixingContext(compoundTag, resourceKey, optional);
+            injectDatafixingContext(compoundTag, resourceKey, optional);
             compoundTag = MCDataConverter.convertTag(MCTypeRegistry.CHUNK, compoundTag, Math.max(1493, i), SharedConstants.getCurrentVersion().getDataVersion().getVersion());
+            removeDatafixingContext(compoundTag);
             if (i < SharedConstants.getCurrentVersion().getDataVersion().getVersion()) {
                 NbtUtils.addCurrentDataVersion(compoundTag);
             }
 
-            compoundTag.remove("__context");
             return compoundTag;
         } catch (Exception var9) {
             CrashReport crashReport = CrashReport.forThrowable(var9, "Updated chunk");

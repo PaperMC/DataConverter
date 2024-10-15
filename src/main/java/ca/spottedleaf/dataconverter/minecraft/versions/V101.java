@@ -32,6 +32,13 @@ public final class V101 {
                 return null;
             }
         });
+        MCTypeRegistry.ENTITY.addConverterForId("Villager", new DataConverter<>(VERSION) {
+            @Override
+            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+                data.setBoolean("CanPickUpLoot", true);
+                return null;
+            }
+        });
     }
 
     private V101() {}
