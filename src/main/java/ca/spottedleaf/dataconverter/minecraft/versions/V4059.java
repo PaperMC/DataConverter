@@ -3,7 +3,6 @@ package ca.spottedleaf.dataconverter.minecraft.versions;
 import ca.spottedleaf.dataconverter.converters.DataConverter;
 import ca.spottedleaf.dataconverter.converters.datatypes.DataWalker;
 import ca.spottedleaf.dataconverter.minecraft.MCVersions;
-import ca.spottedleaf.dataconverter.minecraft.converters.helpers.RenameHelper;
 import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
 import ca.spottedleaf.dataconverter.minecraft.walkers.generic.WalkerUtils;
 import ca.spottedleaf.dataconverter.types.ListType;
@@ -97,13 +96,9 @@ public final class V4059 {
                         newEffect.setString("type", "minecraft:apply_effects");
 
                         final Object oldEffectEffect = oldEffect.getGeneric("effect");
-                        if (oldEffectEffect instanceof ListType list) {
-                            newEffect.setList("effects", list);
-                        } else {
-                            final ListType newEffectEffects = typeUtil.createEmptyList();
-                            newEffectEffects.addGeneric(oldEffectEffect);
-                            newEffect.setList("effects", newEffectEffects);
-                        }
+                        final ListType newEffectEffects = typeUtil.createEmptyList();
+                        newEffectEffects.addGeneric(oldEffectEffect);
+                        newEffect.setList("effects", newEffectEffects);
 
                         newEffect.setFloat("probability", oldEffect.getFloat("probability", 1.0F));
                     }

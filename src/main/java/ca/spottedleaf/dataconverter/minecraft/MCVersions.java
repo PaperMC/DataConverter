@@ -550,6 +550,9 @@ public final class MCVersions {
     public static final int V1_21_2_PRE4          = 4076;
     public static final int V1_21_2_PRE5          = 4077;
     public static final int V1_21_2_RC1           = 4078;
+    public static final int V1_21_2_RC2           = 4079;
+    public static final int V1_21_2               = 4080;
+    public static final int V1_21_3               = 4072;
 
     private MCVersions() {}
 }

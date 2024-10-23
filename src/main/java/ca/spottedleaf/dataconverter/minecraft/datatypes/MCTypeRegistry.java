@@ -317,6 +317,8 @@ public final class MCTypeRegistry {
         V4068.register();
         V4070.register();
         V4071.register();
+        // V1.21.3
+        V4081.register();
     }
 
     private MCTypeRegistry() {}
