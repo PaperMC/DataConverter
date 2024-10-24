@@ -56,6 +56,6 @@ public abstract class SimpleRegionStorageMixin implements AutoCloseable {
             throw new UnsupportedOperationException("For " + this.dataFixType.name());
         }
         final CompoundTag converted = MCDataConverter.convertTag(dataConverterType, (CompoundTag)nbt.getValue(), dataVer, SharedConstants.getCurrentVersion().getDataVersion().getVersion());
-        return new Dynamic<>(NbtOps.INSTANCE, converted);
+        return new Dynamic<>(nbt.getOps(), converted);
     }
 }
