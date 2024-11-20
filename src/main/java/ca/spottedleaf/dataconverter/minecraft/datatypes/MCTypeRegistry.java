@@ -319,6 +319,10 @@ public final class MCTypeRegistry {
         V4071.register();
         // V1.21.3
         V4081.register();
+        // V1.21.4
+        V4173.register();
+        V4175.register();
+        V4176.register();
     }
 
     private MCTypeRegistry() {}
