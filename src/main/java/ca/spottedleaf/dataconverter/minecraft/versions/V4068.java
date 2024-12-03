@@ -25,11 +25,12 @@ public final class V4068 {
 
         final TypeUtil typeUtil = root.getTypeUtil();
 
-        final MapType<String> newLock = typeUtil.createEmptyMap();
         root.remove(srcPath);
-        root.setMap(dstPath, newLock);
 
-        if (lockGeneric instanceof String lock) {
+        if (lockGeneric instanceof String lock && !lock.isEmpty()) {
+            final MapType<String> newLock = typeUtil.createEmptyMap();
+            root.setMap(dstPath, newLock);
+
             final MapType<String> lockComponents = typeUtil.createEmptyMap();
             newLock.setMap("components", lockComponents);
 
