@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(SimpleRegionStorage.class)
-public abstract class SimpleRegionStorageMixin implements AutoCloseable {
+abstract class SimpleRegionStorageMixin implements AutoCloseable {
 
     @Shadow
     @Final

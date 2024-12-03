@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(PlayerDataStorage.class)
-public abstract class PlayerDataStorageMixin {
+abstract class PlayerDataStorageMixin {
 
     /**
      * Redirects ONLY player converters to the new dataconverter system. On update,

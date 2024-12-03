@@ -69,6 +69,8 @@ public final class MCTypeRegistry {
         LOGGER.info("Finished initialising converters for DataConverter in " + oneDecimalFormat.format((double)(end - start) / 1.0E6) + "ms");
     }
 
+    public static void init() {}
+
     private static void registerAll() {
         // General notes:
         // - Structure converters run before everything.
@@ -325,6 +327,8 @@ public final class MCTypeRegistry {
         V4176.register();
         V4180.register();
         V4181.register();
+        V4185.register();
+        V4187.register();
     }
 
     private MCTypeRegistry() {}

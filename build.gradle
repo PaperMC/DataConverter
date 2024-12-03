@@ -1,22 +1,13 @@
 plugins {
-    id 'fabric-loom' version '1.7.4'
+    id 'fabric-loom' version '1.9.2'
     id 'maven-publish'
 }
 
-/*
- * Gets the version name from the latest Git tag
- */
-// https://stackoverflow.com/questions/28498688/gradle-script-to-autoversion-and-include-the-commit-hash-in-android
-def getGitCommit = { ->
-    def stdout = new ByteArrayOutputStream()
-    exec {
-        commandLine 'git', 'rev-parse', '--short', 'HEAD'
-        standardOutput = stdout
-    }
-    return stdout.toString().trim()
-}
+def getGitCommit = providers.exec {
+    commandLine 'git', 'rev-parse', '--short', 'HEAD'
+}.standardOutput.getAsText().map { it.trim() }
 
-version = project.mod_version + "+fabric." + getGitCommit()
+version = project.mod_version + "+fabric." + getGitCommit.get()
 group = project.maven_group
 
 base {
@@ -57,9 +48,8 @@ java {
     // If you remove this line, sources will not be generated.
     withSourcesJar()
 
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
-    }
+	sourceCompatibility = JavaVersion.VERSION_21
+	targetCompatibility = JavaVersion.VERSION_21
 }
 
 jar {

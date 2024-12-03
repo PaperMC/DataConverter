@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(StructureCheck.class)
-public abstract class StructureCheckMixin {
+abstract class StructureCheckMixin {
 
     /**
      * Redirects ONLY chunk converters to the new dataconverter system. On update,

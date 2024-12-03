@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(StructureUpdater.class)
-public abstract class StructureUpdaterMixin {
+abstract class StructureUpdaterMixin {
 
     /**
      * Redirects ONLY structure converters to the new dataconverter system. On update,
