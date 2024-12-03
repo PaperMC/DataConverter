@@ -18,9 +18,9 @@ public final class V4181 {
                 RenameHelper.renameSingle(data, "CookTimeTotal", "cooking_total_time");
                 RenameHelper.renameSingle(data, "BurnTime", "lit_time_remaining");
 
-                final Object litTotalTime = data.getGeneric("lit_total_time");
+                final Object litTotalTime = data.getGeneric("lit_time_remaining");
                 if (litTotalTime != null) {
-                    data.setGeneric("lit_time_remaining", litTotalTime);
+                    data.setGeneric("lit_total_time", litTotalTime);
                 }
 
                 return null;
