@@ -12,8 +12,8 @@ public final class V4057 {
     public static void register() {
         MCTypeRegistry.CHUNK.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
-                final MapType<String> carvingMasks = data.getMap("CarvingMasks");
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
+                final MapType carvingMasks = data.getMap("CarvingMasks");
                 if (carvingMasks == null) {
                     return null;
                 }

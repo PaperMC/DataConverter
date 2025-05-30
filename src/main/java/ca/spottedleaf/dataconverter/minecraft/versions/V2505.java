@@ -10,20 +10,16 @@ public final class V2505 {
 
     private static final int VERSION = MCVersions.V20W06A + 1;
 
-    private static void registerMob(final String id) {
-        V100.registerEquipment(VERSION, id);
-    }
-
     public static void register() {
         MCTypeRegistry.ENTITY.addConverterForId("minecraft:villager", new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
-                final MapType<String> brain = data.getMap("Brain");
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
+                final MapType brain = data.getMap("Brain");
                 if (brain == null) {
                     return null;
                 }
 
-                final MapType<String> memories = brain.getMap("memories");
+                final MapType memories = brain.getMap("memories");
                 if (memories == null) {
                     return null;
                 }
@@ -31,7 +27,7 @@ public final class V2505 {
                 for (final String key : memories.keys()) {
                     final Object value = memories.getGeneric(key);
 
-                    final MapType<String> wrapped = Types.NBT.createEmptyMap();
+                    final MapType wrapped = Types.NBT.createEmptyMap();
                     wrapped.setGeneric("value", value);
 
                     memories.setMap(key, wrapped);
@@ -41,7 +37,7 @@ public final class V2505 {
             }
         });
 
-        registerMob("minecraft:piglin");
+        //registerMob("minecraft:piglin"); // changed to simple in 1.21.5
     }
 
     private V2505() {}

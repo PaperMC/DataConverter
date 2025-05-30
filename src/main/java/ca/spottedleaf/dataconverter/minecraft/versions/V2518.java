@@ -26,7 +26,7 @@ public final class V2518 {
     public static void register() {
         MCTypeRegistry.TILE_ENTITY.addConverterForId("minecraft:jigsaw", new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 final String type = data.getString("attachement_type", "minecraft:empty");
                 final String pool = data.getString("target_pool", "minecraft:empty");
                 data.remove("attachement_type");
@@ -42,12 +42,12 @@ public final class V2518 {
 
         MCTypeRegistry.BLOCK_STATE.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 if (!"minecraft:jigsaw".equals(data.getString("Name"))) {
                     return null;
                 }
 
-                final MapType<String> properties = data.getMap("Properties");
+                final MapType properties = data.getMap("Properties");
                 if (properties == null) {
                     return null;
                 }

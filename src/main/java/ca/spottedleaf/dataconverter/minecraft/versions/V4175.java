@@ -15,14 +15,14 @@ public final class V4175 {
     public static void register() {
         MCTypeRegistry.DATA_COMPONENTS.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 RenameHelper.renameSingle(data.getMap("minecraft:equippable"), "model", "asset_id");
 
                 final Number modelData = data.getNumber("minecraft:custom_model_data");
                 if (modelData != null) {
-                    final TypeUtil typeUtil = data.getTypeUtil();
+                    final TypeUtil<?> typeUtil = data.getTypeUtil();
 
-                    final MapType<String> newModelData = typeUtil.createEmptyMap();
+                    final MapType newModelData = typeUtil.createEmptyMap();
                     data.setMap("minecraft:custom_model_data", newModelData);
 
                     final ListType floats = typeUtil.createEmptyList();

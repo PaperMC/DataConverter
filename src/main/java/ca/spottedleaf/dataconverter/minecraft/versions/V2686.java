@@ -6,12 +6,8 @@ public final class V2686 {
 
     private static final int VERSION = MCVersions.V20W49A + 1;
 
-    private static void registerMob(final String id) {
-        V100.registerEquipment(VERSION, id);
-    }
-
     public static void register() {
-        registerMob("minecraft:axolotl");
+        //registerMob("minecraft:axolotl"); // changed to simple in 1.21.5
     }
 
     private V2686() {}

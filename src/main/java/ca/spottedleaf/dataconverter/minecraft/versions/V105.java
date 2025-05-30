@@ -15,8 +15,8 @@ public final class V105 {
     public static void register() {
         MCTypeRegistry.ITEM_STACK.addConverterForId("minecraft:spawn_egg", new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
-                MapType<String> tag = data.getMap("tag");
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
+                MapType tag = data.getMap("tag");
                 if (tag == null) {
                     tag = Types.NBT.createEmptyMap();
                 }
@@ -26,7 +26,7 @@ public final class V105 {
                     data.setShort("Damage", (short)0);
                 }
 
-                MapType<String> entityTag = tag.getMap("EntityTag");
+                MapType entityTag = tag.getMap("EntityTag");
                 if (entityTag == null) {
                     entityTag = Types.NBT.createEmptyMap();
                 }

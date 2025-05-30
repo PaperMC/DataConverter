@@ -48,12 +48,12 @@ public final class V3818 {
         // Note: No breakpoint needed, nothing nests hotbar
         MCTypeRegistry.HOTBAR.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 for (final String key : data.keys()) {
                     final ListType itemList = data.getList(key, ObjectType.MAP);
                     if (itemList != null) {
                         for (int i = 0, len = itemList.size(); i < len; ++i) {
-                            final MapType<String> item = itemList.getMap(i);
+                            final MapType item = itemList.getMap(i);
 
                             final String id = item.getString("id");
                             final int count = item.getInt("Count");
@@ -71,13 +71,13 @@ public final class V3818 {
 
         MCTypeRegistry.TILE_ENTITY.addConverterForId("minecraft:beehive", new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 RenameHelper.renameSingle(data, "Bees", "bees");
 
                 final ListType bees = data.getList("bees", ObjectType.MAP);
                 if (bees != null) {
                     for (int i = 0, len = bees.size(); i < len; ++i) {
-                        final MapType<String> bee = bees.getMap(i);
+                        final MapType bee = bees.getMap(i);
 
                         RenameHelper.renameSingle(bee, "EntityData", "entity_data");
                         RenameHelper.renameSingle(bee, "TicksInHive", "ticks_in_hive");
@@ -88,7 +88,7 @@ public final class V3818 {
                 return null;
             }
         });
-        MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, "minecraft:beehive", (final MapType<String> root, final long fromVersion, final long toVersion) -> {
+        MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, "minecraft:beehive", (final MapType root, final long fromVersion, final long toVersion) -> {
             WalkerUtils.convertListPath(MCTypeRegistry.ENTITY, root, "bees", "entity_data", fromVersion, toVersion);
 
             return null;
@@ -142,11 +142,11 @@ public final class V3818 {
             }
 
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 final ListType patterns = data.getList("Patterns", ObjectType.MAP);
                 if (patterns != null) {
                     for (int i = 0, len = patterns.size(); i < len; ++i) {
-                        final MapType<String> pattern = patterns.getMap(i);
+                        final MapType pattern = patterns.getMap(i);
 
                         final String patternName = pattern.getString("Pattern");
                         if (patternName != null) {
@@ -172,7 +172,7 @@ public final class V3818 {
         // Note: there is nothing after the previous breakpoint (1.19.4) that reads nested entity item
         MCTypeRegistry.ENTITY.addConverterForId("minecraft:arrow", new DataConverter<>(VERSION, 2) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 final Object potion = data.getGeneric("Potion");
                 final Object customPotionEffects = data.getGeneric("custom_potion_effects");
                 final Object color = data.getGeneric("Color");
@@ -185,12 +185,12 @@ public final class V3818 {
                 data.remove("custom_potion_effects");
                 data.remove("Color");
 
-                final MapType<String> item = data.getMap("item");
+                final MapType item = data.getMap("item");
                 if (item == null) {
                     return null;
                 }
 
-                final MapType<String> tag = item.getOrCreateMap("tag");
+                final MapType tag = item.getOrCreateMap("tag");
 
                 if (potion != null) {
                     tag.setGeneric("Potion", potion);
@@ -207,8 +207,9 @@ public final class V3818 {
         });
 
         // Step 3
+        // next version: 4059
         MCTypeRegistry.DATA_COMPONENTS.addStructureWalker(VERSION, 3, new DataWalker<>() {
-            private static void walkBlockPredicates(final MapType<String> root, final long fromVersion, final long toVersion) {
+            private static void walkBlockPredicates(final MapType root, final long fromVersion, final long toVersion) {
                 if (root.hasKey("blocks", ObjectType.STRING)) {
                     WalkerUtils.convert(MCTypeRegistry.BLOCK_NAME, root, "blocks", fromVersion, toVersion);
                 } else if (root.hasKey("blocks", ObjectType.LIST)) {
@@ -217,13 +218,13 @@ public final class V3818 {
             }
 
             @Override
-            public MapType<String> walk(final MapType<String> root, final long fromVersion, final long toVersion) {
+            public MapType walk(final MapType root, final long fromVersion, final long toVersion) {
                 WalkerUtils.convertListPath(MCTypeRegistry.ENTITY, root, "minecraft:bees", "entity_data", fromVersion, toVersion);
 
                 WalkerUtils.convert(MCTypeRegistry.TILE_ENTITY, root, "minecraft:block_entity_data", fromVersion, toVersion);
                 WalkerUtils.convertList(MCTypeRegistry.ITEM_STACK, root, "minecraft:bundle_contents", fromVersion, toVersion);
 
-                final MapType<String> canBreak = root.getMap("minecraft:can_break");
+                final MapType canBreak = root.getMap("minecraft:can_break");
                 if (canBreak != null) {
                     final ListType predicates = canBreak.getList("predicates", ObjectType.MAP);
                     if (predicates != null) {
@@ -235,7 +236,7 @@ public final class V3818 {
                     walkBlockPredicates(canBreak, fromVersion, toVersion);
                 }
 
-                final MapType<String> canPlaceOn = root.getMap("minecraft:can_place_on");
+                final MapType canPlaceOn = root.getMap("minecraft:can_place_on");
                 if (canPlaceOn != null) {
                     final ListType predicates = canPlaceOn.getList("predicates", ObjectType.MAP);
                     if (predicates != null) {
@@ -252,6 +253,27 @@ public final class V3818 {
                 WalkerUtils.convert(MCTypeRegistry.ENTITY, root, "minecraft:entity_data", fromVersion, toVersion);
                 WalkerUtils.convertList(MCTypeRegistry.ITEM_NAME, root, "minecraft:pot_decorations", fromVersion, toVersion);
                 WalkerUtils.convert(MCTypeRegistry.ITEM_STACK, root.getMap("minecraft:food"), "using_converts_to", fromVersion, toVersion);
+                WalkerUtils.convert(MCTypeRegistry.TEXT_COMPONENT, root, "minecraft:custom_name", fromVersion, toVersion);
+                WalkerUtils.convert(MCTypeRegistry.TEXT_COMPONENT, root, "minecraft:item_name", fromVersion, toVersion);
+
+                final MapType writtenBookContent = root.getMap("minecraft:written_book_content");
+                if (writtenBookContent != null) {
+                    final ListType pages = writtenBookContent.getListUnchecked("pages");
+                    if (pages != null) {
+                        for (int i = 0, len = pages.size(); i < len; ++i) {
+                            final Object pageGeneric = pages.getGeneric(i);
+                            if (pageGeneric instanceof String) {
+                                final Object convertedGeneric = MCTypeRegistry.TEXT_COMPONENT.convert(pageGeneric, fromVersion, toVersion);
+                                if (convertedGeneric != null) {
+                                    pages.setGeneric(i, convertedGeneric);
+                                }
+                            } else if (pageGeneric instanceof MapType mapType) {
+                                WalkerUtils.convert(MCTypeRegistry.TEXT_COMPONENT, mapType, "raw", fromVersion, toVersion);
+                                WalkerUtils.convert(MCTypeRegistry.TEXT_COMPONENT, mapType, "filtered", fromVersion, toVersion);
+                            }
+                        }
+                    }
+                }
 
                 return null;
             }
@@ -260,7 +282,7 @@ public final class V3818 {
         // Step 4
         MCTypeRegistry.PARTICLE.addStructureConverter(new DataConverter<>(VERSION, 4) {
             @Override
-            public MapType<String> convert(final Object input, final long sourceVersion, final long toVersion) {
+            public MapType convert(final Object input, final long sourceVersion, final long toVersion) {
                 if (!(input instanceof String flat)) {
                     return null;
                 }
@@ -270,11 +292,11 @@ public final class V3818 {
         });
 
         MCTypeRegistry.PARTICLE.addStructureWalker(VERSION, 4, (final Object input, final long fromVersion, final long toVersion) -> {
-            if (!(input instanceof MapType<?>)) {
+            if (!(input instanceof MapType)) {
                 return null;
             }
 
-            final MapType<String> root = (MapType<String>)input;
+            final MapType root = (MapType)input;
 
             WalkerUtils.convert(MCTypeRegistry.ITEM_STACK, root, "item", fromVersion, toVersion);
             WalkerUtils.convert(MCTypeRegistry.BLOCK_STATE, root, "block_state", fromVersion, toVersion);
@@ -286,12 +308,12 @@ public final class V3818 {
         // Note: needs breakpoint, reads nested tile entity data
         MCTypeRegistry.ITEM_STACK.addStructureConverter(new DataConverter<>(VERSION, 5) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 return ConverterItemStackToDataComponents.convertItem(data);
             }
         });
 
-        MCTypeRegistry.ITEM_STACK.addStructureWalker(VERSION, 5, (final MapType<String> root, final long fromVersion, final long toVersion) -> {
+        MCTypeRegistry.ITEM_STACK.addStructureWalker(VERSION, 5, (final MapType root, final long fromVersion, final long toVersion) -> {
             WalkerUtils.convert(MCTypeRegistry.ITEM_NAME, root, "id", fromVersion, toVersion);
             WalkerUtils.convert(MCTypeRegistry.DATA_COMPONENTS, root, "components", fromVersion, toVersion);
 
@@ -304,7 +326,7 @@ public final class V3818 {
         // Step 6
         MCTypeRegistry.ENTITY.addConverterForId("minecraft:area_effect_cloud", new DataConverter<>(VERSION, 6) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 final Object color = data.getGeneric("Color");
                 final Object effects = data.getGeneric("effects");
                 final Object potion = data.getGeneric("Potion");
@@ -316,7 +338,7 @@ public final class V3818 {
                 data.remove("effects");
                 data.remove("Potion");
 
-                final MapType<String> potionContents = data.getTypeUtil().createEmptyMap();
+                final MapType potionContents = data.getTypeUtil().createEmptyMap();
                 data.setMap("potion_contents", potionContents);
 
                 if (color != null) {

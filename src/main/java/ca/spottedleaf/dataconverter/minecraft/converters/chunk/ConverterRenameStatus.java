@@ -6,7 +6,7 @@ import ca.spottedleaf.dataconverter.types.MapType;
 import ca.spottedleaf.dataconverter.util.NamespaceUtil;
 import java.util.function.Function;
 
-public final class ConverterRenameStatus extends DataConverter<MapType<String>, MapType<String>> {
+public final class ConverterRenameStatus extends DataConverter<MapType, MapType> {
 
     private final Function<String, String> renamer;
 
@@ -20,7 +20,7 @@ public final class ConverterRenameStatus extends DataConverter<MapType<String>, 
     }
 
     @Override
-    public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+    public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
         // Note: DFU technically enforces namespace due to how they wrote their converter, so we will do the same.
         NamespaceUtil.enforceForPath(data, "Status");
         RenameHelper.renameString(data, "Status", this.renamer);

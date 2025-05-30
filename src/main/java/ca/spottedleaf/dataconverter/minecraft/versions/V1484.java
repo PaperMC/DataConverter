@@ -27,14 +27,14 @@ public final class V1484 {
 
         MCTypeRegistry.CHUNK.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
-                final MapType<String> level = data.getMap("Level");
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
+                final MapType level = data.getMap("Level");
 
                 if (level == null) {
                     return null;
                 }
 
-                final MapType<String> heightmaps = level.getMap("Heightmaps");
+                final MapType heightmaps = level.getMap("Heightmaps");
 
                 if (heightmaps == null) {
                     return null;

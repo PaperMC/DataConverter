@@ -66,8 +66,8 @@ public final class V1496 {
     public static void register() {
         MCTypeRegistry.CHUNK.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
-                final MapType<String> level = data.getMap("Level");
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
+                final MapType level = data.getMap("Level");
                 if (level == null) {
                     return null;
                 }
@@ -155,7 +155,7 @@ public final class V1496 {
 
                 // done updating blocks, now just update the blockstates and palette
                 for (int i = 0, len = sectionsNBT.size(); i < len; ++i) {
-                    final MapType<String> sectionNBT = sectionsNBT.getMap(i);
+                    final MapType sectionNBT = sectionsNBT.getMap(i);
                     final int y = sectionNBT.getInt("Y");
                     final LeavesSection section = sections[y];
 
@@ -164,7 +164,7 @@ public final class V1496 {
 
                 // if sides changed during process, update it now
                 if (newSides != 0) {
-                    MapType<String> upgradeData = level.getMap("UpgradeData");
+                    MapType upgradeData = level.getMap("UpgradeData");
                     if (upgradeData == null) {
                         level.setMap("UpgradeData", upgradeData = Types.NBT.createEmptyMap());
                     }
@@ -230,13 +230,13 @@ public final class V1496 {
         protected final int sectionY;
         protected PackedBitStorage storage;
 
-        public Section(final MapType<String> section) {
+        public Section(final MapType section) {
             this.palette = section.getList("Palette", ObjectType.MAP);
             this.sectionY = section.getInt("Y");
             this.readStorage(section);
         }
 
-        protected void readStorage(final MapType<String> section) {
+        protected void readStorage(final MapType section) {
             if (this.initSkippable()) {
                 this.storage = null;
             } else {
@@ -246,7 +246,7 @@ public final class V1496 {
             }
         }
 
-        public void writeInto(final MapType<String> section) {
+        public void writeInto(final MapType section) {
             if (this.isSkippable()) {
                 return;
             }
@@ -279,7 +279,7 @@ public final class V1496 {
         private IntOpenHashSet logIds;
         private Int2IntOpenHashMap stateToIdMap;
 
-        public LeavesSection(final MapType<String> section) {
+        public LeavesSection(final MapType section) {
             super(section);
         }
 
@@ -291,10 +291,10 @@ public final class V1496 {
             this.stateToIdMap.defaultReturnValue(-1);
 
             for(int i = 0; i < this.palette.size(); ++i) {
-                final MapType<String> blockState = this.palette.getMap(i);
+                final MapType blockState = this.palette.getMap(i);
                 final String name = blockState.getString("Name", "");
                 if (LEAVES_TO_ID.containsKey(name)) {
-                    final MapType<String> properties = blockState.getMap("Properties");
+                    final MapType properties = blockState.getMap("Properties");
                     final boolean notDecayable = properties != null && "false".equals(properties.getString("decayable"));
 
                     this.leaveIds.add(i);
@@ -310,9 +310,9 @@ public final class V1496 {
             return this.leaveIds.isEmpty() && this.logIds.isEmpty();
         }
 
-        private MapType<String> makeNewLeafTag(final String name, final boolean notDecayable, final int distance) {
-            final MapType<String> properties = Types.NBT.createEmptyMap();
-            final MapType<String> ret = Types.NBT.createEmptyMap();
+        private MapType makeNewLeafTag(final String name, final boolean notDecayable, final int distance) {
+            final MapType properties = Types.NBT.createEmptyMap();
+            final MapType ret = Types.NBT.createEmptyMap();
 
             ret.setString("Name", name);
             ret.setMap("Properties", properties);
@@ -341,7 +341,7 @@ public final class V1496 {
         }
 
         private void setDistance(final int index, final int id, final int distance) {
-            final MapType<String> state = this.palette.getMap(id);
+            final MapType state = this.palette.getMap(id);
             final String name = state.getString("Name");
             final boolean persistent = "true".equals(state.getMap("Properties").getString("persistent"));
             final int newState = this.getStateId(name, persistent, distance);

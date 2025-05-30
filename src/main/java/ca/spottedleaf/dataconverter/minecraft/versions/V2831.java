@@ -14,15 +14,8 @@ public final class V2831 {
     private static final int VERSION = MCVersions.V1_17_1 + 101;
 
     public static void register() {
-        MCTypeRegistry.UNTAGGED_SPAWNER.addStructureWalker(VERSION, (final MapType<String> root, final long fromVersion, final long toVersion) -> {
-            final ListType spawnPotentials = root.getList("SpawnPotentials", ObjectType.MAP);
-            if (spawnPotentials != null) {
-                for (int i = 0, len = spawnPotentials.size(); i < len; ++i) {
-                    final MapType<String> spawnPotential = spawnPotentials.getMap(i);
-
-                    WalkerUtils.convert(MCTypeRegistry.ENTITY, spawnPotential.getMap("data"), "entity", fromVersion, toVersion);
-                }
-            }
+        MCTypeRegistry.UNTAGGED_SPAWNER.addStructureWalker(VERSION, (final MapType root, final long fromVersion, final long toVersion) -> {
+            WalkerUtils.convertListPath(MCTypeRegistry.ENTITY, root, "SpawnPotentials", "data", "entity", fromVersion, toVersion);
 
             WalkerUtils.convert(MCTypeRegistry.ENTITY, root.getMap("SpawnData"), "entity", fromVersion, toVersion);
 
@@ -31,10 +24,10 @@ public final class V2831 {
 
         MCTypeRegistry.UNTAGGED_SPAWNER.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> root, final long sourceVersion, final long toVersion) {
-                final MapType<String> spawnData = root.getMap("SpawnData");
+            public MapType convert(final MapType root, final long sourceVersion, final long toVersion) {
+                final MapType spawnData = root.getMap("SpawnData");
                 if (spawnData != null) {
-                    final MapType<String> wrapped = Types.NBT.createEmptyMap();
+                    final MapType wrapped = Types.NBT.createEmptyMap();
                     root.setMap("SpawnData", wrapped);
 
                     wrapped.setMap("entity", spawnData);
@@ -43,19 +36,19 @@ public final class V2831 {
                 final ListType spawnPotentials = root.getList("SpawnPotentials", ObjectType.MAP);
                 if (spawnPotentials != null) {
                     for (int i = 0, len = spawnPotentials.size(); i < len; ++i) {
-                        final MapType<String> spawnPotential = spawnPotentials.getMap(i);
+                        final MapType spawnPotential = spawnPotentials.getMap(i);
 
                         // new format of weighted list (SpawnPotentials):
                         // root.data -> data
                         // root.weight -> weight
 
-                        final MapType<String> entity = spawnPotential.getMap("Entity");
+                        final MapType entity = spawnPotential.getMap("Entity");
                         final int weight = spawnPotential.getInt("Weight", 1);
                         spawnPotential.remove("Entity");
                         spawnPotential.remove("Weight");
                         spawnPotential.setInt("weight", weight);
 
-                        final MapType<String> data = Types.NBT.createEmptyMap();
+                        final MapType data = Types.NBT.createEmptyMap();
                         spawnPotential.setMap("data", data);
 
                         data.setMap("entity", entity);

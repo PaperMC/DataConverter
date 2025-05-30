@@ -4,7 +4,7 @@ import ca.spottedleaf.dataconverter.converters.datatypes.DataType;
 import ca.spottedleaf.dataconverter.converters.datatypes.DataWalker;
 import ca.spottedleaf.dataconverter.types.MapType;
 
-public class DataWalkerTypePaths<T, R> implements DataWalker<MapType<String>> {
+public class DataWalkerTypePaths<T, R> implements DataWalker<MapType> {
 
     protected final DataType<T, R> type;
     protected final String[] paths;
@@ -15,7 +15,7 @@ public class DataWalkerTypePaths<T, R> implements DataWalker<MapType<String>> {
     }
 
     @Override
-    public final MapType<String> walk(final MapType<String> data, final long fromVersion, final long toVersion) {
+    public final MapType walk(final MapType data, final long fromVersion, final long toVersion) {
         for (final String path : this.paths) {
             final Object current = data.getGeneric(path);
             if (current == null) {

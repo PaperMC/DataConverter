@@ -14,7 +14,7 @@ public final class V3808 {
     private static final int VERSION = MCVersions.V24W04A + 2;
 
     public static void register() {
-        class BodyArmorConverter extends DataConverter<MapType<String>, MapType<String>> {
+        class BodyArmorConverter extends DataConverter<MapType, MapType> {
             private final String path;
             private final boolean clearArmor;
 
@@ -30,8 +30,8 @@ public final class V3808 {
             }
 
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
-                final MapType<String> prev = data.getMap(this.path);
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
+                final MapType prev = data.getMap(this.path);
 
                 if (prev == null) {
                     return null;
@@ -62,20 +62,17 @@ public final class V3808 {
         MCTypeRegistry.ENTITY.addConverterForId("minecraft:horse", new BodyArmorConverter(VERSION, "ArmorItem", true));
 
         MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:horse", new DataWalkerItems("SaddleItem"));
-        V100.registerEquipment(VERSION, "minecraft:horse");
 
         // Step 1
         MCTypeRegistry.ENTITY.addConverterForId("minecraft:llama", new BodyArmorConverter(VERSION, 1, "DecorItem", false));
 
         MCTypeRegistry.ENTITY.addWalker(VERSION, 1, "minecraft:llama", new DataWalkerItemLists("Items"));
         MCTypeRegistry.ENTITY.addWalker(VERSION, 1, "minecraft:llama", new DataWalkerItems("SaddleItem"));
-        V100.registerEquipment(VERSION, 1, "minecraft:llama");
 
         // Step 2
         MCTypeRegistry.ENTITY.addConverterForId("minecraft:trader_llama", new BodyArmorConverter(VERSION, 2, "DecorItem", false));
         MCTypeRegistry.ENTITY.addWalker(VERSION, 2, "minecraft:trader_llama", new DataWalkerItemLists("Items"));
         MCTypeRegistry.ENTITY.addWalker(VERSION, 2, "minecraft:trader_llama", new DataWalkerItems("SaddleItem"));
-        V100.registerEquipment(VERSION, 2, "minecraft:trader_llama");
     }
 
     private V3808() {}

@@ -31,13 +31,13 @@ public final class V813 {
     public static void register() {
         MCTypeRegistry.ITEM_STACK.addConverterForId("minecraft:shulker_box", new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
-                final MapType<String> tag = data.getMap("tag");
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
+                final MapType tag = data.getMap("tag");
                 if (tag == null) {
                     return null;
                 }
 
-                final MapType<String> blockEntity = tag.getMap("BlockEntityTag");
+                final MapType blockEntity = tag.getMap("BlockEntityTag");
                 if (blockEntity == null) {
                     return null;
                 }
@@ -53,7 +53,7 @@ public final class V813 {
 
         MCTypeRegistry.TILE_ENTITY.addConverterForId("minecraft:shulker_box", new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 data.remove("Color");
                 return null;
             }

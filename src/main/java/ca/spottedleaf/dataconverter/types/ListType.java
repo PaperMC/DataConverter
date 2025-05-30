@@ -2,7 +2,7 @@ package ca.spottedleaf.dataconverter.types;
 
 public interface ListType {
 
-    public TypeUtil getTypeUtil();
+    public TypeUtil<?> getTypeUtil();
 
     @Override
     public int hashCode();
@@ -13,92 +13,57 @@ public interface ListType {
     // Provides a deep copy of this list
     public ListType copy();
 
-    // returns NONE if no type has been assigned. if NONE, then this list is also empty. It is not true on the other hand that an empty list has no type.
-    public ObjectType getType();
+    // Returns the type of all elements in this list. Returns NONE if empty, returns UNDEFINED if not supported, MIXED if mixed types
+    public ObjectType getUniformType();
 
     public int size();
 
     public void remove(final int index);
 
-    public default Object getGeneric(final int index) {
-        switch (this.getType()) {
-            case NONE:
-                throw new IllegalStateException("List is empty and has no type");
-            case BYTE:
-                return Byte.valueOf(this.getByte(index));
-            case SHORT:
-                return Short.valueOf(this.getShort(index));
-            case INT:
-                return Integer.valueOf(this.getInt(index));
-            case LONG:
-                return Long.valueOf(this.getLong(index));
-            case FLOAT:
-                return Float.valueOf(this.getFloat(index));
-            case DOUBLE:
-                return Double.valueOf(this.getDouble(index));
-            case NUMBER:
-                return this.getNumber(index);
-            case BYTE_ARRAY:
-                return this.getBytes(index);
-            case SHORT_ARRAY:
-                return this.getShorts(index);
-            case INT_ARRAY:
-                return this.getInts(index);
-            case LONG_ARRAY:
-                return this.getLongs(index);
-            case LIST:
-                return this.getList(index);
-            case MAP:
-                return this.getMap(index);
-            case STRING:
-                return this.getString(index);
-            default:
-                throw new UnsupportedOperationException(this.getType().name());
-        }
-    }
+    public Object getGeneric(final int index);
 
     public default void setGeneric(final int index, final Object to) {
         if (to instanceof Number) {
-            if (to instanceof Byte) {
-                this.setByte(index, ((Byte)to).byteValue());
+            if (to instanceof Byte b) {
+                this.setByte(index, b.byteValue());
                 return;
-            } else if (to instanceof Short) {
-                this.setShort(index, ((Short)to).shortValue());
+            } else if (to instanceof Short s) {
+                this.setShort(index, s.shortValue());
                 return;
-            } else if (to instanceof Integer) {
-                this.setInt(index, ((Integer)to).intValue());
+            } else if (to instanceof Integer i) {
+                this.setInt(index, i.intValue());
                 return;
-            } else if (to instanceof Long) {
-                this.setLong(index, ((Long)to).longValue());
+            } else if (to instanceof Long l) {
+                this.setLong(index, l.longValue());
                 return;
-            } else if (to instanceof Float) {
-                this.setFloat(index, ((Float)to).floatValue());
+            } else if (to instanceof Float f) {
+                this.setFloat(index, f.floatValue());
                 return;
-            } else if (to instanceof Double) {
-                this.setDouble(index, ((Double)to).doubleValue());
+            } else if (to instanceof Double d) {
+                this.setDouble(index, d.doubleValue());
                 return;
             } // else fall through to throw
-        } else if (to instanceof MapType) {
-            this.setMap(index, (MapType<?>)to);
+        } else if (to instanceof MapType m) {
+            this.setMap(index, m);
             return;
-        } else if (to instanceof ListType) {
-            this.setList(index, (ListType)to);
+        } else if (to instanceof ListType l) {
+            this.setList(index, l);
             return;
-        } else if (to instanceof String) {
-            this.setString(index, (String)to);
+        } else if (to instanceof String s) {
+            this.setString(index, s);
             return;
         } else if (to.getClass().isArray()) {
-            if (to instanceof byte[]) {
-                this.setBytes(index, (byte[])to);
+            if (to instanceof byte[] bytes) {
+                this.setBytes(index, bytes);
                 return;
-            } else if (to instanceof short[]) {
-                this.setShorts(index, (short[])to);
+            } else if (to instanceof short[] shorts) {
+                this.setShorts(index, shorts);
                 return;
-            } else if (to instanceof int[]) {
-                this.setInts(index, (int[])to);
+            } else if (to instanceof int[] ints) {
+                this.setInts(index, ints);
                 return;
-            } else if (to instanceof long[]) {
-                this.setLongs(index, (long[])to);
+            } else if (to instanceof long[] longs) {
+                this.setLongs(index, longs);
                 return;
             } // else fall through to throw
         }
@@ -106,110 +71,145 @@ public interface ListType {
         throw new IllegalArgumentException("Object " + to + " is not a valid type!");
     }
 
-    // types here are strict. if the type on get does not match the underlying type, will throw.
+    // types here are strict. if the type on get does not match the underlying type, will throw - except for the
+    // default parameter methods, in such cases the default value will be returned.
 
     public Number getNumber(final int index);
 
-    // if the value at index is a Number but not a byte, then returns the number casted to byte. If the value at the index is not a number, then throws
+    public Number getNumber(final int index, final Number dfl);
+
+    // if the value at index is a Number but not a byte, then returns the number casted to byte.
     public byte getByte(final int index);
+
+    // if the value at index is a Number but not a byte, then returns the number casted to byte.
+    public byte getByte(final int index, final byte dfl);
 
     public void setByte(final int index, final byte to);
 
-    // if the value at index is a Number but not a short, then returns the number casted to short. If the value at the index is not a number, then throws
+    // if the value at index is a Number but not a short, then returns the number casted to short.
     public short getShort(final int index);
+
+    // if the value at index is a Number but not a short, then returns the number casted to short.
+    public short getShort(final int index, final short dfl);
 
     public void setShort(final int index, final short to);
 
-    // if the value at index is a Number but not a int, then returns the number casted to int. If the value at the index is not a number, then throws
+    // if the value at index is a Number but not a int, then returns the number casted to int.
     public int getInt(final int index);
+
+    // if the value at index is a Number but not a int, then returns the number casted to int.
+    public int getInt(final int index, final int dfl);
 
     public void setInt(final int index, final int to);
 
-    // if the value at index is a Number but not a long, then returns the number casted to long. If the value at the index is not a number, then throws
+    // if the value at index is a Number but not a long, then returns the number casted to long.
     public long getLong(final int index);
+
+    // if the value at index is a Number but not a long, then returns the number casted to long.
+    public long getLong(final int index, final long dfl);
 
     public void setLong(final int index, final long to);
 
-    // if the value at index is a Number but not a float, then returns the number casted to float. If the value at the index is not a number, then throws
+    // if the value at index is a Number but not a float, then returns the number casted to float.
     public float getFloat(final int index);
+
+    // if the value at index is a Number but not a float, then returns the number casted to float.
+    public float getFloat(final int index, final float dfl);
 
     public void setFloat(final int index, final float to);
 
-    // if the value at index is a Number but not a double, then returns the number casted to double. If the value at the index is not a number, then throws
+    // if the value at index is a Number but not a double, then returns the number casted to double.
     public double getDouble(final int index);
+
+    // if the value at index is a Number but not a double, then returns the number casted to double.
+    public double getDouble(final int index, final double dfl);
 
     public void setDouble(final int index, final double to);
 
     public byte[] getBytes(final int index);
 
+    public byte[] getBytes(final int index, final byte[] bytes);
+
     public void setBytes(final int index, final byte[] to);
 
     public short[] getShorts(final int index);
+
+    public short[] getShorts(final int index, final short[] dfl);
 
     public void setShorts(final int index, final short[] to);
 
     public int[] getInts(final int index);
 
+    public int[] getInts(final int index, final int[] dfl);
+
     public void setInts(final int index, final int[] to);
 
     public long[] getLongs(final int index);
+
+    public long[] getLongs(final int index, final long[] dfl);
 
     public void setLongs(final int index, final long[] to);
 
     public ListType getList(final int index);
 
+    public ListType getList(final int index, final ListType dfl);
+
     public void setList(final int index, final ListType list);
 
-    public <T> MapType<T> getMap(final int index);
+    public MapType getMap(final int index);
 
-    public void setMap(final int index, final MapType<?> to);
+    public MapType getMap(final int index, final MapType dfl);
+
+    public void setMap(final int index, final MapType to);
 
     public String getString(final int index);
+
+    public String getString(final int index, final String dfl);
 
     public void setString(final int index, final String to);
 
     public default void addGeneric(final Object to) {
         if (to instanceof Number) {
-            if (to instanceof Byte) {
-                this.addByte(((Byte)to).byteValue());
+            if (to instanceof Byte b) {
+                this.addByte(b.byteValue());
                 return;
-            } else if (to instanceof Short) {
-                this.addShort(((Short)to).shortValue());
+            } else if (to instanceof Short s) {
+                this.addShort(s.shortValue());
                 return;
-            } else if (to instanceof Integer) {
-                this.addInt(((Integer)to).intValue());
+            } else if (to instanceof Integer i) {
+                this.addInt(i.intValue());
                 return;
-            } else if (to instanceof Long) {
-                this.addLong(((Long)to).longValue());
+            } else if (to instanceof Long l) {
+                this.addLong(l.longValue());
                 return;
-            } else if (to instanceof Float) {
-                this.addFloat(((Float)to).floatValue());
+            } else if (to instanceof Float f) {
+                this.addFloat(f.floatValue());
                 return;
-            } else if (to instanceof Double) {
-                this.addDouble(((Double)to).doubleValue());
+            } else if (to instanceof Double d) {
+                this.addDouble(d.doubleValue());
                 return;
             } // else fall through to throw
-        } else if (to instanceof MapType) {
-            this.addMap((MapType<?>)to);
+        } else if (to instanceof MapType m) {
+            this.addMap(m);
             return;
-        } else if (to instanceof ListType) {
-            this.addList((ListType)to);
+        } else if (to instanceof ListType l) {
+            this.addList(l);
             return;
-        } else if (to instanceof String) {
-            this.addString((String)to);
+        } else if (to instanceof String s) {
+            this.addString(s);
             return;
         } else if (to.getClass().isArray()) {
-            if (to instanceof byte[]) {
-                this.addByteArray((byte[])to);
+            if (to instanceof byte[] bytes) {
+                this.addByteArray(bytes);
                 return;
-            } else if (to instanceof short[]) {
-                this.addShortArray((short[])to);
+            } else if (to instanceof short[] shorts) {
+                this.addShortArray(shorts);
                 return;
-            } else if (to instanceof int[]) {
-                this.addIntArray((int[])to);
+            } else if (to instanceof int[] ints) {
+                this.addIntArray(ints);
                 return;
-            } else if (to instanceof long[]) {
-                this.addLongArray((long[])to);
+            } else if (to instanceof long[] longs) {
+                this.addLongArray(longs);
                 return;
             } // else fall through to throw
         }
@@ -261,9 +261,9 @@ public interface ListType {
 
     public void addList(final int index, final ListType list);
 
-    public void addMap(final MapType<?> map);
+    public void addMap(final MapType map);
 
-    public void addMap(final int index, final MapType<?> map);
+    public void addMap(final int index, final MapType map);
 
     public void addString(final String string);
 

@@ -12,7 +12,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public final class ConverterFlattenItemStack extends DataConverter<MapType<String>, MapType<String>> {
+public final class ConverterFlattenItemStack extends DataConverter<MapType, MapType> {
 
     private static final Logger LOGGER = LogUtils.getLogger();
 
@@ -422,7 +422,7 @@ public final class ConverterFlattenItemStack extends DataConverter<MapType<Strin
     }
 
     @Override
-    public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+    public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
         final String id = data.getString("id");
 
         if (id == null) {
@@ -447,7 +447,7 @@ public final class ConverterFlattenItemStack extends DataConverter<MapType<Strin
 
         if (damage != 0 && ITEMS_WITH_DAMAGE.contains(id)) {
             // migrate damage
-            MapType<String> tag = data.getMap("tag");
+            MapType tag = data.getMap("tag");
             if (tag == null) {
                 tag = Types.NBT.createEmptyMap();
                 data.setMap("tag", tag);

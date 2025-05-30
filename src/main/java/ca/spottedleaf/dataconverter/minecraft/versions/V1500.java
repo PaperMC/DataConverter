@@ -12,7 +12,7 @@ public final class V1500 {
     public static void register() {
         MCTypeRegistry.TILE_ENTITY.addConverterForId("DUMMY", new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 data.setBoolean("keepPacked", true);
                 return null;
             }

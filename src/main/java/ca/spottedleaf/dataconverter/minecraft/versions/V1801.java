@@ -6,12 +6,8 @@ public final class V1801 {
 
     private static final int VERSION = MCVersions.V1_13_2 + 170;
 
-    private static void registerMob(final String id) {
-        V100.registerEquipment(VERSION, id);
-    }
-
     public static void register() {
-        registerMob("minecraft:illager_beast");
+        //registerMob("minecraft:illager_beast"); // changed to simple in 1.21.5
     }
 
     private V1801() {}

@@ -6,12 +6,8 @@ public final class V1931 {
 
     private static final int VERSION = MCVersions.V19W06A;
 
-    private static void registerMob(final String id) {
-        V100.registerEquipment(VERSION, id);
-    }
-
     public static void register() {
-        registerMob("minecraft:fox");
+        //registerMob("minecraft:fox"); // changed to simple in 1.21.5
     }
 
     private V1931() {}

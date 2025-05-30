@@ -12,7 +12,7 @@ public final class V1917 {
     public static void register() {
         MCTypeRegistry.ENTITY.addConverterForId("minecraft:cat", new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 if (data.getInt("CatType") == 9) {
                     data.setInt("CatType", 10);
                 }

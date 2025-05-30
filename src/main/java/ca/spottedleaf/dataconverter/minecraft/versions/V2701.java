@@ -34,7 +34,7 @@ public final class V2701 {
     public static void register() {
         MCTypeRegistry.STRUCTURE_FEATURE.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 final ListType children = data.getList("Children", ObjectType.MAP);
 
                 if (children == null) {
@@ -42,7 +42,7 @@ public final class V2701 {
                 }
 
                 for (int i = 0, len = children.size(); i < len; ++i) {
-                    final MapType<String> child = children.getMap(i);
+                    final MapType child = children.getMap(i);
 
                     if (!PIECE_TYPE.contains(child.getString("id"))) {
                         continue;
@@ -53,7 +53,7 @@ public final class V2701 {
                         continue;
                     }
 
-                    final MapType<String> feature = child.getMap("feature");
+                    final MapType feature = child.getMap("feature");
                     if (feature == null) {
                         continue;
                     }
@@ -70,7 +70,7 @@ public final class V2701 {
         });
     }
 
-    private static String getNestedString(final MapType<String> root, final String... paths) {
+    private static String getNestedString(final MapType root, final String... paths) {
         if (paths.length == 0) {
             throw new IllegalArgumentException("Missing path");
         }
@@ -82,7 +82,7 @@ public final class V2701 {
 
             final Matcher indexMatcher = INDEX_PATTERN.matcher(path);
             if (!indexMatcher.matches()) {
-                current = (current instanceof MapType) ? ((MapType<String>)current).getGeneric(path) : null;
+                current = (current instanceof MapType) ? ((MapType)current).getGeneric(path) : null;
                 if (current == null) {
                     break;
                 }
@@ -107,7 +107,7 @@ public final class V2701 {
         return current instanceof String ? (String)current : "";
     }
 
-    private static String convertToString(final MapType<String> feature) {
+    private static String convertToString(final MapType feature) {
         return getReplacement(
                 getNestedString(feature, "type"),
                 getNestedString(feature, "name"),

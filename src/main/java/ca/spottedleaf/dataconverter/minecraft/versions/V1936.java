@@ -12,7 +12,7 @@ public final class V1936 {
     public static void register() {
         MCTypeRegistry.OPTIONS.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 final String chatOpacity = data.getString("chatOpacity");
                 if (chatOpacity != null) {
                     // Vanilla uses createDouble here, but options is always string -> string. I presume they made

@@ -13,7 +13,7 @@ public final class V3090 {
     public static void register() {
         MCTypeRegistry.ENTITY.addConverterForId("minecraft:painting", new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 RenameHelper.renameSingle(data, "Motive", "variant");
                 RenameHelper.renameSingle(data, "Facing", "facing");
                 return null;

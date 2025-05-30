@@ -15,13 +15,13 @@ public final class V3812 {
     public static void register() {
         MCTypeRegistry.ENTITY.addConverterForId("minecraft:wolf", new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 boolean doubleHealth = false;
 
                 final ListType attributes = data.getList("Attributes", ObjectType.MAP);
                 if (attributes != null) {
                     for (int i = 0, len = attributes.size(); i < len; ++i) {
-                        final MapType<String> attribute = attributes.getMap(i);
+                        final MapType attribute = attributes.getMap(i);
 
                         if (!"minecraft:generic.max_health".equals(NamespaceUtil.correctNamespace(attribute.getString("Name")))) {
                             continue;

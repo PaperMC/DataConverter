@@ -18,7 +18,7 @@ public final class ConverterAbstractBlockRename {
         ConverterAbstractStringValueTypeRename.register(version, subVersion, MCTypeRegistry.BLOCK_NAME, renamer);
         MCTypeRegistry.BLOCK_STATE.addStructureConverter(new DataConverter<>(version, subVersion) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 final String name = data.getString("Name");
                 if (name != null) {
                     final String converted = renamer.apply(name);

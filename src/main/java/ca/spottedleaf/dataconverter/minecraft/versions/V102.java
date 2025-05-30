@@ -38,7 +38,7 @@ public final class V102 {
 
         MCTypeRegistry.ITEM_STACK.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 if (!data.hasKey("id", ObjectType.NUMBER)) {
                     return null;
                 }
@@ -58,12 +58,12 @@ public final class V102 {
         });
         MCTypeRegistry.ITEM_STACK.addConverterForId("minecraft:potion", new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 final short damage = data.getShort("Damage");
                 if (damage != 0) {
                     data.setShort("Damage", (short)0);
                 }
-                MapType<String> tag = data.getMap("tag");
+                MapType tag = data.getMap("tag");
                 if (tag == null) {
                     tag = Types.NBT.createEmptyMap();
                     data.setMap("tag", tag);

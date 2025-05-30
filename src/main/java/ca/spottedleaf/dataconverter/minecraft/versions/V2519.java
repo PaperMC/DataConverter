@@ -6,12 +6,8 @@ public final class V2519 {
 
     private static final int VERSION = MCVersions.V20W12A + 4;
 
-    private static void registerMob(final String id) {
-        V100.registerEquipment(VERSION, id);
-    }
-
     public static void register() {
-        registerMob("minecraft:strider");
+        //registerMob("minecraft:strider"); // changed to simple in 1.21.5
     }
 
     private V2519() {}

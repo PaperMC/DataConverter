@@ -14,20 +14,20 @@ public final class V1920 {
     public static void register() {
         MCTypeRegistry.CHUNK.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
-                final MapType<String> level = data.getMap("Level");
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
+                final MapType level = data.getMap("Level");
                 if (level == null) {
                     return null;
                 }
 
-                final MapType<String> structures = level.getMap("Structures");
+                final MapType structures = level.getMap("Structures");
                 if (structures == null) {
                     return null;
                 }
 
-                final MapType<String> starts = structures.getMap("Starts");
+                final MapType starts = structures.getMap("Starts");
                 if (starts != null) {
-                    final MapType<String> village = starts.getMap("New_Village");
+                    final MapType village = starts.getMap("New_Village");
                     if (village != null) {
                         starts.remove("New_Village");
                         starts.setMap("Village", village);
@@ -36,9 +36,9 @@ public final class V1920 {
                     }
                 }
 
-                final MapType<String> references = structures.getMap("References");
+                final MapType references = structures.getMap("References");
                 if (references != null) {
-                    final MapType<String> newVillage = references.getMap("New_Village");
+                    final MapType newVillage = references.getMap("New_Village");
                     // I believe Mojang had a typo here, removing Village from references only made sense
                     // if the new village didn't exist. DFU removes it whether or not it exists, but still relocates
                     // New_Village to Village first. It doesn't make sense to me to relocate it just to remove it, so it
@@ -57,7 +57,7 @@ public final class V1920 {
 
         MCTypeRegistry.STRUCTURE_FEATURE.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 final String id = data.getString("id");
 
                 if ("minecraft:new_village".equals(NamespaceUtil.correctNamespace(id))) {

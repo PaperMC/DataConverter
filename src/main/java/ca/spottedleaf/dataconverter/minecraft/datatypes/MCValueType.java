@@ -31,8 +31,12 @@ public class MCValueType extends DataType<Object, Object> {
 
     public void addConverter(final DataConverter<Object, Object> converter) {
         MCVersionRegistry.checkVersion(converter.getEncodedVersion());
+        final boolean sort = !this.converters.isEmpty()
+            && DataConverter.LOWEST_VERSION_COMPARATOR.compare(this.converters.getLast(), converter) > 0;
         this.converters.add(converter);
-        this.converters.sort(DataConverter.LOWEST_VERSION_COMPARATOR);
+        if (sort) {
+            this.converters.sort(DataConverter.LOWEST_VERSION_COMPARATOR);
+        }
     }
 
     @Override

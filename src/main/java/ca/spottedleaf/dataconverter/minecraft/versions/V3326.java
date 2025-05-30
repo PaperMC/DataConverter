@@ -8,12 +8,8 @@ public final class V3326 {
 
     private static final int VERSION = MCVersions.V23W06A;
 
-    private static void registerMob(final String id) {
-        V100.registerEquipment(VERSION, id);
-    }
-
     public static void register() {
-        registerMob("minecraft:sniffer");
+        //registerMob("minecraft:sniffer"); // changed to simple in 1.21.5
     }
 
     private V3326() {}

@@ -12,16 +12,16 @@ public final class V3809 {
     private static final int VERSION = MCVersions.V24W05A;
 
     public static void register() {
-        final DataConverter<MapType<String>, MapType<String>> slotConverter = new DataConverter<>(VERSION) {
+        final DataConverter<MapType, MapType> slotConverter = new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 final ListType items = data.getList("Items", ObjectType.MAP);
                 if (items == null) {
                     return null;
                 }
 
                 for (int i = 0, len = items.size(); i < len; ++i) {
-                    final MapType<String> item = items.getMap(i);
+                    final MapType item = items.getMap(i);
 
                     final int slot = item.getInt("Slot", 2);
                     item.setByte("Slot", (byte)(slot - 2));

@@ -33,8 +33,8 @@ public final class V2550 {
 
     private static record StructureFeatureConfiguration(int spacing, int separation, int salt) {
 
-        public MapType<String> serialize() {
-            final MapType<String> ret = Types.NBT.createEmptyMap();
+        public MapType serialize() {
+            final MapType ret = Types.NBT.createEmptyMap();
 
             ret.setInt("spacing", this.spacing);
             ret.setInt("separation", this.separation);
@@ -47,7 +47,7 @@ public final class V2550 {
     public static void register() {
         MCTypeRegistry.WORLD_GEN_SETTINGS.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 final long seed = data.getLong("RandomSeed");
                 String generatorName = data.getString("generatorName");
                 if (generatorName != null) {
@@ -58,7 +58,7 @@ public final class V2550 {
                     legacyCustomOptions = "customized".equals(generatorName) ? data.getString("generatorOptions") : null;
                 }
 
-                final MapType<String> generator;
+                final MapType generator;
                 boolean caves = false;
 
                 if ("customized".equals(generatorName) || generatorName == null) {
@@ -66,10 +66,10 @@ public final class V2550 {
                 } else {
                     switch (generatorName) {
                         case "flat": {
-                            final MapType<String> generatorOptions = data.getMap("generatorOptions");
+                            final MapType generatorOptions = data.getMap("generatorOptions");
 
-                            final MapType<String> structures = fixFlatStructures(generatorOptions);
-                            final MapType<String> settings = Types.NBT.createEmptyMap();
+                            final MapType structures = fixFlatStructures(generatorOptions);
+                            final MapType settings = Types.NBT.createEmptyMap();
                             generator = Types.NBT.createEmptyMap();
                             generator.setString("type", "minecraft:flat");
                             generator.setMap("settings", settings);
@@ -83,7 +83,7 @@ public final class V2550 {
                                 final int[] heights = new int[] { 1, 2, 1 };
                                 final String[] blocks = new String[] { "minecraft:bedrock", "minecraft:dirt", "minecraft:grass_block" };
                                 for (int i = 0; i < 3; ++i) {
-                                    final MapType<String> layer = Types.NBT.createEmptyMap();
+                                    final MapType layer = Types.NBT.createEmptyMap();
                                     layer.setInt("height", heights[i]);
                                     layer.setString("block", blocks[i]);
                                     layers.addMap(layer);
@@ -103,8 +103,8 @@ public final class V2550 {
                         }
 
                         case "buffet": {
-                            final MapType<String> generatorOptions = data.getMap("generatorOptions");
-                            final MapType<String> chunkGenerator = generatorOptions == null ? null : generatorOptions.getMap("chunk_generator");
+                            final MapType generatorOptions = data.getMap("generatorOptions");
+                            final MapType chunkGenerator = generatorOptions == null ? null : generatorOptions.getMap("chunk_generator");
                             final String chunkGeneratorType = chunkGenerator == null ? null  : chunkGenerator.getString("type");
 
                             final String newType;
@@ -117,14 +117,14 @@ public final class V2550 {
                                 newType = "minecraft:overworld";
                             }
 
-                            MapType<String> biomeSource = generatorOptions == null ? null : generatorOptions.getMap("biome_source");
+                            MapType biomeSource = generatorOptions == null ? null : generatorOptions.getMap("biome_source");
                             if (biomeSource == null) {
                                 biomeSource = Types.NBT.createEmptyMap();
                                 biomeSource.setString("type", "minecraft:fixed");
                             }
 
                             if ("minecraft:fixed".equals(biomeSource.getString("type"))) {
-                                final MapType<String> options = biomeSource.getMap("options");
+                                final MapType options = biomeSource.getMap("options");
                                 final ListType biomes = options == null ? null : options.getList("biomes", ObjectType.STRING);
                                 final String biome = biomes == null || biomes.size() == 0 ? "minecraft:ocean" : biomes.getString(0);
                                 biomeSource.remove("options");
@@ -151,7 +151,7 @@ public final class V2550 {
                 final boolean mapFeatures = data.getBoolean("MapFeatures", true);
                 final boolean bonusChest = data.getBoolean("BonusChest", false);
 
-                final MapType<String> ret = Types.NBT.createEmptyMap();
+                final MapType ret = Types.NBT.createEmptyMap();
 
                 ret.setLong("seed", seed);
                 ret.setBoolean("generate_features", mapFeatures);
@@ -166,8 +166,8 @@ public final class V2550 {
         });
     }
 
-    public static MapType<String> noise(final long seed, final String worldType, final MapType<String> biomeSource) {
-        final MapType<String> ret = Types.NBT.createEmptyMap();
+    public static MapType noise(final long seed, final String worldType, final MapType biomeSource) {
+        final MapType ret = Types.NBT.createEmptyMap();
 
         ret.setString("type", "minecraft:noise");
         ret.setMap("biome_source", biomeSource);
@@ -177,8 +177,8 @@ public final class V2550 {
         return ret;
     }
 
-    public static MapType<String> vanillaBiomeSource(final long seed, final boolean default11Gen, final boolean largeBiomes) {
-        final MapType<String> ret = Types.NBT.createEmptyMap();
+    public static MapType vanillaBiomeSource(final long seed, final boolean default11Gen, final boolean largeBiomes) {
+        final MapType ret = Types.NBT.createEmptyMap();
 
         ret.setString("type", "minecraft:vanilla_layered");
         ret.setLong("seed", seed);
@@ -190,7 +190,7 @@ public final class V2550 {
         return ret;
     }
 
-    public static MapType<String> fixFlatStructures(final MapType<String> generatorOptions) {
+    public static MapType fixFlatStructures(final MapType generatorOptions) {
         int distance = 32;
         int spread = 3;
         int count = 128;
@@ -202,10 +202,10 @@ public final class V2550 {
             newStructures.put("minecraft:village", DEFAULTS.get("minecraft:village"));
         }
 
-        final MapType<String> oldStructures = generatorOptions == null ? null : generatorOptions.getMap("structures");
+        final MapType oldStructures = generatorOptions == null ? null : generatorOptions.getMap("structures");
         if (oldStructures != null) {
             for (final String structureName : oldStructures.keys()) {
-                final MapType<String> structureValues = oldStructures.getMap(structureName);
+                final MapType structureValues = oldStructures.getMap(structureName);
                 if (structureValues == null) {
                     continue;
                 }
@@ -269,15 +269,15 @@ public final class V2550 {
             }
         }
 
-        final MapType<String> ret = Types.NBT.createEmptyMap();
-        final MapType<String> structuresSerialized = Types.NBT.createEmptyMap();
+        final MapType ret = Types.NBT.createEmptyMap();
+        final MapType structuresSerialized = Types.NBT.createEmptyMap();
         ret.setMap("structures", structuresSerialized);
         for (final String key : newStructures.keySet()) {
             structuresSerialized.setMap(key, newStructures.get(key).serialize());
         }
 
         if (stronghold) {
-            final MapType<String> strongholdData = Types.NBT.createEmptyMap();
+            final MapType strongholdData = Types.NBT.createEmptyMap();
             ret.setMap("stronghold", strongholdData);
 
             strongholdData.setInt("distance", distance);
@@ -288,12 +288,12 @@ public final class V2550 {
         return ret;
     }
 
-    public static MapType<String> vanillaLevels(final long seed, final MapType<String> generator, final boolean caves) {
-        final MapType<String> ret = Types.NBT.createEmptyMap();
+    public static MapType vanillaLevels(final long seed, final MapType generator, final boolean caves) {
+        final MapType ret = Types.NBT.createEmptyMap();
 
-        final MapType<String> overworld = Types.NBT.createEmptyMap();
-        final MapType<String> nether = Types.NBT.createEmptyMap();
-        final MapType<String> end = Types.NBT.createEmptyMap();
+        final MapType overworld = Types.NBT.createEmptyMap();
+        final MapType nether = Types.NBT.createEmptyMap();
+        final MapType end = Types.NBT.createEmptyMap();
 
         ret.setMap("minecraft:overworld", overworld);
         ret.setMap("minecraft:the_nether", nether);
@@ -305,7 +305,7 @@ public final class V2550 {
 
         // nether
         nether.setString("type", "minecraft:the_nether");
-        final MapType<String> netherBiomeSource = Types.NBT.createEmptyMap();
+        final MapType netherBiomeSource = Types.NBT.createEmptyMap();
         netherBiomeSource.setString("type", "minecraft:multi_noise");
         netherBiomeSource.setLong("seed", seed);
         netherBiomeSource.setString("preset", "minecraft:nether");
@@ -314,7 +314,7 @@ public final class V2550 {
 
         // end
         end.setString("type", "minecraft:the_end");
-        final MapType<String> endBiomeSource = Types.NBT.createEmptyMap();
+        final MapType endBiomeSource = Types.NBT.createEmptyMap();
         endBiomeSource.setString("type", "minecraft:the_end");
         endBiomeSource.setLong("seed", seed);
         end.setMap("generator", noise(seed,"minecraft:end", endBiomeSource));
@@ -322,7 +322,7 @@ public final class V2550 {
         return ret;
     }
 
-    public static MapType<String> defaultOverworld(final long seed) {
+    public static MapType defaultOverworld(final long seed) {
         return noise(seed, "minecraft:overworld", vanillaBiomeSource(seed, false, false));
     }
 

@@ -13,10 +13,10 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
-public final class JsonMapType implements MapType<String> {
+public final class JsonMapType implements MapType {
 
-    protected final JsonObject map;
-    protected final boolean compressed;
+    final JsonObject map;
+    final boolean compressed;
 
     public JsonMapType(final boolean compressed) {
         this.map = new JsonObject();
@@ -29,7 +29,7 @@ public final class JsonMapType implements MapType<String> {
     }
 
     @Override
-    public TypeUtil getTypeUtil() {
+    public TypeUtil<JsonElement> getTypeUtil() {
         return this.compressed ? Types.JSON_COMPRESSED : Types.JSON;
     }
 
@@ -91,8 +91,8 @@ public final class JsonMapType implements MapType<String> {
     }
 
     @Override
-    public MapType<String> copy() {
-        return new JsonMapType(JsonTypeUtil.copyJson(this.map), this.compressed);
+    public MapType copy() {
+        return new JsonMapType(this.map.deepCopy(), this.compressed);
     }
 
     @Override
@@ -419,7 +419,7 @@ public final class JsonMapType implements MapType<String> {
     }
 
     @Override
-    public void setMap(final String key, final MapType<?> val) {
+    public void setMap(final String key, final MapType val) {
         this.map.add(key, ((JsonMapType)val).map);
     }
 
@@ -443,12 +443,10 @@ public final class JsonMapType implements MapType<String> {
         return dfl;
     }
 
-    @Override
     public String getForcedString(final String key) {
         return this.getForcedString(key, null);
     }
 
-    @Override
     public String getForcedString(final String key, final String dfl) {
         final JsonElement element = this.map.get(key);
         if (element instanceof JsonPrimitive) {

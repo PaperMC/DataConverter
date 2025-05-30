@@ -14,10 +14,10 @@ public final class V3683 {
     public static void register() {
         MCTypeRegistry.ENTITY.addConverterForId("minecraft:tnt", new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 RenameHelper.renameSingle(data, "Fuse", "fuse");
 
-                final MapType<String> defaultState = data.getTypeUtil().createEmptyMap();
+                final MapType defaultState = data.getTypeUtil().createEmptyMap();
                 data.setMap("block_state", defaultState);
 
                 defaultState.setString("Name", "minecraft:tnt");

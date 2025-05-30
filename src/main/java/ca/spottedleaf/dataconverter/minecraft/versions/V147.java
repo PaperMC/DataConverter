@@ -12,7 +12,7 @@ public final class V147 {
     public static void register() {
         MCTypeRegistry.ENTITY.addConverterForId("ArmorStand", new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 if (data.getBoolean("Silent") && !data.getBoolean("Marker")) {
                     data.remove("Silent");
                 }

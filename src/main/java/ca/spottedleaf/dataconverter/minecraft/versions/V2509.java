@@ -10,10 +10,6 @@ public final class V2509 {
 
     private static final int VERSION = MCVersions.V20W08A + 2;
 
-    private static void registerMob(final String id) {
-        V100.registerEquipment(VERSION, id);
-    }
-
     public static void register() {
         ConverterAbstractItemRename.register(VERSION, new HashMap<>(
                 ImmutableMap.of(
@@ -26,7 +22,7 @@ public final class V2509 {
                 )
         )::get);
 
-        registerMob("minecraft:zombified_piglin");
+        //registerMob("minecraft:zombified_piglin"); // changed to simple in 1.21.5
     }
 
     private V2509() {}

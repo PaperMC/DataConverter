@@ -13,7 +13,7 @@ public final class V816 {
     public static void register() {
         MCTypeRegistry.OPTIONS.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 final String lang = data.getString("lang");
                 if (lang != null) {
                     data.setString("lang", lang.toLowerCase(Locale.ROOT));

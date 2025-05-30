@@ -9,14 +9,10 @@ public final class V701 {
 
     private static final int VERSION = MCVersions.V1_10_2 + 189;
 
-    private static void registerMob(final String id) {
-        V100.registerEquipment(VERSION, id);
-    }
-
     public static void register() {
         MCTypeRegistry.ENTITY.addConverterForId("Skeleton", new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 final int type = data.getInt("SkeletonType");
                 data.remove("SkeletonType");
 
@@ -33,8 +29,8 @@ public final class V701 {
             }
         });
 
-        registerMob("WitherSkeleton");
-        registerMob("Stray");
+        //registerMob("WitherSkeleton"); // is now simple in 1.21.5
+        //registerMob("Stray"); // is now simple in 1.21.5
     }
 
     private V701() {}

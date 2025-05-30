@@ -18,8 +18,8 @@ public final class V1125 {
     public static void register() {
         MCTypeRegistry.CHUNK.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
-                final MapType<String> level = data.getMap("Level");
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
+                final MapType level = data.getMap("Level");
                 if (level == null) {
                     return null;
                 }
@@ -39,7 +39,7 @@ public final class V1125 {
                 }
 
                 for (int i = 0, len = sections.size(); i < len; ++i) {
-                    final MapType<String> section = sections.getMap(i);
+                    final MapType section = sections.getMap(i);
 
                     final byte sectionY = section.getByte("Y");
                     final byte[] blocks = section.getBytes("Blocks");
@@ -57,7 +57,7 @@ public final class V1125 {
                         final int localZ = (blockIndex >> 4) & 15;
                         final int localY = (blockIndex >> 8) & 15;
 
-                        final MapType<String> newTile = Types.NBT.createEmptyMap();
+                        final MapType newTile = Types.NBT.createEmptyMap();
                         newTile.setString("id", "minecraft:bed");
                         newTile.setInt("x", localX + (chunkX << 4));
                         newTile.setInt("y", localY + (sectionY << 4));
@@ -74,7 +74,7 @@ public final class V1125 {
 
         MCTypeRegistry.ITEM_STACK.addConverterForId("minecraft:bed", new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 if (data.getShort("Damage") == 0) {
                     data.setShort("Damage", (short)14); // Red
                 }
@@ -84,7 +84,7 @@ public final class V1125 {
         });
 
 
-        MCTypeRegistry.ADVANCEMENTS.addStructureWalker(VERSION, (final MapType<String> data, final long fromVersion, final long toVersion) -> {
+        MCTypeRegistry.ADVANCEMENTS.addStructureWalker(VERSION, (final MapType data, final long fromVersion, final long toVersion) -> {
             WalkerUtils.convertKeys(MCTypeRegistry.BIOME, data.getMap("minecraft:adventure/adventuring_time"), "criteria", fromVersion, toVersion);
             WalkerUtils.convertKeys(MCTypeRegistry.ENTITY_NAME, data.getMap("minecraft:adventure/kill_a_mob"), "criteria", fromVersion, toVersion);
             WalkerUtils.convertKeys(MCTypeRegistry.ENTITY_NAME, data.getMap("minecraft:adventure/kill_all_mobs"), "criteria", fromVersion, toVersion);

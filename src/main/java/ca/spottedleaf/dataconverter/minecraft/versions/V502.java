@@ -17,7 +17,7 @@ public final class V502 {
         });
         MCTypeRegistry.ENTITY.addConverterForId("Zombie", new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 if (!data.getBoolean("IsVillager")) {
                     return null;
                 }

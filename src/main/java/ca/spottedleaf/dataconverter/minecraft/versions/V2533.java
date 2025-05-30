@@ -14,7 +14,7 @@ public final class V2533 {
     public static void register() {
         MCTypeRegistry.ENTITY.addConverterForId("minecraft:villager", new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 final ListType attributes = data.getList("Attributes", ObjectType.MAP);
 
                 if (attributes == null) {
@@ -22,7 +22,7 @@ public final class V2533 {
                 }
 
                 for (int i = 0, len = attributes.size(); i < len; ++i) {
-                    final MapType<String> attribute = attributes.getMap(i);
+                    final MapType attribute = attributes.getMap(i);
 
                     if (!"generic.follow_range".equals(attribute.getString("Name"))) {
                         continue;

@@ -12,14 +12,14 @@ public final class V2218 {
     public static void register() {
         MCTypeRegistry.POI_CHUNK.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
-                final MapType<String> sections = data.getMap("Sections");
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
+                final MapType sections = data.getMap("Sections");
                 if (sections == null) {
                     return null;
                 }
 
                 for (final String key : sections.keys()) {
-                    final MapType<String> section = sections.getMap(key);
+                    final MapType section = sections.getMap(key);
 
                     section.remove("Valid");
                 }

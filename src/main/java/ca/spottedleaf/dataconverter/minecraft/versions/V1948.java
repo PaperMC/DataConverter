@@ -12,13 +12,13 @@ public final class V1948 {
     public static void register() {
         MCTypeRegistry.ITEM_STACK.addConverterForId("minecraft:white_banner", new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
-                final MapType<String> tag = data.getMap("tag");
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
+                final MapType tag = data.getMap("tag");
                 if (tag == null) {
                     return null;
                 }
 
-                final MapType<String> display = tag.getMap("display");
+                final MapType display = tag.getMap("display");
                 if (display == null) {
                     return null;
                 }

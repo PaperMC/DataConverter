@@ -12,8 +12,8 @@ public final class V3108 {
     public static void register() {
         MCTypeRegistry.CHUNK.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
-                final MapType<String> context = data.getMap("__context");
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
+                final MapType context = data.getMap("__context");
                 if ("minecraft:overworld".equals(context == null ? null : context.getString("dimension"))) {
                     return null;
                 }

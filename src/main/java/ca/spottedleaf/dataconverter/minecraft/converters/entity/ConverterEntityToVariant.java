@@ -4,7 +4,7 @@ import ca.spottedleaf.dataconverter.converters.DataConverter;
 import ca.spottedleaf.dataconverter.types.MapType;
 import java.util.function.IntFunction;
 
-public final class ConverterEntityToVariant extends DataConverter<MapType<String>, MapType<String>> {
+public final class ConverterEntityToVariant extends DataConverter<MapType, MapType> {
 
     public final String path;
     public final IntFunction<String> conversion;
@@ -22,7 +22,7 @@ public final class ConverterEntityToVariant extends DataConverter<MapType<String
     }
 
     @Override
-    public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+    public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
         final Number value = data.getNumber(this.path);
         if (value == null) {
             // nothing to do, DFU does the same

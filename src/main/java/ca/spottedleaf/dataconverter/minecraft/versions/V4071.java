@@ -6,15 +6,11 @@ public final class V4071 {
 
     private static final int VERSION = MCVersions.V24W39A + 2;
 
-    private static void registerMob(final String id) {
-        V100.registerEquipment(VERSION, 0, id);
-    }
-
     public static void register() {
-        registerMob("minecraft:creaking");
-        registerMob("minecraft:creaking_transient");
+        //registerMob("minecraft:creaking"); // changed to simple in 1.21.5
+        //registerMob("minecraft:creaking_transient"); // changed to simple in 1.21.5
 
-        // minecraft:creaking_heart is a simple tile entity? not sure what the difference is between remainder and optional
+        // minecraft:creaking_heart is a simple tile entity
     }
 
     private V4071() {}

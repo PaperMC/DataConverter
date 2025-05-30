@@ -12,30 +12,30 @@ public final class V2967 {
     public static void register() {
         MCTypeRegistry.WORLD_GEN_SETTINGS.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
-                final MapType<String> dimensions = data.getMap("dimensions");
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
+                final MapType dimensions = data.getMap("dimensions");
 
                 if (dimensions == null) {
                     return null;
                 }
 
                 for (final String dimension : dimensions.keys()) {
-                    final MapType<String> dimensionData = dimensions.getMap(dimension);
+                    final MapType dimensionData = dimensions.getMap(dimension);
                     if (dimensionData == null) {
                         continue;
                     }
 
-                    final MapType<String> generator = dimensionData.getMap("generator");
+                    final MapType generator = dimensionData.getMap("generator");
                     if (generator == null) {
                         continue;
                     }
 
-                    final MapType<String> settings = generator.getMap("settings");
+                    final MapType settings = generator.getMap("settings");
                     if (settings == null) {
                         continue;
                     }
 
-                    final MapType<String> structures = settings.getMap("structures");
+                    final MapType structures = settings.getMap("structures");
                     if (structures == null) {
                         continue;
                     }
@@ -44,7 +44,7 @@ public final class V2967 {
                         structures.getMap(structureKey).setString("type", "minecraft:random_spread");
                     }
 
-                    final MapType<String> stronghold = structures.getMap("stronghold");
+                    final MapType stronghold = structures.getMap("stronghold");
                     stronghold.setString("type", "minecraft:concentric_rings");
                     structures.setMap("minecraft:stronghold", stronghold.copy());
                 }

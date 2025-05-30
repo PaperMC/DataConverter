@@ -38,7 +38,7 @@ public final class V3825 {
 
     public static void register() {
         MCTypeRegistry.ITEM_STACK.addStructureConverter(new DataConverter<>(VERSION) {
-            private static void convertName(final MapType<String> components, final Set<String> standardNames) {
+            private static void convertName(final MapType components, final Set<String> standardNames) {
                 final String customName = components.getString("minecraft:custom_name");
                 if (customName == null) {
                     return;
@@ -56,8 +56,8 @@ public final class V3825 {
             }
 
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
-                final MapType<String> components = data.getMap("components");
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
+                final MapType components = data.getMap("components");
                 if (components == null) {
                     return null;
                 }
@@ -83,7 +83,7 @@ public final class V3825 {
         });
         MCTypeRegistry.TILE_ENTITY.addConverterForId("minecraft:banner", new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 final String customName = data.getString("CustomName");
                 if (customName == null || !"block.minecraft.ominous_banner".equals(ComponentUtils.retrieveTranslationString(customName))) {
                     return null;
@@ -91,7 +91,7 @@ public final class V3825 {
 
                 data.remove("CustomName");
 
-                final MapType<String> components = data.getOrCreateMap("components");
+                final MapType components = data.getOrCreateMap("components");
 
                 components.setString("minecraft:item_name", customName);
                 components.setMap("minecraft:hide_additional_tooltip", components.getTypeUtil().createEmptyMap());
@@ -100,12 +100,12 @@ public final class V3825 {
             }
         });
         // DFU does not change the schema, even though it moves spawn_potentials
-        MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, "minecraft:trial_spawner", (final MapType<String> data, final long fromVersion, final long toVersion) -> {
-            final MapType<String> normalConfig = data.getMap("normal_config");
+        MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, "minecraft:trial_spawner", (final MapType data, final long fromVersion, final long toVersion) -> {
+            final MapType normalConfig = data.getMap("normal_config");
             if (normalConfig != null) {
                 WalkerUtils.convertListPath(MCTypeRegistry.ENTITY, normalConfig, "spawn_potentials", "data", "entity", fromVersion, toVersion);
             }
-            final MapType<String> ominousConfig = data.getMap("ominous_config");
+            final MapType ominousConfig = data.getMap("ominous_config");
             if (ominousConfig != null) {
                 WalkerUtils.convertListPath(MCTypeRegistry.ENTITY, ominousConfig, "spawn_potentials", "data", "entity", fromVersion, toVersion);
             }
@@ -127,8 +127,8 @@ public final class V3825 {
             };
 
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
-                final MapType<String> normalConfig = data.getTypeUtil().createEmptyMap();
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
+                final MapType normalConfig = data.getTypeUtil().createEmptyMap();
 
                 for (final String normalKey : NORMAL_CONFIG_KEYS) {
                     final Object normalValue = data.getGeneric(normalKey);

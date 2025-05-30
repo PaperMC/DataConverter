@@ -3,7 +3,7 @@ package ca.spottedleaf.dataconverter.minecraft.converters.helpers;
 import ca.spottedleaf.dataconverter.converters.DataConverter;
 import ca.spottedleaf.dataconverter.types.MapType;
 
-public final class AddFlagIfAbsent extends DataConverter<MapType<String>, MapType<String>> {
+public final class AddFlagIfAbsent extends DataConverter<MapType, MapType> {
 
     public final String path;
     public final boolean dfl;
@@ -21,7 +21,7 @@ public final class AddFlagIfAbsent extends DataConverter<MapType<String>, MapTyp
     }
 
     @Override
-    public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+    public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
         if (!data.hasKey(this.path)) {
             data.setBoolean(this.path, this.dfl);
         }

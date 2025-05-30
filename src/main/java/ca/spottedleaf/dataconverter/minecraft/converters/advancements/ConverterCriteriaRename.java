@@ -5,7 +5,7 @@ import ca.spottedleaf.dataconverter.minecraft.converters.helpers.RenameHelper;
 import ca.spottedleaf.dataconverter.types.MapType;
 import java.util.function.Function;
 
-public final class ConverterCriteriaRename extends DataConverter<MapType<String>, MapType<String>> {
+public final class ConverterCriteriaRename extends DataConverter<MapType, MapType> {
 
     public final String path;
     public final Function<String, String> conversion;
@@ -23,13 +23,13 @@ public final class ConverterCriteriaRename extends DataConverter<MapType<String>
     }
 
     @Override
-    public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
-        final MapType<String> advancement = data.getMap(this.path);
+    public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
+        final MapType advancement = data.getMap(this.path);
         if (advancement == null) {
             return null;
         }
 
-        final MapType<String> criteria = advancement.getMap("criteria");
+        final MapType criteria = advancement.getMap("criteria");
         if (criteria == null) {
             return null;
         }

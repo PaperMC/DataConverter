@@ -14,7 +14,7 @@ public final class V2535 {
     public static void register() {
         MCTypeRegistry.ENTITY.addConverterForId("minecraft:shulker", new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 // Mojang uses doubles for whatever reason... rotation is in FLOAT. by using double here
                 // the entity load will just ignore rotation and set it to 0...
                 final ListType rotation = data.getList("Rotation", ObjectType.FLOAT);

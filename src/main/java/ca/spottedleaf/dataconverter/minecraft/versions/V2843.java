@@ -24,14 +24,14 @@ public final class V2843 {
         );
 
         MCTypeRegistry.CHUNK.addStructureConverter(new DataConverter<>(VERSION) {
-            private static void moveOutOfBoundTicks(final ListType ticks, final MapType<String> chunkRoot, final int chunkX, final int chunkZ, final String intoKey) {
+            private static void moveOutOfBoundTicks(final ListType ticks, final MapType chunkRoot, final int chunkX, final int chunkZ, final String intoKey) {
                 if (ticks == null) {
                     return;
                 }
 
                 ListType outOfBounds = null;
                 for (int i = 0, len = ticks.size(); i < len; ++i) {
-                    final MapType<String> tick = ticks.getMap(i);
+                    final MapType tick = ticks.getMap(i);
                     final int x = tick.getInt("x");
                     final int z = tick.getInt("z");
                     // anything > 1 is lost, anything less than 1 stays.
@@ -45,7 +45,7 @@ public final class V2843 {
                 }
 
                 if (outOfBounds != null) {
-                    MapType<String> upgradeData = chunkRoot.getMap("UpgradeData");
+                    MapType upgradeData = chunkRoot.getMap("UpgradeData");
                     if (upgradeData == null) {
                         chunkRoot.setMap("UpgradeData", upgradeData = Types.NBT.createEmptyMap());
                     }
@@ -54,7 +54,7 @@ public final class V2843 {
             }
 
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 // After renames, so use new names
                 final int x = data.getInt("xPos");
                 final int z = data.getInt("zPos");
@@ -67,34 +67,24 @@ public final class V2843 {
         });
 
         // DFU is missing schema for UpgradeData block names
-        MCTypeRegistry.CHUNK.addStructureWalker(VERSION, (final MapType<String> data, final long fromVersion, final long toVersion) -> {
+        MCTypeRegistry.CHUNK.addStructureWalker(VERSION, (final MapType data, final long fromVersion, final long toVersion) -> {
             WalkerUtils.convertList(MCTypeRegistry.ENTITY, data, "entities", fromVersion, toVersion);
             WalkerUtils.convertList(MCTypeRegistry.TILE_ENTITY, data, "block_entities", fromVersion, toVersion);
 
-            final ListType blockTicks = data.getList("block_ticks", ObjectType.MAP);
-            if (blockTicks != null) {
-                for (int i = 0, len = blockTicks.size(); i < len; ++i) {
-                    WalkerUtils.convert(MCTypeRegistry.BLOCK_NAME, blockTicks.getMap(i), "i", fromVersion, toVersion);
-                }
-            }
+            WalkerUtils.convertListPath(MCTypeRegistry.BLOCK_NAME, data, "block_ticks", "i", fromVersion, toVersion);
 
-            final MapType<String> upgradeData = data.getMap("UpgradeData");
-            if (upgradeData != null) {
-                // Even though UpgradeData will retrieve the block from the World when the type no longer exists,
-                // the type from the world may not match what was actually queued. So, even though it may look like we
-                // can skip the walker here, we actually don't if we want to be thorough.
-                final ListType neighbourBlockTicks = upgradeData.getList("neighbor_block_ticks", ObjectType.MAP);
-                if (neighbourBlockTicks != null) {
-                    for (int i = 0, len = neighbourBlockTicks.size(); i < len; ++i) {
-                        WalkerUtils.convert(MCTypeRegistry.BLOCK_NAME, neighbourBlockTicks.getMap(i), "i", fromVersion, toVersion);
-                    }
-                }
-            }
+            // Even though UpgradeData will retrieve the block from the World when the type no longer exists,
+            // the type from the world may not match what was actually queued. So, even though it may look like we
+            // can skip the walker here, we actually don't if we want to be thorough.
+            WalkerUtils.convertListPath(MCTypeRegistry.BLOCK_NAME, data.getMap("UpgradeData"), "neighbor_block_ticks", "i", fromVersion, toVersion);
 
-            final ListType sections = data.getList("sections", ObjectType.MAP);
+            final ListType sections = data.getListUnchecked("sections");
             if (sections != null) {
                 for (int i = 0, len = sections.size(); i < len; ++i) {
-                    final MapType<String> section = sections.getMap(i);
+                    final MapType section = sections.getMap(i, null);
+                    if (section == null) {
+                        continue;
+                    }
 
                     WalkerUtils.convertList(MCTypeRegistry.BIOME, section.getMap("biomes"), "palette", fromVersion, toVersion);
                     WalkerUtils.convertList(MCTypeRegistry.BLOCK_STATE, section.getMap("block_states"), "palette", fromVersion, toVersion);

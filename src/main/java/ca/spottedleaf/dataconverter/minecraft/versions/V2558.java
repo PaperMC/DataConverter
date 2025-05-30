@@ -22,8 +22,8 @@ public final class V2558 {
 
         MCTypeRegistry.WORLD_GEN_SETTINGS.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
-                MapType<String> dimensions = data.getMap("dimensions");
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
+                MapType dimensions = data.getMap("dimensions");
                 if (dimensions == null) {
                     dimensions = Types.NBT.createEmptyMap();
                     data.setMap("dimensions", dimensions);
@@ -38,7 +38,7 @@ public final class V2558 {
         });
     }
 
-    private static MapType<String> recreateSettings(final MapType<String> data) {
+    private static MapType recreateSettings(final MapType data) {
         final long seed = data.getLong("seed");
 
         return V2550.vanillaLevels(seed, V2550.defaultOverworld(seed), false);

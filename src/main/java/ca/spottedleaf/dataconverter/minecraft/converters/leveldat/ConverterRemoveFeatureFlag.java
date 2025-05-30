@@ -6,7 +6,7 @@ import ca.spottedleaf.dataconverter.types.MapType;
 import ca.spottedleaf.dataconverter.types.ObjectType;
 import java.util.Set;
 
-public final class ConverterRemoveFeatureFlag extends DataConverter<MapType<String>, MapType<String>> {
+public final class ConverterRemoveFeatureFlag extends DataConverter<MapType, MapType> {
 
     private final Set<String> flags;
 
@@ -20,7 +20,7 @@ public final class ConverterRemoveFeatureFlag extends DataConverter<MapType<Stri
     }
 
     @Override
-    public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+    public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
         final ListType enabledFeatures = data.getList("enabled_features", ObjectType.STRING);
         if (enabledFeatures == null) {
             return null;

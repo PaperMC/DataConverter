@@ -11,7 +11,7 @@ public final class RenameHelper {
 
     // assumes no two or more entries are renamed to a single value, otherwise result will be only one of them will win
     // and there is no defined winner in such a case
-    public static void renameKeys(final MapType<String> data, final Function<String, String> renamer) {
+    public static void renameKeys(final MapType data, final Function<String, String> renamer) {
         if (data == null) {
             return;
         }
@@ -56,19 +56,21 @@ public final class RenameHelper {
     }
 
     // Clobbers anything in toKey if fromKey exists
-    public static void renameSingle(final MapType<String> data, final String fromKey, final String toKey) {
+    public static boolean renameSingle(final MapType data, final String fromKey, final String toKey) {
         if (data == null) {
-            return;
+            return false;
         }
 
         final Object value = data.getGeneric(fromKey);
         if (value != null) {
             data.remove(fromKey);
             data.setGeneric(toKey, value);
+            return true;
         }
+        return false;
     }
 
-    public static void renameString(final MapType<String> data, final String key, final Function<String, String> renamer) {
+    public static void renameString(final MapType data, final String key, final Function<String, String> renamer) {
         if (data == null) {
             return;
         }
@@ -86,19 +88,19 @@ public final class RenameHelper {
         data.setString(key, renamed);
     }
 
-    public static void renameListMapItems(final MapType<String> data, final String listPath, final String mapPath,
+    public static void renameListMapItems(final MapType data, final String listPath, final String mapPath,
                                           final Function<String, String> renamer) {
         if (data == null) {
             return;
         }
 
-        final ListType list = data.getList(listPath, ObjectType.MAP);
+        final ListType list = data.getListUnchecked(listPath);
         if (list == null) {
             return;
         }
 
         for (int i = 0, len = list.size(); i < len; ++i) {
-            RenameHelper.renameString(list.getMap(i), mapPath, renamer);
+            RenameHelper.renameString(list.getMap(i, null), mapPath, renamer);
         }
     }
 

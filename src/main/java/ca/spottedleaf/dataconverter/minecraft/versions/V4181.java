@@ -11,9 +11,9 @@ public final class V4181 {
     private static final int VERSION = MCVersions.V1_21_4_PRE1 + 2;
 
     public static void register() {
-        final DataConverter<MapType<String>, MapType<String>> furnaceConverter = new DataConverter<>(VERSION) {
+        final DataConverter<MapType, MapType> furnaceConverter = new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 RenameHelper.renameSingle(data, "CookTime", "cooking_time_spent");
                 RenameHelper.renameSingle(data, "CookTimeTotal", "cooking_total_time");
                 RenameHelper.renameSingle(data, "BurnTime", "lit_time_remaining");

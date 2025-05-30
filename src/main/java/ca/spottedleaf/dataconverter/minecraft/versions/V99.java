@@ -66,10 +66,6 @@ public final class V99 {
         ITEM_ID_TO_TILE_ENTITY_ID.put("minecraft:shield", "Banner");
     }
 
-    private static void registerMob(final String id) {
-        MCTypeRegistry.ENTITY.addWalker(VERSION, id, new DataWalkerItemLists("Equipment"));
-    }
-
     private static void registerProjectile(final String id) {
         MCTypeRegistry.ENTITY.addWalker(VERSION, id, new DataWalkerBlockNames("inTile"));
     }
@@ -78,13 +74,31 @@ public final class V99 {
         MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, id, new DataWalkerItemLists("Items"));
     }
 
-    public static void register() {
-        // entities
-        MCTypeRegistry.ENTITY.addStructureWalker(VERSION, (final MapType<String> data, final long fromVersion, final long toVersion) -> {
-            WalkerUtils.convert(MCTypeRegistry.ENTITY, data, "Riding", fromVersion, toVersion);
+    static void registerSign(final int version, final String id) {
+        MCTypeRegistry.TILE_ENTITY.addWalker(version, id, (final MapType data, final long fromVersion, final long toVersion) -> {
+            WalkerUtils.convert(MCTypeRegistry.TEXT_COMPONENT, data, "Text1", fromVersion, toVersion);
+            WalkerUtils.convert(MCTypeRegistry.TEXT_COMPONENT, data, "Text2", fromVersion, toVersion);
+            WalkerUtils.convert(MCTypeRegistry.TEXT_COMPONENT, data, "Text3", fromVersion, toVersion);
+            WalkerUtils.convert(MCTypeRegistry.TEXT_COMPONENT, data, "Text4", fromVersion, toVersion);
+
+            WalkerUtils.convert(MCTypeRegistry.TEXT_COMPONENT, data, "FilteredText1", fromVersion, toVersion);
+            WalkerUtils.convert(MCTypeRegistry.TEXT_COMPONENT, data, "FilteredText2", fromVersion, toVersion);
+            WalkerUtils.convert(MCTypeRegistry.TEXT_COMPONENT, data, "FilteredText3", fromVersion, toVersion);
+            WalkerUtils.convert(MCTypeRegistry.TEXT_COMPONENT, data, "FilteredText4", fromVersion, toVersion);
 
             return null;
         });
+    }
+
+    public static void register() {
+        // entities
+        MCTypeRegistry.ENTITY.addStructureWalker(VERSION, (final MapType data, final long fromVersion, final long toVersion) -> {
+            WalkerUtils.convert(MCTypeRegistry.ENTITY, data, "Riding", fromVersion, toVersion);
+
+            return MCTypeRegistry.ENTITY_EQUIPMENT.convert(data, fromVersion, toVersion);
+        });
+        MCTypeRegistry.ENTITY_EQUIPMENT.addStructureWalker(VERSION, new DataWalkerItemLists("Equipment"));
+
         MCTypeRegistry.ENTITY.addWalker(VERSION, "Item", new DataWalkerItems("Item"));
         registerProjectile("ThrownEgg");
         MCTypeRegistry.ENTITY.addWalker(VERSION, "Arrow", new DataWalkerBlockNames("inTile"));
@@ -108,9 +122,8 @@ public final class V99 {
         // Vanilla does not make the generic minecart convert spawners, but we do.
         MCTypeRegistry.ENTITY.addWalker(VERSION, "Minecart", new DataWalkerBlockNames("DisplayTile")); // for all minecart types
         MCTypeRegistry.ENTITY.addWalker(VERSION, "Minecart", new DataWalkerItemLists("Items")); // for chest types
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "Minecart", (final MapType<String> data, final long fromVersion, final long toVersion) -> {
-            MCTypeRegistry.UNTAGGED_SPAWNER.convert(data, fromVersion, toVersion);
-            return null;
+        MCTypeRegistry.ENTITY.addWalker(VERSION, "Minecart", (final MapType data, final long fromVersion, final long toVersion) -> {
+            return MCTypeRegistry.UNTAGGED_SPAWNER.convert(data, fromVersion, toVersion);
         }); // for spawner type
         MCTypeRegistry.ENTITY.addWalker(VERSION, "MinecartRideable", new DataWalkerBlockNames("DisplayTile"));
         MCTypeRegistry.ENTITY.addWalker(VERSION, "MinecartChest", new DataWalkerBlockNames("DisplayTile"));
@@ -118,58 +131,58 @@ public final class V99 {
         MCTypeRegistry.ENTITY.addWalker(VERSION, "MinecartFurnace", new DataWalkerBlockNames("DisplayTile"));
         MCTypeRegistry.ENTITY.addWalker(VERSION, "MinecartTNT", new DataWalkerBlockNames("DisplayTile"));
         MCTypeRegistry.ENTITY.addWalker(VERSION, "MinecartSpawner", new DataWalkerBlockNames("DisplayTile"));
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "MinecartSpawner", (final MapType<String> data, final long fromVersion, final long toVersion) -> {
-            MCTypeRegistry.UNTAGGED_SPAWNER.convert(data, fromVersion, toVersion);
-            return null;
+        MCTypeRegistry.ENTITY.addWalker(VERSION, "MinecartSpawner", (final MapType data, final long fromVersion, final long toVersion) -> {
+            return MCTypeRegistry.UNTAGGED_SPAWNER.convert(data, fromVersion, toVersion);
         });
         MCTypeRegistry.ENTITY.addWalker(VERSION, "MinecartHopper", new DataWalkerBlockNames("DisplayTile"));
         MCTypeRegistry.ENTITY.addWalker(VERSION, "MinecartHopper", new DataWalkerItemLists("Items"));
         MCTypeRegistry.ENTITY.addWalker(VERSION, "MinecartCommandBlock", new DataWalkerBlockNames("DisplayTile"));
-        registerMob("ArmorStand");
-        registerMob("Creeper");
-        registerMob("Skeleton");
-        registerMob("Spider");
-        registerMob("Giant");
-        registerMob("Zombie");
-        registerMob("Slime");
-        registerMob("Ghast");
-        registerMob("PigZombie");
+        MCTypeRegistry.ENTITY.addWalker(VERSION, "MinecartCommandBlock", new DataWalkerTypePaths<>(MCTypeRegistry.TEXT_COMPONENT, "LastOutput"));
+        // mob -> simple as equipment is moved to base ENTITY
+        //registerMob("ArmorStand"); // changed to simple in 1.21.5
+        //registerMob("Creeper"); // changed to simple in 1.21.5
+        //registerMob("Skeleton"); // changed to simple in 1.21.5
+        //registerMob("Spider"); // changed to simple in 1.21.5
+        //registerMob("Giant"); // changed to simple in 1.21.5
+        //registerMob("Zombie"); // changed to simple in 1.21.5
+        //registerMob("Slime"); // changed to simple in 1.21.5
+        //registerMob("Ghast"); // changed to simple in 1.21.5
+        //registerMob("PigZombie"); // changed to simple in 1.21.5
         MCTypeRegistry.ENTITY.addWalker(VERSION, "Enderman", new DataWalkerBlockNames("carried"));
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "Enderman", new DataWalkerItemLists("Equipment"));
-        registerMob("CaveSpider");
-        registerMob("Silverfish");
-        registerMob("Blaze");
-        registerMob("LavaSlime");
-        registerMob("EnderDragon");
-        registerMob("WitherBoss");
-        registerMob("Bat");
-        registerMob("Witch");
-        registerMob("Endermite");
-        registerMob("Guardian");
-        registerMob("Pig");
-        registerMob("Sheep");
-        registerMob("Cow");
-        registerMob("Chicken");
-        registerMob("Squid");
-        registerMob("Wolf");
-        registerMob("MushroomCow");
-        registerMob("SnowMan");
-        registerMob("Ozelot");
-        registerMob("VillagerGolem");
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "EntityHorse", new DataWalkerItemLists("Items", "Equipment"));
+        //registerMob("CaveSpider"); // changed to simple in 1.21.5
+        //registerMob("Silverfish"); // changed to simple in 1.21.5
+        //registerMob("Blaze"); // changed to simple in 1.21.5
+        //registerMob("LavaSlime"); // changed to simple in 1.21.5
+        //registerMob("EnderDragon"); // changed to simple in 1.21.5
+        //registerMob("WitherBoss"); // changed to simple in 1.21.5
+        //registerMob("Bat"); // changed to simple in 1.21.5
+        //registerMob("Witch"); // changed to simple in 1.21.5
+        //registerMob("Endermite"); // changed to simple in 1.21.5
+        //registerMob("Guardian"); // changed to simple in 1.21.5
+        //registerMob("Pig"); // changed to simple in 1.21.5
+        //registerMob("Sheep"); // changed to simple in 1.21.5
+        //registerMob("Cow"); // changed to simple in 1.21.5
+        //registerMob("Chicken"); // changed to simple in 1.21.5
+        //registerMob("Squid"); // changed to simple in 1.21.5
+        //registerMob("Wolf"); // changed to simple in 1.21.5
+        //registerMob("MushroomCow"); // changed to simple in 1.21.5
+        //registerMob("SnowMan"); // changed to simple in 1.21.5
+        //registerMob("Ozelot"); // changed to simple in 1.21.5
+        //registerMob("VillagerGolem"); // changed to simple in 1.21.5
+        MCTypeRegistry.ENTITY.addWalker(VERSION, "EntityHorse", new DataWalkerItemLists("Items"));
         MCTypeRegistry.ENTITY.addWalker(VERSION, "EntityHorse", new DataWalkerItems("ArmorItem", "SaddleItem"));
-        registerMob("Rabbit");
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "Villager", new DataWalkerItemLists("Inventory", "Equipment"));
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "Villager", (final MapType<String> data, final long fromVersion, final long toVersion) -> {
+        //registerMob("Rabbit"); // changed to simple in 1.21.5
+        MCTypeRegistry.ENTITY.addWalker(VERSION, "Villager", new DataWalkerItemLists("Inventory"));
+        MCTypeRegistry.ENTITY.addWalker(VERSION, "Villager", (final MapType data, final long fromVersion, final long toVersion) -> {
             WalkerUtils.convertList(MCTypeRegistry.VILLAGER_TRADE, data.getMap("Offers"), "Recipes", fromVersion, toVersion);
 
             return null;
         });
-        registerMob("Shulker");
+        //registerMob("Shulker"); // changed to simple in 1.21.5
         MCTypeRegistry.ENTITY.addWalker(VERSION, "AreaEffectCloud", new DataWalkerTypePaths<>(MCTypeRegistry.PARTICLE, "Particle"));
 
         // tile entities
-        MCTypeRegistry.TILE_ENTITY.addStructureWalker(VERSION, (final MapType<String> data, final long fromVersion, final long toVersion) -> {
+        MCTypeRegistry.TILE_ENTITY.addStructureWalker(VERSION, (final MapType data, final long fromVersion, final long toVersion) -> {
             WalkerUtils.convert(MCTypeRegistry.DATA_COMPONENTS, data, "components", fromVersion, toVersion);
 
             return null;
@@ -181,25 +194,33 @@ public final class V99 {
         MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, "RecordPlayer", new DataWalkerItems("RecordItem"));
         registerInventory("Trap");
         registerInventory("Dropper");
-        MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, "MobSpawner", (final MapType<String> data, final long fromVersion, final long toVersion) -> {
-            MCTypeRegistry.UNTAGGED_SPAWNER.convert(data, fromVersion, toVersion);
-            return null;
+        registerSign(VERSION, "Sign");
+        MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, "MobSpawner", (final MapType data, final long fromVersion, final long toVersion) -> {
+            return MCTypeRegistry.UNTAGGED_SPAWNER.convert(data, fromVersion, toVersion);
         });
         registerInventory("Cauldron");
+        MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, "Control",
+            new DataWalkerTypePaths<>(MCTypeRegistry.DATACONVERTER_CUSTOM_TYPE_COMMAND, "Command")
+        );
+        MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, "Control", new DataWalkerTypePaths<>(MCTypeRegistry.TEXT_COMPONENT, "LastOutput"));
+        MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, "Skull", new DataWalkerTypePaths<>(MCTypeRegistry.TEXT_COMPONENT, "custom_name"));
         registerInventory("Hopper");
+        MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, "Banner", new DataWalkerTypePaths<>(MCTypeRegistry.TEXT_COMPONENT, "CustomName"));
         // Note: Vanilla does not properly handle this case for FlowerPot, it will not convert int ids!
         MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, "FlowerPot", new DataWalkerItemNames("Item"));
-        MCTypeRegistry.TILE_ENTITY.addWalker(
-                VERSION, "Control",
-                new DataWalkerTypePaths<>(MCTypeRegistry.DATACONVERTER_CUSTOM_TYPE_COMMAND, "Command")
-        );
 
         // rest
 
-        MCTypeRegistry.ITEM_STACK.addStructureWalker(VERSION, (final MapType<String> data, final long fromVersion, final long toVersion) -> {
+        MCTypeRegistry.LEVEL.addStructureWalker(VERSION, (final MapType data, final long fromVersion, final long toVersion) -> {
+            WalkerUtils.convertListPath(MCTypeRegistry.TEXT_COMPONENT, data, "CustomBossEvents", "Name", fromVersion, toVersion);
+
+            return null;
+        });
+
+        MCTypeRegistry.ITEM_STACK.addStructureWalker(VERSION, (final MapType data, final long fromVersion, final long toVersion) -> {
             WalkerUtils.convert(MCTypeRegistry.ITEM_NAME, data, "id", fromVersion, toVersion);
 
-            final MapType<String> tag = data.getMap("tag");
+            final MapType tag = data.getMap("tag");
             if (tag == null) {
                 return null;
             }
@@ -208,8 +229,15 @@ public final class V99 {
 
             WalkerUtils.convertList(MCTypeRegistry.ITEM_STACK, tag, "Items", fromVersion, toVersion);
             WalkerUtils.convertList(MCTypeRegistry.ITEM_STACK, tag, "ChargedProjectiles", fromVersion, toVersion);
+            WalkerUtils.convertList(MCTypeRegistry.TEXT_COMPONENT, tag, "pages", fromVersion, toVersion);
+            WalkerUtils.convertList(MCTypeRegistry.TEXT_COMPONENT, tag, "filtered_pages", fromVersion, toVersion);
+            final MapType display = tag.getMap("display");
+            if (display != null) {
+                WalkerUtils.convert(MCTypeRegistry.TEXT_COMPONENT, display, "Name", fromVersion, toVersion);
+                WalkerUtils.convertList(MCTypeRegistry.TEXT_COMPONENT, display, "Lore", fromVersion, toVersion);
+            }
 
-            MapType<String> entityTag = tag.getMap("EntityTag");
+            MapType entityTag = tag.getMap("EntityTag");
             if (entityTag != null) {
                 String itemId = getStringId(data.getString("id"));
                 final String entityId;
@@ -242,7 +270,7 @@ public final class V99 {
                     }
                 }
 
-                final MapType<String> replace = MCTypeRegistry.ENTITY.convert(entityTag, fromVersion, toVersion);
+                final MapType replace = MCTypeRegistry.ENTITY.convert(entityTag, fromVersion, toVersion);
 
                 if (replace != null) {
                     entityTag = replace;
@@ -253,7 +281,7 @@ public final class V99 {
                 }
             }
 
-            MapType<String> blockEntityTag = tag.getMap("BlockEntityTag");
+            MapType blockEntityTag = tag.getMap("BlockEntityTag");
             if (blockEntityTag != null) {
                 final String itemId = getStringId(data.getString("id"));
                 final String entityId = ITEM_ID_TO_TILE_ENTITY_ID.get(itemId);
@@ -267,7 +295,7 @@ public final class V99 {
                     removeId = !blockEntityTag.hasKey("id", ObjectType.STRING);
                     blockEntityTag.setString("id", entityId);
                 }
-                final MapType<String> replace = MCTypeRegistry.TILE_ENTITY.convert(blockEntityTag, fromVersion, toVersion);
+                final MapType replace = MCTypeRegistry.TILE_ENTITY.convert(blockEntityTag, fromVersion, toVersion);
                 if (replace != null) {
                     blockEntityTag = replace;
                     tag.setMap("BlockEntityTag", blockEntityTag);
@@ -285,8 +313,8 @@ public final class V99 {
 
         MCTypeRegistry.PLAYER.addStructureWalker(VERSION, new DataWalkerItemLists("Inventory", "EnderItems"));
 
-        MCTypeRegistry.CHUNK.addStructureWalker(VERSION, (final MapType<String> data, final long fromVersion, final long toVersion) -> {
-            final MapType<String> level = data.getMap("Level");
+        MCTypeRegistry.CHUNK.addStructureWalker(VERSION, (final MapType data, final long fromVersion, final long toVersion) -> {
+            final MapType level = data.getMap("Level");
             if (level == null) {
                 return null;
             }
@@ -297,7 +325,7 @@ public final class V99 {
             final ListType tileTicks = level.getList("TileTicks", ObjectType.MAP);
             if (tileTicks != null) {
                 for (int i = 0, len = tileTicks.size(); i < len; ++i) {
-                    final MapType<String> tileTick = tileTicks.getMap(i);
+                    final MapType tileTick = tileTicks.getMap(i);
                     WalkerUtils.convert(MCTypeRegistry.BLOCK_NAME, tileTick, "i", fromVersion, toVersion);
                 }
             }
@@ -305,25 +333,30 @@ public final class V99 {
             return null;
         });
 
-        MCTypeRegistry.ENTITY_CHUNK.addStructureWalker(VERSION, (final MapType<String> data, final long fromVersion, final long toVersion) -> {
+        MCTypeRegistry.ENTITY_CHUNK.addStructureWalker(VERSION, (final MapType data, final long fromVersion, final long toVersion) -> {
             WalkerUtils.convertList(MCTypeRegistry.ENTITY, data, "Entities", fromVersion, toVersion);
 
             return null;
         });
 
-        MCTypeRegistry.SAVED_DATA_SCOREBOARD.addStructureWalker(VERSION, (final MapType<String> root, final long fromVersion, final long toVersion) -> {
-            final MapType<String> data = root.getMap("data");
+        MCTypeRegistry.SAVED_DATA_MAP_DATA.addStructureWalker(VERSION, (final MapType root, final long fromVersion, final long toVersion) -> {
+            WalkerUtils.convertListPath(MCTypeRegistry.TEXT_COMPONENT, root, "banners", "Name", fromVersion, toVersion);
+            return null;
+        });
+        MCTypeRegistry.SAVED_DATA_SCOREBOARD.addStructureWalker(VERSION, (final MapType root, final long fromVersion, final long toVersion) -> {
+            final MapType data = root.getMap("data");
             if (data == null) {
                 return null;
             }
 
             WalkerUtils.convertList(MCTypeRegistry.OBJECTIVE, data, "Objectives", fromVersion, toVersion);
             WalkerUtils.convertList(MCTypeRegistry.TEAM, data, "Teams", fromVersion, toVersion);
+            WalkerUtils.convertListPath(MCTypeRegistry.TEXT_COMPONENT, data, "PlayerScores", "display", fromVersion, toVersion);
 
             return null;
         });
-        MCTypeRegistry.SAVED_DATA_STRUCTURE_FEATURE_INDICES.addStructureWalker(VERSION, (final MapType<String> root, final long fromVersion, final long toVersion) -> {
-            final MapType<String> data = root.getMap("data");
+        MCTypeRegistry.SAVED_DATA_STRUCTURE_FEATURE_INDICES.addStructureWalker(VERSION, (final MapType root, final long fromVersion, final long toVersion) -> {
+            final MapType data = root.getMap("data");
             if (data == null) {
                 return null;
             }
@@ -333,10 +366,26 @@ public final class V99 {
             return null;
         });
 
-        MCTypeRegistry.VILLAGER_TRADE.addStructureWalker(VERSION, (final MapType<String> root, final long fromVersion, final long toVersion) -> {
+        MCTypeRegistry.TEAM.addStructureWalker(VERSION, (final MapType root, final long fromVersion, final long toVersion) -> {
+            WalkerUtils.convert(MCTypeRegistry.TEXT_COMPONENT, root, "MemberNamePrefix", fromVersion, toVersion);
+            WalkerUtils.convert(MCTypeRegistry.TEXT_COMPONENT, root, "MemberNameSuffix", fromVersion, toVersion);
+            WalkerUtils.convert(MCTypeRegistry.TEXT_COMPONENT, root, "DisplayName", fromVersion, toVersion);
+
+            return null;
+        });
+
+        MCTypeRegistry.VILLAGER_TRADE.addStructureWalker(VERSION, (final MapType root, final long fromVersion, final long toVersion) -> {
             WalkerUtils.convert(MCTypeRegistry.ITEM_STACK, root, "buy", fromVersion, toVersion);
             WalkerUtils.convert(MCTypeRegistry.ITEM_STACK, root, "buyB", fromVersion, toVersion);
             WalkerUtils.convert(MCTypeRegistry.ITEM_STACK, root, "sell", fromVersion, toVersion);
+
+            return null;
+        });
+
+        MCTypeRegistry.STRUCTURE.addStructureWalker(VERSION, (final MapType root, final long fromVersion, final long toVersion) -> {
+            WalkerUtils.convertListPath(MCTypeRegistry.ENTITY, root, "entities", "nbt", fromVersion, toVersion);
+            WalkerUtils.convertListPath(MCTypeRegistry.TILE_ENTITY, root, "blocks", "nbt", fromVersion, toVersion);
+            WalkerUtils.convertList(MCTypeRegistry.BLOCK_STATE, root, "palette", fromVersion, toVersion);
 
             return null;
         });

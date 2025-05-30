@@ -13,21 +13,21 @@ public final class V4054 {
     public static void register() {
         MCTypeRegistry.TILE_ENTITY.addConverterForId("minecraft:banner", new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 convertComponents(data.getMap("components"));
                 return null;
             }
         });
         MCTypeRegistry.ITEM_STACK.addConverterForId("minecraft:white_banner", new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 convertComponents(data.getMap("components"));
                 return null;
             }
         });
     }
 
-    private static void convertComponents(final MapType<String> components) {
+    private static void convertComponents(final MapType components) {
         if (components == null) {
             return;
         }

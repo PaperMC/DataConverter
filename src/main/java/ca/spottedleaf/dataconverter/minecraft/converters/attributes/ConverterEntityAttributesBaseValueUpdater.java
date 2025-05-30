@@ -7,7 +7,7 @@ import ca.spottedleaf.dataconverter.types.ObjectType;
 import ca.spottedleaf.dataconverter.util.NamespaceUtil;
 import java.util.function.DoubleUnaryOperator;
 
-public final class ConverterEntityAttributesBaseValueUpdater extends DataConverter<MapType<String>, MapType<String>> {
+public final class ConverterEntityAttributesBaseValueUpdater extends DataConverter<MapType, MapType> {
 
     private final String targetId;
     private final DoubleUnaryOperator updater;
@@ -24,14 +24,14 @@ public final class ConverterEntityAttributesBaseValueUpdater extends DataConvert
     }
 
     @Override
-    public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+    public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
         final ListType modifiers = data.getList("attributes", ObjectType.MAP);
         if (modifiers == null) {
             return null;
         }
 
         for (int i = 0, len = modifiers.size(); i < len; ++i) {
-            final MapType<String> modifier = modifiers.getMap(i);
+            final MapType modifier = modifiers.getMap(i);
 
             if (!this.targetId.equals(NamespaceUtil.correctNamespace(modifier.getString("id", "")))) {
                 continue;

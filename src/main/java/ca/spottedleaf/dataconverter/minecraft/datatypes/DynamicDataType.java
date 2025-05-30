@@ -23,8 +23,12 @@ public class DynamicDataType extends DataType<Object, Object> {
 
     public void addStructureConverter(final DataConverter<Object, Object> converter) {
         MCVersionRegistry.checkVersion(converter.getEncodedVersion());
+        final boolean sort = !this.structureConverters.isEmpty()
+            && DataConverter.LOWEST_VERSION_COMPARATOR.compare(this.structureConverters.getLast(), converter) > 0;
         this.structureConverters.add(converter);
-        this.structureConverters.sort(DataConverter.LOWEST_VERSION_COMPARATOR);
+        if (sort) {
+            this.structureConverters.sort(DataConverter.LOWEST_VERSION_COMPARATOR);
+        }
     }
 
     public void addStructureWalker(final int minVersion, final DataWalker<Object> walker) {

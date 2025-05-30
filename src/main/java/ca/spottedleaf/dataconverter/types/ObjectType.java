@@ -16,7 +16,8 @@ public enum ObjectType {
     LIST(ListType.class),
     MAP(MapType.class),
     STRING(String.class),
-    UNDEFINED(null);
+    UNDEFINED(null),
+    MIXED(null);
 
     private final Class<?> clazz;
     private final boolean isNumber;

@@ -68,7 +68,7 @@ public final class V4067 {
             }
 
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 final String id = data.getString("id");
                 final String boatType = BOAT_TYPES_BY_ITEM_ID.get(id);
 
@@ -76,12 +76,12 @@ public final class V4067 {
                     return null;
                 }
 
-                final MapType<String> components = data.getMap("components");
+                final MapType components = data.getMap("components");
                 if (components == null) {
                     return null;
                 }
 
-                final MapType<String> entityData = components.getMap("minecraft:entity_data");
+                final MapType entityData = components.getMap("minecraft:entity_data");
                 if (entityData == null) {
                     return null;
                 }
@@ -107,7 +107,7 @@ public final class V4067 {
             }
 
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 final String id = data.getString("id");
                 if (id == null) {
                     // wat

@@ -13,7 +13,7 @@ public final class V4068 {
 
     private static final int VERSION = MCVersions.V24W38A + 2;
 
-    private static void convertLock(final MapType<String> root, final String srcPath, final String dstPath) {
+    private static void convertLock(final MapType root, final String srcPath, final String dstPath) {
         if (root == null) {
             return;
         }
@@ -23,15 +23,15 @@ public final class V4068 {
             return;
         }
 
-        final TypeUtil typeUtil = root.getTypeUtil();
+        final TypeUtil<?> typeUtil = root.getTypeUtil();
 
         root.remove(srcPath);
 
         if (lockGeneric instanceof String lock && !lock.isEmpty()) {
-            final MapType<String> newLock = typeUtil.createEmptyMap();
+            final MapType newLock = typeUtil.createEmptyMap();
             root.setMap(dstPath, newLock);
 
-            final MapType<String> lockComponents = typeUtil.createEmptyMap();
+            final MapType lockComponents = typeUtil.createEmptyMap();
             newLock.setMap("components", lockComponents);
 
             lockComponents.setString("minecraft:custom_name", ESCAPER.escape(lock));
@@ -41,8 +41,8 @@ public final class V4068 {
     public static void register() {
         MCTypeRegistry.ITEM_STACK.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
-                final MapType<String> components = data.getMap("components");
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
+                final MapType components = data.getMap("components");
                 if (components == null) {
                     return null;
                 }
@@ -54,7 +54,7 @@ public final class V4068 {
         });
         MCTypeRegistry.TILE_ENTITY.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 convertLock(data, "Lock", "lock");
                 return null;
             }

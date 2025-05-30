@@ -13,8 +13,8 @@ public final class V1946 {
     public static void register() {
         MCTypeRegistry.POI_CHUNK.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
-                final MapType<String> sections = Types.NBT.createEmptyMap();
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
+                final MapType sections = Types.NBT.createEmptyMap();
                 data.setMap("Sections", sections);
 
                 for (int y = 0; y < 16; ++y) {
@@ -27,7 +27,7 @@ public final class V1946 {
 
                     data.remove(key);
 
-                    final MapType<String> section = Types.NBT.createEmptyMap();
+                    final MapType section = Types.NBT.createEmptyMap();
                     section.setGeneric("Records", records);
                     sections.setMap(key, section); // integer keys convert to string in DFU (at least for NBT ops)
                 }

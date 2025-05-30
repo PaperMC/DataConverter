@@ -120,7 +120,7 @@ public final class V1492 {
     public static void register() {
         MCTypeRegistry.STRUCTURE_FEATURE.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 final ListType children = data.getList("Children", ObjectType.MAP);
                 if (children == null) {
                     return null;
@@ -134,7 +134,7 @@ public final class V1492 {
                 }
 
                 for (int i = 0, len = children.size(); i < len; ++i) {
-                    final MapType<String> child = children.getMap(i);
+                    final MapType child = children.getMap(i);
 
                     if (renames.getFirst().equals(child.getString("id"))) {
                         final String template = child.getString("Template", "");

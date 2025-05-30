@@ -10,7 +10,7 @@ public final class V1022 {
     private static final int VERSION = MCVersions.V17W06A;
 
     public static void register() {
-        MCTypeRegistry.PLAYER.addStructureWalker(VERSION, (final MapType<String> data, final long fromVersion, final long toVersion) -> {
+        MCTypeRegistry.PLAYER.addStructureWalker(VERSION, (final MapType data, final long fromVersion, final long toVersion) -> {
             WalkerUtils.convert(MCTypeRegistry.ENTITY, data.getMap("RootVehicle"), "Entity", fromVersion, toVersion);
 
             WalkerUtils.convertList(MCTypeRegistry.ENTITY, data, "ender_pearls", fromVersion, toVersion);
@@ -21,7 +21,7 @@ public final class V1022 {
             WalkerUtils.convert(MCTypeRegistry.ENTITY, data, "ShoulderEntityLeft", fromVersion, toVersion);
             WalkerUtils.convert(MCTypeRegistry.ENTITY, data, "ShoulderEntityRight", fromVersion, toVersion);
 
-            final MapType<String> recipeBook = data.getMap("recipeBook");
+            final MapType recipeBook = data.getMap("recipeBook");
             if (recipeBook != null) {
                 WalkerUtils.convertList(MCTypeRegistry.RECIPE, recipeBook, "recipes", fromVersion, toVersion);
                 WalkerUtils.convertList(MCTypeRegistry.RECIPE, recipeBook, "toBeDisplayed", fromVersion, toVersion);
@@ -30,7 +30,7 @@ public final class V1022 {
             return null;
         });
 
-        MCTypeRegistry.HOTBAR.addStructureWalker(VERSION, (final MapType<String> data, final long fromVersion, final long toVersion) -> {
+        MCTypeRegistry.HOTBAR.addStructureWalker(VERSION, (final MapType data, final long fromVersion, final long toVersion) -> {
             for (final String key : data.keys()) {
                 WalkerUtils.convertList(MCTypeRegistry.ITEM_STACK, data, key, fromVersion, toVersion);
             }

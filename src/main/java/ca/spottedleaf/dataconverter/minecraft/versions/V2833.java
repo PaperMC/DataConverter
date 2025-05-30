@@ -12,11 +12,11 @@ public final class V2833 {
     public static void register() {
         MCTypeRegistry.WORLD_GEN_SETTINGS.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
-                final MapType<String> dimensions = data.getMap("dimensions");
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
+                final MapType dimensions = data.getMap("dimensions");
 
                 for (final String dimensionKey : dimensions.keys()) {
-                    final MapType<String> dimension = dimensions.getMap(dimensionKey);
+                    final MapType dimension = dimensions.getMap(dimensionKey);
                     if (!dimension.hasKey("type")) {
                         throw new IllegalStateException("Unable load old custom worlds.");
                     }

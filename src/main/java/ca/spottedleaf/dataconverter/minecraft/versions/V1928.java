@@ -10,10 +10,6 @@ public final class V1928 {
 
     private static final int VERSION = MCVersions.V19W04B + 1;
 
-    private static void registerMob(final String id) {
-        V100.registerEquipment(VERSION, id);
-    }
-
     public static void register() {
         ConverterAbstractEntityRename.register(VERSION, new HashMap<>(
                 ImmutableMap.of(
@@ -26,7 +22,7 @@ public final class V1928 {
                 )
         )::get);
 
-        registerMob("minecraft:ravager");
+        //registerMob("minecraft:ravager"); // changed to simple in 1.21.5
     }
 
     private V1928() {}

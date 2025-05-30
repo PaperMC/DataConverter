@@ -41,8 +41,8 @@ public final class V3566 {
             );
 
             @Override
-            public MapType<String> convert(final MapType<String> root, final long sourceVersion, final long toVersion) {
-                final MapType<String> data = root.getMap("data");
+            public MapType convert(final MapType root, final long sourceVersion, final long toVersion) {
+                final MapType data = root.getMap("data");
                 if (data == null) {
                     return null;
                 }

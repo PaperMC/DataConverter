@@ -20,17 +20,17 @@ public final class V2511 {
         };
     }
 
-    private static void setUUID(final MapType<String> data, final long most, final long least) {
+    private static void setUUID(final MapType data, final long most, final long least) {
         if (most != 0L && least != 0L) {
             data.setInts("OwnerUUID", createUUIDArray(most, least));
         }
     }
 
     public static void register() {
-        final DataConverter<MapType<String>, MapType<String>> throwableConverter = new DataConverter<>(VERSION) {
+        final DataConverter<MapType, MapType> throwableConverter = new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
-                final MapType<String> owner = data.getMap("owner");
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
+                final MapType owner = data.getMap("owner");
                 data.remove("owner");
                 if (owner == null) {
                     return null;
@@ -41,10 +41,10 @@ public final class V2511 {
                 return null;
             }
         };
-        final DataConverter<MapType<String>, MapType<String>> potionConverter = new DataConverter<>(VERSION) {
+        final DataConverter<MapType, MapType> potionConverter = new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
-                final MapType<String> potion = data.getMap("Potion");
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
+                final MapType potion = data.getMap("Potion");
                 data.remove("Potion");
 
                 data.setMap("Item", potion == null ? Types.NBT.createEmptyMap() : potion);
@@ -52,10 +52,10 @@ public final class V2511 {
                 return null;
             }
         };
-        final DataConverter<MapType<String>, MapType<String>> llamaSpitConverter = new DataConverter<>(VERSION) {
+        final DataConverter<MapType, MapType> llamaSpitConverter = new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
-                final MapType<String> owner = data.getMap("Owner");
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
+                final MapType owner = data.getMap("Owner");
                 data.remove("Owner");
                 if (owner == null) {
                     return null;
@@ -66,9 +66,9 @@ public final class V2511 {
                 return null;
             }
         };
-        final DataConverter<MapType<String>, MapType<String>> arrowConverter = new DataConverter<>(VERSION) {
+        final DataConverter<MapType, MapType> arrowConverter = new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 setUUID(data, data.getLong("OwnerUUIDMost"), data.getLong("OwnerUUIDLeast"));
 
                 data.remove("OwnerUUIDMost");
@@ -89,7 +89,9 @@ public final class V2511 {
         MCTypeRegistry.ENTITY.addConverterForId("minecraft:spectral_arrow", arrowConverter);
         MCTypeRegistry.ENTITY.addConverterForId("minecraft:trident", arrowConverter);
 
-        // Vanilla migrates the potion item but does not change the schema.
+        // Vanilla uses version step 1, but there's no need to add a step here.
+        // Note: Originally we have had this walker on step 0, as Vanilla accidentally left this walker out
+        //       until 1.21.5
         MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:potion", new DataWalkerItems("Item"));
     }
 

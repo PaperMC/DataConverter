@@ -26,7 +26,7 @@ public final class V1456 {
     public static void register() {
         MCTypeRegistry.ENTITY.addConverterForId("minecraft:item_frame", new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 data.setByte("Facing", direction2dTo3d(data.getByte("Facing")));
                 return null;
             }

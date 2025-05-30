@@ -62,7 +62,7 @@ public final class V3568 {
                     )
             );
 
-    private static String readLegacyEffect(final MapType<String> data, final String path) {
+    private static String readLegacyEffect(final MapType data, final String path) {
         final Number id = data.getNumber(path);
         if (id == null) {
             return null;
@@ -72,7 +72,7 @@ public final class V3568 {
         return castedId >= 0 && castedId < EFFECT_ID_MAP.length ? EFFECT_ID_MAP[castedId] : null;
     }
 
-    private static void convertLegacyEffect(final MapType<String> data, final String legacyPath, final String newPath) {
+    private static void convertLegacyEffect(final MapType data, final String legacyPath, final String newPath) {
         final Number id = data.getNumber(legacyPath);
         data.remove(legacyPath);
 
@@ -101,7 +101,7 @@ public final class V3568 {
         MOB_EFFECT_RENAMES.put("HiddenEffect", "hidden_effect");
     }
 
-    private static void convertMobEffect(final MapType<String> mobEffect) {
+    private static void convertMobEffect(final MapType mobEffect) {
         if (mobEffect == null) {
             return;
         }
@@ -115,7 +115,7 @@ public final class V3568 {
         convertMobEffect(mobEffect.getMap("hidden_effect"));
     }
 
-    private static void convertMobEffectList(final MapType<String> data, final String oldPath, final String newPath) {
+    private static void convertMobEffectList(final MapType data, final String oldPath, final String newPath) {
         final ListType effects = data.getList(oldPath, ObjectType.MAP);
         if (effects == null) {
             return;
@@ -129,7 +129,7 @@ public final class V3568 {
         data.setList(newPath, effects);
     }
 
-    private static void removeAndSet(final MapType<String> data, final String toRemovePath,
+    private static void removeAndSet(final MapType data, final String toRemovePath,
                                      final String toSetPath, final Object toSet) {
         data.remove(toRemovePath);
         if (toSet != null) {
@@ -137,15 +137,15 @@ public final class V3568 {
         }
     }
 
-    private static void updateSuspiciousStew(final MapType<String> from, final MapType<String> into) {
+    private static void updateSuspiciousStew(final MapType from, final MapType into) {
         removeAndSet(into, "EffectId", "id", readLegacyEffect(from, "EffectId"));
         removeAndSet(into, "EffectDuration", "duration", from.getGeneric("EffectDuration"));
     }
 
     public static void register() {
-        final DataConverter<MapType<String>, MapType<String>> beaconConverter = new DataConverter<>(VERSION) {
+        final DataConverter<MapType, MapType> beaconConverter = new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 convertLegacyEffect(data, "Primary", "primary_effect");
                 convertLegacyEffect(data, "Secondary", "secondary_effect");
 
@@ -153,10 +153,10 @@ public final class V3568 {
             }
         };
 
-        final DataConverter<MapType<String>, MapType<String>> mooshroomConverter = new DataConverter<>(VERSION) {
+        final DataConverter<MapType, MapType> mooshroomConverter = new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
-                final MapType<String> newEffect = data.getTypeUtil().createEmptyMap();
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
+                final MapType newEffect = data.getTypeUtil().createEmptyMap();
                 updateSuspiciousStew(data, newEffect);
 
                 data.remove("EffectId");
@@ -172,34 +172,34 @@ public final class V3568 {
                 return null;
             }
         };
-        final DataConverter<MapType<String>, MapType<String>> arrowConverter = new DataConverter<>(VERSION) {
+        final DataConverter<MapType, MapType> arrowConverter = new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 convertMobEffectList(data, "CustomPotionEffects", "custom_potion_effects");
                 return null;
             }
         };
-        final DataConverter<MapType<String>, MapType<String>> areaEffectCloudConverter = new DataConverter<>(VERSION) {
+        final DataConverter<MapType, MapType> areaEffectCloudConverter = new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 convertMobEffectList(data, "Effects", "effects");
                 return null;
             }
         };
-        final DataConverter<MapType<String>, MapType<String>> livingEntityConverter = new DataConverter<>(VERSION) {
+        final DataConverter<MapType, MapType> livingEntityConverter = new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 convertMobEffectList(data, "ActiveEffects", "active_effects");
                 return null;
             }
         };
 
-        final DataConverter<MapType<String>, MapType<String>> itemConverter = new DataConverter<>(VERSION) {
+        final DataConverter<MapType, MapType> itemConverter = new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> root, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType root, final long sourceVersion, final long toVersion) {
                 final String id = root.getString("id");
 
-                final MapType<String> tag = root.getMap("tag");
+                final MapType tag = root.getMap("tag");
 
                 if (tag == null) {
                     return null;
@@ -212,7 +212,7 @@ public final class V3568 {
 
                     if (effects != null) {
                         for (int i = 0, len = effects.size(); i < len; ++i) {
-                            final MapType<String> effect = effects.getMap(i);
+                            final MapType effect = effects.getMap(i);
                             updateSuspiciousStew(effect, effect);
                         }
                     }

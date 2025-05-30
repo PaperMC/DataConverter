@@ -16,8 +16,8 @@ public final class V2842 {
     public static void register() {
         MCTypeRegistry.CHUNK.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> root, final long sourceVersion, final long toVersion) {
-                final MapType<String> level = root.getMap("Level");
+            public MapType convert(final MapType root, final long sourceVersion, final long toVersion) {
+                final MapType level = root.getMap("Level");
                 root.remove("Level");
 
                 if (!root.isEmpty()) {
@@ -38,7 +38,7 @@ public final class V2842 {
                 RenameHelper.renameSingle(level, "Structures", "structures");
 
                 // 2nd level
-                final MapType<String> structures = level.getMap("structures");
+                final MapType structures = level.getMap("structures");
                 if (structures != null) {
                     RenameHelper.renameSingle(structures, "Starts", "starts");
                 }
@@ -47,7 +47,7 @@ public final class V2842 {
             }
         });
 
-        MCTypeRegistry.CHUNK.addStructureWalker(VERSION, (final MapType<String> data, final long fromVersion, final long toVersion) -> {
+        MCTypeRegistry.CHUNK.addStructureWalker(VERSION, (final MapType data, final long fromVersion, final long toVersion) -> {
             WalkerUtils.convertList(MCTypeRegistry.ENTITY, data, "entities", fromVersion, toVersion);
             WalkerUtils.convertList(MCTypeRegistry.TILE_ENTITY, data, "block_entities", fromVersion, toVersion);
 
@@ -61,7 +61,7 @@ public final class V2842 {
             final ListType sections = data.getList("sections", ObjectType.MAP);
             if (sections != null) {
                 for (int i = 0, len = sections.size(); i < len; ++i) {
-                    final MapType<String> section = sections.getMap(i);
+                    final MapType section = sections.getMap(i);
 
                     WalkerUtils.convertList(MCTypeRegistry.BIOME, section.getMap("biomes"), "palette", fromVersion, toVersion);
                     WalkerUtils.convertList(MCTypeRegistry.BLOCK_STATE, section.getMap("block_states"), "palette", fromVersion, toVersion);

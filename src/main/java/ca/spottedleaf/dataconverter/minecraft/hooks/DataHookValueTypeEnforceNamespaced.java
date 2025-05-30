@@ -7,8 +7,8 @@ public class DataHookValueTypeEnforceNamespaced implements DataHook<Object, Obje
 
     @Override
     public Object preHook(final Object data, final long fromVersion, final long toVersion) {
-        if (data instanceof String) {
-            return NamespaceUtil.correctNamespaceOrNull((String)data);
+        if (data instanceof String string) {
+            return NamespaceUtil.correctNamespaceOrNull(string);
         }
         return null;
     }

@@ -255,8 +255,28 @@ public final class MCVersionRegistry {
             4180,
             4181,
             4185,
-            4187
-            // All up to 1.21.4
+            4187,
+            4290,
+            4291,
+            4292,
+            4293,
+            4294,
+            4295,
+            4296,
+            4297,
+            4299,
+            4300,
+            4301,
+            4302,
+            4303,
+            4305,
+            4306,
+            4307,
+            4309,
+            4311,
+            4312,
+            4314,
+            // All up to 1.21.5
         };
         Arrays.sort(converterVersions);
 
@@ -319,7 +339,9 @@ public final class MCVersionRegistry {
                 throw new RuntimeException(ex);
             }
 
-            if (VERSION_NAMES.containsKey(value) && value != MCVersions.V15W33B) { // Mojang registered 15w33a and 15w33b under the same id.
+            // Mojang registered 15w33a and 15w33b under the same id.
+            // Mojang registered 1.21.5-pre2 and 1.21.5-pre3 under the same id.
+            if (VERSION_NAMES.containsKey(value) && value != MCVersions.V15W33B && value != MCVersions.V1_21_5_PRE3) {
                 LOGGER.warn("Error registering version \"" + name + "\", version number '" + value + "' is already associated with \"" + VERSION_NAMES.get(value) + "\"");
             }
 

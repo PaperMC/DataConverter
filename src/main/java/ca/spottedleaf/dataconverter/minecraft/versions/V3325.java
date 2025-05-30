@@ -12,7 +12,7 @@ public final class V3325 {
     public static void register() {
         MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:item_display", new DataWalkerItems("item"));
         MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:block_display", new DataWalkerTypePaths<>(MCTypeRegistry.BLOCK_STATE, "block_state"));
-        // text_display is a simple entity
+        MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:text_display", new DataWalkerTypePaths<>(MCTypeRegistry.TEXT_COMPONENT, "text"));
     }
 
     private V3325() {}

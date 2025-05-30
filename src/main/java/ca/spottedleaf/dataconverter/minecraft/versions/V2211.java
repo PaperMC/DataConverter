@@ -13,7 +13,7 @@ public final class V2211 {
     public static void register() {
         MCTypeRegistry.STRUCTURE_FEATURE.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 if (!data.hasKey("references", ObjectType.NUMBER)) {
                     return null;
                 }

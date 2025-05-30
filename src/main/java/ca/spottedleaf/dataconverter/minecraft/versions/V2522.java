@@ -6,12 +6,8 @@ public final class V2522 {
 
     private static final int VERSION = MCVersions.V20W13B + 1;
 
-    private static void registerMob(final String id) {
-        V100.registerEquipment(VERSION, id);
-    }
-
     public static void register() {
-        registerMob("minecraft:zoglin");
+        //registerMob("minecraft:zoglin"); // changed to simple in 1.21.5
     }
 
     private V2522() {}

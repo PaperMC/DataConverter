@@ -14,14 +14,14 @@ public final class V1963 {
     public static void register() {
         MCTypeRegistry.ENTITY.addConverterForId("minecraft:villager", new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 final ListType gossips = data.getList("Gossips", ObjectType.MAP);
                 if (gossips == null) {
                     return null;
                 }
 
                 for (int i = 0; i < gossips.size();) {
-                    final MapType<String> gossip = gossips.getMap(i);
+                    final MapType gossip = gossips.getMap(i);
                     if ("golem".equals(gossip.getString("Type"))) {
                         gossips.remove(i);
                         continue;

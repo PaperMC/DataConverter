@@ -10,9 +10,9 @@ public final class V2702 {
     private static final int VERSION = MCVersions.V21W10A + 3;
 
     public static void register() {
-        final DataConverter<MapType<String>, MapType<String>> arrowConverter = new DataConverter<>(VERSION) {
+        final DataConverter<MapType, MapType> arrowConverter = new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 if (data.hasKey("pickup")) {
                     return null;
                 }

@@ -12,19 +12,19 @@ public final class V3459 {
     public static void register() {
         MCTypeRegistry.LEVEL.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 if (data.hasKey("DragonFight")) {
                     return null;
                 }
 
-                final MapType<String> dimensionData = data.getMap("DimensionData");
+                final MapType dimensionData = data.getMap("DimensionData");
                 if (dimensionData == null) {
                     return null;
                 }
 
-                final MapType<String> endData = dimensionData.getMap("1");
+                final MapType endData = dimensionData.getMap("1");
                 if (endData != null) {
-                    final MapType<String> dragonFight = endData.<String>getMap("DragonFight", endData.getTypeUtil().createEmptyMap()).copy();
+                    final MapType dragonFight = endData.<String>getMap("DragonFight", endData.getTypeUtil().createEmptyMap()).copy();
                     V3807.flattenBlockPos(dragonFight, "ExitPortalLocation");
                     data.setMap("DragonFight", dragonFight);
                 }

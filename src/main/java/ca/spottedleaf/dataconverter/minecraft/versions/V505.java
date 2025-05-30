@@ -12,7 +12,7 @@ public final class V505 {
     public static void register() {
         MCTypeRegistry.OPTIONS.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 data.setString("useVbo", "true");
                 return null;
             }

@@ -25,16 +25,12 @@ public final class V2100 {
             )
     );
 
-    private static void registerMob(final String id) {
-        V100.registerEquipment(VERSION, id);
-    }
-
     public static void register() {
         ConverterAbstractRecipeRename.register(VERSION, RECIPE_RENAMES::get);
         ConverterAbstractAdvancementsRename.register(VERSION, ADVANCEMENT_RENAMES::get);
 
-        registerMob("minecraft:bee");
-        registerMob("minecraft:bee_stinger");
+        //registerMob("minecraft:bee"); // changed in 1.21.5 to simple
+        //registerMob("minecraft:bee_stinger"); // changed in 1.21.5 to simple
         MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, "minecraft:beehive", (data, fromVersion, toVersion) -> {
             final ListType bees = data.getList("Bees", ObjectType.MAP);
             if (bees != null) {

@@ -10,14 +10,10 @@ public final class V702 {
 
     private static final int VERSION = MCVersions.V1_10_2 + 190;
 
-    private static void registerMob(final String id) {
-        V100.registerEquipment(VERSION, id);
-    }
-
     public static void register() {
         MCTypeRegistry.ENTITY.addConverterForId("Zombie", new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 final int zombieType = data.getInt("ZombieType");
                 data.remove("ZombieType");
 
@@ -44,12 +40,11 @@ public final class V702 {
             }
         });
 
-        registerMob("ZombieVillager");
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "ZombieVillager", (final MapType<String> root, final long fromVersion, final long toVersion) -> {
+        MCTypeRegistry.ENTITY.addWalker(VERSION, "ZombieVillager", (final MapType root, final long fromVersion, final long toVersion) -> {
             WalkerUtils.convertList(MCTypeRegistry.VILLAGER_TRADE, root.getMap("Offers"), "Recipes", fromVersion, toVersion);
             return null;
         });
-        registerMob( "Husk");
+        //registerMob("Husk"); // is now simple in 1.21.5
     }
 
     private V702() {}

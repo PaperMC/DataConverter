@@ -47,7 +47,7 @@ public final class V2970 {
 
     public static void register() {
         MCTypeRegistry.CHUNK.addStructureConverter(new DataConverter<>(VERSION) {
-            private static Object2IntOpenHashMap<String> countBiomes(final MapType<String> chunk) {
+            private static Object2IntOpenHashMap<String> countBiomes(final MapType chunk) {
                 final ListType sections = chunk.getList("sections", ObjectType.MAP);
                 if (sections == null) {
                     return null;
@@ -56,9 +56,9 @@ public final class V2970 {
                 final Object2IntOpenHashMap<String> ret = new Object2IntOpenHashMap<>();
 
                 for (int i = 0, len = sections.size(); i < len; ++i) {
-                    final MapType<String> section = sections.getMap(i);
+                    final MapType section = sections.getMap(i);
 
-                    final MapType<String> biomes = section.getMap("biomes");
+                    final MapType biomes = section.getMap("biomes");
 
                     if (biomes == null) {
                         continue;
@@ -114,23 +114,23 @@ public final class V2970 {
             }
 
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
-                final MapType<String> structures = data.getMap("structures");
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
+                final MapType structures = data.getMap("structures");
                 if (structures == null || structures.isEmpty()) {
                     return null;
                 }
 
                 final Object2IntOpenHashMap<String> biomeCounts = countBiomes(data);
 
-                final MapType<String> starts = structures.getMap("starts");
-                final MapType<String> references = structures.getMap("References");
+                final MapType starts = structures.getMap("starts");
+                final MapType references = structures.getMap("References");
 
                 if (starts != null) {
-                    final MapType<String> newStarts = data.getTypeUtil().createEmptyMap();
+                    final MapType newStarts = data.getTypeUtil().createEmptyMap();
                     structures.setMap("starts", newStarts);
 
                     for (final String key : starts.keys()) {
-                        final MapType<String> value = starts.getMap(key);
+                        final MapType value = starts.getMap(key);
                         if ("INVALID".equals(value.getString("id", "INVALID"))) {
                             continue;
                         }
@@ -149,7 +149,7 @@ public final class V2970 {
 
                 // This TRULY is a guess, no idea what biomes the referent has.
                 if (references != null) {
-                    final MapType<String> newReferences = data.getTypeUtil().createEmptyMap();
+                    final MapType newReferences = data.getTypeUtil().createEmptyMap();
                     structures.setMap("References", newReferences);
                     for (final String key : references.keys()) {
                         final long[] value = references.getLongs(key);

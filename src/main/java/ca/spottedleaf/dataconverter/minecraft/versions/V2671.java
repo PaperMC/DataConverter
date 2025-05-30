@@ -6,12 +6,8 @@ public final class V2671 {
 
     private static final int VERSION = MCVersions.V1_16_5 + 85;
 
-    private static void registerMob(final String id) {
-        V100.registerEquipment(VERSION, id);
-    }
-
     public static void register() {
-        registerMob("minecraft:goat");
+        //registerMob("minecraft:goat"); // changed to simple in 1.21.5
     }
 
     private V2671() {}

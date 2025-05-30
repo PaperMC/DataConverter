@@ -15,9 +15,9 @@ public final class ConverterAbstractOldAttributesRename {
     }
 
     public static void register(final int version, final int versionStep, final Function<String, String> renamer) {
-        final DataConverter<MapType<String>, MapType<String>> entityConverter = new DataConverter<>(version, versionStep) {
+        final DataConverter<MapType, MapType> entityConverter = new DataConverter<>(version, versionStep) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 final ListType attributes = data.getList("Attributes", ObjectType.MAP);
 
                 if (attributes == null) {
@@ -37,7 +37,7 @@ public final class ConverterAbstractOldAttributesRename {
 
         MCTypeRegistry.ITEM_STACK.addStructureConverter(new DataConverter<>(version, versionStep) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 final ListType attributes = data.getList("AttributeModifiers", ObjectType.MAP);
 
                 if (attributes == null) {

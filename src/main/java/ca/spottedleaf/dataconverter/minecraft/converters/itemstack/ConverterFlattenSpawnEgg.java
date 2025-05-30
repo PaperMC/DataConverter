@@ -6,7 +6,7 @@ import ca.spottedleaf.dataconverter.types.MapType;
 import java.util.HashMap;
 import java.util.Map;
 
-public final class ConverterFlattenSpawnEgg extends DataConverter<MapType<String>, MapType<String>> {
+public final class ConverterFlattenSpawnEgg extends DataConverter<MapType, MapType> {
 
     private static final Map<String, String> ENTITY_ID_TO_NEW_EGG_ID = new HashMap<>();
     static {
@@ -66,13 +66,13 @@ public final class ConverterFlattenSpawnEgg extends DataConverter<MapType<String
     }
 
     @Override
-    public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
-        final MapType<String> tag = data.getMap("tag");
+    public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
+        final MapType tag = data.getMap("tag");
         if (tag == null) {
             return null;
         }
 
-        final MapType<String> entityTag = tag.getMap("EntityTag");
+        final MapType entityTag = tag.getMap("EntityTag");
         if (entityTag == null) {
             return null;
         }

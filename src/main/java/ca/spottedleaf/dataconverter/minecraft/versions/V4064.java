@@ -12,8 +12,8 @@ public final class V4064 {
     public static void register() {
         MCTypeRegistry.ITEM_STACK.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
-                final MapType<String> components = data.getMap("components");
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
+                final MapType components = data.getMap("components");
                 if (components == null) {
                     return null;
                 }
@@ -21,7 +21,7 @@ public final class V4064 {
                 if (components.hasKey("minecraft:fire_resistant")) {
                     components.remove("minecraft:fire_resistant");
 
-                    final MapType<String> damageResistant = components.getTypeUtil().createEmptyMap();
+                    final MapType damageResistant = components.getTypeUtil().createEmptyMap();
                     components.setMap("minecraft:damage_resistant", damageResistant);
 
                     damageResistant.setString("types", "#minecraft:is_fire");

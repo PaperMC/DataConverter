@@ -17,8 +17,8 @@ public final class ConverterAbstractAttributesRename {
     public static void register(final int version, final int versionStep, final Function<String, String> renamer) {
         MCTypeRegistry.DATA_COMPONENTS.addStructureConverter(new DataConverter<>(version, versionStep) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
-                final MapType<String> attributeModifiers = data.getMap("minecraft:attribute_modifiers");
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
+                final MapType attributeModifiers = data.getMap("minecraft:attribute_modifiers");
                 if (attributeModifiers == null) {
                     return null;
                 }
@@ -36,9 +36,9 @@ public final class ConverterAbstractAttributesRename {
             }
         });
 
-        final DataConverter<MapType<String>, MapType<String>> entityConverter = new DataConverter<>(version, versionStep) {
+        final DataConverter<MapType, MapType> entityConverter = new DataConverter<>(version, versionStep) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 final ListType modifiers = data.getList("attributes", ObjectType.MAP);
                 if (modifiers == null) {
                     return null;

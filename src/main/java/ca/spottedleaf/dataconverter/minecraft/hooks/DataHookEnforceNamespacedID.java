@@ -4,7 +4,7 @@ import ca.spottedleaf.dataconverter.converters.datatypes.DataHook;
 import ca.spottedleaf.dataconverter.types.MapType;
 import ca.spottedleaf.dataconverter.util.NamespaceUtil;
 
-public class DataHookEnforceNamespacedID implements DataHook<MapType<String>, MapType<String>> {
+public class DataHookEnforceNamespacedID implements DataHook<MapType, MapType> {
 
     private final String path;
 
@@ -17,13 +17,13 @@ public class DataHookEnforceNamespacedID implements DataHook<MapType<String>, Ma
     }
 
     @Override
-    public MapType<String> preHook(final MapType<String> data, final long fromVersion, final long toVersion) {
+    public MapType preHook(final MapType data, final long fromVersion, final long toVersion) {
         NamespaceUtil.enforceForPath(data, this.path);
         return null;
     }
 
     @Override
-    public MapType<String> postHook(final MapType<String> data, final long fromVersion, final long toVersion) {
+    public MapType postHook(final MapType data, final long fromVersion, final long toVersion) {
         return null;
     }
 }

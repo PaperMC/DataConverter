@@ -18,14 +18,14 @@ public final class ConverterAbstractPOIRename {
     public static void register(final int version, final int subVersion, final Function<String, String> renamer) {
         MCTypeRegistry.POI_CHUNK.addStructureConverter(new DataConverter<>(version, subVersion) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
-                final MapType<String> sections = data.getMap("Sections");
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
+                final MapType sections = data.getMap("Sections");
                 if (sections == null) {
                     return null;
                 }
 
                 for (final String key : sections.keys()) {
-                    final MapType<String> section = sections.getMap(key);
+                    final MapType section = sections.getMap(key);
 
                     final ListType records = section.getList("Records", ObjectType.MAP);
 
@@ -34,7 +34,7 @@ public final class ConverterAbstractPOIRename {
                     }
 
                     for (int i = 0, len = records.size(); i < len; ++i) {
-                        final MapType<String> record = records.getMap(i);
+                        final MapType record = records.getMap(i);
 
                         final String type = record.getString("type");
                         if (type != null) {

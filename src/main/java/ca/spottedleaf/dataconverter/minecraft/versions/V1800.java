@@ -20,16 +20,11 @@ public final class V1800 {
                     .build()
     );
 
-    private static void registerMob(final String id) {
-        V100.registerEquipment(VERSION, id);
-    }
-
     public static void register() {
         ConverterAbstractItemRename.register(VERSION, RENAMED_ITEM_IDS::get);
 
-        registerMob("minecraft:panda");
+        //registerMob("minecraft:panda"); // simple as of 1.21.5
         MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:pillager", new DataWalkerItemLists("Inventory"));
-        V100.registerEquipment(VERSION, "minecraft:pillager");
     }
 
     private V1800() {}

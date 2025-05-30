@@ -11,7 +11,7 @@ public final class V3201 {
 
     public static void register() {
         MCTypeRegistry.OPTIONS.addStructureConverter(new DataConverter<>(VERSION) {
-            private static void fixList(final MapType<String> data, final String target) {
+            private static void fixList(final MapType data, final String target) {
                 if (data == null) {
                     return;
                 }
@@ -23,7 +23,7 @@ public final class V3201 {
             }
 
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 fixList(data, "resourcePacks");
                 fixList(data, "incompatibleResourcePacks");
                 return null;

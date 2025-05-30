@@ -12,12 +12,12 @@ public final class V3807 {
 
     private static final int VERSION = MCVersions.V24W04A + 1;
 
-    public static void flattenBlockPos(final MapType<String> data, final String path) {
+    public static void flattenBlockPos(final MapType data, final String path) {
         if (data == null) {
             return;
         }
 
-        final MapType<String> pos = data.getMap(path);
+        final MapType pos = data.getMap(path);
         if (pos == null) {
             return;
         }
@@ -35,7 +35,7 @@ public final class V3807 {
 
     public static void register() {
         // Step 0
-        MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, "minecraft:vault", (final MapType<String> root, final long fromVersion, final long toVersion) -> {
+        MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, "minecraft:vault", (final MapType root, final long fromVersion, final long toVersion) -> {
             WalkerUtils.convert(MCTypeRegistry.ITEM_STACK, root.getMap("config"), "key_item", fromVersion, toVersion);
             WalkerUtils.convertList(MCTypeRegistry.ITEM_STACK, root.getMap("server_data"), "items_to_eject", fromVersion, toVersion);
             WalkerUtils.convert(MCTypeRegistry.ITEM_STACK, root.getMap("shared_data"), "display_item", fromVersion, toVersion);
@@ -46,8 +46,8 @@ public final class V3807 {
         // Step 1
         MCTypeRegistry.SAVED_DATA_MAP_DATA.addStructureConverter(new DataConverter<>(VERSION, 1) {
             @Override
-            public MapType<String> convert(final MapType<String> root, final long sourceVersion, final long toVersion) {
-                final MapType<String> data = root.getMap("data");
+            public MapType convert(final MapType root, final long sourceVersion, final long toVersion) {
+                final MapType data = root.getMap("data");
 
                 if (data == null) {
                     return null;

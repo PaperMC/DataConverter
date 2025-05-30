@@ -53,8 +53,8 @@ public final class V1494 {
     public static void register() {
         MCTypeRegistry.ITEM_STACK.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
-                final MapType<String> tag = data.getMap("tag");
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
+                final MapType tag = data.getMap("tag");
                 if (tag == null) {
                     return null;
                 }
@@ -65,7 +65,7 @@ public final class V1494 {
                     tag.setList("Enchantments", enchants);
 
                     for (int i = 0, len = enchants.size(); i < len; ++i) {
-                        final MapType<String> enchant = enchants.getMap(i);
+                        final MapType enchant = enchants.getMap(i);
                         enchant.setString("id", ENCH_ID_TO_NAME.getOrDefault(enchant.getInt("id"), "null"));
                     }
                 }
@@ -73,7 +73,7 @@ public final class V1494 {
                 final ListType storedEnchants = tag.getList("StoredEnchantments", ObjectType.MAP);
                 if (storedEnchants != null) {
                     for (int i = 0, len = storedEnchants.size(); i < len; ++i) {
-                        final MapType<String> enchant = storedEnchants.getMap(i);
+                        final MapType enchant = storedEnchants.getMap(i);
                         enchant.setString("id", ENCH_ID_TO_NAME.getOrDefault(enchant.getInt("id"), "null"));
                     }
                 }

@@ -16,8 +16,8 @@ public final class V2527 {
     public static void register() {
         MCTypeRegistry.CHUNK.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
-                final MapType<String> level = data.getMap("Level");
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
+                final MapType level = data.getMap("Level");
 
                 if (level == null) {
                     return null;
@@ -26,7 +26,7 @@ public final class V2527 {
                 final ListType sections = level.getList("Sections", ObjectType.MAP);
                 if (sections != null) {
                     for (int i = 0, len = sections.size(); i < len; ++i) {
-                        final MapType<String> section = sections.getMap(i);
+                        final MapType section = sections.getMap(i);
 
                         final ListType palette = section.getList("Palette", ObjectType.MAP);
 
@@ -51,7 +51,7 @@ public final class V2527 {
                     }
                 }
 
-                final MapType<String> heightMaps = level.getMap("Heightmaps");
+                final MapType heightMaps = level.getMap("Heightmaps");
                 if (heightMaps != null) {
                     for (final String key : heightMaps.keys()) {
                         final long[] old = heightMaps.getLongs(key);

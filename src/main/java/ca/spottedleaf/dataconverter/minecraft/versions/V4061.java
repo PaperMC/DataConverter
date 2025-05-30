@@ -16,7 +16,7 @@ public final class V4061 {
 
     private static final int VERSION = MCVersions.V24W34A + 1;
 
-    private static final Map<Pair<MapType<String>, MapType<String>>, String> CONVERT_MAP = new HashMap<>();
+    private static final Map<Pair<MapType, MapType>, String> CONVERT_MAP = new HashMap<>();
     static {
         addConversion("trial_chamber/breeze", "{simultaneous_mobs: 1.0f, simultaneous_mobs_added_per_player: 0.5f, spawn_potentials: [{data: {entity: {id: \"minecraft:breeze\"}}, weight: 1}], ticks_between_spawn: 20, total_mobs: 2.0f, total_mobs_added_per_player: 1.0f}", "{loot_tables_to_eject: [{data: \"minecraft:spawners/ominous/trial_chamber/key\", weight: 3}, {data: \"minecraft:spawners/ominous/trial_chamber/consumables\", weight: 7}], simultaneous_mobs: 2.0f, total_mobs: 4.0f}");
         addConversion("trial_chamber/melee/husk", "{simultaneous_mobs: 3.0f, simultaneous_mobs_added_per_player: 0.5f, spawn_potentials: [{data: {entity: {id: \"minecraft:husk\"}}, weight: 1}], ticks_between_spawn: 20}", "{loot_tables_to_eject: [{data: \"minecraft:spawners/ominous/trial_chamber/key\", weight: 3}, {data: \"minecraft:spawners/ominous/trial_chamber/consumables\", weight: 7}], spawn_potentials: [{data: {entity: {id: \"minecraft:husk\"}, equipment: {loot_table: \"minecraft:equipment/trial_chamber_melee\", slot_drop_chances: 0.0f}}, weight: 1}]}");
@@ -38,7 +38,7 @@ public final class V4061 {
         final String fullKey = "minecraft:".concat(keyPath);
 
         final CompoundTag normalNBT = parseNBT(normalsNBT);
-        final MapType<String> normalMapType = new NBTMapType(normalNBT);
+        final MapType normalMapType = new NBTMapType(normalNBT);
         final CompoundTag ominousNBT = parseNBT(ominoussNBT);
 
         final CompoundTag ominousMerged = normalNBT.copy().merge(ominousNBT);
@@ -50,34 +50,34 @@ public final class V4061 {
 
     private static CompoundTag parseNBT(final String sNBT) {
         try {
-            return TagParser.parseTag(sNBT);
+            return TagParser.parseCompoundFully(sNBT);
         } catch (final CommandSyntaxException ex) {
             throw new IllegalArgumentException("Failed to parse NBT: " + sNBT, ex);
         }
     }
 
     private static CompoundTag removeDefaults(final CompoundTag config) {
-        if (config.getInt("spawn_range") == 4) {
+        if (config.getIntOr("spawn_range", 0) == 4) {
             config.remove("spawn_range");
         }
 
-        if (config.getFloat("total_mobs") == 6.0F) {
+        if (config.getFloatOr("total_mobs", 0.0F) == 6.0F) {
             config.remove("total_mobs");
         }
 
-        if (config.getFloat("simultaneous_mobs") == 2.0F) {
+        if (config.getFloatOr("simultaneous_mobs", 0.0F) == 2.0F) {
             config.remove("simultaneous_mobs");
         }
 
-        if (config.getFloat("total_mobs_added_per_player") == 2.0F) {
+        if (config.getFloatOr("total_mobs_added_per_player", 0.0F) == 2.0F) {
             config.remove("total_mobs_added_per_player");
         }
 
-        if (config.getFloat("simultaneous_mobs_added_per_player") == 1.0F) {
+        if (config.getFloatOr("simultaneous_mobs_added_per_player", 0.0F) == 1.0F) {
             config.remove("simultaneous_mobs_added_per_player");
         }
 
-        if (config.getInt("ticks_between_spawn") == 40) {
+        if (config.getIntOr("ticks_between_spawn", 0) == 40) {
             config.remove("ticks_between_spawn");
         }
 
@@ -87,9 +87,9 @@ public final class V4061 {
     public static void register() {
         MCTypeRegistry.TILE_ENTITY.addConverterForId("minecraft:trial_spawner", new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
-                final MapType<String> normalConfig = data.getMap("normal_config");
-                final MapType<String> ominousConfig = data.getMap("ominous_config");
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
+                final MapType normalConfig = data.getMap("normal_config");
+                final MapType ominousConfig = data.getMap("ominous_config");
 
                 if (normalConfig == null || ominousConfig == null) {
                     return null;

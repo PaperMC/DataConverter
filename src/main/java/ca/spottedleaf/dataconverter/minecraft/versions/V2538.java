@@ -21,8 +21,8 @@ public final class V2538 {
     public static void register() {
         MCTypeRegistry.LEVEL.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
-                final MapType<String> worldGenSettings = data.getOrCreateMap("WorldGenSettings");
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
+                final MapType worldGenSettings = data.getOrCreateMap("WorldGenSettings");
 
                 for (final String key : MERGE_KEYS) {
                     final Object value = data.getGeneric(key);

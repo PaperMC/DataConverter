@@ -13,7 +13,7 @@ public final class V109 {
         // Converts health to be in float, and cleans up whatever the hell was going on with HealF and Health...
         MCTypeRegistry.ENTITY.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 final Number healF = data.getNumber("HealF");
                 final Number heal = data.getNumber("Health");
 

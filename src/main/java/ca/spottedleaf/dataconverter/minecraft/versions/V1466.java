@@ -40,8 +40,8 @@ public final class V1466 {
 
         MCTypeRegistry.CHUNK.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
-                final MapType<String> level = data.getMap("Level");
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
+                final MapType level = data.getMap("Level");
                 if (level == null) {
                     return null;
                 }
@@ -74,7 +74,7 @@ public final class V1466 {
                     level.setList("ToBeTicked", sections);
 
                     for (int i = 0, len = ticks.size(); i < len; ++i) {
-                        final MapType<String> tick = ticks.getMap(i);
+                        final MapType tick = ticks.getMap(i);
 
                         final int x = tick.getInt("x");
                         final int y = tick.getInt("y");
@@ -90,8 +90,8 @@ public final class V1466 {
         });
 
 
-        MCTypeRegistry.CHUNK.addStructureWalker(VERSION, (final MapType<String> data, final long fromVersion, final long toVersion) -> {
-            final MapType<String> level = data.getMap("Level");
+        MCTypeRegistry.CHUNK.addStructureWalker(VERSION, (final MapType data, final long fromVersion, final long toVersion) -> {
+            final MapType level = data.getMap("Level");
             if (level == null) {
                 return null;
             }
@@ -102,7 +102,7 @@ public final class V1466 {
             final ListType tileTicks = level.getList("TileTicks", ObjectType.MAP);
             if (tileTicks != null) {
                 for (int i = 0, len = tileTicks.size(); i < len; ++i) {
-                    final MapType<String> tileTick = tileTicks.getMap(i);
+                    final MapType tileTick = tileTicks.getMap(i);
                     WalkerUtils.convert(MCTypeRegistry.BLOCK_NAME, tileTick, "i", fromVersion, toVersion);
                 }
             }
@@ -110,7 +110,7 @@ public final class V1466 {
             final ListType sections = level.getList("Sections", ObjectType.MAP);
             if (sections != null) {
                 for (int i = 0, len = sections.size(); i < len; ++i) {
-                    final MapType<String> section = sections.getMap(i);
+                    final MapType section = sections.getMap(i);
                     WalkerUtils.convertList(MCTypeRegistry.BLOCK_STATE, section, "Palette", fromVersion, toVersion);
                 }
             }
@@ -119,11 +119,11 @@ public final class V1466 {
 
             return null;
         });
-        MCTypeRegistry.STRUCTURE_FEATURE.addStructureWalker(VERSION, (final MapType<String> data, final long fromVersion, final long toVersion) -> {
+        MCTypeRegistry.STRUCTURE_FEATURE.addStructureWalker(VERSION, (final MapType data, final long fromVersion, final long toVersion) -> {
             final ListType list = data.getList("Children", ObjectType.MAP);
             if (list != null) {
                 for (int i = 0, len = list.size(); i < len; ++i) {
-                    final MapType<String> child = list.getMap(i);
+                    final MapType child = list.getMap(i);
 
                     WalkerUtils.convert(MCTypeRegistry.BLOCK_STATE, child, "CA", fromVersion, toVersion);
                     WalkerUtils.convert(MCTypeRegistry.BLOCK_STATE, child, "CB", fromVersion, toVersion);

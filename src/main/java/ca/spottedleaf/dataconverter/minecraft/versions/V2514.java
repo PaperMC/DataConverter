@@ -120,7 +120,7 @@ public final class V2514 {
         };
     }
 
-    static int[] createUUIDFromString(final MapType<String> data, final String path) {
+    static int[] createUUIDFromString(final MapType data, final String path) {
         if (data == null) {
             return null;
         }
@@ -138,7 +138,7 @@ public final class V2514 {
         }
     }
 
-    static int[] createUUIDFromLongs(final MapType<String> data, final String most, final String least) {
+    static int[] createUUIDFromLongs(final MapType data, final String most, final String least) {
         if (data == null) {
             return null;
         }
@@ -149,7 +149,7 @@ public final class V2514 {
         return (mostBits != 0 || leastBits != 0) ? createUUIDArray(mostBits, leastBits) : null;
     }
 
-    static void replaceUUIDString(final MapType<String> data, final String oldPath, final String newPath) {
+    static void replaceUUIDString(final MapType data, final String oldPath, final String newPath) {
         final int[] newUUID = createUUIDFromString(data, oldPath);
         if (newUUID != null) {
             data.remove(oldPath);
@@ -157,7 +157,7 @@ public final class V2514 {
         }
     }
 
-    static void replaceUUIDMLTag(final MapType<String> data, final String oldPath, final String newPath) {
+    static void replaceUUIDMLTag(final MapType data, final String oldPath, final String newPath) {
         final int[] uuid = createUUIDFromLongs(data.getMap(oldPath), "M", "L");
         if (uuid != null) {
             data.remove(oldPath);
@@ -165,7 +165,7 @@ public final class V2514 {
         }
     }
 
-    static void replaceUUIDLeastMost(final MapType<String> data, final String prefix, final String newPath) {
+    static void replaceUUIDLeastMost(final MapType data, final String prefix, final String newPath) {
         final String mostPath = prefix.concat("Most");
         final String leastPath = prefix.concat("Least");
 
@@ -177,45 +177,45 @@ public final class V2514 {
         }
     }
 
-    private static void updatePiglin(final MapType<String> data) {
-        final MapType<String> brain = data.getMap("Brain");
+    private static void updatePiglin(final MapType data) {
+        final MapType brain = data.getMap("Brain");
         if (brain == null) {
             return;
         }
 
-        final MapType<String> memories = brain.getMap("memories");
+        final MapType memories = brain.getMap("memories");
         if (memories == null) {
             return;
         }
 
-        final MapType<String> angryAt = memories.getMap("minecraft:angry_at");
+        final MapType angryAt = memories.getMap("minecraft:angry_at");
 
         replaceUUIDString(angryAt, "value", "value");
     }
 
-    private static void updateEvokerFangs(final MapType<String> data) {
+    private static void updateEvokerFangs(final MapType data) {
         replaceUUIDLeastMost(data, "OwnerUUID", "Owner");
     }
 
-    private static void updateZombieVillager(final MapType<String> data) {
+    private static void updateZombieVillager(final MapType data) {
         replaceUUIDLeastMost(data, "ConversionPlayer", "ConversionPlayer");
     }
 
-    private static void updateAreaEffectCloud(final MapType<String> data) {
+    private static void updateAreaEffectCloud(final MapType data) {
         replaceUUIDLeastMost(data, "OwnerUUID", "Owner");
     }
 
-    private static void updateShulkerBullet(final MapType<String> data) {
+    private static void updateShulkerBullet(final MapType data) {
         replaceUUIDMLTag(data, "Owner", "Owner");
         replaceUUIDMLTag(data, "Target", "Target");
     }
 
-    private static void updateItem(final MapType<String> data) {
+    private static void updateItem(final MapType data) {
         replaceUUIDMLTag(data, "Owner", "Owner");
         replaceUUIDMLTag(data, "Thrower", "Thrower");
     }
 
-    private static void updateFox(final MapType<String> data) {
+    private static void updateFox(final MapType data) {
         final ListType trustedUUIDS = data.getList("TrustedUUIDs", ObjectType.MAP);
         if (trustedUUIDS == null) {
             return;
@@ -226,7 +226,7 @@ public final class V2514 {
         data.setList("Trusted", newUUIDs);
 
         for (int i = 0, len = trustedUUIDS.size(); i < len; ++i) {
-            final MapType<String> uuid = trustedUUIDS.getMap(i);
+            final MapType uuid = trustedUUIDS.getMap(i);
             final int[] newUUID = createUUIDFromLongs(uuid, "M", "L");
             if (newUUID != null) {
                 newUUIDs.addIntArray(newUUID);
@@ -234,26 +234,26 @@ public final class V2514 {
         }
     }
 
-    private static void updateHurtBy(final MapType<String> data) {
+    private static void updateHurtBy(final MapType data) {
         replaceUUIDString(data, "HurtBy", "HurtBy");
     }
 
-    private static void updateAnimalOwner(final MapType<String> data) {
+    private static void updateAnimalOwner(final MapType data) {
         updateAnimal(data);
 
         replaceUUIDString(data, "OwnerUUID", "Owner");
     }
 
-    private static void updateAnimal(final MapType<String> data) {
+    private static void updateAnimal(final MapType data) {
         updateMob(data);
 
         replaceUUIDLeastMost(data, "LoveCause", "LoveCause");
     }
 
-    private static void updateMob(final MapType<String> data) {
+    private static void updateMob(final MapType data) {
         updateLivingEntity(data);
 
-        final MapType<String> leash = data.getMap("Leash");
+        final MapType leash = data.getMap("Leash");
         if (leash == null) {
             return;
         }
@@ -261,14 +261,14 @@ public final class V2514 {
         replaceUUIDLeastMost(leash, "UUID", "UUID");
     }
 
-    private static void updateLivingEntity(final MapType<String> data) {
+    private static void updateLivingEntity(final MapType data) {
         final ListType attributes = data.getList("Attributes", ObjectType.MAP);
         if (attributes == null) {
             return;
         }
 
         for (int i = 0, len = attributes.size(); i < len; ++i) {
-            final MapType<String> attribute = attributes.getMap(i);
+            final MapType attribute = attributes.getMap(i);
 
             final ListType modifiers = attribute.getList("Modifiers", ObjectType.MAP);
             if (modifiers == null) {
@@ -281,7 +281,7 @@ public final class V2514 {
         }
     }
 
-    private static void updateProjectile(final MapType<String> data) {
+    private static void updateProjectile(final MapType data) {
         final Object ownerUUID = data.getGeneric("OwnerUUID");
         if (ownerUUID != null) {
             data.remove("OwnerUUID");
@@ -289,7 +289,7 @@ public final class V2514 {
         }
     }
 
-    private static void updateEntityUUID(final MapType<String> data) {
+    private static void updateEntityUUID(final MapType data) {
         replaceUUIDLeastMost(data, "UUID", "UUID");
     }
 
@@ -298,43 +298,43 @@ public final class V2514 {
 
         MCTypeRegistry.ENTITY.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 updateEntityUUID(data);
                 return null;
             }
         });
 
-        final DataConverter<MapType<String>, MapType<String>> animalOwnerConverter = new DataConverter<>(VERSION) {
+        final DataConverter<MapType, MapType> animalOwnerConverter = new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 updateAnimalOwner(data);
                 return null;
             }
         };
-        final DataConverter<MapType<String>, MapType<String>> animalConverter = new DataConverter<>(VERSION) {
+        final DataConverter<MapType, MapType> animalConverter = new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 updateAnimal(data);
                 return null;
             }
         };
-        final DataConverter<MapType<String>, MapType<String>> mobConverter = new DataConverter<>(VERSION) {
+        final DataConverter<MapType, MapType> mobConverter = new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 updateMob(data);
                 return null;
             }
         };
-        final DataConverter<MapType<String>, MapType<String>> livingEntityConverter = new DataConverter<>(VERSION) {
+        final DataConverter<MapType, MapType> livingEntityConverter = new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 updateLivingEntity(data);
                 return null;
             }
         };
-        final DataConverter<MapType<String>, MapType<String>> projectileConverter = new DataConverter<>(VERSION) {
+        final DataConverter<MapType, MapType> projectileConverter = new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 updateProjectile(data);
                 return null;
             }
@@ -361,63 +361,63 @@ public final class V2514 {
 
         MCTypeRegistry.ENTITY.addConverterForId("minecraft:bee", new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 updateHurtBy(data);
                 return null;
             }
         });
         MCTypeRegistry.ENTITY.addConverterForId("minecraft:zombified_piglin", new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 updateHurtBy(data);
                 return null;
             }
         });
         MCTypeRegistry.ENTITY.addConverterForId("minecraft:fox", new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 updateFox(data);
                 return null;
             }
         });
         MCTypeRegistry.ENTITY.addConverterForId("minecraft:item", new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 updateItem(data);
                 return null;
             }
         });
         MCTypeRegistry.ENTITY.addConverterForId("minecraft:shulker_bullet", new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 updateShulkerBullet(data);
                 return null;
             }
         });
         MCTypeRegistry.ENTITY.addConverterForId("minecraft:area_effect_cloud", new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 updateAreaEffectCloud(data);
                 return null;
             }
         });
         MCTypeRegistry.ENTITY.addConverterForId("minecraft:zombie_villager", new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 updateZombieVillager(data);
                 return null;
             }
         });
         MCTypeRegistry.ENTITY.addConverterForId("minecraft:evoker_fangs", new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 updateEvokerFangs(data);
                 return null;
             }
         });
         MCTypeRegistry.ENTITY.addConverterForId("minecraft:piglin", new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 updatePiglin(data);
                 return null;
             }
@@ -427,15 +427,15 @@ public final class V2514 {
         // Update TE
         MCTypeRegistry.TILE_ENTITY.addConverterForId("minecraft:conduit", new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 replaceUUIDMLTag(data, "target_uuid", "Target");
                 return null;
             }
         });
         MCTypeRegistry.TILE_ENTITY.addConverterForId("minecraft:skull", new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
-                final MapType<String> owner = data.getMap("Owner");
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
+                final MapType owner = data.getMap("Owner");
                 if (owner == null) {
                     return null;
                 }
@@ -453,11 +453,11 @@ public final class V2514 {
         // Player UUID
         MCTypeRegistry.PLAYER.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 updateLivingEntity(data);
                 updateEntityUUID(data);
 
-                final MapType<String> rootVehicle = data.getMap("RootVehicle");
+                final MapType rootVehicle = data.getMap("RootVehicle");
                 if (rootVehicle == null) {
                     return null;
                 }
@@ -471,15 +471,15 @@ public final class V2514 {
         // Level.dat
         MCTypeRegistry.LEVEL.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 replaceUUIDString(data, "WanderingTraderId", "WanderingTraderId");
 
-                final MapType<String> dimensionData = data.getMap("DimensionData");
+                final MapType dimensionData = data.getMap("DimensionData");
                 if (dimensionData != null) {
                     for (final String key : dimensionData.keys()) {
-                        final MapType<String> dimension = dimensionData.getMap(key);
+                        final MapType dimension = dimensionData.getMap(key);
 
-                        final MapType<String> dragonFight = dimension.getMap("DragonFight");
+                        final MapType dragonFight = dimension.getMap("DragonFight");
                         if (dragonFight == null) {
                             continue;
                         }
@@ -488,10 +488,10 @@ public final class V2514 {
                     }
                 }
 
-                final MapType<String> customBossEvents = data.getMap("CustomBossEvents");
+                final MapType customBossEvents = data.getMap("CustomBossEvents");
                 if (customBossEvents != null) {
                     for (final String key : customBossEvents.keys()) {
-                        final MapType<String> customBossEvent = customBossEvents.getMap(key);
+                        final MapType customBossEvent = customBossEvents.getMap(key);
 
                         final ListType players = customBossEvent.getList("Players", ObjectType.MAP);
                         if (players == null) {
@@ -516,8 +516,8 @@ public final class V2514 {
 
         MCTypeRegistry.SAVED_DATA_RAIDS.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> root, final long sourceVersion, final long toVersion) {
-                final MapType<String> data = root.getMap("data");
+            public MapType convert(final MapType root, final long sourceVersion, final long toVersion) {
+                final MapType data = root.getMap("data");
                 if (data == null) {
                     return null;
                 }
@@ -528,7 +528,7 @@ public final class V2514 {
                 }
 
                 for (int i = 0, len = raids.size(); i < len; ++i) {
-                    final MapType<String> raid = raids.getMap(i);
+                    final MapType raid = raids.getMap(i);
 
                     final ListType heros = raid.getList("HeroesOfTheVillage", ObjectType.MAP);
 
@@ -540,7 +540,7 @@ public final class V2514 {
                     raid.setList("HeroesOfTheVillage", newHeros);
 
                     for (int k = 0, klen = heros.size(); k < klen; ++k) {
-                        final MapType<String> uuidOld = heros.getMap(i);
+                        final MapType uuidOld = heros.getMap(i);
                         final int[] uuidNew = createUUIDFromLongs(uuidOld, "UUIDMost", "UUIDLeast");
                         if (uuidNew != null) {
                             newHeros.addIntArray(uuidNew);
@@ -554,8 +554,8 @@ public final class V2514 {
 
         MCTypeRegistry.ITEM_STACK.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
-                final MapType<String> tag = data.getMap("tag");
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
+                final MapType tag = data.getMap("tag");
                 if (tag == null) {
                     return null;
                 }
@@ -571,7 +571,7 @@ public final class V2514 {
         });
     }
 
-    private static void updateAttributeModifiers(final MapType<String> tag) {
+    private static void updateAttributeModifiers(final MapType tag) {
         final ListType attributes = tag.getList("AttributeModifiers", ObjectType.MAP);
         if (attributes == null) {
             return;
@@ -582,7 +582,7 @@ public final class V2514 {
         }
     }
 
-    private static void updateSkullOwner(final MapType<String> tag) {
+    private static void updateSkullOwner(final MapType tag) {
         replaceUUIDString(tag.getMap("SkullOwner"), "Id", "Id");
     }
 

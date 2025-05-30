@@ -22,7 +22,7 @@ import net.minecraft.nbt.Tag;
 
 public final class NBTListType implements ListType {
 
-    private final ListTag list;
+    final ListTag list;
 
     public NBTListType() {
         this.list = new ListTag();
@@ -33,7 +33,7 @@ public final class NBTListType implements ListType {
     }
 
     @Override
-    public TypeUtil getTypeUtil() {
+    public TypeUtil<Tag> getTypeUtil() {
         return Types.NBT;
     }
 
@@ -70,33 +70,33 @@ public final class NBTListType implements ListType {
         return new NBTListType(this.list.copy());
     }
 
-    protected static ObjectType getType(final byte id) {
+    static ObjectType getType(final byte id) {
         switch (id) {
-            case 0: // END
+            case Tag.TAG_END:
                 return ObjectType.NONE;
-            case 1: // BYTE
+            case Tag.TAG_BYTE:
                 return ObjectType.BYTE;
-            case 2: // SHORT
+            case Tag.TAG_SHORT:
                 return ObjectType.SHORT;
-            case 3: // INT
+            case Tag.TAG_INT:
                 return ObjectType.INT;
-            case 4: // LONG
+            case Tag.TAG_LONG:
                 return ObjectType.LONG;
-            case 5: // FLOAT
+            case Tag.TAG_FLOAT:
                 return ObjectType.FLOAT;
-            case 6: // DOUBLE
+            case Tag.TAG_DOUBLE:
                 return ObjectType.DOUBLE;
-            case 7: // BYTE_ARRAY
+            case Tag.TAG_BYTE_ARRAY:
                 return ObjectType.BYTE_ARRAY;
-            case 8: // STRING
+            case Tag.TAG_STRING:
                 return ObjectType.STRING;
-            case 9: // LIST
+            case Tag.TAG_LIST:
                 return ObjectType.LIST;
-            case 10: // COMPOUND
+            case Tag.TAG_COMPOUND:
                 return ObjectType.MAP;
-            case 11: // INT_ARRAY
+            case Tag.TAG_INT_ARRAY:
                 return ObjectType.INT_ARRAY;
-            case 12: // LONG_ARRAY
+            case Tag.TAG_LONG_ARRAY:
                 return ObjectType.LONG_ARRAY;
             default:
                 throw new IllegalStateException("Unknown type: " + id);
@@ -104,8 +104,20 @@ public final class NBTListType implements ListType {
     }
 
     @Override
-    public ObjectType getType() {
-        return getType(this.list.getElementType());
+    public ObjectType getUniformType() {
+        ObjectType curr = null;
+
+        for (int i = 0, len = this.list.size(); i < len; ++i) {
+            final Tag tag = this.list.get(i);
+            final ObjectType tagType = getType(tag.getId());
+            if (curr == null) {
+                curr = tagType;
+            } else if (tagType != curr) {
+                return ObjectType.MIXED;
+            }
+        }
+
+        return curr == null ? ObjectType.NONE : curr;
     }
 
     @Override
@@ -119,21 +131,44 @@ public final class NBTListType implements ListType {
     }
 
     @Override
+    public Object getGeneric(final int index) {
+        return Types.NBT.baseToGeneric(this.list.get(index));
+    }
+
+    @Override
     public Number getNumber(final int index) {
         final Tag tag = this.list.get(index); // does bound checking for us
-        if (!(tag instanceof NumericTag)) {
+        if (!(tag instanceof NumericTag numericTag)) {
             throw new IllegalStateException();
         }
-        return ((NumericTag)tag).getAsNumber();
+        return numericTag.box();
+    }
+
+    @Override
+    public Number getNumber(final int index, final Number dfl) {
+        final Tag tag = this.list.get(index); // does bound checking for us
+        if (!(tag instanceof NumericTag numericTag)) {
+            return dfl;
+        }
+        return numericTag.box();
     }
 
     @Override
     public byte getByte(final int index) {
         final Tag tag = this.list.get(index); // does bound checking for us
-        if (!(tag instanceof NumericTag)) {
+        if (!(tag instanceof NumericTag numericTag)) {
             throw new IllegalStateException();
         }
-        return ((NumericTag)tag).getAsByte();
+        return numericTag.byteValue();
+    }
+
+    @Override
+    public byte getByte(final int index, final byte dfl) {
+        final Tag tag = this.list.get(index); // does bound checking for us
+        if (!(tag instanceof NumericTag numericTag)) {
+            return dfl;
+        }
+        return numericTag.byteValue();
     }
 
     @Override
@@ -144,10 +179,19 @@ public final class NBTListType implements ListType {
     @Override
     public short getShort(final int index) {
         final Tag tag = this.list.get(index); // does bound checking for us
-        if (!(tag instanceof NumericTag)) {
+        if (!(tag instanceof NumericTag numericTag)) {
             throw new IllegalStateException();
         }
-        return ((NumericTag)tag).getAsShort();
+        return numericTag.shortValue();
+    }
+
+    @Override
+    public short getShort(final int index, final short dfl) {
+        final Tag tag = this.list.get(index); // does bound checking for us
+        if (!(tag instanceof NumericTag numericTag)) {
+            return dfl;
+        }
+        return numericTag.shortValue();
     }
 
     @Override
@@ -158,10 +202,19 @@ public final class NBTListType implements ListType {
     @Override
     public int getInt(final int index) {
         final Tag tag = this.list.get(index); // does bound checking for us
-        if (!(tag instanceof NumericTag)) {
+        if (!(tag instanceof NumericTag numericTag)) {
             throw new IllegalStateException();
         }
-        return ((NumericTag)tag).getAsInt();
+        return numericTag.intValue();
+    }
+
+    @Override
+    public int getInt(final int index, final int dfl) {
+        final Tag tag = this.list.get(index); // does bound checking for us
+        if (!(tag instanceof NumericTag numericTag)) {
+            return dfl;
+        }
+        return numericTag.intValue();
     }
 
     @Override
@@ -172,10 +225,19 @@ public final class NBTListType implements ListType {
     @Override
     public long getLong(final int index) {
         final Tag tag = this.list.get(index); // does bound checking for us
-        if (!(tag instanceof NumericTag)) {
+        if (!(tag instanceof NumericTag numericTag)) {
             throw new IllegalStateException();
         }
-        return ((NumericTag)tag).getAsLong();
+        return numericTag.longValue();
+    }
+
+    @Override
+    public long getLong(final int index, final long dfl) {
+        final Tag tag = this.list.get(index); // does bound checking for us
+        if (!(tag instanceof NumericTag numericTag)) {
+            return dfl;
+        }
+        return numericTag.longValue();
     }
 
     @Override
@@ -186,10 +248,19 @@ public final class NBTListType implements ListType {
     @Override
     public float getFloat(final int index) {
         final Tag tag = this.list.get(index); // does bound checking for us
-        if (!(tag instanceof NumericTag)) {
+        if (!(tag instanceof NumericTag numericTag)) {
             throw new IllegalStateException();
         }
-        return ((NumericTag)tag).getAsFloat();
+        return numericTag.floatValue();
+    }
+
+    @Override
+    public float getFloat(final int index, final float dfl) {
+        final Tag tag = this.list.get(index); // does bound checking for us
+        if (!(tag instanceof NumericTag numericTag)) {
+            return dfl;
+        }
+        return numericTag.floatValue();
     }
 
     @Override
@@ -200,10 +271,19 @@ public final class NBTListType implements ListType {
     @Override
     public double getDouble(final int index) {
         final Tag tag = this.list.get(index); // does bound checking for us
-        if (!(tag instanceof NumericTag)) {
+        if (!(tag instanceof NumericTag numericTag)) {
             throw new IllegalStateException();
         }
-        return ((NumericTag)tag).getAsDouble();
+        return numericTag.doubleValue();
+    }
+
+    @Override
+    public double getDouble(final int index, final double dfl) {
+        final Tag tag = this.list.get(index); // does bound checking for us
+        if (!(tag instanceof NumericTag numericTag)) {
+            return dfl;
+        }
+        return numericTag.doubleValue();
     }
 
     @Override
@@ -214,10 +294,20 @@ public final class NBTListType implements ListType {
     @Override
     public byte[] getBytes(final int index) {
         final Tag tag = this.list.get(index); // does bound checking for us
-        if (!(tag instanceof ByteArrayTag)) {
+        if (!(tag instanceof ByteArrayTag bytes)) {
             throw new IllegalStateException();
         }
-        return ((ByteArrayTag)tag).getAsByteArray();
+        return bytes.getAsByteArray();
+    }
+
+
+    @Override
+    public byte[] getBytes(final int index, final byte[] dfl) {
+        final Tag tag = this.list.get(index); // does bound checking for us
+        if (!(tag instanceof ByteArrayTag bytes)) {
+            return dfl;
+        }
+        return bytes.getAsByteArray();
     }
 
     @Override
@@ -232,6 +322,12 @@ public final class NBTListType implements ListType {
     }
 
     @Override
+    public short[] getShorts(final int index, final short[] dfl) {
+        // NBT does not support shorts
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public void setShorts(final int index, final short[] to) {
         throw new UnsupportedOperationException();
     }
@@ -239,10 +335,19 @@ public final class NBTListType implements ListType {
     @Override
     public int[] getInts(final int index) {
         final Tag tag = this.list.get(index); // does bound checking for us
-        if (!(tag instanceof IntArrayTag)) {
+        if (!(tag instanceof IntArrayTag ints)) {
             throw new IllegalStateException();
         }
-        return ((IntArrayTag)tag).getAsIntArray();
+        return ints.getAsIntArray();
+    }
+
+    @Override
+    public int[] getInts(final int index, final int[] dfl) {
+        final Tag tag = this.list.get(index); // does bound checking for us
+        if (!(tag instanceof IntArrayTag ints)) {
+            return dfl;
+        }
+        return ints.getAsIntArray();
     }
 
     @Override
@@ -253,10 +358,19 @@ public final class NBTListType implements ListType {
     @Override
     public long[] getLongs(final int index) {
         final Tag tag = this.list.get(index); // does bound checking for us
-        if (!(tag instanceof LongArrayTag)) {
+        if (!(tag instanceof LongArrayTag longs)) {
             throw new IllegalStateException();
         }
-        return ((LongArrayTag)tag).getAsLongArray();
+        return longs.getAsLongArray();
+    }
+
+    @Override
+    public long[] getLongs(final int index, final long[] dfl) {
+        final Tag tag = this.list.get(index); // does bound checking for us
+        if (!(tag instanceof LongArrayTag longs)) {
+            return dfl;
+        }
+        return longs.getAsLongArray();
     }
 
     @Override
@@ -267,10 +381,19 @@ public final class NBTListType implements ListType {
     @Override
     public ListType getList(final int index) {
         final Tag tag = this.list.get(index); // does bound checking for us
-        if (!(tag instanceof ListTag)) {
+        if (!(tag instanceof ListTag list)) {
             throw new IllegalStateException();
         }
-        return new NBTListType((ListTag)tag);
+        return new NBTListType(list);
+    }
+
+    @Override
+    public ListType getList(final int index, final ListType dfl) {
+        final Tag tag = this.list.get(index); // does bound checking for us
+        if (!(tag instanceof ListTag list)) {
+            return dfl;
+        }
+        return new NBTListType(list);
     }
 
     @Override
@@ -279,26 +402,45 @@ public final class NBTListType implements ListType {
     }
 
     @Override
-    public MapType<String> getMap(final int index) {
+    public MapType getMap(final int index) {
         final Tag tag = this.list.get(index); // does bound checking for us
-        if (!(tag instanceof CompoundTag)) {
+        if (!(tag instanceof CompoundTag compoundTag)) {
             throw new IllegalStateException();
         }
-        return new NBTMapType((CompoundTag)tag);
+        return new NBTMapType(compoundTag);
     }
 
     @Override
-    public void setMap(final int index, final MapType<?> to) {
+    public MapType getMap(final int index, final MapType dfl) {
+        final Tag tag = this.list.get(index); // does bound checking for us
+        if (!(tag instanceof CompoundTag compoundTag)) {
+            return dfl;
+        }
+        return new NBTMapType(compoundTag);
+    }
+
+    @Override
+    public void setMap(final int index, final MapType to) {
         this.list.set(index, ((NBTMapType)to).getTag());
     }
 
     @Override
     public String getString(final int index) {
         final Tag tag = this.list.get(index); // does bound checking for us
-        if (!(tag instanceof StringTag)) {
+        if (!(tag instanceof StringTag stringTag)) {
             throw new IllegalStateException();
         }
-        return ((StringTag)tag).getAsString();
+        return stringTag.value();
+    }
+
+
+    @Override
+    public String getString(final int index, final String dfl) {
+        final Tag tag = this.list.get(index); // does bound checking for us
+        if (!(tag instanceof StringTag stringTag)) {
+            return dfl;
+        }
+        return stringTag.value();
     }
 
     @Override
@@ -419,12 +561,12 @@ public final class NBTListType implements ListType {
     }
 
     @Override
-    public void addMap(final MapType<?> map) {
+    public void addMap(final MapType map) {
         this.list.add(((NBTMapType)map).getTag());
     }
 
     @Override
-    public void addMap(final int index, final MapType<?> map) {
+    public void addMap(final int index, final MapType map) {
         this.list.add(index, ((NBTMapType)map).getTag());
     }
 

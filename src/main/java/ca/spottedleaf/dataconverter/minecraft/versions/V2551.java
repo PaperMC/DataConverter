@@ -12,20 +12,20 @@ public final class V2551 {
     private static final int VERSION = MCVersions.V20W20B + 14;
 
     public static void register() {
-        MCTypeRegistry.WORLD_GEN_SETTINGS.addStructureWalker(VERSION, (final MapType<String> data, final long fromVersion, final long toVersion) -> {
-            final MapType<String> dimensions = data.getMap("dimensions");
+        MCTypeRegistry.WORLD_GEN_SETTINGS.addStructureWalker(VERSION, (final MapType data, final long fromVersion, final long toVersion) -> {
+            final MapType dimensions = data.getMap("dimensions");
 
             if (dimensions == null) {
                 return null;
             }
 
             for (final String dimension : dimensions.keys()) {
-                final MapType<String> dimensionData = dimensions.getMap(dimension);
+                final MapType dimensionData = dimensions.getMap(dimension);
                 if (dimensionData == null) {
                     continue;
                 }
 
-                final MapType<String> generator = dimensionData.getMap("generator");
+                final MapType generator = dimensionData.getMap("generator");
                 if (generator == null) {
                     continue;
                 }
@@ -37,7 +37,7 @@ public final class V2551 {
 
                 switch (type) {
                     case "minecraft:flat": {
-                        final MapType<String> settings = generator.getMap("settings");
+                        final MapType settings = generator.getMap("settings");
                         if (settings == null) {
                             continue;
                         }
@@ -54,13 +54,13 @@ public final class V2551 {
                         break;
                     }
                     case "minecraft:noise": {
-                        final MapType<String> settings = generator.getMap("settings");
+                        final MapType settings = generator.getMap("settings");
                         if (settings != null) {
                             WalkerUtils.convert(MCTypeRegistry.BLOCK_NAME, settings, "default_block", fromVersion, toVersion);
                             WalkerUtils.convert(MCTypeRegistry.BLOCK_NAME, settings, "default_fluid", fromVersion, toVersion);
                         }
 
-                        final MapType<String> biomeSource = generator.getMap("biome_source");
+                        final MapType biomeSource = generator.getMap("biome_source");
                         if (biomeSource != null) {
                             final String biomeSourceType = biomeSource.getString("type", "");
                             switch (biomeSourceType) {

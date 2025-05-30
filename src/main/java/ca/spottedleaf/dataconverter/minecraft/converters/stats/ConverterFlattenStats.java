@@ -255,11 +255,11 @@ public final class ConverterFlattenStats {
         return null;
     }
 
-    public static DataConverter<MapType<String>, MapType<String>> makeStatsConverter() {
+    public static DataConverter<MapType, MapType> makeStatsConverter() {
         return new DataConverter<>(VERSION, VERSION_STEP) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
-                final MapType<String> stats = Types.NBT.createEmptyMap();
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
+                final MapType stats = Types.NBT.createEmptyMap();
 
                 for (final String statKey : data.keys()) {
                     final Number value = data.getNumber(statKey);
@@ -284,15 +284,15 @@ public final class ConverterFlattenStats {
         };
     }
 
-    public static DataConverter<MapType<String>, MapType<String>> makeObjectiveConverter() {
+    public static DataConverter<MapType, MapType> makeObjectiveConverter() {
         return new DataConverter<>(VERSION, VERSION_STEP) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 convertCriteriaName(data, "CriteriaName");
 
                 // We also need to update CriteriaType that is created by the data hook in V1451,
                 // otherwise that data hook will overwrite our CriteriaName
-                final MapType<String> criteriaType = data.getMap("CriteriaType");
+                final MapType criteriaType = data.getMap("CriteriaType");
                 if (criteriaType != null) {
                     if ("_special".equals(criteriaType.getString("type"))) {
                         convertCriteriaName(criteriaType, "id");
@@ -302,7 +302,7 @@ public final class ConverterFlattenStats {
                 return null;
             }
 
-            private void convertCriteriaName(final MapType<String> data, final String key) {
+            private void convertCriteriaName(final MapType data, final String key) {
                 final String criteriaName = data.getString(key);
 
                 if (criteriaName == null) {

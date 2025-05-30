@@ -9,12 +9,8 @@ public final class V2688 {
 
     private static final int VERSION = MCVersions.V20W51A + 1;
 
-    private static void registerMob(final String id) {
-        V100.registerEquipment(VERSION, id);
-    }
-
     public static void register() {
-        registerMob("minecraft:glow_squid");
+        //registerMob("minecraft:glow_squid"); // changed to simple in 1.21.5
         MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:glow_item_frame", new DataWalkerItems("Item"));
     }
 

@@ -25,7 +25,7 @@ public final class V3438 {
 
         MCTypeRegistry.TILE_ENTITY.addConverterForId("minecraft:brushable_block", new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 RenameHelper.renameSingle(data, "loot_table", "LootTable");
                 RenameHelper.renameSingle(data, "loot_table_seed", "LootTableSeed");
                 return null;

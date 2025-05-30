@@ -12,9 +12,9 @@ public final class V2516 {
     private static final int VERSION = MCVersions.V20W12A + 1;
 
     public static void register() {
-        final DataConverter<MapType<String>, MapType<String>> gossipUUIDConverter = new DataConverter<>(VERSION) {
+        final DataConverter<MapType, MapType> gossipUUIDConverter = new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 final ListType gossips = data.getList("Gossips", ObjectType.MAP);
 
                 if (gossips == null) {

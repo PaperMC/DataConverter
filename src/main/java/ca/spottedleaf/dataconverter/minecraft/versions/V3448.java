@@ -17,7 +17,7 @@ public final class V3448 {
         MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, "minecraft:decorated_pot", new DataWalkerItems("item"));
         MCTypeRegistry.TILE_ENTITY.addConverterForId("minecraft:decorated_pot", new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 RenameHelper.renameSingle(data, "shards", "sherds");
                 return null;
             }

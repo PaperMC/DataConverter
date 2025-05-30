@@ -18,7 +18,7 @@ public final class ConverterAbstractAdvancementsRename {
     public static void register(final int version, final int subVersion, final Function<String, String> renamer) {
         MCTypeRegistry.ADVANCEMENTS.addStructureConverter(new DataConverter<>(version, subVersion) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 RenameHelper.renameKeys(data, renamer);
                 return null;
             }

@@ -13,7 +13,7 @@ public final class V1514 {
     public static void register() {
         MCTypeRegistry.OBJECTIVE.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 final String displayName = data.getString("DisplayName");
                 if (displayName == null) {
                     return null;
@@ -29,7 +29,7 @@ public final class V1514 {
 
         MCTypeRegistry.TEAM.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 final String displayName = data.getString("DisplayName");
                 if (displayName == null) {
                     return null;
@@ -49,7 +49,7 @@ public final class V1514 {
             }
 
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 final String renderType = data.getString("RenderType");
                 if (renderType != null) {
                     return null;

@@ -13,8 +13,8 @@ public final class V1450 {
     public static void register() {
         MCTypeRegistry.BLOCK_STATE.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
-                final MapType<String> ret = HelperBlockFlatteningV1450.flattenNBT(data);
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
+                final MapType ret = HelperBlockFlatteningV1450.flattenNBT(data);
                 return ret == data ? null : ret.copy(); // copy to avoid problems with later state datafixers
             }
         });

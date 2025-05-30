@@ -19,8 +19,8 @@ public final class V1624 {
     public static void register() {
         MCTypeRegistry.CHUNK.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
-                final MapType<String> level = data.getMap("Level");
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
+                final MapType level = data.getMap("Level");
 
                 if (level == null) {
                     return null;
@@ -53,7 +53,7 @@ public final class V1624 {
 
                 if (tileEntities != null) {
                     for (int i = 0, len = tileEntities.size(); i < len; ++i) {
-                        final MapType<String> tile = tileEntities.getMap(i);
+                        final MapType tile = tileEntities.getMap(i);
 
                         final int x = tile.getInt("x");
                         final int y = tile.getInt("y");
@@ -84,7 +84,7 @@ public final class V1624 {
 
         private IntOpenHashSet chestIds;
 
-        public TrappedChestSection(final MapType<String> section) {
+        public TrappedChestSection(final MapType section) {
             super(section);
         }
 
@@ -93,7 +93,7 @@ public final class V1624 {
             this.chestIds = new IntOpenHashSet();
 
             for (int i = 0; i < this.palette.size(); ++i) {
-                final MapType<String> blockState = this.palette.getMap(i);
+                final MapType blockState = this.palette.getMap(i);
                 final String name = blockState.getString("Name");
                 if ("minecraft:trapped_chest".equals(name)) {
                     this.chestIds.add(i);

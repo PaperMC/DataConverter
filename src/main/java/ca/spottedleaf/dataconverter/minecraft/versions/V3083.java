@@ -9,12 +9,8 @@ public final class V3083 {
 
     private static final int VERSION = MCVersions.V22W12A + 1;
 
-    private static void registerMob(final String id) {
-        V100.registerEquipment(VERSION, id);
-    }
-
     public static void register() {
-        registerMob("minecraft:allay");
+        //registerMob("minecraft:allay"); // changed to simple in 1.21.5
         MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:allay", new DataWalkerItemLists("Inventory"));
         MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:allay", new GameEventListenerWalker());
     }

@@ -7,7 +7,7 @@ public final class NamespaceUtil {
 
     private NamespaceUtil() {}
 
-    public static void enforceForPath(final MapType<String> data, final String path) {
+    public static void enforceForPath(final MapType data, final String path) {
         if (data == null) {
             return;
         }

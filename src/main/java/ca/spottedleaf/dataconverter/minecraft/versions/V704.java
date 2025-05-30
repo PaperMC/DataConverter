@@ -320,7 +320,7 @@ public final class V704 {
     public static void register() {
         MCTypeRegistry.TILE_ENTITY.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 final String id = data.getString("id");
                 if (id == null) {
                     return null;
@@ -332,31 +332,21 @@ public final class V704 {
         });
 
 
-        MCTypeRegistry.TILE_ENTITY.addStructureWalker(VERSION, (final MapType<String> data, final long fromVersion, final long toVersion) -> {
-            WalkerUtils.convert(MCTypeRegistry.DATA_COMPONENTS, data, "components", fromVersion, toVersion);
-            return null;
-        });
-        registerInventory( "minecraft:furnace");
-        registerInventory( "minecraft:chest");
-        MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, "minecraft:jukebox", new DataWalkerItems("RecordItem"));
-        registerInventory("minecraft:dispenser");
-        registerInventory("minecraft:dropper");
-        MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, "minecraft:mob_spawner", (final MapType<String> data, final long fromVersion, final long toVersion) -> {
-            MCTypeRegistry.UNTAGGED_SPAWNER.convert(data, fromVersion, toVersion);
-            return null;
-        });
-        registerInventory("minecraft:brewing_stand");
-        registerInventory("minecraft:hopper");
-        MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, "minecraft:flower_pot", new DataWalkerItemNames("Item"));
-        MCTypeRegistry.TILE_ENTITY.addWalker(
-                VERSION, "minecraft:command_block",
-                new DataWalkerTypePaths<>(MCTypeRegistry.DATACONVERTER_CUSTOM_TYPE_COMMAND, "Command")
-        );
+        for (final Map.Entry<String, String> entry : TILE_ID_UPDATE.entrySet()) {
+            final String oldId = entry.getKey();
+            final String newId = entry.getValue();
 
-        MCTypeRegistry.ITEM_STACK.addStructureWalker(VERSION, (final MapType<String> data, final long fromVersion, final long toVersion) -> {
+            if (!MCTypeRegistry.TILE_ENTITY.hasWalkers(oldId)) {
+                LOGGER.error("(V704) Failed to find walkers for " + oldId);
+            }
+
+            MCTypeRegistry.TILE_ENTITY.copyWalkers(VERSION, oldId, newId);
+        }
+
+        MCTypeRegistry.ITEM_STACK.addStructureWalker(VERSION, (final MapType data, final long fromVersion, final long toVersion) -> {
             WalkerUtils.convert(MCTypeRegistry.ITEM_NAME, data, "id", fromVersion, toVersion);
 
-            final MapType<String> tag = data.getMap("tag");
+            final MapType tag = data.getMap("tag");
             if (tag == null) {
                 return null;
             }
@@ -365,8 +355,15 @@ public final class V704 {
 
             WalkerUtils.convertList(MCTypeRegistry.ITEM_STACK, tag, "Items", fromVersion, toVersion);
             WalkerUtils.convertList(MCTypeRegistry.ITEM_STACK, tag, "ChargedProjectiles", fromVersion, toVersion);
+            WalkerUtils.convertList(MCTypeRegistry.TEXT_COMPONENT, tag, "pages", fromVersion, toVersion);
+            WalkerUtils.convertList(MCTypeRegistry.TEXT_COMPONENT, tag, "filtered_pages", fromVersion, toVersion);
+            final MapType display = tag.getMap("display");
+            if (display != null) {
+                WalkerUtils.convert(MCTypeRegistry.TEXT_COMPONENT, display, "Name", fromVersion, toVersion);
+                WalkerUtils.convertList(MCTypeRegistry.TEXT_COMPONENT, display, "Lore", fromVersion, toVersion);
+            }
 
-            MapType<String> entityTag = tag.getMap("EntityTag");
+            MapType entityTag = tag.getMap("EntityTag");
             if (entityTag != null) {
                 final String itemId = data.getString("id");
                 final String entityId;
@@ -391,7 +388,7 @@ public final class V704 {
                     }
                 }
 
-                final MapType<String> replace = MCTypeRegistry.ENTITY.convert(entityTag, fromVersion, toVersion);
+                final MapType replace = MCTypeRegistry.ENTITY.convert(entityTag, fromVersion, toVersion);
 
                 if (replace != null) {
                     entityTag = replace;
@@ -399,11 +396,11 @@ public final class V704 {
                 }
             }
 
-            MapType<String> blockEntityTag = tag.getMap("BlockEntityTag");
+            MapType blockEntityTag = tag.getMap("BlockEntityTag");
             if (blockEntityTag != null) {
                 final String itemId = data.getString("id");
                 final String entityId;
-                if ("minecraft:suspicious_sand".equals(itemId) && fromVersion < V3438.VERSION) {
+                if (fromVersion < V3438.VERSION && "minecraft:suspicious_sand".equals(itemId)) {
                     // renamed after this version, and since the id is a mapping to just string we need to special case this
                     entityId = "minecraft:suspicious_sand";
                 } else {
@@ -419,7 +416,7 @@ public final class V704 {
                         blockEntityTag.setString("id", entityId);
                     }
                 }
-                final MapType<String> replace = MCTypeRegistry.TILE_ENTITY.convert(blockEntityTag, fromVersion, toVersion);
+                final MapType replace = MCTypeRegistry.TILE_ENTITY.convert(blockEntityTag, fromVersion, toVersion);
                 if (replace != null) {
                     blockEntityTag = replace;
                     tag.setMap("BlockEntityTag", blockEntityTag);

@@ -9,12 +9,12 @@ import java.util.Map;
 
 public final class HelperBlockFlatteningV1450 {
 
-    protected static final MapType<String>[] FLATTENED_BY_ID = new MapType[4096];
-    protected static final MapType<String>[] BLOCK_DEFAULTS = new MapType[4096];
+    protected static final MapType[] FLATTENED_BY_ID = new MapType[4096];
+    protected static final MapType[] BLOCK_DEFAULTS = new MapType[4096];
 
-    private static final Object2IntOpenHashMap<MapType<String>> ID_BY_OLD_NBT = new Object2IntOpenHashMap<MapType<String>>(64, 0.7f) {
+    private static final Object2IntOpenHashMap<MapType> ID_BY_OLD_NBT = new Object2IntOpenHashMap<MapType>(64, 0.7f) {
         @Override
-        public int put(final MapType<String> o, final int v) {
+        public int put(final MapType o, final int v) {
             if (this.containsKey(o)) {
                 throw new RuntimeException("Already contains mapping for " + o);
             }
@@ -41,14 +41,14 @@ public final class HelperBlockFlatteningV1450 {
     }
 
     // map used to ensure that each parsed block state contains no duplicates
-    protected static final Map<MapType<String>, MapType<String>> IDENTITY_ENSURE = new HashMap<>();
+    protected static final Map<MapType, MapType> IDENTITY_ENSURE = new HashMap<>();
 
-    public static MapType<String> parseTag(final String blockstate) {
+    public static MapType parseTag(final String blockstate) {
         try {
-            final MapType<String> ret = new NBTMapType(TagParser.parseTag(blockstate.replace('\'', '"')));
+            final MapType ret = new NBTMapType(TagParser.parseCompoundFully(blockstate.replace('\'', '"')));
 
             synchronized (IDENTITY_ENSURE) {
-                final MapType<String> identity = IDENTITY_ENSURE.putIfAbsent(ret, ret);
+                final MapType identity = IDENTITY_ENSURE.putIfAbsent(ret, ret);
 
                 return identity == null ? ret : identity;
             }
@@ -59,7 +59,7 @@ public final class HelperBlockFlatteningV1450 {
     }
 
     private static void register(final int id, final String flattened, final String... preFlattenings) {
-        final MapType<String> flattenedNBT = parseTag(flattened);
+        final MapType flattenedNBT = parseTag(flattened);
         if (FLATTENED_BY_ID[id] != null) {
             throw new RuntimeException("Mapping already exists for id " + id);
         }
@@ -73,7 +73,7 @@ public final class HelperBlockFlatteningV1450 {
         }
 
         for (final String preFlattening : preFlattenings) {
-            final MapType<String> preFlatteningNBT = parseTag(preFlattening);
+            final MapType preFlatteningNBT = parseTag(preFlattening);
             final String name = preFlatteningNBT.getString("Name");
             if (name == null) {
                 throw new RuntimeException("Name does not exist for pre flattenings for id " + id);
@@ -93,30 +93,30 @@ public final class HelperBlockFlatteningV1450 {
         }
     }
 
-    public static MapType<String> flattenNBT(final MapType<String> old) {
+    public static MapType flattenNBT(final MapType old) {
         final int id = ID_BY_OLD_NBT.getInt(old);
-        final MapType<String> ret = getNBTForIdRaw(id);
+        final MapType ret = getNBTForIdRaw(id);
 
         return ret == null ? old : ret;
     }
 
     public static String getNewBlockName(final String old) {
         final int id = ID_BY_OLD_NAME.getInt(old);
-        final MapType<String> ret = getNBTForIdRaw(id);
+        final MapType ret = getNBTForIdRaw(id);
         return ret == null ? old : ret.getString("Name");
     }
 
     public static String getNameForId(final int block) {
-        final MapType<String> nbt = getNBTForIdRaw(block);
+        final MapType nbt = getNBTForIdRaw(block);
         return nbt == null ? "minecraft:air" : nbt.getString("Name");
     }
 
-    protected static MapType<String> getNBTForIdRaw(final int block) {
+    protected static MapType getNBTForIdRaw(final int block) {
         return block >= 0 && block < FLATTENED_BY_ID.length ? FLATTENED_BY_ID[block] : null;
     }
 
-    public static MapType<String> getNBTForId(final int block) {
-        MapType<String> ret = getNBTForIdRaw(block);
+    public static MapType getNBTForId(final int block) {
+        MapType ret = getNBTForIdRaw(block);
         return ret == null ? FLATTENED_BY_ID[0] : ret;
     }
 

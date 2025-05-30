@@ -4,7 +4,7 @@ import ca.spottedleaf.dataconverter.converters.DataConverter;
 import ca.spottedleaf.dataconverter.types.MapType;
 import java.util.function.Function;
 
-public final class ConverterEntityVariantRename extends DataConverter<MapType<String>, MapType<String>> {
+public final class ConverterEntityVariantRename extends DataConverter<MapType, MapType> {
 
     private final Function<String, String> renamer;
 
@@ -19,7 +19,7 @@ public final class ConverterEntityVariantRename extends DataConverter<MapType<St
     }
 
     @Override
-    public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+    public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
         final String variant = data.getString("variant");
 
         if (variant == null) {

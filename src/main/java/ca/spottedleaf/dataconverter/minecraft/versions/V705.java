@@ -98,10 +98,6 @@ public final class V705 {
         ENTITY_ID_UPDATE.put("ZombieVillager", "minecraft:zombie_villager");
     }
 
-    private static void registerMob(final String id) {
-        V100.registerEquipment(VERSION, id);
-    }
-
     private static void registerThrowableProjectile(final String id) {
         MCTypeRegistry.ENTITY.addWalker(VERSION, id, new DataWalkerBlockNames("inTile"));
     }
@@ -110,105 +106,97 @@ public final class V705 {
         ConverterAbstractEntityRename.register(VERSION, ENTITY_ID_UPDATE::get);
 
         MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:area_effect_cloud", new DataWalkerTypePaths<>(MCTypeRegistry.PARTICLE, "Particle"));
-        registerMob("minecraft:armor_stand");
+        //registerMob("minecraft:armor_stand"); // now simple in 1.21.5
         MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:arrow", new DataWalkerBlockNames("inTile"));
-        registerMob("minecraft:bat");
-        registerMob("minecraft:blaze");
-        registerMob("minecraft:cave_spider");
+        //registerMob("minecraft:bat"); // now simple in 1.21.5
+        //registerMob("minecraft:blaze"); // now simple in 1.21.5
+        //registerMob("minecraft:cave_spider"); // now simple in 1.21.5
         MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:chest_minecart", new DataWalkerBlockNames("DisplayTile"));
         MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:chest_minecart", new DataWalkerItemLists("Items"));
-        registerMob("minecraft:chicken");
+        //registerMob("minecraft:chicken"); // now simple in 1.21.5
         MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:commandblock_minecart", new DataWalkerBlockNames("DisplayTile"));
-        registerMob("minecraft:cow");
-        registerMob("minecraft:creeper");
+        MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:commandblock_minecart", new DataWalkerTypePaths<>(MCTypeRegistry.TEXT_COMPONENT, "LastOutput"));
+        //registerMob("minecraft:cow"); // now simple in 1.21.5
+        //registerMob("minecraft:creeper"); // now simple in 1.21.5
         MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:donkey", new DataWalkerItemLists("Items"));
-        V100.registerEquipment(VERSION, "minecraft:donkey");
         MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:donkey", new DataWalkerItems("SaddleItem"));
         registerThrowableProjectile("minecraft:egg");
-        registerMob("minecraft:elder_guardian");
-        registerMob("minecraft:ender_dragon");
-        V100.registerEquipment(VERSION, "minecraft:enderman");
+        //registerMob("minecraft:elder_guardian"); // now simple in 1.21.5
+        //registerMob("minecraft:ender_dragon"); // now simple in 1.21.5
         MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:enderman", new DataWalkerBlockNames("carried"));
-        registerMob("minecraft:endermite");
+        //registerMob("minecraft:endermite");  // now simple in 1.21.5
         registerThrowableProjectile("minecraft:ender_pearl");
         MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:falling_block", new DataWalkerBlockNames("Block"));
         MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:falling_block", new DataWalkerTileEntities("TileEntityData"));
         registerThrowableProjectile("minecraft:fireball");
         MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:fireworks_rocket", new DataWalkerItems("FireworksItem"));
         MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:furnace_minecart", new DataWalkerBlockNames("DisplayTile"));
-        registerMob("minecraft:ghast");
-        registerMob("minecraft:giant");
-        registerMob("minecraft:guardian");
+        //registerMob("minecraft:ghast"); // now simple in 1.21.5
+        //registerMob("minecraft:giant"); // now simple in 1.21.5
+        //registerMob("minecraft:guardian"); // now simple in 1.21.5
         MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:hopper_minecart", new DataWalkerBlockNames("DisplayTile"));
         MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:hopper_minecart", new DataWalkerItemLists("Items"));
         MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:horse", new DataWalkerItems("ArmorItem", "SaddleItem"));
-        V100.registerEquipment(VERSION, "minecraft:horse");
-        registerMob("minecraft:husk");
+        //registerMob("minecraft:husk"); // now simple in 1.21.5
         MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:item", new DataWalkerItems("Item"));
         MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:item_frame", new DataWalkerItems("Item"));
-        registerMob("minecraft:magma_cube");
+        //registerMob("minecraft:magma_cube"); // now simple in 1.21.5
         MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:minecart", new DataWalkerBlockNames("DisplayTile"));
-        registerMob("minecraft:mooshroom");
+        //registerMob("minecraft:mooshroom"); // now simple in 1.21.5
         MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:mule", new DataWalkerItemLists("Items"));
-        V100.registerEquipment(VERSION, "minecraft:mule");
         MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:mule", new DataWalkerItems("SaddleItem"));
-        registerMob("minecraft:ocelot");
-        registerMob("minecraft:pig");
-        registerMob("minecraft:polar_bear");
+        //registerMob("minecraft:ocelot"); // now simple in 1.21.5
+        //registerMob("minecraft:pig"); // now simple in 1.21.5
+        //registerMob("minecraft:polar_bear"); // now simple in 1.21.5
         MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:potion", new DataWalkerItems("Potion"));
         MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:potion", new DataWalkerBlockNames("inTile"));
-        registerMob("minecraft:rabbit");
-        registerMob("minecraft:sheep");
-        registerMob("minecraft:shulker");
-        registerMob("minecraft:silverfish");
-        registerMob("minecraft:skeleton");
-        V100.registerEquipment(VERSION, "minecraft:skeleton_horse");
+        //registerMob("minecraft:rabbit"); // now simple in 1.21.5
+        //registerMob("minecraft:sheep"); // now simple in 1.21.5
+        //registerMob("minecraft:shulker"); // now simple in 1.21.5
+        //registerMob("minecraft:silverfish"); // now simple in 1.21.5
+        //registerMob("minecraft:skeleton"); // now simple in 1.21.5
         MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:skeleton_horse", new DataWalkerItems("SaddleItem"));
-        registerMob("minecraft:slime");
+        //registerMob("minecraft:slime"); // now simple in 1.21.5
         registerThrowableProjectile("minecraft:small_fireball");
         registerThrowableProjectile("minecraft:snowball");
-        registerMob("minecraft:snowman");
+        //registerMob("minecraft:snowman"); // now simple in 1.21.5
         MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:spawner_minecart", new DataWalkerBlockNames("DisplayTile"));
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:spawner_minecart", (final MapType<String> data, final long fromVersion, final long toVersion) -> {
-            MCTypeRegistry.UNTAGGED_SPAWNER.convert(data, fromVersion, toVersion);
-            return null;
+        MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:spawner_minecart", (final MapType data, final long fromVersion, final long toVersion) -> {
+            return MCTypeRegistry.UNTAGGED_SPAWNER.convert(data, fromVersion, toVersion);
         });
         MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:spectral_arrow", new DataWalkerBlockNames("inTile"));
-        registerMob("minecraft:spider");
-        registerMob("minecraft:squid");
-        registerMob("minecraft:stray");
+        //registerMob("minecraft:spider"); // now simple in 1.21.5
+        //registerMob("minecraft:squid"); // now simple in 1.21.5
+        //registerMob("minecraft:stray"); // now simple in 1.21.5
         MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:tnt_minecart", new DataWalkerBlockNames("DisplayTile"));
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:villager", (final MapType<String> data, final long fromVersion, final long toVersion) -> {
+        MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:villager", (final MapType data, final long fromVersion, final long toVersion) -> {
             WalkerUtils.convertList(MCTypeRegistry.ITEM_STACK, data, "Inventory", fromVersion, toVersion);
 
             WalkerUtils.convertList(MCTypeRegistry.VILLAGER_TRADE, data.getMap("Offers"), "Recipes", fromVersion, toVersion);
 
             return null;
         });
-        V100.registerEquipment(VERSION, "minecraft:villager");
-        registerMob("minecraft:villager_golem");
-        registerMob("minecraft:witch");
-        registerMob("minecraft:wither");
-        registerMob("minecraft:wither_skeleton");
+        //registerMob("minecraft:villager_golem"); // now simple in 1.21.5
+        //registerMob("minecraft:witch"); // now simple in 1.21.5
+        //registerMob("minecraft:wither"); // now simple in 1.21.5
+        //registerMob("minecraft:wither_skeleton"); // now simple in 1.21.5
         registerThrowableProjectile("minecraft:wither_skull");
-        registerMob("minecraft:wolf");
+        //registerMob("minecraft:wolf"); // now simple in 1.21.5
         registerThrowableProjectile("minecraft:xp_bottle");
-        registerMob("minecraft:zombie");
+        //registerMob("minecraft:zombie"); // now simple in 1.21.5
         MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:zombie_horse", new DataWalkerItems("SaddleItem"));
-        V100.registerEquipment(VERSION, "minecraft:zombie_horse");
-        registerMob("minecraft:zombie_pigman");
-        registerMob("minecraft:zombie_villager");
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:zombie_villager", (final MapType<String> data, final long fromVersion, final long toVersion) -> {
+        //registerMob("minecraft:zombie_pigman"); // now simple in 1.21.5
+        //registerMob("minecraft:zombie_villager"); // now simple in 1.21.5
+        MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:zombie_villager", (final MapType data, final long fromVersion, final long toVersion) -> {
             WalkerUtils.convertList(MCTypeRegistry.VILLAGER_TRADE, data.getMap("Offers"), "Recipes", fromVersion, toVersion);
 
             return null;
         });
-        registerMob("minecraft:evocation_illager");
+        //registerMob("minecraft:evocation_illager"); // now simple in 1.21.5
         MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:llama", new DataWalkerItemLists("Items"));
-        V100.registerEquipment(VERSION, "minecraft:llama");
         MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:llama", new DataWalkerItems("SaddleItem", "DecorItem"));
-        registerMob("minecraft:vex");
-        registerMob("minecraft:vindication_illager");
+        //registerMob("minecraft:vex"); // now simple in 1.21.5
+        //registerMob("minecraft:vindication_illager"); // now simple in 1.21.5
         // Don't need to re-register itemstack walker, the V704 will correctly choose the right id for armorstand based on
         // the source version
 

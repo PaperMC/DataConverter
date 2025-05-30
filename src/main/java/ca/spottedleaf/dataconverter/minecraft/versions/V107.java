@@ -24,7 +24,7 @@ public final class V107 {
             // No harm in catching more cases here.
 
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 String newId = "MinecartRideable"; // dfl
                 final int type = data.getInt("Type");
                 data.remove("Type");

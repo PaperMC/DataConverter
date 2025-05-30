@@ -7,6 +7,8 @@ import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
 import ca.spottedleaf.dataconverter.types.ListType;
 import ca.spottedleaf.dataconverter.types.MapType;
 import ca.spottedleaf.dataconverter.types.ObjectType;
+import ca.spottedleaf.dataconverter.types.TypeUtil;
+import ca.spottedleaf.dataconverter.types.Types;
 import ca.spottedleaf.dataconverter.util.CommandArgumentUpgrader;
 import com.google.common.base.Suppliers;
 import com.google.gson.JsonArray;
@@ -17,11 +19,8 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.logging.LogUtils;
-import com.mojang.serialization.Dynamic;
-import com.mojang.serialization.JsonOps;
 import net.minecraft.SharedConstants;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.nbt.TagParser;
 import net.minecraft.util.GsonHelper;
@@ -40,7 +39,7 @@ public final class V3818_Commands {
     public static String toCommandFormat(final CompoundTag components) {
         final StringBuilder ret = new StringBuilder();
         ret.append('[');
-        for (final Iterator<String> iterator = components.getAllKeys().iterator(); iterator.hasNext();) {
+        for (final Iterator<String> iterator = components.keySet().iterator(); iterator.hasNext();) {
             final String key = iterator.next();
             ret.append(key);
             ret.append('=');
@@ -55,9 +54,7 @@ public final class V3818_Commands {
     }
 
     public static JsonElement convertToJson(final Tag tag) {
-        // We don't have conversion utilities, but DFU does...
-
-        return new Dynamic<>(NbtOps.INSTANCE, tag).convert(JsonOps.INSTANCE).getValue();
+        return Types.NBT.convertBaseToBase(tag, Types.JSON);
     }
 
     public static void walkComponent(final JsonElement primitive) {
@@ -109,7 +106,7 @@ public final class V3818_Commands {
 
                         if (tagElement instanceof JsonPrimitive tagPrimitive) {
                             try {
-                                final CompoundTag tag = TagParser.parseTag(tagPrimitive.getAsString());
+                                final CompoundTag tag = TagParser.parseCompoundFully(tagPrimitive.getAsString());
                                 itemNBT.put("tag", tag);
                             } catch (final CommandSyntaxException ignore) {}
                         }
@@ -121,19 +118,19 @@ public final class V3818_Commands {
 
                         contents.remove("tag");
 
-                        contents.addProperty("id", converted.getString("id"));
+                        contents.addProperty("id", converted.getStringOr("id", ""));
 
-                        if (converted.contains("components", Tag.TAG_COMPOUND)) {
-                            contents.add("components", convertToJson(converted.getCompound("components")));
+                        if (converted.contains("components")) {
+                            contents.add("components", convertToJson(converted.getCompoundOrEmpty("components")));
                         }
                     }
                 }
                 final JsonElement valueElement = hoverEvent.get("value");
                 if (valueElement instanceof JsonPrimitive valuePrimitive) {
                     try {
-                        final CompoundTag itemNBT = TagParser.parseTag(valuePrimitive.getAsString());
-                        if (itemNBT.contains("id", Tag.TAG_STRING)) {
-                            final boolean explicitCount = itemNBT.contains("Count", Tag.TAG_ANY_NUMERIC);
+                        final CompoundTag itemNBT = TagParser.parseCompoundFully(valuePrimitive.getAsString());
+                        if (itemNBT.contains("id")) {
+                            final boolean explicitCount = itemNBT.contains("Count");
                             if (!explicitCount) {
                                 itemNBT.putInt("Count", 1);
                             }
@@ -147,13 +144,13 @@ public final class V3818_Commands {
                             final JsonObject contents = new JsonObject();
                             hoverEvent.add("contents", contents);
 
-                            contents.addProperty("id", converted.getString("id"));
+                            contents.addProperty("id", converted.getStringOr("id", ""));
                             if (explicitCount) {
-                                contents.addProperty("count", converted.getInt("count"));
+                                contents.addProperty("count", converted.getIntOr("count", 0));
                             }
 
-                            if (converted.contains("components", Tag.TAG_COMPOUND)) {
-                                contents.add("components", convertToJson(converted.getCompound("components")));
+                            if (converted.contains("components")) {
+                                contents.add("components", convertToJson(converted.getCompoundOrEmpty("components")));
                             }
                         }
                     } catch (final CommandSyntaxException ignore) {}
@@ -219,7 +216,7 @@ public final class V3818_Commands {
         // books
         // note: at this stage, item is converted to components, so we can use the data components type
         MCTypeRegistry.DATA_COMPONENTS.addStructureConverter(new DataConverter<>(VERSION, 5) {
-            private static void walkPath(final MapType<String> data, final String path) {
+            private static void walkPath(final MapType data, final String path) {
                 final String str = data.getString(path);
                 if (str == null) {
                     return;
@@ -231,12 +228,12 @@ public final class V3818_Commands {
                 }
             }
 
-            private static void walkBookContent(final MapType<String> data, final String path) {
+            private static void walkBookContent(final MapType data, final String path) {
                 if (data == null) {
                     return;
                 }
 
-                final MapType<String> content = data.getMap(path);
+                final MapType content = data.getMap(path);
                 if (content == null) {
                     return;
                 }
@@ -247,7 +244,7 @@ public final class V3818_Commands {
                 }
 
                 for (int i = 0, len = pages.size(); i < len; ++i) {
-                    final MapType<String> text = pages.getMap(i);
+                    final MapType text = pages.getMap(i);
 
                     walkPath(text, "raw");
                     walkPath(text, "filtered");
@@ -255,7 +252,7 @@ public final class V3818_Commands {
             }
 
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 walkBookContent(data, "minecraft:written_book_content");
                 return null;
             }
@@ -263,13 +260,13 @@ public final class V3818_Commands {
 
         // signs
 
-        final DataConverter<MapType<String>, MapType<String>> signTileConverter = new DataConverter<>(VERSION, 5) {
-            private static void walkText(final MapType<String> data, final String path) {
+        final DataConverter<MapType, MapType> signTileConverter = new DataConverter<>(VERSION, 5) {
+            private static void walkText(final MapType data, final String path) {
                 if (data == null) {
                     return;
                 }
 
-                final MapType<String> text = data.getMap(path);
+                final MapType text = data.getMap(path);
                 if (text == null) {
                     return;
                 }
@@ -291,7 +288,7 @@ public final class V3818_Commands {
             }
 
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 walkText(data, "front_text");
                 walkText(data, "back_text");
                 return null;

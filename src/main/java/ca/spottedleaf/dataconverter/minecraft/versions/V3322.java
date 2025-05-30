@@ -23,7 +23,7 @@ public final class V3322 {
             )
     );
 
-    private static void updateEffectList(final MapType<String> root, final String path) {
+    private static void updateEffectList(final MapType root, final String path) {
         if (root == null) {
             return;
         }
@@ -35,8 +35,8 @@ public final class V3322 {
         }
 
         for (int i = 0, len = effects.size(); i < len; ++i) {
-            final MapType<String> data = effects.getMap(i);
-            final MapType<String> factorData = data.getMap("FactorCalculationData");
+            final MapType data = effects.getMap(i);
+            final MapType factorData = data.getMap("FactorCalculationData");
             if (factorData == null) {
                 continue;
             }
@@ -52,9 +52,9 @@ public final class V3322 {
     }
 
     public static void register() {
-        final DataConverter<MapType<String>, MapType<String>> entityEffectFix = new DataConverter<>(VERSION) {
+        final DataConverter<MapType, MapType> entityEffectFix = new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 updateEffectList(data, "Effects");
                 updateEffectList(data, "ActiveEffects");
                 updateEffectList(data, "CustomPotionEffects");
@@ -67,7 +67,7 @@ public final class V3322 {
 
         MCTypeRegistry.ITEM_STACK.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 final String id = data.getString("id");
                 if (!EFFECT_ITEM_TYPES.contains(id)) {
                     return null;

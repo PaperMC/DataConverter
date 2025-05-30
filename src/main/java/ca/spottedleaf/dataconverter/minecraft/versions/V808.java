@@ -14,7 +14,7 @@ public final class V808 {
     public static void register() {
         MCTypeRegistry.ENTITY.addConverterForId("minecraft:shulker", new DataConverter<>(VERSION, 1) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 if (!data.hasKey("Color", ObjectType.NUMBER)) {
                     data.setByte("Color", (byte)10);
                 }

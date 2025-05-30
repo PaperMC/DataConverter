@@ -13,8 +13,8 @@ public final class V3833 {
     public static void register() {
         MCTypeRegistry.TILE_ENTITY.addConverterForId("minecraft:brushable_block", new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
-                final MapType<String> item = data.getMap("item");
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
+                final MapType item = data.getMap("item");
                 if (item == null) {
                     return null;
                 }

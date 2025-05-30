@@ -183,17 +183,17 @@ public final class CommandArgumentUpgrader {
             itemNBT.putInt("Count", 1);
 
             if (reader.canRead() && reader.peek() == '{') {
-                itemNBT.put("tag", new TagParser(reader).readStruct());
+                itemNBT.put("tag", TagParser.parseCompoundAsArgument(reader));
             }
 
             final CompoundTag converted = MCDataConverter.convertTag(
                 MCTypeRegistry.ITEM_STACK, itemNBT, MCVersions.V1_20_4, SharedConstants.getCurrentVersion().getDataVersion().getVersion()
             );
 
-            final String newId = converted.getString("id");
+            final String newId = converted.getStringOr("id", "");
 
-            if (converted.contains("components", Tag.TAG_COMPOUND)) {
-                return new UpgradedArgument(newId + V3818_Commands.toCommandFormat(converted.getCompound("components")));
+            if (converted.contains("components")) {
+                return new UpgradedArgument(newId + V3818_Commands.toCommandFormat(converted.getCompoundOrEmpty("components")));
             } else {
                 return new UpgradedArgument(newId);
             }
@@ -275,8 +275,8 @@ public final class CommandArgumentUpgrader {
                 return new UpgradedArgument(block + properties);
             }
 
-            CompoundTag tag = new TagParser(reader).readStruct();
-            boolean missId = !tag.contains("id", Tag.TAG_STRING);
+            CompoundTag tag = TagParser.parseCompoundAsArgument(reader);
+            boolean missId = !tag.contains("id");
             if (missId) { // Data converter can't upgrade tile entities without it
                 tag.putString("id", CommandArgumentUpgrader.blockToTileEntity(block));
             }

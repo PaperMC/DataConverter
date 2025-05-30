@@ -37,9 +37,9 @@ public final class V1918 {
     }
 
     public static void register() {
-        final DataConverter<MapType<String>, MapType<String>> converter = new DataConverter<>(VERSION) {
+        final DataConverter<MapType, MapType> converter = new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 final int profession = data.getInt("Profession");
                 final int career = data.getInt("Career");
                 final int careerLevel = data.getInt("CareerLevel", 1);
@@ -47,7 +47,7 @@ public final class V1918 {
                 data.remove("Career");
                 data.remove("CareerLevel");
 
-                final MapType<String> villagerData = Types.NBT.createEmptyMap();
+                final MapType villagerData = Types.NBT.createEmptyMap();
                 data.setMap("VillagerData", villagerData);
                 villagerData.setString("type", "minecraft:plains");
                 villagerData.setString("profession", getProfessionString(profession, career));

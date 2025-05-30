@@ -12,7 +12,7 @@ public final class V3093 {
     public static void register() {
         MCTypeRegistry.ENTITY.addConverterForId("minecraft:goat", new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 data.setBoolean("HasLeftHorn", true);
                 data.setBoolean("HasRightHorn", true);
                 return null;

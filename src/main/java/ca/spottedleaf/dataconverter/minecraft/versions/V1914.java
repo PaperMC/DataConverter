@@ -12,7 +12,7 @@ public final class V1914 {
     public static void register() {
         MCTypeRegistry.TILE_ENTITY.addConverterForId("minecraft:chest", new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 final String lootTable = data.getString("LootTable");
 
                 if ("minecraft:chests/village_blacksmith".equals(lootTable)) {

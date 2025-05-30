@@ -17,10 +17,10 @@ public final class V3097 {
     private static final int VERSION = MCVersions.V22W19A + 1;
 
     public static void register() {
-        final DataConverter<MapType<String>, MapType<String>> removeFilteredBookText = new DataConverter<>(VERSION) {
+        final DataConverter<MapType, MapType> removeFilteredBookText = new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
-                final MapType<String> tag = data.getMap("tag");
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
+                final MapType tag = data.getMap("tag");
                 if (tag == null) {
                     return null;
                 }
@@ -36,7 +36,7 @@ public final class V3097 {
 
         MCTypeRegistry.TILE_ENTITY.addConverterForId("minecraft:sign", new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 data.remove("FilteredText1");
                 data.remove("FilteredText2");
                 data.remove("FilteredText3");

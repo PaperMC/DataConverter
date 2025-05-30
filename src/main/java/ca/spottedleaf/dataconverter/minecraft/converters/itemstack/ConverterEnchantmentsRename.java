@@ -6,7 +6,7 @@ import ca.spottedleaf.dataconverter.types.MapType;
 import ca.spottedleaf.dataconverter.util.NamespaceUtil;
 import java.util.function.Function;
 
-public final class ConverterEnchantmentsRename extends DataConverter<MapType<String>, MapType<String>> {
+public final class ConverterEnchantmentsRename extends DataConverter<MapType, MapType> {
 
     private final Function<String, String> renamer;
 
@@ -23,8 +23,8 @@ public final class ConverterEnchantmentsRename extends DataConverter<MapType<Str
     }
 
     @Override
-    public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
-        final MapType<String> tag = data.getMap("tag");
+    public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
+        final MapType tag = data.getMap("tag");
 
         if (tag == null) {
             return null;

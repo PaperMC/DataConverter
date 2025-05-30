@@ -17,7 +17,7 @@ public final class V111 {
 
     private V111() {}
 
-    protected static final class EntityRotationFix extends DataConverter<MapType<String>, MapType<String>> {
+    protected static final class EntityRotationFix extends DataConverter<MapType, MapType> {
 
         private static final int[][] DIRECTIONS = new int[][] {
                 {0, 0, 1},
@@ -31,7 +31,7 @@ public final class V111 {
         }
 
         @Override
-        public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+        public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
             if (data.getNumber("Facing") != null) {
                 return null;
             }

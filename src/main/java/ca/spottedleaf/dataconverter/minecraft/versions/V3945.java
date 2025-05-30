@@ -84,10 +84,10 @@ public final class V3945 {
     }
 
     private static ListType remapModifiers(final ListType list) {
-        final Map<String, MapType<String>> ret = new LinkedHashMap<>();
+        final Map<String, MapType> ret = new LinkedHashMap<>();
 
         for (int i = 0, len = list.size(); i < len; ++i) {
-            final MapType<String> modifier = list.<String>getMap(i).copy();
+            final MapType modifier = list.<String>getMap(i).copy();
 
             final UUID uuid = makeUUID(modifier.getInts("uuid"));
             final String name = modifier.getString("name", "");
@@ -103,7 +103,7 @@ public final class V3945 {
 
                 ret.put(remappedUUID, modifier);
             } else if (remappedName != null) {
-                final MapType<String> existing = ret.get(remappedName);
+                final MapType existing = ret.get(remappedName);
                 if (existing != null) {
                     existing.setDouble("amount",
                         existing.getDouble("amount", 0.0) + modifier.getDouble("amount", 0.0)
@@ -127,7 +127,7 @@ public final class V3945 {
 
         final ListType retList = list.getTypeUtil().createEmptyList();
 
-        for (final MapType<String> modifier : ret.values()) {
+        for (final MapType modifier : ret.values()) {
             retList.addMap(modifier);
         }
 
@@ -137,13 +137,13 @@ public final class V3945 {
     public static void register() {
         MCTypeRegistry.ITEM_STACK.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
-                final MapType<String> components = data.getMap("components");
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
+                final MapType components = data.getMap("components");
                 if (components == null) {
                     return null;
                 }
 
-                final MapType<String> attributeModifiers = components.getMap("minecraft:attribute_modifiers");
+                final MapType attributeModifiers = components.getMap("minecraft:attribute_modifiers");
                 if (attributeModifiers == null) {
                     return null;
                 }
@@ -159,9 +159,9 @@ public final class V3945 {
             }
         });
 
-        final DataConverter<MapType<String>, MapType<String>> entityConverter = new DataConverter<>(VERSION) {
+        final DataConverter<MapType, MapType> entityConverter = new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 RenameHelper.renameSingle(data, "Attributes", "attributes");
 
                 final ListType attributes = data.getList("attributes", ObjectType.MAP);
@@ -170,7 +170,7 @@ public final class V3945 {
                 }
 
                 for (int i = 0, len = attributes.size(); i < len; ++i) {
-                    final MapType<String> attribute = attributes.getMap(i);
+                    final MapType attribute = attributes.getMap(i);
 
                     RenameHelper.renameSingle(attribute, "Name", "id");
                     RenameHelper.renameSingle(attribute, "Base", "base");
@@ -183,7 +183,7 @@ public final class V3945 {
                     }
 
                     for (int j = 0, len2 = modifiers.size(); j < len2; ++j) {
-                        final MapType<String> modifier = modifiers.getMap(j);
+                        final MapType modifier = modifiers.getMap(j);
 
                         RenameHelper.renameSingle(modifier, "UUID", "uuid");
                         RenameHelper.renameSingle(modifier, "Name", "name");
@@ -224,7 +224,7 @@ public final class V3945 {
 
         MCTypeRegistry.TILE_ENTITY.addConverterForId("minecraft:jukebox", new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 final long playingFor = data.getLong("TickCount") - data.getLong("RecordStartTick");
 
                 data.remove("IsPlaying");

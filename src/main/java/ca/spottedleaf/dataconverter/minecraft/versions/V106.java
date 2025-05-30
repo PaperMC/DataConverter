@@ -18,7 +18,7 @@ public final class V106 {
 
         MCTypeRegistry.UNTAGGED_SPAWNER.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 // While all converters for spawners check the id for this version, we don't because spawners exist in minecarts. ooops! Loading a chunk
                 // with a minecart spawner from 1.7.10 in 1.16.5 vanilla will fail to convert! Clearly there was a mistake in how they
                 // used and applied spawner converters. In anycase, do not check the id - we are not guaranteed to be a tile
@@ -27,7 +27,7 @@ public final class V106 {
                 final String entityId = data.getString("EntityId");
                 if (entityId != null) {
                     data.remove("EntityId");
-                    MapType<String> spawnData = data.getMap("SpawnData");
+                    MapType spawnData = data.getMap("SpawnData");
                     if (spawnData == null) {
                         spawnData = Types.NBT.createEmptyMap();
                         data.setMap("SpawnData", spawnData);
@@ -40,14 +40,14 @@ public final class V106 {
                     for (int i = 0, len = spawnPotentials.size(); i < len; ++i) {
                         // convert to standard entity format (it's not a coincidence a walker for spawners is only added
                         // in this version)
-                        final MapType<String> spawn = spawnPotentials.getMap(i);
+                        final MapType spawn = spawnPotentials.getMap(i);
                         final String spawnType = spawn.getString("Type");
                         if (spawnType == null) {
                             continue;
                         }
                         spawn.remove("Type");
 
-                        MapType<String> properties = spawn.getMap("Properties");
+                        MapType properties = spawn.getMap("Properties");
                         if (properties == null) {
                             properties = Types.NBT.createEmptyMap();
                         } else {
@@ -64,11 +64,11 @@ public final class V106 {
             }
         });
 
-        MCTypeRegistry.UNTAGGED_SPAWNER.addStructureWalker(VERSION, (final MapType<String> data, final long fromVersion, final long toVersion) -> {
+        MCTypeRegistry.UNTAGGED_SPAWNER.addStructureWalker(VERSION, (final MapType data, final long fromVersion, final long toVersion) -> {
             final ListType spawnPotentials = data.getList("SpawnPotentials", ObjectType.MAP);
             if (spawnPotentials != null) {
                 for (int i = 0, len = spawnPotentials.size(); i < len; ++i) {
-                    final MapType<String> spawnPotential = spawnPotentials.getMap(i);
+                    final MapType spawnPotential = spawnPotentials.getMap(i);
                     WalkerUtils.convert(MCTypeRegistry.ENTITY, spawnPotential, "Entity", fromVersion, toVersion);
                 }
             }

@@ -14,7 +14,7 @@ public final class V3451 {
     public static void register() {
         MCTypeRegistry.CHUNK.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 data.remove("isLightOn");
 
                 final ListType sections = data.getList("sections", ObjectType.MAP);
@@ -23,7 +23,7 @@ public final class V3451 {
                 }
 
                 for (int i = 0, len = sections.size(); i < len; ++i) {
-                    final MapType<String> section = sections.getMap(i);
+                    final MapType section = sections.getMap(i);
 
                     section.remove("BlockLight");
                     section.remove("SkyLight");

@@ -9,35 +9,37 @@ public final class MCTypeRegistry {
 
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    public static final MCDataType LEVEL              = new MCDataType("Level");
-    public static final MCDataType PLAYER             = new MCDataType("Player");
-    public static final MCDataType CHUNK              = new MCDataType("Chunk");
-    public static final MCDataType HOTBAR             = new MCDataType("CreativeHotbar");
-    public static final MCDataType OPTIONS            = new MCDataType("Options");
-    public static final MCDataType STRUCTURE          = new MCDataType("Structure");
-    public static final MCDataType STATS              = new MCDataType("Stats");
-    public static final MCDataType ADVANCEMENTS       = new MCDataType("Advancements");
-    public static final MCDataType POI_CHUNK          = new MCDataType("PoiChunk");
-    public static final MCDataType ENTITY_CHUNK       = new MCDataType("EntityChunk");
-    public static final IDDataType TILE_ENTITY        = new IDDataType("TileEntity");
-    public static final IDDataType ITEM_STACK         = new IDDataType("ItemStack");
-    public static final MCDataType BLOCK_STATE        = new MCDataType("BlockState");
-    public static final MCValueType FLAT_BLOCK_STATE  = new MCValueType("FlatBlockState");
-    public static final MCDataType DATA_COMPONENTS    = new MCDataType("DataComponents");
-    public static final MCDataType VILLAGER_TRADE     = new MCDataType("VillagerTrade");
-    public static final DynamicDataType PARTICLE      = new DynamicDataType("Particle");
-    public static final MCValueType ENTITY_NAME       = new MCValueType("EntityName");
-    public static final IDDataType ENTITY             = new IDDataType("Entity");
-    public static final MCValueType BLOCK_NAME        = new MCValueType("BlockName");
-    public static final MCValueType ITEM_NAME         = new MCValueType("ItemName");
-    public static final MCDataType UNTAGGED_SPAWNER   = new MCDataType("Spawner");
-    public static final MCDataType STRUCTURE_FEATURE  = new MCDataType("StructureFeature");
-    public static final MCDataType OBJECTIVE          = new MCDataType("Objective");
-    public static final MCDataType TEAM               = new MCDataType("Team");
-    public static final MCValueType RECIPE            = new MCValueType("RecipeName");
-    public static final MCValueType BIOME             = new MCValueType("Biome");
-    public static final MCDataType WORLD_GEN_SETTINGS = new MCDataType("WorldGenSettings");
-    public static final MCValueType GAME_EVENT_NAME   = new MCValueType("GameEventName");
+    public static final MCDataType LEVEL               = new MCDataType("Level");
+    public static final MCDataType PLAYER              = new MCDataType("Player");
+    public static final MCDataType CHUNK               = new MCDataType("Chunk");
+    public static final MCDataType HOTBAR              = new MCDataType("CreativeHotbar");
+    public static final MCDataType OPTIONS             = new MCDataType("Options");
+    public static final MCDataType STRUCTURE           = new MCDataType("Structure");
+    public static final MCDataType STATS               = new MCDataType("Stats");
+    public static final MCDataType ADVANCEMENTS        = new MCDataType("Advancements");
+    public static final MCDataType POI_CHUNK           = new MCDataType("PoiChunk");
+    public static final MCDataType ENTITY_CHUNK        = new MCDataType("EntityChunk");
+    public static final IDDataType TILE_ENTITY         = new IDDataType("TileEntity");
+    public static final IDDataType ITEM_STACK          = new IDDataType("ItemStack");
+    public static final MCDataType BLOCK_STATE         = new MCDataType("BlockState");
+    public static final MCValueType FLAT_BLOCK_STATE   = new MCValueType("FlatBlockState");
+    public static final MCDataType DATA_COMPONENTS     = new MCDataType("DataComponents");
+    public static final MCDataType VILLAGER_TRADE      = new MCDataType("VillagerTrade");
+    public static final DynamicDataType PARTICLE       = new DynamicDataType("Particle");
+    public static final MCValueType ENTITY_NAME        = new MCValueType("EntityName");
+    public static final IDDataType ENTITY              = new IDDataType("Entity");
+    public static final MCValueType BLOCK_NAME         = new MCValueType("BlockName");
+    public static final MCValueType ITEM_NAME          = new MCValueType("ItemName");
+    public static final MCDataType UNTAGGED_SPAWNER    = new MCDataType("Spawner");
+    public static final MCDataType STRUCTURE_FEATURE   = new MCDataType("StructureFeature");
+    public static final MCDataType OBJECTIVE           = new MCDataType("Objective");
+    public static final MCDataType TEAM                = new MCDataType("Team");
+    public static final MCValueType RECIPE             = new MCValueType("RecipeName");
+    public static final MCValueType BIOME              = new MCValueType("Biome");
+    public static final MCDataType WORLD_GEN_SETTINGS  = new MCDataType("WorldGenSettings");
+    public static final MCValueType GAME_EVENT_NAME    = new MCValueType("GameEventName");
+    public static final DynamicDataType TEXT_COMPONENT = new DynamicDataType("TextComponent");
+    public static final MCDataType ENTITY_EQUIPMENT    = new MCDataType("EntityEquipment");
 
     public static final MCValueType MULTI_NOISE_BIOME_SOURCE_PARAMETER_LIST = new MCValueType("MultiNoiseBiomeSourceParameterList");
 
@@ -47,8 +49,8 @@ public final class MCTypeRegistry {
     public static final MCDataType SAVED_DATA_MAP_DATA                  = new MCDataType("SavedData/MapData");
     public static final MCDataType SAVED_DATA_RAIDS                     = new MCDataType("SavedData/Raids");
     public static final MCDataType SAVED_DATA_COMMAND_STORAGE           = new MCDataType("SavedData/CommandStorage");
-    public static final MCDataType SAVED_DATA_FORCED_CHUNKS             = new MCDataType("SavedData/Chunks");
     public static final MCDataType SAVED_DATA_MAP_INDEX                 = new MCDataType("SavedData/IdCounts");
+    public static final MCDataType SAVED_DATA_TICKETS                   = new MCDataType("SavedData/Tickets");
 
     public static final MCValueType DATACONVERTER_CUSTOM_TYPE_COMMAND = new MCValueType("DC_Custom/Command");
 
@@ -257,7 +259,7 @@ public final class MCTypeRegistry {
         V3097.register();
         V3108.register();
         V3201.register();
-        // V3202 registers a simple tile entity
+        V3202.register();
         V3203.register();
         V3204.register();
         V3209.register();
@@ -329,6 +331,27 @@ public final class MCTypeRegistry {
         V4181.register();
         V4185.register();
         V4187.register();
+        // V1.21.5
+        V4290.register();
+        V4291.register();
+        V4292.register();
+        V4293.register();
+        V4294.register();
+        V4295.register();
+        V4296.register();
+        V4297.register();
+        V4299.register();
+        V4300.register();
+        V4301.register();
+        V4302.register();
+        V4303.register();
+        V4305.register();
+        V4306.register();
+        V4307.register();
+        V4309.register();
+        V4311.register();
+        V4312.register();
+        V4314.register();
     }
 
     private MCTypeRegistry() {}

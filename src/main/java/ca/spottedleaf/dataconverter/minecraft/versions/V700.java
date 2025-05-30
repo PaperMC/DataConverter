@@ -9,14 +9,10 @@ public final class V700 {
 
     private static final int VERSION = MCVersions.V1_10_2 + 188;
 
-    private static void registerMob(final String id) {
-        V100.registerEquipment(VERSION, id);
-    }
-
     public static void register() {
         MCTypeRegistry.ENTITY.addConverterForId("Guardian", new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 if (data.getBoolean("Elder")) {
                     data.setString("id", "ElderGuardian");
                 }
@@ -25,7 +21,7 @@ public final class V700 {
             }
         });
 
-        registerMob("ElderGuardian");
+        //registerMob("ElderGuardian"); // is now simple in 1.21.5
     }
 
     private V700() {}

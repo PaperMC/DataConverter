@@ -14,7 +14,7 @@ public final class V703 {
     public static void register() {
         MCTypeRegistry.ENTITY.addConverterForId("EntityHorse", new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 final int type = data.getInt("Type");
                 data.remove("Type");
 
@@ -46,21 +46,16 @@ public final class V703 {
         });
 
         MCTypeRegistry.ENTITY.addWalker(VERSION, "Horse", new DataWalkerItems("ArmorItem", "SaddleItem"));
-        V100.registerEquipment(VERSION, "Horse");
 
         MCTypeRegistry.ENTITY.addWalker(VERSION, "Donkey", new DataWalkerItems("SaddleItem"));
         MCTypeRegistry.ENTITY.addWalker(VERSION, "Donkey", new DataWalkerItemLists("Items"));
-        V100.registerEquipment(VERSION, "Donkey");
 
         MCTypeRegistry.ENTITY.addWalker(VERSION, "Mule", new DataWalkerItems("SaddleItem"));
         MCTypeRegistry.ENTITY.addWalker(VERSION, "Mule", new DataWalkerItemLists("Items"));
-        V100.registerEquipment(VERSION, "Mule");
 
         MCTypeRegistry.ENTITY.addWalker(VERSION, "ZombieHorse", new DataWalkerItems("SaddleItem"));
-        V100.registerEquipment(VERSION, "ZombieHorse");
 
         MCTypeRegistry.ENTITY.addWalker(VERSION, "SkeletonHorse", new DataWalkerItems("SaddleItem"));
-        V100.registerEquipment(VERSION, "SkeletonHorse");
     }
 
     private V703() {}

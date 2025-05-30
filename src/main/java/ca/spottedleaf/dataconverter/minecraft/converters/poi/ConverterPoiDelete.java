@@ -6,7 +6,7 @@ import ca.spottedleaf.dataconverter.types.MapType;
 import ca.spottedleaf.dataconverter.types.ObjectType;
 import java.util.function.Predicate;
 
-public final class ConverterPoiDelete extends DataConverter<MapType<String>, MapType<String>> {
+public final class ConverterPoiDelete extends DataConverter<MapType, MapType> {
 
     private final Predicate<String> delete;
 
@@ -21,14 +21,14 @@ public final class ConverterPoiDelete extends DataConverter<MapType<String>, Map
     }
 
     @Override
-    public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
-        final MapType<String> sections = data.getMap("Sections");
+    public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
+        final MapType sections = data.getMap("Sections");
         if (sections == null) {
             return null;
         }
 
         for (final String key : sections.keys()) {
-            final MapType<String> section = sections.getMap(key);
+            final MapType section = sections.getMap(key);
 
             final ListType records = section.getList("Records", ObjectType.MAP);
 
@@ -37,7 +37,7 @@ public final class ConverterPoiDelete extends DataConverter<MapType<String>, Map
             }
 
             for (int i = 0; i < records.size();) {
-                final MapType<String> record = records.getMap(i);
+                final MapType record = records.getMap(i);
 
                 final String type = record.getString("type");
                 if (type != null && this.delete.test(type)) {

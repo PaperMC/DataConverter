@@ -19,15 +19,15 @@ public final class ConverterParticleToNBT {
 
     private static CompoundTag parseNBT(final String flat) {
         try {
-            return TagParser.parseTag(flat);
+            return TagParser.parseCompoundFully(flat);
         } catch (final Exception ex) {
             LOGGER.warn("Failed to parse nbt: " + flat, ex);
             return null;
         }
     }
 
-    private static void convertItem(final MapType<String> nbt, final String data) {
-        final MapType<String> itemNBT = nbt.getTypeUtil().createEmptyMap();
+    private static void convertItem(final MapType nbt, final String data) {
+        final MapType itemNBT = nbt.getTypeUtil().createEmptyMap();
         nbt.setMap("item", itemNBT);
         itemNBT.setInt("Count", 1);
 
@@ -47,8 +47,8 @@ public final class ConverterParticleToNBT {
         }
     }
 
-    private static MapType<String> parseProperties(final String input, final TypeUtil type) {
-        final MapType<String> ret = type.createEmptyMap();
+    private static MapType parseProperties(final String input, final TypeUtil<?> type) {
+        final MapType ret = type.createEmptyMap();
         try {
             // format: [p1=v1, p2=v2, p3=v3, ...]
             final StringReader reader = new StringReader(input);
@@ -90,8 +90,8 @@ public final class ConverterParticleToNBT {
         }
     }
 
-    private static void convertBlock(final MapType<String> nbt, final String data) {
-        final MapType<String> blockNBT = nbt.getTypeUtil().createEmptyMap();
+    private static void convertBlock(final MapType nbt, final String data) {
+        final MapType blockNBT = nbt.getTypeUtil().createEmptyMap();
         nbt.setMap("block_state", blockNBT);
 
         final int propertiesStart = data.indexOf('[');
@@ -103,13 +103,13 @@ public final class ConverterParticleToNBT {
         blockNBT.setString("Name", NamespaceUtil.correctNamespace(data.substring(0, propertiesStart)));
 
         // blockname{properties}
-        final MapType<String> properties = parseProperties(data.substring(propertiesStart), nbt.getTypeUtil());
+        final MapType properties = parseProperties(data.substring(propertiesStart), nbt.getTypeUtil());
         if (properties != null && !properties.isEmpty()) {
             blockNBT.setMap("Properties", properties);
         }
     }
 
-    private static ListType parseFloatVector(final StringReader reader, final TypeUtil type) throws CommandSyntaxException {
+    private static ListType parseFloatVector(final StringReader reader, final TypeUtil<?> type) throws CommandSyntaxException {
         final float x = reader.readFloat();
 
         reader.expect(' ');
@@ -126,7 +126,7 @@ public final class ConverterParticleToNBT {
         return ret;
     }
 
-    private static void convertDust(final MapType<String> nbt, final String data) {
+    private static void convertDust(final MapType nbt, final String data) {
         try {
             final StringReader reader = new StringReader(data);
 
@@ -142,7 +142,7 @@ public final class ConverterParticleToNBT {
         }
     }
 
-    private static void convertColorDust(final MapType<String> nbt, final String data) {
+    private static void convertColorDust(final MapType nbt, final String data) {
         try {
             final StringReader reader = new StringReader(data);
 
@@ -162,7 +162,7 @@ public final class ConverterParticleToNBT {
         }
     }
 
-    private static void convertSculk(final MapType<String> nbt, final String data) {
+    private static void convertSculk(final MapType nbt, final String data) {
         try {
             final StringReader reader = new StringReader(data);
 
@@ -174,7 +174,7 @@ public final class ConverterParticleToNBT {
         }
     }
 
-    private static void convertVibration(final MapType<String> nbt, final String data) {
+    private static void convertVibration(final MapType nbt, final String data) {
         try {
             final StringReader reader = new StringReader(data);
 
@@ -191,7 +191,7 @@ public final class ConverterParticleToNBT {
 
             nbt.setInt("arrival_in_ticks", arrival);
 
-            final MapType<String> destination = nbt.getTypeUtil().createEmptyMap();
+            final MapType destination = nbt.getTypeUtil().createEmptyMap();
             nbt.setMap("destination", destination);
 
             destination.setString("type", "minecraft:block");
@@ -207,7 +207,7 @@ public final class ConverterParticleToNBT {
         }
     }
 
-    private static void convertShriek(final MapType<String> nbt, final String data) {
+    private static void convertShriek(final MapType nbt, final String data) {
         try {
             final StringReader reader = new StringReader(data);
 
@@ -219,11 +219,11 @@ public final class ConverterParticleToNBT {
         }
     }
 
-    public static MapType<String> convert(final String flat, final TypeUtil type) {
+    public static MapType convert(final String flat, final TypeUtil<?> type) {
         final String[] split = flat.split(" ", 2);
         final String name = NamespaceUtil.correctNamespace(split[0]);
 
-        final MapType<String> ret = type.createEmptyMap();
+        final MapType ret = type.createEmptyMap();
         ret.setString("type", name);
 
         if (split.length > 1) {

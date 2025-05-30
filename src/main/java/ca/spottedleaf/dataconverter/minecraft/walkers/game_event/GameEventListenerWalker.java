@@ -5,16 +5,16 @@ import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
 import ca.spottedleaf.dataconverter.minecraft.walkers.generic.WalkerUtils;
 import ca.spottedleaf.dataconverter.types.MapType;
 
-public final class GameEventListenerWalker implements DataWalker<MapType<String>> {
+public final class GameEventListenerWalker implements DataWalker<MapType> {
 
     @Override
-    public MapType<String> walk(final MapType<String> data, final long fromVersion, final long toVersion) {
-        final MapType<String> listener = data.getMap("listener");
+    public MapType walk(final MapType data, final long fromVersion, final long toVersion) {
+        final MapType listener = data.getMap("listener");
         if (listener == null) {
             return null;
         }
 
-        final MapType<String> event = listener.getMap("event");
+        final MapType event = listener.getMap("event");
         if (event == null) {
             return null;
         }

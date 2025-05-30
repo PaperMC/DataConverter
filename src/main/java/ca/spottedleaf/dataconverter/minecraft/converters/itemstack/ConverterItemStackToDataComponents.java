@@ -131,7 +131,7 @@ public final class ConverterItemStackToDataComponents {
         return type >= 0 && type < MAP_DECORATION_CONVERSION_TABLE.length ? MAP_DECORATION_CONVERSION_TABLE[type] : MAP_DECORATION_CONVERSION_TABLE[0];
     }
 
-    private static void convertBlockStateProperties(final MapType<String> properties) {
+    private static void convertBlockStateProperties(final MapType properties) {
         // convert values stored as boolean/integer to string
         for (final String key : properties.keys()) {
             final Object value = properties.getGeneric(key);
@@ -145,7 +145,7 @@ public final class ConverterItemStackToDataComponents {
         }
     }
 
-    private static void convertTileEntity(final MapType<String> tileEntity, final TransientItemStack transientItem) {
+    private static void convertTileEntity(final MapType tileEntity, final TransientItemStack transientItem) {
         final Object lock = tileEntity.getGeneric("Lock");
         if (lock != null) {
             tileEntity.remove("Lock");
@@ -154,7 +154,7 @@ public final class ConverterItemStackToDataComponents {
 
         final Object lootTable = tileEntity.getGeneric("LootTable");
         if (lootTable != null) {
-            final MapType<String> containerLoot = tileEntity.getTypeUtil().createEmptyMap();
+            final MapType containerLoot = tileEntity.getTypeUtil().createEmptyMap();
             transientItem.componentSetMap("minecraft:container_loot", containerLoot);
 
             containerLoot.setGeneric("loot_table", lootTable);
@@ -194,7 +194,7 @@ public final class ConverterItemStackToDataComponents {
                     final ListType container = tileEntity.getTypeUtil().createEmptyList();
                     transientItem.componentSetList("minecraft:container", container);
 
-                    final MapType<String> wrappedItem = tileEntity.getTypeUtil().createEmptyMap();
+                    final MapType wrappedItem = tileEntity.getTypeUtil().createEmptyMap();
                     container.addMap(wrappedItem);
 
                     wrappedItem.setInt("slot", 0);
@@ -242,11 +242,11 @@ public final class ConverterItemStackToDataComponents {
                     transientItem.componentSetList("minecraft:container", items);
 
                     for (int i = 0, len = items.size(); i < len; ++i) {
-                        final MapType<String> item = items.getMap(i);
+                        final MapType item = items.getMap(i);
                         final int slot = (int)item.getByte("Slot", (byte)0) & 0xFF;
                         item.remove("Slot");
 
-                        final MapType<String> wrappedItem = item.getTypeUtil().createEmptyMap();
+                        final MapType wrappedItem = item.getTypeUtil().createEmptyMap();
                         items.setMap(i, wrappedItem);
 
                         wrappedItem.setInt("slot", slot);
@@ -269,23 +269,23 @@ public final class ConverterItemStackToDataComponents {
         }
     }
 
-    private static void convertEnchantments(final TransientItemStack transientItem, final TypeUtil type,
+    private static void convertEnchantments(final TransientItemStack transientItem, final TypeUtil<?> type,
                                             final String tagKey, final String componentKey,
                                             final boolean hideToolTip) {
         final ListType enchantments = transientItem.tagRemoveList(tagKey, ObjectType.MAP);
         if (enchantments == null || enchantments.size() == 0) {
             if (hideToolTip) {
-                final MapType<String> newEnchants = type.createEmptyMap();
+                final MapType newEnchants = type.createEmptyMap();
                 transientItem.componentSetMap(componentKey, newEnchants);
 
                 newEnchants.setMap("levels", type.createEmptyMap());
                 newEnchants.setBoolean("show_in_tooltip", false);
             }
         } else {
-            final MapType<String> newEnchantments = type.createEmptyMap();
+            final MapType newEnchantments = type.createEmptyMap();
 
             for (int i = 0, len = enchantments.size(); i < len; ++i) {
-                final MapType<String> enchantment = enchantments.getMap(i);
+                final MapType enchantment = enchantments.getMap(i);
 
                 final String id = enchantment.getString("id");
                 final Number level = enchantment.getNumber("lvl");
@@ -298,7 +298,7 @@ public final class ConverterItemStackToDataComponents {
             }
 
             if (!newEnchantments.isEmpty() || hideToolTip) {
-                final MapType<String> newEnchants = type.createEmptyMap();
+                final MapType newEnchants = type.createEmptyMap();
                 transientItem.componentSetMap(componentKey, newEnchants);
 
                 newEnchants.setMap("levels", newEnchantments);
@@ -313,8 +313,8 @@ public final class ConverterItemStackToDataComponents {
         }
     }
 
-    private static void convertDisplay(final TransientItemStack transientItem, final TypeUtil type, final int flags) {
-        final MapType<String> display = transientItem.tag.getMap("display");
+    private static void convertDisplay(final TransientItemStack transientItem, final TypeUtil<?> type, final int flags) {
+        final MapType display = transientItem.tag.getMap("display");
 
         if (display != null) {
             final Object name = display.getGeneric("Name");
@@ -340,7 +340,7 @@ public final class ConverterItemStackToDataComponents {
                 display.remove("color");
             }
 
-            final MapType<String> dyedColor = type.createEmptyMap();
+            final MapType dyedColor = type.createEmptyMap();
             transientItem.componentSetMap("minecraft:dyed_color", dyedColor);
 
             dyedColor.setInt("rgb", color == null ? DEFAULT_LEATHER_COLOUR : color.intValue());
@@ -373,7 +373,7 @@ public final class ConverterItemStackToDataComponents {
         }
     }
 
-    public static MapType<String> convertBlockStatePredicate(final String value, final TypeUtil type) {
+    public static MapType convertBlockStatePredicate(final String value, final TypeUtil<?> type) {
         final int propertyStart = value.indexOf('[');
         final int nbtStart = value.indexOf('{');
         int blockNameEnd = value.length();
@@ -385,7 +385,7 @@ public final class ConverterItemStackToDataComponents {
             blockNameEnd = Math.min(blockNameEnd, nbtStart);
         }
 
-        final MapType<String> ret = type.createEmptyMap();
+        final MapType ret = type.createEmptyMap();
 
         final String blockName = value.substring(0, blockNameEnd);
 
@@ -396,7 +396,7 @@ public final class ConverterItemStackToDataComponents {
             // unlike DFU, set the fromIndex so that on malformed data we do not IOOBE
             final int propertyEnd = value.indexOf(']', propertyStart + 1);
             if (propertyEnd != -1) {
-                final MapType<String> state = type.createEmptyMap();
+                final MapType state = type.createEmptyMap();
                 ret.setMap("state", state);
 
                 for (final String property : value.substring(propertyStart + 1, propertyEnd).split(",")) {
@@ -425,7 +425,7 @@ public final class ConverterItemStackToDataComponents {
         return ret;
     }
 
-    private static void convertBlockStatePredicates(final TransientItemStack item, final TypeUtil type,
+    private static void convertBlockStatePredicates(final TransientItemStack item, final TypeUtil<?> type,
                                                     final String tagKey, final String componentKey,
                                                     final boolean hideInTooltip) {
         final ListType blocks = item.tagRemoveListUnchecked(tagKey);
@@ -433,7 +433,7 @@ public final class ConverterItemStackToDataComponents {
             return;
         }
 
-        final MapType<String> blockPredicates = type.createEmptyMap();
+        final MapType blockPredicates = type.createEmptyMap();
         item.componentSetMap(componentKey, blockPredicates);
 
         if (hideInTooltip) {
@@ -451,13 +451,13 @@ public final class ConverterItemStackToDataComponents {
                 continue;
             }
 
-            final MapType<String> predicate = convertBlockStatePredicate(blockString, type);
+            final MapType predicate = convertBlockStatePredicate(blockString, type);
 
             predicates.addMap(predicate);
         }
     }
 
-    private static void convertAdventureMode(final TransientItemStack item, final TypeUtil type, final int flags) {
+    private static void convertAdventureMode(final TransientItemStack item, final TypeUtil<?> type, final int flags) {
         convertBlockStatePredicates(
                 item, type, "CanDestroy", "minecraft:can_break",
                 (flags & TOOLTIP_FLAG_HIDE_CAN_DESTROY) != 0
@@ -468,7 +468,7 @@ public final class ConverterItemStackToDataComponents {
         );
     }
 
-    private static void copy(final MapType<String> src, final String srcKey, final MapType<String> dst, final String dstKey) {
+    private static void copy(final MapType src, final String srcKey, final MapType dst, final String dstKey) {
         if (src == null || dst == null) {
             return;
         }
@@ -479,10 +479,10 @@ public final class ConverterItemStackToDataComponents {
         }
     }
 
-    private static MapType<String> convertAttribute(final Object inputGeneric, final TypeUtil type) {
-        final MapType<String> input = inputGeneric instanceof MapType<?> casted ? (MapType<String>)casted : null;
+    private static MapType convertAttribute(final Object inputGeneric, final TypeUtil<?> type) {
+        final MapType input = inputGeneric instanceof MapType casted ? (MapType)casted : null;
 
-        final MapType<String> ret = type.createEmptyMap();
+        final MapType ret = type.createEmptyMap();
         ret.setString("name", "");
         ret.setDouble("amount", 0.0);
         ret.setString("operation", "add_value");
@@ -516,7 +516,7 @@ public final class ConverterItemStackToDataComponents {
         return ret;
     }
 
-    private static void convertAttributes(final TransientItemStack item, final TypeUtil type, final int flags) {
+    private static void convertAttributes(final TransientItemStack item, final TypeUtil<?> type, final int flags) {
         final ListType attributes = item.tagRemoveListUnchecked("AttributeModifiers");
         final ListType newAttributes = type.createEmptyList();
 
@@ -527,7 +527,7 @@ public final class ConverterItemStackToDataComponents {
         }
 
         if (newAttributes.size() > 0) {
-            final MapType<String> newModifiers = type.createEmptyMap();
+            final MapType newModifiers = type.createEmptyMap();
             item.componentSetMap("minecraft:attribute_modifiers", newModifiers);
 
             newModifiers.setList("modifiers", newAttributes);
@@ -539,20 +539,19 @@ public final class ConverterItemStackToDataComponents {
         }
     }
 
-    private static void convertMap(final TransientItemStack item, final TypeUtil type) {
+    private static void convertMap(final TransientItemStack item, final TypeUtil<?> type) {
         item.tagMigrateToComponent("map", "minecraft:map_id");
 
         final ListType decorations = item.tagRemoveListUnchecked("Decorations");
         if (decorations != null) {
-            final MapType<String> newDecorations = type.createEmptyMap();
+            final MapType newDecorations = type.createEmptyMap();
 
             for (int i = 0, len = decorations.size(); i < len; ++i) {
                 final Object decorationGeneric = decorations.getGeneric(i);
 
-                final MapType<String> decoration = decorationGeneric instanceof MapType<?> casted ? (MapType<String>)casted : null;
+                final MapType decoration = decorationGeneric instanceof MapType casted ? (MapType)casted : null;
 
-                // note: getForcedString mirrors DFU converting to string for key
-                final String id = decoration == null ? "" : decoration.getForcedString("id", "");
+                final String id = decoration == null ? "" : decoration.getString("id", "");
                 if (newDecorations.hasKey(id)) {
                     // note: never replace existing decorations by id
                     continue;
@@ -563,7 +562,7 @@ public final class ConverterItemStackToDataComponents {
                 final double z = decoration == null ? 0.0 : decoration.getDouble("z", 0.0);
                 final float rot = decoration == null ? 0.0f : (float)decoration.getDouble("rot", 0.0);
 
-                final MapType<String> newDecoration = type.createEmptyMap();
+                final MapType newDecoration = type.createEmptyMap();
                 newDecorations.setMap(id, newDecoration);
 
                 newDecoration.setString("type", convertMapDecorationId(typeId));
@@ -578,8 +577,8 @@ public final class ConverterItemStackToDataComponents {
         }
     }
 
-    private static void convertPotion(final TransientItemStack item, final TypeUtil type) {
-        final MapType<String> potionContents = type.createEmptyMap();
+    private static void convertPotion(final TransientItemStack item, final TypeUtil<?> type) {
+        final MapType potionContents = type.createEmptyMap();
 
         final String potion = item.tagRemoveString("Potion");
 
@@ -595,8 +594,8 @@ public final class ConverterItemStackToDataComponents {
         }
     }
 
-    private static MapType<String> makeFilteredText(final String raw, final String filtered, final TypeUtil type) {
-        final MapType<String> ret = type.createEmptyMap();
+    private static MapType makeFilteredText(final String raw, final String filtered, final TypeUtil<?> type) {
+        final MapType ret = type.createEmptyMap();
 
         ret.setString("raw", raw);
         if (filtered != null) {
@@ -606,10 +605,10 @@ public final class ConverterItemStackToDataComponents {
         return ret;
     }
 
-    private static ListType convertBookPages(final TransientItemStack item, final TypeUtil type) {
+    private static ListType convertBookPages(final TransientItemStack item, final TypeUtil<?> type) {
         final ListType oldPages = item.tagRemoveListUnchecked("pages");
 
-        final MapType<String> filteredPages = item.tagRemoveMap("filtered_pages");
+        final MapType filteredPages = item.tagRemoveMap("filtered_pages");
 
         if (oldPages == null || oldPages.size() == 0) {
             return null;
@@ -627,20 +626,20 @@ public final class ConverterItemStackToDataComponents {
         return ret;
     }
 
-    private static void convertWritableBook(final TransientItemStack item, final TypeUtil type) {
+    private static void convertWritableBook(final TransientItemStack item, final TypeUtil<?> type) {
         final ListType pages = convertBookPages(item, type);
         if (pages != null) {
-            final MapType<String> bookContent = type.createEmptyMap();
+            final MapType bookContent = type.createEmptyMap();
             item.componentSetMap("minecraft:writable_book_content", bookContent);
 
             bookContent.setList("pages", pages);
         }
     }
 
-    private static void convertWrittenBook(final TransientItemStack item, final TypeUtil type) {
+    private static void convertWrittenBook(final TransientItemStack item, final TypeUtil<?> type) {
         final ListType pages = convertBookPages(item, type);
 
-        final MapType<String> bookContent = type.createEmptyMap();
+        final MapType bookContent = type.createEmptyMap();
         item.componentSetMap("minecraft:written_book_content", bookContent);
         if (pages != null) {
             bookContent.setList("pages", pages);
@@ -651,13 +650,13 @@ public final class ConverterItemStackToDataComponents {
 
         bookContent.setMap("title", makeFilteredText(title, filteredTitle, type));
 
-        item.migrateTagTo("author", bookContent, "author");
+        bookContent.setString("author", item.tagRemoveString("author", ""));
         item.migrateTagTo("resolved", bookContent, "resolved");
         item.migrateTagTo("generation", bookContent, "generation");
     }
 
-    private static void convertMobBucket(final TransientItemStack item, final TypeUtil type) {
-        final MapType<String> bucketEntityData = type.createEmptyMap();
+    private static void convertMobBucket(final TransientItemStack item, final TypeUtil<?> type) {
+        final MapType bucketEntityData = type.createEmptyMap();
 
         for (final String oldKey : BUCKETED_MOB_TAGS) {
             item.migrateTagTo(oldKey, bucketEntityData, oldKey);
@@ -668,7 +667,7 @@ public final class ConverterItemStackToDataComponents {
         }
     }
 
-    private static void convertCompass(final TransientItemStack item, final TypeUtil type) {
+    private static void convertCompass(final TransientItemStack item, final TypeUtil<?> type) {
         final Object lodestonePos = item.tagRemoveGeneric("LodestonePos");
         final Object lodestoneDim = item.tagRemoveGeneric("LodestoneDimension");
 
@@ -676,11 +675,11 @@ public final class ConverterItemStackToDataComponents {
             return;
         }
 
-        final MapType<String> lodestoneTracker = type.createEmptyMap();
+        final MapType lodestoneTracker = type.createEmptyMap();
         item.componentSetMap("minecraft:lodestone_tracker", lodestoneTracker);
 
         if (lodestonePos != null && lodestoneDim != null) {
-            final MapType<String> target = type.createEmptyMap();
+            final MapType target = type.createEmptyMap();
             lodestoneTracker.setMap("target", target);
 
             target.setGeneric("pos", lodestonePos);
@@ -694,11 +693,11 @@ public final class ConverterItemStackToDataComponents {
     }
 
     private static void convertFireworkExplosion(final Object inputGeneric) {
-        if (!(inputGeneric instanceof MapType<?>)) {
+        if (!(inputGeneric instanceof MapType)) {
             return;
         }
 
-        final MapType<String> input = (MapType<String>)inputGeneric;
+        final MapType input = (MapType)inputGeneric;
 
         RenameHelper.renameSingle(input, "Colors", "colors");
         RenameHelper.renameSingle(input, "FadeColors", "fade_colors");
@@ -735,15 +734,15 @@ public final class ConverterItemStackToDataComponents {
         input.setString("shape", newType);
     }
 
-    private static void convertFireworkRocket(final TransientItemStack item, final TypeUtil type) {
+    private static void convertFireworkRocket(final TransientItemStack item, final TypeUtil<?> type) {
         // adhere to fixSubTag(true) behavior
         final Object fireworksGeneric = item.tag.getGeneric("Fireworks");
         if (fireworksGeneric == null) {
             return;
         }
 
-        if (!(fireworksGeneric instanceof MapType<?>)) {
-            final MapType<String> newFireworks = type.createEmptyMap();
+        if (!(fireworksGeneric instanceof MapType)) {
+            final MapType newFireworks = type.createEmptyMap();
             item.componentSetMap("minecraft:fireworks", newFireworks);
 
             newFireworks.setList("explosions", type.createEmptyList());
@@ -752,9 +751,9 @@ public final class ConverterItemStackToDataComponents {
             return;
         }
 
-        final MapType<String> fireworks = (MapType<String>)fireworksGeneric;
+        final MapType fireworks = (MapType)fireworksGeneric;
 
-        final MapType<String> newFireworks = type.createEmptyMap();
+        final MapType newFireworks = type.createEmptyMap();
         item.componentSetMap("minecraft:fireworks", newFireworks);
 
         final int flight = fireworks.getInt("Flight", 0);
@@ -774,11 +773,11 @@ public final class ConverterItemStackToDataComponents {
         }
     }
 
-    private static Object copyGeneric(final Object value, final TypeUtil type) {
+    private static Object copyGeneric(final Object value, final TypeUtil<?> type) {
         if (value == null || value instanceof Number || value instanceof String) {
             return value;
         }
-        if (value instanceof MapType<?> mapType) {
+        if (value instanceof MapType mapType) {
             return mapType.copy();
         }
         if (value instanceof ListType listType) {
@@ -792,22 +791,22 @@ public final class ConverterItemStackToDataComponents {
         return dummy.copy().getGeneric(0);
     }
 
-    private static void convertFireworkStar(final TransientItemStack item, final TypeUtil type) {
+    private static void convertFireworkStar(final TransientItemStack item, final TypeUtil<?> type) {
         // note: adhere to fixSubTag(true) behavior
         final Object explosionGeneric = item.tag.getGeneric("Explosion");
         if (explosionGeneric == null) {
             return;
         }
 
-        if (!(explosionGeneric instanceof MapType<?>)) {
+        if (!(explosionGeneric instanceof MapType)) {
             // important that we copy the generic value when not moving it
             item.componentSetGeneric("minecraft:firework_explosion", copyGeneric(explosionGeneric, type));
             return;
         }
 
-        final MapType<String> explosion = (MapType<String>)explosionGeneric;
+        final MapType explosion = (MapType)explosionGeneric;
 
-        final MapType<String> explosionCopy = explosion.copy();
+        final MapType explosionCopy = explosion.copy();
         item.componentSetGeneric("minecraft:firework_explosion", explosionCopy);
         convertFireworkExplosion(explosionCopy);
 
@@ -837,7 +836,7 @@ public final class ConverterItemStackToDataComponents {
         return true;
     }
 
-    private static ListType convertProperties(final MapType<String> properties, final TypeUtil type) {
+    private static ListType convertProperties(final MapType properties, final TypeUtil<?> type) {
         final ListType ret = type.createEmptyList();
 
         for (final String propertyKey : properties.keys()) {
@@ -848,12 +847,12 @@ public final class ConverterItemStackToDataComponents {
             }
 
             for (int i = 0, len = propertyValues.size(); i < len; ++i) {
-                final MapType<String> property = propertyValues.getGeneric(i) instanceof MapType<?> casted ? (MapType<String>)casted : null;
+                final MapType property = propertyValues.getGeneric(i) instanceof MapType casted ? (MapType)casted : null;
 
                 final String value = property == null ? "" : property.getString("Value", "");
                 final String signature = property == null ? null : property.getString("Signature");
 
-                final MapType<String> newProperty = type.createEmptyMap();
+                final MapType newProperty = type.createEmptyMap();
                 ret.addMap(newProperty);
 
                 newProperty.setString("name", propertyKey);
@@ -867,8 +866,8 @@ public final class ConverterItemStackToDataComponents {
         return ret;
     }
 
-    public static MapType<String> convertProfile(final Object inputGeneric, final TypeUtil type) {
-        final MapType<String> ret = type.createEmptyMap();
+    public static MapType convertProfile(final Object inputGeneric, final TypeUtil<?> type) {
+        final MapType ret = type.createEmptyMap();
 
         if (inputGeneric instanceof String name) {
             if (!isValidPlayerName(name)) {
@@ -880,7 +879,7 @@ public final class ConverterItemStackToDataComponents {
             return ret;
         }
 
-        final MapType<String> input = inputGeneric instanceof MapType<?> casted ? (MapType<String>)casted : null;
+        final MapType input = inputGeneric instanceof MapType casted ? (MapType)casted : null;
 
         final String name = input == null ? "" : input.getString("Name", "");
 
@@ -894,7 +893,7 @@ public final class ConverterItemStackToDataComponents {
             ret.setGeneric("id", id);
         }
 
-        final MapType<String> properties = input == null ? null : input.getMap("Properties");
+        final MapType properties = input == null ? null : input.getMap("Properties");
         if (properties != null && !properties.isEmpty()) {
             ret.setList("properties", convertProperties(properties, type));
         }
@@ -902,7 +901,7 @@ public final class ConverterItemStackToDataComponents {
         return ret;
     }
 
-    private static void convertSukll(final TransientItemStack item, final TypeUtil type) {
+    private static void convertSukll(final TransientItemStack item, final TypeUtil<?> type) {
         final Object skullOwnerGeneric = item.tagRemoveGeneric("SkullOwner");
         if (skullOwnerGeneric == null) {
             return;
@@ -912,12 +911,12 @@ public final class ConverterItemStackToDataComponents {
     }
 
     // input is unmodified
-    public static MapType<String> convertItem(final MapType<String> input) {
+    public static MapType convertItem(final MapType input) {
         if (!input.hasKey("id", ObjectType.STRING) || !input.hasKey("Count", ObjectType.NUMBER)) {
             return input.copy();
         }
 
-        final TypeUtil type = input.getTypeUtil();
+        final TypeUtil<?> type = input.getTypeUtil();
 
         final TransientItemStack item = new TransientItemStack(input);
 
@@ -925,7 +924,7 @@ public final class ConverterItemStackToDataComponents {
         item.tagMigrateToComponent("RepairCost", "minecraft:repair_cost", 0);
         item.tagMigrateToComponent("CustomModelData", "minecraft:custom_model_data");
 
-        final MapType<String> blockStateProperties = item.tagRemoveMap("BlockStateTag");
+        final MapType blockStateProperties = item.tagRemoveMap("BlockStateTag");
         if (blockStateProperties != null) {
             item.componentSetMap("minecraft:block_state", blockStateProperties);
             convertBlockStateProperties(blockStateProperties);
@@ -933,7 +932,7 @@ public final class ConverterItemStackToDataComponents {
 
         item.tagMigrateToComponent("EntityTag", "minecraft:entity_data");
 
-        final MapType<String> tileEntityTag = item.tagRemoveMap("BlockEntityTag");
+        final MapType tileEntityTag = item.tagRemoveMap("BlockEntityTag");
         if (tileEntityTag != null) {
             convertTileEntity(tileEntityTag, item);
 
@@ -945,7 +944,7 @@ public final class ConverterItemStackToDataComponents {
         final int flags = item.tagRemoveInt("HideFlags", 0);
 
         if (item.tagRemoveInt("Unbreakable", 0) != 0) {
-            final MapType<String> unbreakable = type.createEmptyMap();
+            final MapType unbreakable = type.createEmptyMap();
             item.componentSetMap("minecraft:unbreakable", unbreakable);
             if ((flags & TOOLTIP_FLAG_HIDE_UNBREAKABLE) != 0) {
                 unbreakable.setBoolean("show_in_tooltip", false);
@@ -965,7 +964,7 @@ public final class ConverterItemStackToDataComponents {
         if (trim != null) {
             // note: DFU set does nothing if not map
             if ((flags & TOOLTIP_FLAG_HIDE_UPGRADES) != 0 && trim instanceof MapType) {
-                ((MapType<String>)trim).setBoolean("show_in_tooltip", false);
+                ((MapType)trim).setBoolean("show_in_tooltip", false);
             }
 
             item.componentSetGeneric("minecraft:trim", trim);
@@ -1064,21 +1063,21 @@ public final class ConverterItemStackToDataComponents {
         private final String id;
         private final int count;
 
-        private final MapType<String> components;
-        private final MapType<String> tag;
-        private final MapType<String> root;
+        private final MapType components;
+        private final MapType tag;
+        private final MapType root;
 
-        public TransientItemStack(final MapType<String> root) {
+        public TransientItemStack(final MapType root) {
             this.id = root.getString("id");
             this.count = root.getInt("Count");
 
-            final TypeUtil type = root.getTypeUtil();
+            final TypeUtil<?> type = root.getTypeUtil();
 
             this.components = type.createEmptyMap();
 
-            final MapType<String> rootCopy = root.copy();
+            final MapType rootCopy = root.copy();
 
-            final MapType<String> tag = rootCopy.getMap("tag");
+            final MapType tag = rootCopy.getMap("tag");
 
             rootCopy.remove("id");
             rootCopy.remove("Count");
@@ -1089,7 +1088,7 @@ public final class ConverterItemStackToDataComponents {
             this.root = rootCopy;
         }
 
-        public void migrateTagTo(final String tagKey, final MapType<String> dst, final String dstKey) {
+        public void migrateTagTo(final String tagKey, final MapType dst, final String dstKey) {
             final Object value = this.tag.getGeneric(tagKey);
 
             if (value != null) {
@@ -1131,8 +1130,8 @@ public final class ConverterItemStackToDataComponents {
             return ret;
         }
 
-        public MapType<String> tagRemoveMap(final String key) {
-            final MapType<String> ret = this.tag.getMap(key);
+        public MapType tagRemoveMap(final String key) {
+            final MapType ret = this.tag.getMap(key);
 
             this.tag.remove(key);
 
@@ -1207,7 +1206,7 @@ public final class ConverterItemStackToDataComponents {
             this.components.setList(key, value);
         }
 
-        public void componentSetMap(final String key, final MapType<String> value) {
+        public void componentSetMap(final String key, final MapType value) {
             this.components.setMap(key, value);
         }
 
@@ -1215,8 +1214,8 @@ public final class ConverterItemStackToDataComponents {
             this.components.setGeneric(key, value);
         }
 
-        public MapType<String> serialize() {
-            final MapType<String> ret = this.components.getTypeUtil().createEmptyMap();
+        public MapType serialize() {
+            final MapType ret = this.components.getTypeUtil().createEmptyMap();
 
             ret.setString("id", this.id);
             ret.setInt("count", this.count);

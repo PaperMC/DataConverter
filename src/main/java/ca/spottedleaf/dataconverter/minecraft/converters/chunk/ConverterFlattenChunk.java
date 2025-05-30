@@ -27,7 +27,7 @@ import java.util.Objects;
 
 import static it.unimi.dsi.fastutil.HashCommon.arraySize;
 
-public final class ConverterFlattenChunk extends DataConverter<MapType<String>, MapType<String>> {
+public final class ConverterFlattenChunk extends DataConverter<MapType, MapType> {
 
     private static final Logger LOGGER = LogUtils.getLogger();
 
@@ -110,18 +110,18 @@ public final class ConverterFlattenChunk extends DataConverter<MapType<String>, 
         return ret;
     }
 
-    static final MapType<String> PUMPKIN          = HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:pumpkin'}");
-    static final MapType<String> SNOWY_PODZOL     = HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:podzol',Properties:{snowy:'true'}}");
-    static final MapType<String> SNOWY_GRASS      = HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:grass_block',Properties:{snowy:'true'}}");
-    static final MapType<String> SNOWY_MYCELIUM   = HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:mycelium',Properties:{snowy:'true'}}");
-    static final MapType<String> UPPER_SUNFLOWER  = HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:sunflower',Properties:{half:'upper'}}");
-    static final MapType<String> UPPER_LILAC      = HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:lilac',Properties:{half:'upper'}}");
-    static final MapType<String> UPPER_TALL_GRASS = HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:tall_grass',Properties:{half:'upper'}}");
-    static final MapType<String> UPPER_LARGE_FERN = HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:large_fern',Properties:{half:'upper'}}");
-    static final MapType<String> UPPER_ROSE_BUSH  = HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:rose_bush',Properties:{half:'upper'}}");
-    static final MapType<String> UPPER_PEONY      = HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:peony',Properties:{half:'upper'}}");
+    static final MapType PUMPKIN          = HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:pumpkin'}");
+    static final MapType SNOWY_PODZOL     = HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:podzol',Properties:{snowy:'true'}}");
+    static final MapType SNOWY_GRASS      = HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:grass_block',Properties:{snowy:'true'}}");
+    static final MapType SNOWY_MYCELIUM   = HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:mycelium',Properties:{snowy:'true'}}");
+    static final MapType UPPER_SUNFLOWER  = HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:sunflower',Properties:{half:'upper'}}");
+    static final MapType UPPER_LILAC      = HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:lilac',Properties:{half:'upper'}}");
+    static final MapType UPPER_TALL_GRASS = HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:tall_grass',Properties:{half:'upper'}}");
+    static final MapType UPPER_LARGE_FERN = HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:large_fern',Properties:{half:'upper'}}");
+    static final MapType UPPER_ROSE_BUSH  = HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:rose_bush',Properties:{half:'upper'}}");
+    static final MapType UPPER_PEONY      = HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:peony',Properties:{half:'upper'}}");
 
-    static final Map<String, MapType<String>> FLOWER_POT_MAP = new HashMap<>();
+    static final Map<String, MapType> FLOWER_POT_MAP = new HashMap<>();
     static {
         FLOWER_POT_MAP.put("minecraft:air0",            HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:flower_pot'}"));
         FLOWER_POT_MAP.put("minecraft:red_flower0",     HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:potted_poppy'}"));
@@ -147,7 +147,7 @@ public final class ConverterFlattenChunk extends DataConverter<MapType<String>, 
         FLOWER_POT_MAP.put("minecraft:cactus0",         HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:potted_cactus'}")); // we change default to empty
     }
 
-    static final Map<String, MapType<String>> SKULL_MAP = new HashMap<>();
+    static final Map<String, MapType> SKULL_MAP = new HashMap<>();
     static {
         mapSkull(SKULL_MAP, 0, "skeleton", "skull");
         mapSkull(SKULL_MAP, 1, "wither_skeleton", "skull");
@@ -157,7 +157,7 @@ public final class ConverterFlattenChunk extends DataConverter<MapType<String>, 
         mapSkull(SKULL_MAP, 5, "dragon", "head");
     };
 
-    private static void mapSkull(final Map<String, MapType<String>> into, final int oldId, final String newId, final String skullType) {
+    private static void mapSkull(final Map<String, MapType> into, final int oldId, final String newId, final String skullType) {
         into.put(oldId + "north", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + newId + "_wall_" + skullType + "',Properties:{facing:'north'}}"));
         into.put(oldId + "east",  HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + newId + "_wall_" + skullType + "',Properties:{facing:'east'}}"));
         into.put(oldId + "south", HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + newId + "_wall_" + skullType + "',Properties:{facing:'south'}}"));
@@ -169,7 +169,7 @@ public final class ConverterFlattenChunk extends DataConverter<MapType<String>, 
         }
     }
 
-    static final Map<String, MapType<String>> DOOR_MAP = new HashMap<>();
+    static final Map<String, MapType> DOOR_MAP = new HashMap<>();
     static {
         mapDoor(DOOR_MAP, "oak_door", 1024);
         mapDoor(DOOR_MAP, "iron_door", 1136);
@@ -180,7 +180,7 @@ public final class ConverterFlattenChunk extends DataConverter<MapType<String>, 
         mapDoor(DOOR_MAP, "dark_oak_door", 3152);
     };
 
-    private static void mapDoor(final Map<String, MapType<String>> into, final String type, final int oldId) {
+    private static void mapDoor(final Map<String, MapType> into, final String type, final int oldId) {
         into.put("minecraft:" + type + "eastlowerleftfalsefalse",   HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'east',half:'lower',hinge:'left',open:'false',powered:'false'}}"));
         into.put("minecraft:" + type + "eastlowerleftfalsetrue",    HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'east',half:'lower',hinge:'left',open:'false',powered:'true'}}"));
         into.put("minecraft:" + type + "eastlowerlefttruefalse",    HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'east',half:'lower',hinge:'left',open:'true',powered:'false'}}"));
@@ -247,7 +247,7 @@ public final class ConverterFlattenChunk extends DataConverter<MapType<String>, 
         into.put("minecraft:" + type + "westupperrighttruetrue",    HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + type + "',Properties:{facing:'west',half:'upper',hinge:'right',open:'true',powered:'true'}}"));
     }
 
-    static final Map<String, MapType<String>> NOTE_BLOCK_MAP = new HashMap<>();
+    static final Map<String, MapType> NOTE_BLOCK_MAP = new HashMap<>();
     static {
         for(int note = 0; note < 26; ++note) {
             NOTE_BLOCK_MAP.put("true" + note,  HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:note_block',Properties:{powered:'true',note:'" + note + "'}}"));
@@ -275,7 +275,7 @@ public final class ConverterFlattenChunk extends DataConverter<MapType<String>, 
         DYE_COLOR_MAP.put(15, "black");
     }
 
-    static final Map<String, MapType<String>> BED_BLOCK_MAP = new HashMap<>();
+    static final Map<String, MapType> BED_BLOCK_MAP = new HashMap<>();
 
     static {
         for (final Int2ObjectMap.Entry<String> entry : DYE_COLOR_MAP.int2ObjectEntrySet()) {
@@ -285,7 +285,7 @@ public final class ConverterFlattenChunk extends DataConverter<MapType<String>, 
         }
     }
 
-    private static void addBeds(final Map<String, MapType<String>> into, final int colourId, final String colourName) {
+    private static void addBeds(final Map<String, MapType> into, final int colourId, final String colourName) {
         into.put("southfalsefoot" + colourId, HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + colourName + "_bed',Properties:{facing:'south',occupied:'false',part:'foot'}}"));
         into.put("westfalsefoot" + colourId,  HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + colourName + "_bed',Properties:{facing:'west',occupied:'false',part:'foot'}}"));
         into.put("northfalsefoot" + colourId, HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + colourName + "_bed',Properties:{facing:'north',occupied:'false',part:'foot'}}"));
@@ -300,7 +300,7 @@ public final class ConverterFlattenChunk extends DataConverter<MapType<String>, 
         into.put("easttruehead" + colourId,   HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + colourName + "_bed',Properties:{facing:'east',occupied:'true',part:'head'}}"));
     }
 
-    static final Map<String, MapType<String>> BANNER_BLOCK_MAP = new HashMap<>();
+    static final Map<String, MapType> BANNER_BLOCK_MAP = new HashMap<>();
 
     static {
         for (final Int2ObjectMap.Entry<String> entry : DYE_COLOR_MAP.int2ObjectEntrySet()) {
@@ -310,7 +310,7 @@ public final class ConverterFlattenChunk extends DataConverter<MapType<String>, 
         }
     }
 
-    private static void addBanners(final Map<String, MapType<String>> into, final int colourId, final String colourName) {
+    private static void addBanners(final Map<String, MapType> into, final int colourId, final String colourName) {
         for(int rotation = 0; rotation < 16; ++rotation) {
             into.put("" + rotation + "_" + colourId, HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + colourName + "_banner',Properties:{rotation:'" + rotation + "'}}"));
         }
@@ -321,18 +321,18 @@ public final class ConverterFlattenChunk extends DataConverter<MapType<String>, 
         into.put("east_" + colourId,  HelperBlockFlatteningV1450.parseTag("{Name:'minecraft:" + colourName + "_wall_banner',Properties:{facing:'east'}}"));
     }
 
-    static final MapType<String> AIR = Objects.requireNonNull(HelperBlockFlatteningV1450.getNBTForId(0));
+    static final MapType AIR = Objects.requireNonNull(HelperBlockFlatteningV1450.getNBTForId(0));
 
     public ConverterFlattenChunk() {
         super(MCVersions.V17W47A, 1);
     }
 
-    static String getName(final MapType<String> blockState) {
+    static String getName(final MapType blockState) {
         return blockState.getString("Name");
     }
 
-    static String getProperty(final MapType<String> blockState, final String propertyName) {
-        final MapType<String> properties = blockState.getMap("Properties");
+    static String getProperty(final MapType blockState, final String propertyName) {
+        final MapType properties = blockState.getMap("Properties");
         if (properties == null) {
             return "";
         }
@@ -367,8 +367,8 @@ public final class ConverterFlattenChunk extends DataConverter<MapType<String>, 
     }
 
     @Override
-    public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
-        final MapType<String> level = data.getMap("Level");
+    public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
+        final MapType level = data.getMap("Level");
         if (level == null) {
             return null;
         }
@@ -470,12 +470,12 @@ public final class ConverterFlattenChunk extends DataConverter<MapType<String>, 
         int sides;
 
         final Section[] sections = new Section[16];
-        final MapType<String> level;
+        final MapType level;
         final int blockX;
         final int blockZ;
-        final Int2ObjectLinkedOpenHashMap<MapType<String>> tileEntities = new Int2ObjectLinkedOpenHashMap<>(16);
+        final Int2ObjectLinkedOpenHashMap<MapType> tileEntities = new Int2ObjectLinkedOpenHashMap<>(16);
 
-        public UpgradeChunk(final MapType<String> level) {
+        public UpgradeChunk(final MapType level) {
             this.level = level;
             this.blockX = level.getInt("xPos") << 4;
             this.blockZ = level.getInt("zPos") << 4;
@@ -483,7 +483,7 @@ public final class ConverterFlattenChunk extends DataConverter<MapType<String>, 
             final ListType tileEntities = level.getList("TileEntities", ObjectType.MAP);
             if (tileEntities != null) {
                 for (int i = 0, len = tileEntities.size(); i < len; ++i) {
-                    final MapType<String> tileEntity = tileEntities.getMap(i);
+                    final MapType tileEntity = tileEntities.getMap(i);
 
                     final int x = (tileEntity.getInt("x") - this.blockX) & 15;
                     final int y = tileEntity.getInt("y");
@@ -499,7 +499,7 @@ public final class ConverterFlattenChunk extends DataConverter<MapType<String>, 
             final ListType sections = level.getList("Sections", ObjectType.MAP);
             if (sections != null) {
                 for (int i = 0, len = sections.size(); i < len; ++i) {
-                    final MapType<String> sectionData = sections.getMap(i);
+                    final MapType sectionData = sections.getMap(i);
                     final Section section = new Section(sectionData);
 
                     if (section.y < 0 || section.y > 15) {
@@ -530,7 +530,7 @@ public final class ConverterFlattenChunk extends DataConverter<MapType<String>, 
                         case 2: { // grass block
                             while (positionIterator.hasNext()) {
                                 final int position = positionIterator.nextInt() | yIndex;
-                                final MapType<String> blockState = this.getBlock(position);
+                                final MapType blockState = this.getBlock(position);
                                 if (!"minecraft:grass_block".equals(getName(blockState))) {
                                     continue;
                                 }
@@ -545,7 +545,7 @@ public final class ConverterFlattenChunk extends DataConverter<MapType<String>, 
                         case 3: { // dirt
                             while (positionIterator.hasNext()) {
                                 final int position = positionIterator.nextInt() | yIndex;
-                                final MapType<String> blockState = this.getBlock(position);
+                                final MapType blockState = this.getBlock(position);
                                 if (!"minecraft:podzol".equals(getName(blockState))) {
                                     continue;
                                 }
@@ -560,7 +560,7 @@ public final class ConverterFlattenChunk extends DataConverter<MapType<String>, 
                         case 25: { // note block
                             while (positionIterator.hasNext()) {
                                 final int position = positionIterator.nextInt() | yIndex;
-                                final MapType<String> tile = this.removeBlockEntity(position);
+                                final MapType tile = this.removeBlockEntity(position);
                                 if (tile != null) {
                                     final String state = Boolean.toString(tile.getBoolean("powered")) + (byte) Math.min(Math.max(tile.getInt("note"), 0), 24);
                                     this.setBlock(position, NOTE_BLOCK_MAP.getOrDefault(state, NOTE_BLOCK_MAP.get("false0")));
@@ -571,19 +571,19 @@ public final class ConverterFlattenChunk extends DataConverter<MapType<String>, 
                         case 26: { // bed
                             while (positionIterator.hasNext()) {
                                 final int position = positionIterator.nextInt() | yIndex;
-                                final MapType<String> tile = this.getBlockEntity(position);
+                                final MapType tile = this.getBlockEntity(position);
 
                                 if (tile == null) {
                                     continue;
                                 }
 
-                                final MapType<String> blockState = this.getBlock(position);
+                                final MapType blockState = this.getBlock(position);
 
                                 final int colour = tile.getInt("color");
                                 if (colour != 14 && colour >= 0 && colour < 16) {
                                     final String state = getProperty(blockState, "facing") + getProperty(blockState, "occupied") + getProperty(blockState, "part") + colour;
 
-                                    final MapType<String> update = BED_BLOCK_MAP.get(state);
+                                    final MapType update = BED_BLOCK_MAP.get(state);
                                     if (update != null) {
                                         this.setBlock(position, update);
                                     }
@@ -601,7 +601,7 @@ public final class ConverterFlattenChunk extends DataConverter<MapType<String>, 
                             // aka the door updater
                             while (positionIterator.hasNext()) {
                                 final int position = positionIterator.nextInt() | yIndex;
-                                final MapType<String> blockState = this.getBlock(position);
+                                final MapType blockState = this.getBlock(position);
                                 if (!getName(blockState).endsWith("_door")) {
                                     continue;
                                 }
@@ -611,7 +611,7 @@ public final class ConverterFlattenChunk extends DataConverter<MapType<String>, 
                                 }
 
                                 final int positionAbove = relative(position, Direction.UP);
-                                final MapType<String> blockStateAbove = this.getBlock(positionAbove);
+                                final MapType blockStateAbove = this.getBlock(positionAbove);
 
                                 final String name = getName(blockState);
                                 if (name.equals(getName(blockStateAbove))) {
@@ -629,7 +629,7 @@ public final class ConverterFlattenChunk extends DataConverter<MapType<String>, 
                         case 86: { // pumpkin
                             while (positionIterator.hasNext()) {
                                 final int position = positionIterator.nextInt() | yIndex;
-                                final MapType<String> blockState = this.getBlock(position);
+                                final MapType blockState = this.getBlock(position);
 
                                 // I guess this is some terrible hack to convert carved pumpkins from world gen into
                                 // regular pumpkins?
@@ -646,7 +646,7 @@ public final class ConverterFlattenChunk extends DataConverter<MapType<String>, 
                         case 110: { // mycelium
                             while (positionIterator.hasNext()) {
                                 final int position = positionIterator.nextInt() | yIndex;
-                                final MapType<String> blockState = this.getBlock(position);
+                                final MapType blockState = this.getBlock(position);
                                 if ("minecraft:mycelium".equals(getName(blockState))) {
                                     final String nameAbove = getName(this.getBlock(relative(position, Direction.UP)));
                                     if ("minecraft:snow".equals(nameAbove) || "minecraft:snow_layer".equals(nameAbove)) {
@@ -659,7 +659,7 @@ public final class ConverterFlattenChunk extends DataConverter<MapType<String>, 
                         case 140: { // flower pot
                             while (positionIterator.hasNext()) {
                                 final int position = positionIterator.nextInt() | yIndex;
-                                final MapType<String> tile = this.removeBlockEntity(position);
+                                final MapType tile = this.removeBlockEntity(position);
                                 if (tile == null) {
                                     continue;
                                 }
@@ -682,7 +682,7 @@ public final class ConverterFlattenChunk extends DataConverter<MapType<String>, 
                         case 144: { // mob head
                             while (positionIterator.hasNext()) {
                                 final int position = positionIterator.nextInt() | yIndex;
-                                final MapType<String> tile = this.getBlockEntity(position);
+                                final MapType tile = this.getBlockEntity(position);
                                 if (tile == null) {
                                     continue;
                                 }
@@ -707,12 +707,12 @@ public final class ConverterFlattenChunk extends DataConverter<MapType<String>, 
                         case 175: { // sunflower
                             while (positionIterator.hasNext()) {
                                 final int position = positionIterator.nextInt() | yIndex;
-                                final MapType<String> blockState = this.getBlock(position);
+                                final MapType blockState = this.getBlock(position);
                                 if (!"upper".equals(getProperty(blockState, "half"))) {
                                     continue;
                                 }
 
-                                final MapType<String> blockStateBelow = this.getBlock(relative(position, Direction.DOWN));
+                                final MapType blockStateBelow = this.getBlock(relative(position, Direction.DOWN));
                                 final String nameBelow = getName(blockStateBelow);
                                 switch (nameBelow) {
                                     case "minecraft:sunflower":
@@ -741,18 +741,18 @@ public final class ConverterFlattenChunk extends DataConverter<MapType<String>, 
                         case 177: { // wall mounted banner
                             while (positionIterator.hasNext()) {
                                 final int position = positionIterator.nextInt() | yIndex;
-                                final MapType<String> tile = this.getBlockEntity(position);
+                                final MapType tile = this.getBlockEntity(position);
 
                                 if (tile == null) {
                                     continue;
                                 }
 
-                                final MapType<String> blockState = this.getBlock(position);
+                                final MapType blockState = this.getBlock(position);
 
                                 final int base = tile.getInt("Base");
                                 if (base != 15 && base >= 0 && base < 16) {
                                     final String state = getProperty(blockState, fixEntry.getIntKey() == 176 ? "rotation" : "facing") + "_" + base;
-                                    final MapType<String> update = BANNER_BLOCK_MAP.get(state);
+                                    final MapType update = BANNER_BLOCK_MAP.get(state);
                                     if (update != null) {
                                         this.setBlock(position, update);
                                     }
@@ -765,11 +765,11 @@ public final class ConverterFlattenChunk extends DataConverter<MapType<String>, 
             }
         }
 
-        private MapType<String> getBlockEntity(final int index) {
+        private MapType getBlockEntity(final int index) {
             return this.tileEntities.get(index);
         }
 
-        private MapType<String> removeBlockEntity(final int index) {
+        private MapType removeBlockEntity(final int index) {
             return this.tileEntities.remove(index);
         }
 
@@ -789,7 +789,7 @@ public final class ConverterFlattenChunk extends DataConverter<MapType<String>, 
             }
         }
 
-        private void setBlock(final int index, final MapType<String> blockState) {
+        private void setBlock(final int index, final MapType blockState) {
             if (index >= 0 && index <= 65535) {
                 final Section section = this.getSection(index);
                 if (section != null) {
@@ -803,7 +803,7 @@ public final class ConverterFlattenChunk extends DataConverter<MapType<String>, 
             return y < this.sections.length ? this.sections[y] : null;
         }
 
-        public MapType<String> getBlock(int i) {
+        public MapType getBlock(int i) {
             if (i >= 0 && i <= 65535) {
                 final Section section = this.getSection(i);
                 return section == null ? AIR : section.getBlock(i & 4095);
@@ -812,7 +812,7 @@ public final class ConverterFlattenChunk extends DataConverter<MapType<String>, 
             }
         }
 
-        public MapType<String> writeBackToLevel() {
+        public MapType writeBackToLevel() {
             if (this.tileEntities.isEmpty()) {
                 this.level.remove("TileEntities");
             } else {
@@ -821,7 +821,7 @@ public final class ConverterFlattenChunk extends DataConverter<MapType<String>, 
                 this.level.setList("TileEntities", tileEntities);
             }
 
-            final MapType<String> indices = Types.NBT.createEmptyMap();
+            final MapType indices = Types.NBT.createEmptyMap();
             final ListType sections = Types.NBT.createEmptyList();
             for (final Section section : this.sections) {
                 if (section == null) {
@@ -834,7 +834,7 @@ public final class ConverterFlattenChunk extends DataConverter<MapType<String>, 
 
             this.level.setList("Sections", sections);
 
-            final MapType<String> upgradeData = Types.NBT.createEmptyMap();
+            final MapType upgradeData = Types.NBT.createEmptyMap();
             upgradeData.setByte("Sides", (byte)this.sides);
             upgradeData.setMap("Indices", indices);
 
@@ -847,31 +847,31 @@ public final class ConverterFlattenChunk extends DataConverter<MapType<String>, 
     static class Section {
         final Palette palette = new Palette();
 
-        static final class Palette extends Reference2IntOpenHashMap<MapType<String>> {
+        static final class Palette extends Reference2IntOpenHashMap<MapType> {
 
             final ListType paletteStates = Types.NBT.createEmptyList();
 
-            private int find(final MapType<String> k) {
+            private int find(final MapType k) {
                 if (((k) == (null)))
                     return containsNullKey ? n : -(n + 1);
-                MapType<String> curr;
+                MapType curr;
                 final Object[] key = this.key;
                 int pos;
                 // The starting point.
-                if (((curr = (MapType<String>)key[pos = (it.unimi.dsi.fastutil.HashCommon.mix(System.identityHashCode(k))) & mask]) == (null)))
+                if (((curr = (MapType)key[pos = (it.unimi.dsi.fastutil.HashCommon.mix(System.identityHashCode(k))) & mask]) == (null)))
                     return -(pos + 1);
                 if (((k) == (curr)))
                     return pos;
                 // There's always an unused entry.
                 while (true) {
-                    if (((curr = (MapType<String>)key[pos = (pos + 1) & mask]) == (null)))
+                    if (((curr = (MapType)key[pos = (pos + 1) & mask]) == (null)))
                         return -(pos + 1);
                     if (((k) == (curr)))
                         return pos;
                 }
             }
 
-            private void insert(final int pos, final MapType<String> k, final int v) {
+            private void insert(final int pos, final MapType k, final int v) {
                 if (pos == n)
                     containsNullKey = true;
                 ((Object[])key)[pos] = k;
@@ -880,10 +880,10 @@ public final class ConverterFlattenChunk extends DataConverter<MapType<String>, 
                     rehash(arraySize(size + 1, f));
             }
 
-            private MapType<String>[] byId = new MapType[4];
-            private MapType<String> last = null;
+            private MapType[] byId = new MapType[4];
+            private MapType last = null;
 
-            public int getOrCreateId(final MapType<String> k) {
+            public int getOrCreateId(final MapType k) {
                 if (k == this.last) {
                     return this.size - 1;
                 }
@@ -893,7 +893,7 @@ public final class ConverterFlattenChunk extends DataConverter<MapType<String>, 
                 }
 
                 final int insert = this.size;
-                MapType<String> inPalette = k;
+                MapType inPalette = k;
 
                 if ("%%FILTER_ME%%".equals(getName(k))) {
                     inPalette = AIR;
@@ -916,29 +916,29 @@ public final class ConverterFlattenChunk extends DataConverter<MapType<String>, 
 
         }
 
-        final MapType<String> section;
+        final MapType section;
         final boolean hasData;
         final Int2ObjectLinkedOpenHashMap<IntArrayList> toFix = new Int2ObjectLinkedOpenHashMap<>();
         final IntArrayList update = new IntArrayList();
         final int y;
         final int[] buffer = new int[4096];
 
-        public Section(final MapType<String> section) {
+        public Section(final MapType section) {
             this.section = section;
             this.y = section.getInt("Y");
             this.hasData = section.hasKey("Blocks", ObjectType.BYTE_ARRAY);
         }
 
-        public MapType<String> getBlock(final int index) {
+        public MapType getBlock(final int index) {
             if (index >= 0 && index <= 4095) {
-                final MapType<String> state = this.palette.byId[this.buffer[index]];
+                final MapType state = this.palette.byId[this.buffer[index]];
                 return state == null ? AIR : state;
             } else {
                 return AIR;
             }
         }
 
-        public void setBlock(final int index, final MapType<String> blockState) {
+        public void setBlock(final int index, final MapType blockState) {
             this.buffer[index] = this.palette.getOrCreateId(blockState);
         }
 
@@ -990,7 +990,7 @@ public final class ConverterFlattenChunk extends DataConverter<MapType<String>, 
         }
 
         // Note: modifies the current section and returns it.
-        public MapType<String> writeBackToSection() {
+        public MapType writeBackToSection() {
             if (!this.hasData) {
                 return this.section;
             }

@@ -16,12 +16,12 @@ public final class V110 {
         // in V99, it doesn't need to be added here.
         MCTypeRegistry.ENTITY.addConverterForId("EntityHorse", new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 if (!data.getBoolean("Saddle") || data.hasKey("SaddleItem", ObjectType.MAP)) {
                     return null;
                 }
 
-                final MapType<String> saddleItem = Types.NBT.createEmptyMap();
+                final MapType saddleItem = Types.NBT.createEmptyMap();
                 data.remove("Saddle");
                 data.setMap("SaddleItem", saddleItem);
 

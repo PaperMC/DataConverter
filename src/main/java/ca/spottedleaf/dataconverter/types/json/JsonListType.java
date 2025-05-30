@@ -12,8 +12,8 @@ import com.google.gson.JsonPrimitive;
 
 public final class JsonListType implements ListType {
 
-    protected final JsonArray array;
-    protected final boolean compressed;
+    final JsonArray array;
+    final boolean compressed;
 
     public JsonListType(final boolean compressed) {
         this.array = new JsonArray();
@@ -26,7 +26,7 @@ public final class JsonListType implements ListType {
     }
 
     @Override
-    public TypeUtil getTypeUtil() {
+    public TypeUtil<JsonElement> getTypeUtil() {
         return this.compressed ? Types.JSON_COMPRESSED : Types.JSON;
     }
 
@@ -62,11 +62,11 @@ public final class JsonListType implements ListType {
 
     @Override
     public ListType copy() {
-        return new JsonListType(JsonTypeUtil.copyJson(this.array), this.compressed);
+        return new JsonListType(this.array.deepCopy(), this.compressed);
     }
 
     @Override
-    public ObjectType getType() {
+    public ObjectType getUniformType() {
         return ObjectType.UNDEFINED;
     }
 
@@ -78,6 +78,11 @@ public final class JsonListType implements ListType {
     @Override
     public void remove(final int index) {
         this.array.remove(index);
+    }
+
+    @Override
+    public Object getGeneric(final int index) {
+        return Types.JSON.baseToGeneric(this.array.get(index));
     }
 
     @Override
@@ -102,10 +107,23 @@ public final class JsonListType implements ListType {
     }
 
     @Override
+    public Number getNumber(final int index, final Number dfl) {
+        final Number ret = this.getNumber(index);
+        return ret == null ? dfl : ret;
+    }
+
+    @Override
     public byte getByte(final int index) {
         final Number number = this.getNumber(index);
 
-        return number == null ? 0 : number.byteValue();
+        return number == null ? (byte)0 : number.byteValue();
+    }
+
+    @Override
+    public byte getByte(final int index, final byte dfl) {
+        final Number number = this.getNumber(index);
+
+        return number == null ? dfl : number.byteValue();
     }
 
     @Override
@@ -117,7 +135,14 @@ public final class JsonListType implements ListType {
     public short getShort(final int index) {
         final Number number = this.getNumber(index);
 
-        return number == null ? 0 : number.shortValue();
+        return number == null ? (short)0 : number.shortValue();
+    }
+
+    @Override
+    public short getShort(final int index, final short dfl) {
+        final Number number = this.getNumber(index);
+
+        return number == null ? dfl : number.shortValue();
     }
 
     @Override
@@ -133,6 +158,13 @@ public final class JsonListType implements ListType {
     }
 
     @Override
+    public int getInt(final int index, final int dfl) {
+        final Number number = this.getNumber(index);
+
+        return number == null ? dfl : number.intValue();
+    }
+
+    @Override
     public void setInt(final int index, final int to) {
         this.array.set(index, new JsonPrimitive(Integer.valueOf(to)));
     }
@@ -141,7 +173,14 @@ public final class JsonListType implements ListType {
     public long getLong(final int index) {
         final Number number = this.getNumber(index);
 
-        return number == null ? 0 : number.longValue();
+        return number == null ? 0L : number.longValue();
+    }
+
+    @Override
+    public long getLong(final int index, final long dfl) {
+        final Number number = this.getNumber(index);
+
+        return number == null ? dfl : number.longValue();
     }
 
     @Override
@@ -153,7 +192,14 @@ public final class JsonListType implements ListType {
     public float getFloat(final int index) {
         final Number number = this.getNumber(index);
 
-        return number == null ? 0 : number.floatValue();
+        return number == null ? 0.0f : number.floatValue();
+    }
+
+    @Override
+    public float getFloat(final int index, final float dfl) {
+        final Number number = this.getNumber(index);
+
+        return number == null ? dfl : number.floatValue();
     }
 
     @Override
@@ -165,7 +211,14 @@ public final class JsonListType implements ListType {
     public double getDouble(final int index) {
         final Number number = this.getNumber(index);
 
-        return number == null ? 0 : number.doubleValue();
+        return number == null ? 0.0 : number.doubleValue();
+    }
+
+    @Override
+    public double getDouble(final int index, final double dfl) {
+        final Number number = this.getNumber(index);
+
+        return number == null ? dfl : number.doubleValue();
     }
 
     @Override
@@ -180,12 +233,24 @@ public final class JsonListType implements ListType {
     }
 
     @Override
+    public byte[] getBytes(final int index, final byte[] dfl) {
+        // JSON does not support raw primitive arrays
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public void setBytes(final int index, final byte[] to) {
         throw new UnsupportedOperationException();
     }
 
     @Override
     public short[] getShorts(final int index) {
+        // JSON does not support raw primitive arrays
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public short[] getShorts(final int index, final short[] dfl) {
         // JSON does not support raw primitive arrays
         throw new UnsupportedOperationException();
     }
@@ -203,6 +268,12 @@ public final class JsonListType implements ListType {
     }
 
     @Override
+    public int[] getInts(final int index, final int[] dfl) {
+        // JSON does not support raw primitive arrays
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public void setInts(final int index, final int[] to) {
         // JSON does not support raw primitive arrays
         throw new UnsupportedOperationException();
@@ -210,6 +281,12 @@ public final class JsonListType implements ListType {
 
     @Override
     public long[] getLongs(final int index) {
+        // JSON does not support raw primitive arrays
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public long[] getLongs(final int index, final long[] dfl) {
         // JSON does not support raw primitive arrays
         throw new UnsupportedOperationException();
     }
@@ -230,12 +307,18 @@ public final class JsonListType implements ListType {
     }
 
     @Override
+    public ListType getList(final int index, final ListType dfl) {
+        final ListType ret = this.getList(index);
+        return ret == null ? dfl : ret;
+    }
+
+    @Override
     public void setList(final int index, final ListType list) {
         this.array.set(index, ((JsonListType)list).array);
     }
 
     @Override
-    public MapType<String> getMap(final int index) {
+    public MapType getMap(final int index) {
         final JsonElement element = this.array.get(index);
         if (element instanceof JsonObject) {
             return new JsonMapType((JsonObject)element, this.compressed);
@@ -244,7 +327,13 @@ public final class JsonListType implements ListType {
     }
 
     @Override
-    public void setMap(final int index, final MapType<?> to) {
+    public MapType getMap(final int index, final MapType dfl) {
+        final MapType ret = this.getMap(index);
+        return ret == null ? dfl : ret;
+    }
+
+    @Override
+    public void setMap(final int index, final MapType to) {
         this.array.set(index, ((JsonMapType)to).map);
     }
 
@@ -259,6 +348,12 @@ public final class JsonListType implements ListType {
         }
 
         return null;
+    }
+
+    @Override
+    public String getString(final int index, final String dfl) {
+        final String ret = this.getString(index);
+        return ret == null ? dfl : ret;
     }
 
     @Override
@@ -392,12 +487,12 @@ public final class JsonListType implements ListType {
     }
 
     @Override
-    public void addMap(final MapType<?> map) {
+    public void addMap(final MapType map) {
         this.array.add(((JsonMapType)map).map);
     }
 
     @Override
-    public void addMap(final int index, final MapType<?> map) {
+    public void addMap(final int index, final MapType map) {
         // doesn't implement any methods for adding at index... yee haw...
         throw new UnsupportedOperationException();
     }

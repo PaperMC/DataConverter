@@ -17,26 +17,10 @@ public final class V100 {
 
     private static final int VERSION = MCVersions.V15W32A;
 
-    static void registerEquipment(final int version, final String id) {
-        registerEquipment(version, 0, id);
-    }
-
-    private static final DataWalkerItemLists EQUIPMENT_ITEM_LISTS = new DataWalkerItemLists("ArmorItems", "HandItems");
-    private static final DataWalkerItems EQUIPMENT_ITEMS = new DataWalkerItems("body_armor_item");
-
-    static void registerEquipment(final int version, final int versionStep, final String id) {
-        MCTypeRegistry.ENTITY.addWalker(version, versionStep, id, EQUIPMENT_ITEM_LISTS);
-        MCTypeRegistry.ENTITY.addWalker(version, versionStep, id, EQUIPMENT_ITEMS);
-    }
-
-    private static void registerMob(final String id) {
-        registerEquipment(VERSION, 0, id);
-    }
-
     public static void register() {
         MCTypeRegistry.ENTITY.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 final ListType equipment = data.getList("Equipment", ObjectType.MAP);
                 data.remove("Equipment");
 
@@ -88,73 +72,52 @@ public final class V100 {
                 return null;
             }
         });
-
-        registerMob("ArmorStand");
-        registerMob("Creeper");
-        registerMob("Skeleton");
-        registerMob("Spider");
-        registerMob("Giant");
-        registerMob("Zombie");
-        registerMob("Slime");
-        registerMob("Ghast");
-        registerMob("PigZombie");
-        registerMob("Enderman");
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "Enderman", new DataWalkerBlockNames("carried"));
-        registerMob("CaveSpider");
-        registerMob("Silverfish");
-        registerMob("Blaze");
-        registerMob("LavaSlime");
-        registerMob("EnderDragon");
-        registerMob("WitherBoss");
-        registerMob("Bat");
-        registerMob("Witch");
-        registerMob("Endermite");
-        registerMob("Guardian");
-        registerMob("Pig");
-        registerMob("Sheep");
-        registerMob("Cow");
-        registerMob("Chicken");
-        registerMob("Squid");
-        registerMob("Wolf");
-        registerMob("MushroomCow");
-        registerMob("SnowMan");
-        registerMob("Ozelot");
-        registerMob("VillagerGolem");
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "EntityHorse", new DataWalkerItemLists("Items", "ArmorItems", "HandItems"));
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "EntityHorse", new DataWalkerItems("ArmorItem", "SaddleItem"));
-        registerMob("Rabbit");
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "Villager", (final MapType<String> data, final long fromVersion, final long toVersion) -> {
-            WalkerUtils.convertList(MCTypeRegistry.ITEM_STACK, data, "Inventory", fromVersion, toVersion);
-
-            WalkerUtils.convertList(MCTypeRegistry.VILLAGER_TRADE, data.getMap("Offers"), "Recipes", fromVersion, toVersion);
-
+        MCTypeRegistry.ENTITY_EQUIPMENT.addStructureWalker(VERSION, (final MapType data, final long fromVersion, final long toVersion) -> {
             WalkerUtils.convertList(MCTypeRegistry.ITEM_STACK, data, "ArmorItems", fromVersion, toVersion);
             WalkerUtils.convertList(MCTypeRegistry.ITEM_STACK, data, "HandItems", fromVersion, toVersion);
+            WalkerUtils.convert(MCTypeRegistry.ITEM_STACK, data, "body_armor_item", fromVersion, toVersion);
+            WalkerUtils.convert(MCTypeRegistry.ITEM_STACK, data, "saddle", fromVersion, toVersion);
 
             return null;
         });
-        registerMob("Shulker");
-        MCTypeRegistry.ENTITY.addWalker(VERSION, "AreaEffectCloud", new DataWalkerTypePaths<>(MCTypeRegistry.PARTICLE, "Particle"));
 
-        MCTypeRegistry.STRUCTURE.addStructureWalker(VERSION, (final MapType<String> data, final long fromVersion, final long toVersion) -> {
-            final ListType entities = data.getList("entities", ObjectType.MAP);
-            if (entities != null) {
-                for (int i = 0, len = entities.size(); i < len; ++i) {
-                    WalkerUtils.convert(MCTypeRegistry.ENTITY, entities.getMap(i), "nbt", fromVersion, toVersion);
-                }
-            }
+        //registerMob("ArmorStand"); // changed to simple in 1.21.5
+        //registerMob("Creeper"); // changed to simple in 1.21.5
+        //registerMob("Skeleton"); // changed to simple in 1.21.5
+        //registerMob("Spider"); // changed to simple in 1.21.5
+        //registerMob("Giant"); // changed to simple in 1.21.5
+        //registerMob("Zombie"); // changed to simple in 1.21.5
+        //registerMob("Slime"); // changed to simple in 1.21.5
+        //registerMob("Ghast"); // changed to simple in 1.21.5
+        //registerMob("PigZombie"); // changed to simple in 1.21.5
+        // Enderman is now identical to V99 due to moving equipment to base in 1.21.5
+        //registerMob("CaveSpider"); // changed to simple in 1.21.5
+        //registerMob("Silverfish"); // changed to simple in 1.21.5
+        //registerMob("Blaze"); // changed to simple in 1.21.5
+        //registerMob("LavaSlime"); // changed to simple in 1.21.5
+        //registerMob("EnderDragon"); // changed to simple in 1.21.5
+        //registerMob("WitherBoss"); // changed to simple in 1.21.5
+        //registerMob("Bat"); // changed to simple in 1.21.5
+        //registerMob("Witch"); // changed to simple in 1.21.5
+        //registerMob("Endermite"); // changed to simple in 1.21.5
+        //registerMob("Guardian"); // changed to simple in 1.21.5
+        //registerMob("Pig"); // changed to simple in 1.21.5
+        //registerMob("Sheep"); // changed to simple in 1.21.5
+        //registerMob("Cow"); // changed to simple in 1.21.5
+        //registerMob("Chicken"); // changed to simple in 1.21.5
+        //registerMob("Squid"); // changed to simple in 1.21.5
+        //registerMob("Wolf"); // changed to simple in 1.21.5
+        //registerMob("MushroomCow"); // changed to simple in 1.21.5
+        //registerMob("SnowMan"); // changed to simple in 1.21.5
+        //registerMob("Ozelot"); // changed to simple in 1.21.5
+        //registerMob("VillagerGolem"); // changed to simple in 1.21.5
+        // EntityHorse is now identical to V99 due to moving equipment to base in 1.21.5
+        //registerMob("Rabbit"); // changed to simple in 1.21.5
+        // Villager is now identical to V99 due to moving equipment to base in 1.21.5
+        //registerMob("Shulker"); // changed to simple in 1.21.5
+        // AreaEffectCloud is now identical to V99 due to moving equipment to base in 1.21.5
 
-            final ListType blocks = data.getList("blocks", ObjectType.MAP);
-            if (blocks != null) {
-                for (int i = 0, len = blocks.size(); i < len; ++i) {
-                    WalkerUtils.convert(MCTypeRegistry.TILE_ENTITY, blocks.getMap(i), "nbt", fromVersion, toVersion);
-                }
-            }
-
-            WalkerUtils.convertList(MCTypeRegistry.BLOCK_STATE, data, "palette", fromVersion, toVersion);
-
-            return null;
-        });
+        // Moved to V99 in 1.21.5
     }
 
     private V100() {}

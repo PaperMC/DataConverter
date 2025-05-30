@@ -16,12 +16,12 @@ public final class V2531 {
     public static void register() {
         MCTypeRegistry.BLOCK_STATE.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 if (!"minecraft:redstone_wire".equals(data.getString("Name"))) {
                     return null;
                 }
 
-                final MapType<String> properties = data.getMap("Properties");
+                final MapType properties = data.getMap("Properties");
 
                 if (properties == null) {
                     return null;

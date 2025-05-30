@@ -6,12 +6,8 @@ public final class V501 {
 
     private static final int VERSION = MCVersions.V16W20A;
 
-    private static void registerMob(final String id) {
-        V100.registerEquipment(VERSION, id);
-    }
-
     public static void register() {
-        registerMob("PolarBear");
+        //registerMob("PolarBear"); // is now simple in 1.21.5
     }
 
     private V501() {}

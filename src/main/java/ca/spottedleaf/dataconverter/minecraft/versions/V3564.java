@@ -13,7 +13,7 @@ public final class V3564 {
     private static final int VERSION = MCVersions.V1_20_1 + 99;
 
     public static void register() {
-        final DataConverter<MapType<String>, MapType<String>> converter = new DataConverter<>(VERSION) {
+        final DataConverter<MapType, MapType> converter = new DataConverter<>(VERSION) {
 
             private static final String[] LEGACY_FIELDS = new String[] {
                     "Text1",
@@ -32,7 +32,7 @@ public final class V3564 {
             };
 
 
-            private static void updateText(final MapType<String> text) {
+            private static void updateText(final MapType text) {
                 if (text == null) {
                     return;
                 }
@@ -73,7 +73,7 @@ public final class V3564 {
             }
 
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 updateText(data.getMap("front_text"));
                 updateText(data.getMap("back_text"));
 

@@ -15,6 +15,8 @@ public final class V2501 {
         MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, id, (data, fromVersion, toVersion) -> {
             WalkerUtils.convertList(MCTypeRegistry.ITEM_STACK, data, "Items", fromVersion, toVersion);
 
+            WalkerUtils.convert(MCTypeRegistry.TEXT_COMPONENT, data, "CustomName", fromVersion, toVersion);
+
             WalkerUtils.convertKeys(MCTypeRegistry.RECIPE, data, "RecipesUsed", fromVersion, toVersion);
 
             return null;
@@ -22,9 +24,9 @@ public final class V2501 {
     }
 
     public static void register() {
-        final DataConverter<MapType<String>, MapType<String>> converter = new DataConverter<>(VERSION) {
+        final DataConverter<MapType, MapType> converter = new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 final int recipesUsedSize = data.getInt("RecipesUsedSize");
                 data.remove("RecipesUsedSize");
 
@@ -32,7 +34,7 @@ public final class V2501 {
                     return null;
                 }
 
-                final MapType<String> newRecipes = Types.NBT.createEmptyMap();
+                final MapType newRecipes = Types.NBT.createEmptyMap();
                 data.setMap("RecipesUsed", newRecipes);
 
                 for (int i = 0; i < recipesUsedSize; ++i) {

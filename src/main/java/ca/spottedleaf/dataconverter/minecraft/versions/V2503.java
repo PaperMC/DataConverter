@@ -34,7 +34,7 @@ public final class V2503 {
             )
     );
 
-    private static void changeWallProperty(final MapType<String> properties, final String path) {
+    private static void changeWallProperty(final MapType properties, final String path) {
         final String property = properties.getString(path);
         if (property != null) {
             properties.setString(path, "true".equals(property) ? "low" : "none");
@@ -44,12 +44,12 @@ public final class V2503 {
     public static void register() {
         MCTypeRegistry.BLOCK_STATE.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 if (!WALL_BLOCKS.contains(data.getString("Name"))) {
                     return null;
                 }
 
-                final MapType<String> properties = data.getMap("Properties");
+                final MapType properties = data.getMap("Properties");
                 if (properties == null) {
                     return null;
                 }

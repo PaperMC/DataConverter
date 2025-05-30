@@ -5,6 +5,7 @@ import ca.spottedleaf.dataconverter.minecraft.MCVersions;
 import ca.spottedleaf.dataconverter.minecraft.converters.blockname.ConverterAbstractBlockRename;
 import ca.spottedleaf.dataconverter.minecraft.converters.itemname.ConverterAbstractItemRename;
 import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
+import ca.spottedleaf.dataconverter.minecraft.walkers.generic.DataWalkerTypePaths;
 import ca.spottedleaf.dataconverter.types.ListType;
 import ca.spottedleaf.dataconverter.types.MapType;
 import ca.spottedleaf.dataconverter.types.ObjectType;
@@ -16,7 +17,7 @@ public final class V1488 {
 
     private static final int VERSION = MCVersions.V18W19B + 3;
 
-    private static boolean isIglooPiece(final MapType<String> piece) {
+    private static boolean isIglooPiece(final MapType piece) {
         return "Iglu".equals(piece.getString("id"));
     }
 
@@ -38,21 +39,21 @@ public final class V1488 {
 
         MCTypeRegistry.TILE_ENTITY.addConverterForId("minecraft:command_block", new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 return V1458.updateCustomName(data);
             }
         });
 
         MCTypeRegistry.ENTITY.addConverterForId("minecraft:commandblock_minecart", new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 return V1458.updateCustomName(data);
             }
         });
 
         MCTypeRegistry.STRUCTURE_FEATURE.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 final ListType children = data.getList("Children", ObjectType.MAP);
                 boolean isIgloo;
                 if (children != null) {
@@ -75,7 +76,7 @@ public final class V1488 {
 
                 if (children != null) {
                     for (int i = 0; i < children.size();) {
-                        final MapType<String> child = children.getMap(i);
+                        final MapType child = children.getMap(i);
                         if (isIglooPiece(child)) {
                             children.remove(i);
                             continue;
@@ -87,6 +88,11 @@ public final class V1488 {
                 return null;
             }
         });
+
+        MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, "minecraft:command_block",
+            new DataWalkerTypePaths<>(MCTypeRegistry.DATACONVERTER_CUSTOM_TYPE_COMMAND, "Command")
+        );
+        MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, "minecraft:command_block", new DataWalkerTypePaths<>(MCTypeRegistry.TEXT_COMPONENT, "CustomName", "LastOutput"));
     }
 
     private V1488() {}

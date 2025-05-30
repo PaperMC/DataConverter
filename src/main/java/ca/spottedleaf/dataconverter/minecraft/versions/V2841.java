@@ -30,15 +30,15 @@ public final class V2841 {
     public static void register() {
         MCTypeRegistry.CHUNK.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> root, final long sourceVersion, final long toVersion) {
-                final MapType<String> level = root.getMap("Level");
+            public MapType convert(final MapType root, final long sourceVersion, final long toVersion) {
+                final MapType level = root.getMap("Level");
                 if (level == null) {
                     return null;
                 }
 
                 {
                     // Why it's renamed here and not the next data version is beyond me.
-                    final MapType<String> liquidTicks = level.getMap("LiquidTicks");
+                    final MapType liquidTicks = level.getMap("LiquidTicks");
                     if (liquidTicks != null) {
                         level.remove("LiquidTicks");
                         level.setMap("fluid_ticks", liquidTicks);
@@ -50,14 +50,14 @@ public final class V2841 {
                 int minSection = 0; // TODO wtf is this
                 if (sections != null) {
                     for (int i = 0, len = sections.size(); i < len; ++i) {
-                        final MapType<String> section = sections.getMap(i);
+                        final MapType section = sections.getMap(i);
 
                         final int sectionY = section.getInt("Y");
                         if (sectionY < minSection && section.hasKey("biomes")) {
                             minSection = sectionY;
                         }
 
-                        final MapType<String> blockStates = section.getMap("block_states");
+                        final MapType blockStates = section.getMap("block_states");
                         if (blockStates == null) {
                             continue;
                         }
@@ -103,7 +103,7 @@ public final class V2841 {
 
             for (int i = 0, len = sectionTicks.size(); i < len; ++i) {
                 final int localIndex = sectionTicks.getShort(i) & 0xFFFF;
-                final MapType<String> blockState = palette == null ? null : palette.getState(localIndex);
+                final MapType blockState = palette == null ? null : palette.getState(localIndex);
                 final String subjectId = blockTicks ? getBlockId(blockState) : getLiquidId(blockState);
 
                 ret.addMap(createNewTick(subjectId, localIndex, sectionX, sectionY, sectionZ));
@@ -113,12 +113,12 @@ public final class V2841 {
         return ret;
     }
 
-    public static MapType<String> createNewTick(final String subjectId, final int localIndex, final int sectionX, final int sectionY, final int sectionZ) {
+    public static MapType createNewTick(final String subjectId, final int localIndex, final int sectionX, final int sectionY, final int sectionZ) {
         final int newX = (localIndex & 15) + (sectionX << 4);
         final int newZ = ((localIndex >> 4) & 15) + (sectionZ << 4);
         final int newY = ((localIndex >> 8) & 15) + (sectionY << 4);
 
-        final MapType<String> ret = Types.NBT.createEmptyMap();
+        final MapType ret = Types.NBT.createEmptyMap();
 
         ret.setString("i", subjectId);
         ret.setInt("x", newX);
@@ -130,11 +130,11 @@ public final class V2841 {
         return ret;
     }
 
-    public static String getBlockId(final MapType<String> blockState) {
+    public static String getBlockId(final MapType blockState) {
         return blockState == null ? "minecraft:air" : blockState.getString("Name", "minecraft:air");
     }
 
-    private static String getLiquidId(final MapType<String> blockState) {
+    private static String getLiquidId(final MapType blockState) {
         if (blockState == null) {
             return "minecraft:empty";
         }
@@ -144,7 +144,7 @@ public final class V2841 {
             return "minecraft:water";
         }
 
-        final MapType<String> properties = blockState.getMap("Properties");
+        final MapType properties = blockState.getMap("Properties");
         // Correctly read block state properties as strings - https://github.com/PaperMC/DataConverter/issues/6
         if ("minecraft:water".equals(name)) {
             return properties != null && "0".equals(properties.getString("level")) ? "minecraft:water" : "minecraft:flowing_water";
@@ -173,12 +173,12 @@ public final class V2841 {
             this.valuesPerLong = (int)(64L / this.bitsPerValue);
         }
 
-        public MapType<String> getState(final int x, final int y, final int z) {
+        public MapType getState(final int x, final int y, final int z) {
             final int index = x | (z << 4) | (y << 8);
             return this.getState(index);
         }
 
-        public MapType<String> getState(final int index) {
+        public MapType getState(final int index) {
             final ListType palette = this.palette;
             if (palette == null) {
                 return null;

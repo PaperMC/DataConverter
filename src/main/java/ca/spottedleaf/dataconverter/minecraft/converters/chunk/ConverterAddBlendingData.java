@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-public final class ConverterAddBlendingData extends DataConverter<MapType<String>, MapType<String>> {
+public final class ConverterAddBlendingData extends DataConverter<MapType, MapType> {
 
     private static final Set<String> STATUSES_TO_SKIP_BLENDING = new HashSet<>(
             Arrays.asList(
@@ -27,8 +27,8 @@ public final class ConverterAddBlendingData extends DataConverter<MapType<String
         super(toVersion, versionStep);
     }
 
-    private static MapType<String> createBlendingData(final int height, final int minY) {
-        final MapType<String> ret = Types.NBT.createEmptyMap();
+    private static MapType createBlendingData(final int height, final int minY) {
+        final MapType ret = Types.NBT.createEmptyMap();
 
         ret.setInt("min_section", minY >> 4);
         ret.setInt("max_section", (minY + height) >> 4);
@@ -37,9 +37,9 @@ public final class ConverterAddBlendingData extends DataConverter<MapType<String
     }
 
     @Override
-    public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+    public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
         data.remove("blending_data");
-        final MapType<String> context = data.getMap("__context");
+        final MapType context = data.getMap("__context");
         if (!"minecraft:overworld".equals(context == null ? null : context.getString("dimension"))) {
             return null;
         }
@@ -49,7 +49,7 @@ public final class ConverterAddBlendingData extends DataConverter<MapType<String
             return null;
         }
 
-        final MapType<String> belowZeroRetrogen = data.getMap("below_zero_retrogen");
+        final MapType belowZeroRetrogen = data.getMap("below_zero_retrogen");
 
         if (!STATUSES_TO_SKIP_BLENDING.contains(status)) {
             data.setMap("blending_data", createBlendingData(384, -64));

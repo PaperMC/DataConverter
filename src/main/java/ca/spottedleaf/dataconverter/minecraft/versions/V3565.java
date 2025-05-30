@@ -12,13 +12,13 @@ public final class V3565 {
     public static void register() {
         MCTypeRegistry.SAVED_DATA_RANDOM_SEQUENCES.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> root, final long sourceVersion, final long toVersion) {
-                final MapType<String> oldData = root.getMap("data");
+            public MapType convert(final MapType root, final long sourceVersion, final long toVersion) {
+                final MapType oldData = root.getMap("data");
                 if (oldData == null) {
                     return null;
                 }
 
-                final MapType<String> newData = root.getTypeUtil().createEmptyMap();
+                final MapType newData = root.getTypeUtil().createEmptyMap();
                 root.setMap("data", newData);
 
                 newData.setMap("sequences", oldData);

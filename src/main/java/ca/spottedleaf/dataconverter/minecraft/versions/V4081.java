@@ -12,7 +12,7 @@ public final class V4081 {
     public static void register() {
         MCTypeRegistry.ENTITY.addConverterForId("minecraft:salmon", new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 if ("large".equals(data.getString("type"))) {
                     return null;
                 }

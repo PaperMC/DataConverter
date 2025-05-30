@@ -25,8 +25,8 @@ public final class V1955 {
         return LEVEL_XP_THRESHOLDS[Mth.clamp(level - 1, 0, LEVEL_XP_THRESHOLDS.length - 1)];
     }
 
-    private static void addLevel(final MapType<String> data, final int level) {
-        MapType<String> villagerData = data.getMap("VillagerData");
+    private static void addLevel(final MapType data, final int level) {
+        MapType villagerData = data.getMap("VillagerData");
         if (villagerData == null) {
             villagerData = Types.NBT.createEmptyMap();
             data.setMap("VillagerData", villagerData);
@@ -34,19 +34,19 @@ public final class V1955 {
         villagerData.setInt("level", level);
     }
 
-    private static void addXpFromLevel(final MapType<String> data, final int level) {
+    private static void addXpFromLevel(final MapType data, final int level) {
         data.setInt("Xp", getMinXpPerLevel(level));
     }
 
     public static void register() {
         MCTypeRegistry.ENTITY.addConverterForId("minecraft:villager", new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
-                final MapType<String> villagerData = data.getMap("VillagerData");
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
+                final MapType villagerData = data.getMap("VillagerData");
                 int level = villagerData == null ? 0 : villagerData.getInt("level");
                 if (level == 0 || level == 1) {
                     // count recipes
-                    final MapType<String> offers = data.getMap("Offers");
+                    final MapType offers = data.getMap("Offers");
                     final ListType recipes = offers == null ? null : offers.getList("Recipes", ObjectType.MAP);
                     final int recipeCount;
                     if (recipes != null) {
@@ -71,11 +71,11 @@ public final class V1955 {
 
         MCTypeRegistry.ENTITY.addConverterForId("minecraft:zombie_villager", new DataConverter<>(VERSION) {
             @Override
-            public MapType<String> convert(final MapType<String> data, final long sourceVersion, final long toVersion) {
+            public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
                 final Number xp = data.getNumber("Xp");
                 if (xp == null) {
                     final int level;
-                    final MapType<String> villagerData = data.getMap("VillagerData");
+                    final MapType villagerData = data.getMap("VillagerData");
                     if (villagerData == null) {
                         level = 1;
                     } else {

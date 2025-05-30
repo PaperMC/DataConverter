@@ -11,22 +11,13 @@ public final class V3689 {
 
     private static final int VERSION = MCVersions.V23W44A + 1;
 
-    private static void registerMob(final String id) {
-        V100.registerEquipment(VERSION, id);
-    }
-
     public static void register() {
-        registerMob("minecraft:breeze");
+        //registerMob("minecraft:breeze"); // changed to simple in 1.21.5
         // minecraft:wind_charge is a simple entity
         // minecraft:breeze_wind_charge is a simple entity
 
-        MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, "minecraft:trial_spawner", (final MapType<String> data, final long fromVersion, final long toVersion) -> {
-            final ListType spawnPotentials = data.getList("spawn_potentials", ObjectType.MAP);
-            if (spawnPotentials != null) {
-                for (int i = 0, len = spawnPotentials.size(); i < len; ++i) {
-                    WalkerUtils.convert(MCTypeRegistry.ENTITY, spawnPotentials.getMap(i).getMap("data"), "entity", fromVersion, toVersion);
-                }
-            }
+        MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, "minecraft:trial_spawner", (final MapType data, final long fromVersion, final long toVersion) -> {
+            WalkerUtils.convertListPath(MCTypeRegistry.ENTITY, data, "spawn_potentials", "data", "entity", fromVersion, toVersion);
 
             WalkerUtils.convert(MCTypeRegistry.ENTITY, data.getMap("spawn_data"), "entity", fromVersion, toVersion);
             return null;
