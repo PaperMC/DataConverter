@@ -130,7 +130,7 @@ public final class NBTMapType implements MapType {
             case LIST:
                 return new NBTListType((ListTag)tag);
             case STRING:
-                return ((StringTag)tag).asString();
+                return ((StringTag)tag).value();
             case BYTE_ARRAY:
                 return ((ByteArrayTag)tag).getAsByteArray();
             // Note: No short array tag!
@@ -318,8 +318,8 @@ public final class NBTMapType implements MapType {
     @Override
     public byte[] getBytes(final String key, final byte[] dfl) {
         final Tag tag = this.map.get(key);
-        if (tag instanceof ByteArrayTag) {
-            return ((ByteArrayTag)tag).getAsByteArray();
+        if (tag instanceof ByteArrayTag byteArrayTag) {
+            return byteArrayTag.getAsByteArray();
         }
         return dfl;
     }
@@ -353,8 +353,8 @@ public final class NBTMapType implements MapType {
     @Override
     public int[] getInts(final String key, final int[] dfl) {
         final Tag tag = this.map.get(key);
-        if (tag instanceof IntArrayTag) {
-            return ((IntArrayTag)tag).getAsIntArray();
+        if (tag instanceof IntArrayTag intArrayTag) {
+            return intArrayTag.getAsIntArray();
         }
         return dfl;
     }
@@ -372,8 +372,8 @@ public final class NBTMapType implements MapType {
     @Override
     public long[] getLongs(final String key, final long[] dfl) {
         final Tag tag = this.map.get(key);
-        if (tag instanceof LongArrayTag) {
-            return ((LongArrayTag)tag).getAsLongArray();
+        if (tag instanceof LongArrayTag longArrayTag) {
+            return longArrayTag.getAsLongArray();
         }
         return dfl;
     }
@@ -391,8 +391,8 @@ public final class NBTMapType implements MapType {
     @Override
     public ListType getListUnchecked(final String key, final ListType dfl) {
         final Tag tag = this.map.get(key);
-        if (tag instanceof ListTag) {
-            return new NBTListType((ListTag)tag);
+        if (tag instanceof ListTag listTag) {
+            return new NBTListType(listTag);
         }
         return dfl;
     }
@@ -410,8 +410,8 @@ public final class NBTMapType implements MapType {
     @Override
     public MapType getMap(final String key, final MapType dfl) {
         final Tag tag = this.map.get(key);
-        if (tag instanceof CompoundTag) {
-            return new NBTMapType((CompoundTag)tag);
+        if (tag instanceof CompoundTag compoundTag) {
+            return new NBTMapType(compoundTag);
         }
         return dfl;
     }
