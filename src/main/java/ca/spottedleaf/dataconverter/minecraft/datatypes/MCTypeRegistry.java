@@ -38,6 +38,10 @@ public final class MCTypeRegistry {
     public static final MCValueType BIOME              = new MCValueType("Biome");
     public static final MCDataType WORLD_GEN_SETTINGS  = new MCDataType("WorldGenSettings");
     public static final MCValueType GAME_EVENT_NAME    = new MCValueType("GameEventName");
+    // NOTE: Prior to V165, TEXT_COMPONENT _also_ mark plain strings (not components!) to be converted to json format.
+    // So, great care should be taken to ensure that when dealing with versions up to and including V165 that BOTH formats
+    // of JSON and plain text are parsed properly.
+    // As a result, we differ from Vanilla's schemas to ensure that legacy data converts correctly.
     public static final DynamicDataType TEXT_COMPONENT = new DynamicDataType("TextComponent");
     public static final MCDataType ENTITY_EQUIPMENT    = new MCDataType("EntityEquipment");
 

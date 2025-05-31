@@ -11,7 +11,7 @@ import ca.spottedleaf.dataconverter.types.MapType;
 
 public final class V1458 {
 
-    private static final int VERSION = MCVersions.V17W50A + 1;
+    public static final int VERSION = MCVersions.V17W50A + 1;
 
     public static MapType updateCustomName(final MapType data) {
         final String customName = data.getString("CustomName", "");

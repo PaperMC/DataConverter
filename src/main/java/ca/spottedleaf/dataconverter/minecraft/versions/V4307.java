@@ -183,6 +183,7 @@ public final class V4307 {
 
                 WalkerUtils.convert(MCTypeRegistry.TEXT_COMPONENT, root, "minecraft:custom_name", fromVersion, toVersion);
                 WalkerUtils.convert(MCTypeRegistry.TEXT_COMPONENT, root, "minecraft:item_name", fromVersion, toVersion);
+                WalkerUtils.convertList(MCTypeRegistry.TEXT_COMPONENT, root, "minecraft:lore", fromVersion, toVersion);
 
                 final MapType writtenBookContent = root.getMap("minecraft:written_book_content");
                 if (writtenBookContent != null) {
@@ -190,14 +191,24 @@ public final class V4307 {
                     if (pages != null) {
                         for (int i = 0, len = pages.size(); i < len; ++i) {
                             final Object pageGeneric = pages.getGeneric(i);
-                            if (pageGeneric instanceof String) {
+                            if (pageGeneric instanceof String || pageGeneric instanceof ListType) { // handles: String case, ListType case
                                 final Object convertedGeneric = MCTypeRegistry.TEXT_COMPONENT.convert(pageGeneric, fromVersion, toVersion);
                                 if (convertedGeneric != null) {
                                     pages.setGeneric(i, convertedGeneric);
                                 }
                             } else if (pageGeneric instanceof MapType mapType) {
-                                WalkerUtils.convert(MCTypeRegistry.TEXT_COMPONENT, mapType, "raw", fromVersion, toVersion);
-                                WalkerUtils.convert(MCTypeRegistry.TEXT_COMPONENT, mapType, "filtered", fromVersion, toVersion);
+                                // Need to handle: Filterable format and regular NBT Component format are both MapType...
+                                if (mapType.hasKey("raw") || mapType.hasKey("filtered")) {
+                                    // Assume filterable format
+                                    WalkerUtils.convert(MCTypeRegistry.TEXT_COMPONENT, mapType, "raw", fromVersion, toVersion);
+                                    WalkerUtils.convert(MCTypeRegistry.TEXT_COMPONENT, mapType, "filtered", fromVersion, toVersion);
+                                } else {
+                                    // Assume regular NBT format
+                                    final Object convertedGeneric = MCTypeRegistry.TEXT_COMPONENT.convert(pageGeneric, fromVersion, toVersion);
+                                    if (convertedGeneric != null) {
+                                        pages.setGeneric(i, convertedGeneric);
+                                    }
+                                }
                             }
                         }
                     }

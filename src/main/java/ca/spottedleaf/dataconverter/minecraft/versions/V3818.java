@@ -255,9 +255,12 @@ public final class V3818 {
                 WalkerUtils.convert(MCTypeRegistry.ITEM_STACK, root.getMap("minecraft:food"), "using_converts_to", fromVersion, toVersion);
                 WalkerUtils.convert(MCTypeRegistry.TEXT_COMPONENT, root, "minecraft:custom_name", fromVersion, toVersion);
                 WalkerUtils.convert(MCTypeRegistry.TEXT_COMPONENT, root, "minecraft:item_name", fromVersion, toVersion);
+                WalkerUtils.convertList(MCTypeRegistry.TEXT_COMPONENT, root, "minecraft:lore", fromVersion, toVersion);
 
                 final MapType writtenBookContent = root.getMap("minecraft:written_book_content");
                 if (writtenBookContent != null) {
+                    // This logic is OK up until we need to convert TEXT_COMPONENT to NBT.
+                    // But that's for the next walker to handle.
                     final ListType pages = writtenBookContent.getListUnchecked("pages");
                     if (pages != null) {
                         for (int i = 0, len = pages.size(); i < len; ++i) {

@@ -75,6 +75,7 @@ public final class V99 {
     }
 
     static void registerSign(final int version, final String id) {
+        // NOTE: In 1.7.10, the text was not TEXT_COMPONENT but in 1.8 it is.
         MCTypeRegistry.TILE_ENTITY.addWalker(version, id, (final MapType data, final long fromVersion, final long toVersion) -> {
             WalkerUtils.convert(MCTypeRegistry.TEXT_COMPONENT, data, "Text1", fromVersion, toVersion);
             WalkerUtils.convert(MCTypeRegistry.TEXT_COMPONENT, data, "Text2", fromVersion, toVersion);
@@ -203,9 +204,9 @@ public final class V99 {
             new DataWalkerTypePaths<>(MCTypeRegistry.DATACONVERTER_CUSTOM_TYPE_COMMAND, "Command")
         );
         MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, "Control", new DataWalkerTypePaths<>(MCTypeRegistry.TEXT_COMPONENT, "LastOutput"));
-        MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, "Skull", new DataWalkerTypePaths<>(MCTypeRegistry.TEXT_COMPONENT, "custom_name"));
+        // skull doesn't even have custom_name in legacy versions! Why is it being walked here in DFU?????
         registerInventory("Hopper");
-        MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, "Banner", new DataWalkerTypePaths<>(MCTypeRegistry.TEXT_COMPONENT, "CustomName"));
+        // Banner CustomName is a string, not TEXT_COMPONENT. Fix Vanilla incorrectly converting this
         // Note: Vanilla does not properly handle this case for FlowerPot, it will not convert int ids!
         MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, "FlowerPot", new DataWalkerItemNames("Item"));
 
@@ -225,21 +226,23 @@ public final class V99 {
                 return null;
             }
 
+            final String itemId = getStringId(data.getGeneric("id"));
+
             // only things here are in tag, if changed update if above
 
             WalkerUtils.convertList(MCTypeRegistry.ITEM_STACK, tag, "Items", fromVersion, toVersion);
             WalkerUtils.convertList(MCTypeRegistry.ITEM_STACK, tag, "ChargedProjectiles", fromVersion, toVersion);
-            WalkerUtils.convertList(MCTypeRegistry.TEXT_COMPONENT, tag, "pages", fromVersion, toVersion);
-            WalkerUtils.convertList(MCTypeRegistry.TEXT_COMPONENT, tag, "filtered_pages", fromVersion, toVersion);
-            final MapType display = tag.getMap("display");
-            if (display != null) {
-                WalkerUtils.convert(MCTypeRegistry.TEXT_COMPONENT, display, "Name", fromVersion, toVersion);
-                WalkerUtils.convertList(MCTypeRegistry.TEXT_COMPONENT, display, "Lore", fromVersion, toVersion);
+            if ("minecraft:written_book".equals(itemId)) {
+                // These are only text component for WRITTEN books! DFU blindly will mark this as TEXT_COMPONENT.
+                // Like signs, they are only a real TEXT_COMPONENT (possibly!) in 1.8. We really can't distinguish between
+                // them though.
+                WalkerUtils.convertList(MCTypeRegistry.TEXT_COMPONENT, tag, "pages", fromVersion, toVersion);
+                WalkerUtils.convertList(MCTypeRegistry.TEXT_COMPONENT, tag, "filtered_pages", fromVersion, toVersion);
             }
+            // Note: In this version, display IS NEVER a TEXT_COMPONENT! This fixes incorrectly converting the display tag
 
             MapType entityTag = tag.getMap("EntityTag");
             if (entityTag != null) {
-                String itemId = getStringId(data.getString("id"));
                 final String entityId;
                 if ("minecraft:armor_stand".equals(itemId)) {
                     // The check for version id is removed here. For whatever reason, the legacy
@@ -283,7 +286,6 @@ public final class V99 {
 
             MapType blockEntityTag = tag.getMap("BlockEntityTag");
             if (blockEntityTag != null) {
-                final String itemId = getStringId(data.getString("id"));
                 final String entityId = ITEM_ID_TO_TILE_ENTITY_ID.get(itemId);
                 final boolean removeId;
                 if (entityId == null) {
@@ -399,10 +401,10 @@ public final class V99 {
     }
 
     private static String getStringId(final Object id) {
-        if (id instanceof String) {
-            return (String)id;
-        } else if (id instanceof Number) {
-            return HelperItemNameV102.getNameFromId(((Number)id).intValue());
+        if (id instanceof String string) {
+            return string;
+        } else if (id instanceof Number number) {
+            return HelperItemNameV102.getNameFromId(number.intValue());
         } else {
             return null;
         }

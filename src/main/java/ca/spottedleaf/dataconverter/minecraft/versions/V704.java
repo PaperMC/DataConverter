@@ -22,8 +22,11 @@ import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import org.slf4j.Logger;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public final class V704 {
 
@@ -228,20 +231,20 @@ public final class V704 {
         }
     }*/
 
-    private static Long2ObjectArraySortedMap<String> makeSingle(final long k1, final String v1) {
+    private static Long2ObjectArraySortedMap<String> makeSingle(final int k1, final String v1) {
         final Long2ObjectArraySortedMap<String> ret = new Long2ObjectArraySortedMap<>();
 
-        ret.put(k1, v1);
+        ret.put(DataConverter.encodeVersions(k1, 0), v1);
 
         return ret;
     }
 
-    private static Long2ObjectArraySortedMap<String> makeDouble(final long k1, final String v1,
-                                                                final long k2, final String v2) {
+    private static Long2ObjectArraySortedMap<String> makeDouble(final int k1, final String v1,
+                                                                final int k2, final String v2) {
         final Long2ObjectArraySortedMap<String> ret = new Long2ObjectArraySortedMap<>();
 
-        ret.put(k1, v1);
-        ret.put(k2, v2);
+        ret.put(DataConverter.encodeVersions(k1, 0), v1);
+        ret.put(DataConverter.encodeVersions(k2, 0), v2);
 
         return ret;
     }
@@ -313,9 +316,25 @@ public final class V704 {
         TILE_ID_UPDATE.put("Trap", "minecraft:dispenser");
     }
 
-    private static void registerInventory(final String id) {
-        MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, id, new DataWalkerItemLists("Items"));
-    }
+    // These do not need a walker, so we can ignore them not being registered.
+    private static final Set<String> IGNORE_ABSENT_WALKERS = new HashSet<>(
+        Arrays.asList(
+            "Airportal",
+            "DLDetector",
+            "Comparator",
+            "EnchantTable",
+            "EndGateway",
+            "Music",
+            "Beacon",
+            // note: contains blockId and blockData, but handled by flattening converters
+            "Piston",
+            "Structure",
+            "EnderChest",
+            // See V99
+            "Skull",
+            "Banner"
+        )
+    );
 
     public static void register() {
         MCTypeRegistry.TILE_ENTITY.addStructureConverter(new DataConverter<>(VERSION) {
@@ -336,7 +355,7 @@ public final class V704 {
             final String oldId = entry.getKey();
             final String newId = entry.getValue();
 
-            if (!MCTypeRegistry.TILE_ENTITY.hasWalkers(oldId)) {
+            if (!MCTypeRegistry.TILE_ENTITY.hasWalkers(oldId) && !IGNORE_ABSENT_WALKERS.contains(oldId)) {
                 LOGGER.error("(V704) Failed to find walkers for " + oldId);
             }
 
@@ -351,21 +370,33 @@ public final class V704 {
                 return null;
             }
 
+            final String itemId = data.getString("id");
+
             // only things here are in tag, if changed update if above
 
             WalkerUtils.convertList(MCTypeRegistry.ITEM_STACK, tag, "Items", fromVersion, toVersion);
             WalkerUtils.convertList(MCTypeRegistry.ITEM_STACK, tag, "ChargedProjectiles", fromVersion, toVersion);
-            WalkerUtils.convertList(MCTypeRegistry.TEXT_COMPONENT, tag, "pages", fromVersion, toVersion);
-            WalkerUtils.convertList(MCTypeRegistry.TEXT_COMPONENT, tag, "filtered_pages", fromVersion, toVersion);
-            final MapType display = tag.getMap("display");
-            if (display != null) {
-                WalkerUtils.convert(MCTypeRegistry.TEXT_COMPONENT, display, "Name", fromVersion, toVersion);
-                WalkerUtils.convertList(MCTypeRegistry.TEXT_COMPONENT, display, "Lore", fromVersion, toVersion);
+            if ("minecraft:written_book".equals(itemId)) {
+                // These are only text component for WRITTEN books! DFU blindly will mark this as TEXT_COMPONENT.
+                WalkerUtils.convertList(MCTypeRegistry.TEXT_COMPONENT, tag, "pages", fromVersion, toVersion);
+                WalkerUtils.convertList(MCTypeRegistry.TEXT_COMPONENT, tag, "filtered_pages", fromVersion, toVersion);
+            }
+            // Vanilla blindly marks these as TEXT_COMPONENT even though they are only converted after the versions noted
+            // below.
+            if (toVersion >= DataConverter.encodeVersions(V1458.VERSION, 0)) {
+                final MapType display = tag.getMap("display");
+                if (display != null) {
+                    // only TEXT_COMPONENT in V1458
+                    WalkerUtils.convert(MCTypeRegistry.TEXT_COMPONENT, display, "Name", fromVersion, toVersion);
+                    if (toVersion >= DataConverter.encodeVersions(V1803.VERSION, 0)) {
+                        // only TEXT_COMPONENT in V1803
+                        WalkerUtils.convertList(MCTypeRegistry.TEXT_COMPONENT, display, "Lore", fromVersion, toVersion);
+                    }
+                }
             }
 
             MapType entityTag = tag.getMap("EntityTag");
             if (entityTag != null) {
-                final String itemId = data.getString("id");
                 final String entityId;
                 if (itemId != null && itemId.contains("_spawn_egg")) {
                     // V1451 changes spawn eggs to have the sub entity id be a part of the item id, but of course Mojang never
@@ -398,9 +429,8 @@ public final class V704 {
 
             MapType blockEntityTag = tag.getMap("BlockEntityTag");
             if (blockEntityTag != null) {
-                final String itemId = data.getString("id");
                 final String entityId;
-                if (fromVersion < V3438.VERSION && "minecraft:suspicious_sand".equals(itemId)) {
+                if (fromVersion < DataConverter.encodeVersions(V3438.VERSION, 0) && "minecraft:suspicious_sand".equals(itemId)) {
                     // renamed after this version, and since the id is a mapping to just string we need to special case this
                     entityId = "minecraft:suspicious_sand";
                 } else {

@@ -2,9 +2,9 @@ package ca.spottedleaf.dataconverter.minecraft.versions;
 
 import ca.spottedleaf.dataconverter.converters.DataConverter;
 import ca.spottedleaf.dataconverter.minecraft.MCVersions;
-import ca.spottedleaf.dataconverter.minecraft.converters.helpers.RenameHelper;
 import ca.spottedleaf.dataconverter.minecraft.converters.itemstack.ConverterItemStackToDataComponents;
 import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
+import ca.spottedleaf.dataconverter.minecraft.walkers.generic.DataWalkerTypePaths;
 import ca.spottedleaf.dataconverter.types.MapType;
 
 public final class V3820 {
@@ -72,6 +72,9 @@ public final class V3820 {
                 return null;
             }
         });
+
+        // Moved from V99 to here, as 21w10a is when custom_name was added
+        MCTypeRegistry.TILE_ENTITY.addWalker(VERSION, "minecraft:skull", new DataWalkerTypePaths<>(MCTypeRegistry.TEXT_COMPONENT, "custom_name"));
     }
 
     private V3820() {}
