@@ -111,6 +111,7 @@ public final class V3439 {
         MCTypeRegistry.TILE_ENTITY.addConverterForId("minecraft:hanging_sign", signTileUpdater);
 
         registerSign(VERSION, "minecraft:sign");
+        // in 1.21.6 this was changed to a subversion. I don't see why we need that change.
         registerSign(VERSION, "minecraft:hanging_sign");
     }
 

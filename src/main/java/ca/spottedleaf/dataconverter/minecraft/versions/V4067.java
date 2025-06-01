@@ -134,7 +134,7 @@ public final class V4067 {
             }
         });
 
-        MCTypeRegistry.LEVEL.addStructureConverter(
+        MCTypeRegistry.LIGHTWEIGHT_LEVEL.addStructureConverter(
             new ConverterRemoveFeatureFlag(VERSION, new HashSet<>(Arrays.asList("minecraft:bundle")))
         );
     }

@@ -12,6 +12,7 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.gson.JsonParser;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Dynamic;
 import com.mojang.serialization.DynamicOps;
@@ -118,7 +119,7 @@ public final class V1506 {
                 if ("flat".equalsIgnoreCase(generatorName)) {
                     data.setMap("generatorOptions", V1506.convert(generatorOptions == null ? "" : generatorOptions));
                 } else if ("buffet".equalsIgnoreCase(generatorName) && generatorOptions != null) {
-                    data.setGeneric("generatorOptions", Types.JSON.convertFromBaseToGeneric(GsonHelper.parse(generatorOptions, true), data.getTypeUtil()));
+                    data.setGeneric("generatorOptions", Types.JSON.convertFromBaseToGeneric(JsonParser.parseString(generatorOptions), data.getTypeUtil()));
                 }
                 return null;
             }

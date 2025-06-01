@@ -2,6 +2,7 @@ package ca.spottedleaf.dataconverter.mixin;
 
 import ca.spottedleaf.dataconverter.minecraft.MCDataConverter;
 import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
+import ca.spottedleaf.dataconverter.minecraft.util.Version;
 import com.mojang.datafixers.DataFixer;
 import com.mojang.serialization.Dynamic;
 import net.minecraft.SharedConstants;
@@ -28,7 +29,7 @@ abstract class LevelStorageSourceMixin {
     )
     private static <T> Dynamic<T> updatePlayerData(final DataFixTypes type, final DataFixer dataFixer, final Dynamic<T> input, final int version) {
         if (type == DataFixTypes.PLAYER) {
-            return new Dynamic<>(input.getOps(), (T)MCDataConverter.convertTag(MCTypeRegistry.PLAYER, (CompoundTag)input.getValue(), version, SharedConstants.getCurrentVersion().getDataVersion().getVersion()));
+            return new Dynamic<>(input.getOps(), (T)MCDataConverter.convertTag(MCTypeRegistry.PLAYER, (CompoundTag)input.getValue(), version, Version.getCurrentVersion()));
         }
 
         return type.updateToCurrentVersion(dataFixer, input, version);

@@ -2,6 +2,7 @@ package ca.spottedleaf.dataconverter.mixin;
 
 import ca.spottedleaf.dataconverter.minecraft.MCDataConverter;
 import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
+import ca.spottedleaf.dataconverter.minecraft.util.Version;
 import com.mojang.datafixers.DataFixer;
 import net.minecraft.SharedConstants;
 import net.minecraft.nbt.CompoundTag;
@@ -28,7 +29,7 @@ abstract class PlayerDataStorageMixin {
     )
     private CompoundTag updatePlayerData(final DataFixTypes type, final DataFixer dataFixer, final CompoundTag compoundTag, final int version) {
         if (type == DataFixTypes.PLAYER) {
-            return MCDataConverter.convertTag(MCTypeRegistry.PLAYER, compoundTag, version, SharedConstants.getCurrentVersion().getDataVersion().getVersion());
+            return MCDataConverter.convertTag(MCTypeRegistry.PLAYER, compoundTag, version, Version.getCurrentVersion());
         }
 
         return type.updateToCurrentVersion(dataFixer, compoundTag, version);

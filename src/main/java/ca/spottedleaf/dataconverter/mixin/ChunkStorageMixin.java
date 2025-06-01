@@ -2,6 +2,7 @@ package ca.spottedleaf.dataconverter.mixin;
 
 import ca.spottedleaf.dataconverter.minecraft.MCDataConverter;
 import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
+import ca.spottedleaf.dataconverter.minecraft.util.Version;
 import com.mojang.datafixers.DataFixer;
 import net.minecraft.SharedConstants;
 import net.minecraft.nbt.CompoundTag;
@@ -49,6 +50,6 @@ abstract class ChunkStorageMixin implements AutoCloseable {
         if (instance != DataFixTypes.CHUNK) {
             throw new IllegalStateException();
         }
-        return MCDataConverter.convertTag(MCTypeRegistry.CHUNK, compoundTag, from, SharedConstants.getCurrentVersion().getDataVersion().getVersion());
+        return MCDataConverter.convertTag(MCTypeRegistry.CHUNK, compoundTag, from, Version.getCurrentVersion());
     }
 }

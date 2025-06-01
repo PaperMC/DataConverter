@@ -11,7 +11,7 @@ public final class V4180 {
     private static final int VERSION = MCVersions.V1_21_4_PRE1 + 1;
 
     public static void register() {
-        MCTypeRegistry.LEVEL.addStructureConverter(new ConverterRemoveFeatureFlag(VERSION, new HashSet<>(
+        MCTypeRegistry.LIGHTWEIGHT_LEVEL.addStructureConverter(new ConverterRemoveFeatureFlag(VERSION, new HashSet<>(
             Arrays.asList(
                 "minecraft:winter_drop"
             )

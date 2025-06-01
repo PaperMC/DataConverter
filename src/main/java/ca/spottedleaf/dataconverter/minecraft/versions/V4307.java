@@ -99,6 +99,7 @@ public final class V4307 {
                 updateComponentAndUnwrap(root, "minecraft:attribute_modifiers", "modifiers", hiddenComponents);
                 updateComponentAndUnwrap(root, "minecraft:enchantments", "levels", hiddenComponents);
                 updateComponentAndUnwrap(root, "minecraft:stored_enchantments", "levels", hiddenComponents);
+                updateComponentAndUnwrap(root, "minecraft:jukebox_playable", "song", hiddenComponents);
 
                 final boolean hideTooltip = root.hasKey("minecraft:hide_tooltip");
                 final boolean hideAdditionalTooltip = root.hasKey("minecraft:hide_additional_tooltip");

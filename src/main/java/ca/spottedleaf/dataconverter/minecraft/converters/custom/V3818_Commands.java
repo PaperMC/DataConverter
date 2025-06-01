@@ -4,6 +4,7 @@ import ca.spottedleaf.dataconverter.converters.DataConverter;
 import ca.spottedleaf.dataconverter.minecraft.MCDataConverter;
 import ca.spottedleaf.dataconverter.minecraft.MCVersions;
 import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
+import ca.spottedleaf.dataconverter.minecraft.util.Version;
 import ca.spottedleaf.dataconverter.types.ListType;
 import ca.spottedleaf.dataconverter.types.MapType;
 import ca.spottedleaf.dataconverter.types.ObjectType;
@@ -78,7 +79,7 @@ public final class V3818_Commands {
                 if ((actionString.equals("suggest_command") && cmdString.startsWith("/")) || actionString.equals("run_command")) {
                     try {
                         final Object res = MCDataConverter.convert(
-                            MCTypeRegistry.DATACONVERTER_CUSTOM_TYPE_COMMAND, cmdString, MCVersions.V1_20_4, SharedConstants.getCurrentVersion().getDataVersion().getVersion()
+                            MCTypeRegistry.DATACONVERTER_CUSTOM_TYPE_COMMAND, cmdString, MCVersions.V1_20_4, Version.getCurrentVersion()
                         );
                         if (res instanceof String newCmd) {
                             clickEvent.addProperty("value", newCmd);
@@ -112,8 +113,8 @@ public final class V3818_Commands {
                         }
 
                         final CompoundTag converted = MCDataConverter.convertTag(
-                                MCTypeRegistry.ITEM_STACK, itemNBT, MCVersions.V1_20_4,
-                                SharedConstants.getCurrentVersion().getDataVersion().getVersion()
+                            MCTypeRegistry.ITEM_STACK, itemNBT, MCVersions.V1_20_4,
+                            Version.getCurrentVersion()
                         );
 
                         contents.remove("tag");
@@ -136,7 +137,7 @@ public final class V3818_Commands {
                             }
                             final CompoundTag converted = MCDataConverter.convertTag(
                                 MCTypeRegistry.ITEM_STACK, itemNBT, MCVersions.V1_20_4,
-                                SharedConstants.getCurrentVersion().getDataVersion().getVersion()
+                                Version.getCurrentVersion()
                             );
 
                             hoverEvent.remove("value");

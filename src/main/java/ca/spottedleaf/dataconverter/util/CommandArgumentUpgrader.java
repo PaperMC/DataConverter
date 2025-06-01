@@ -4,6 +4,7 @@ import ca.spottedleaf.dataconverter.minecraft.MCDataConverter;
 import ca.spottedleaf.dataconverter.minecraft.MCVersions;
 import ca.spottedleaf.dataconverter.minecraft.converters.custom.V3818_Commands;
 import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
+import ca.spottedleaf.dataconverter.minecraft.util.Version;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.google.gson.internal.Streams;
@@ -187,7 +188,7 @@ public final class CommandArgumentUpgrader {
             }
 
             final CompoundTag converted = MCDataConverter.convertTag(
-                MCTypeRegistry.ITEM_STACK, itemNBT, MCVersions.V1_20_4, SharedConstants.getCurrentVersion().getDataVersion().getVersion()
+                MCTypeRegistry.ITEM_STACK, itemNBT, MCVersions.V1_20_4, Version.getCurrentVersion()
             );
 
             final String newId = converted.getStringOr("id", "");
@@ -281,7 +282,7 @@ public final class CommandArgumentUpgrader {
                 tag.putString("id", CommandArgumentUpgrader.blockToTileEntity(block));
             }
             tag = MCDataConverter.convertTag(
-                MCTypeRegistry.TILE_ENTITY, tag, MCVersions.V1_20_4, SharedConstants.getCurrentVersion().getDataVersion().getVersion()
+                MCTypeRegistry.TILE_ENTITY, tag, MCVersions.V1_20_4, Version.getCurrentVersion()
             );
             if (missId) {
                 tag.remove("id");
@@ -529,7 +530,7 @@ public final class CommandArgumentUpgrader {
                                         final CompoundTag convertedTag = MCDataConverter.convertTag(
                                             MCTypeRegistry.ENTITY,
                                             tagCopy,
-                                            MCVersions.V1_20_4, SharedConstants.getCurrentVersion().getDataVersion().getVersion()
+                                            MCVersions.V1_20_4, Version.getCurrentVersion()
                                         );
                                         convertedTag.remove("id");
 

@@ -66,6 +66,7 @@ public final class V4309 {
                         RenameHelper.renameSingle(raid, "TotalHealth", "total_health");
                         RenameHelper.renameSingle(raid, "NumGroups", "group_count");
                         RenameHelper.renameSingle(raid, "Status", "status");
+                        RenameHelper.renameSingle(raid, "HeroesOfTheVillage", "heroes_of_the_village");
                     }
                 }
 

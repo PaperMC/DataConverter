@@ -3,6 +3,7 @@ package ca.spottedleaf.dataconverter.mixin;
 import ca.spottedleaf.dataconverter.minecraft.MCDataConverter;
 import ca.spottedleaf.dataconverter.minecraft.datatypes.MCDataType;
 import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
+import ca.spottedleaf.dataconverter.minecraft.util.Version;
 import com.mojang.serialization.Dynamic;
 import net.minecraft.SharedConstants;
 import net.minecraft.nbt.CompoundTag;
@@ -41,7 +42,7 @@ abstract class SimpleRegionStorageMixin implements AutoCloseable {
     @Overwrite
     public CompoundTag upgradeChunkTag(final CompoundTag nbt, final int dflVer) {
         final int dataVer = NbtUtils.getDataVersion(nbt, dflVer);
-        return MCDataConverter.convertTag(this.getDataConverterType(), nbt, dataVer, SharedConstants.getCurrentVersion().getDataVersion().getVersion());
+        return MCDataConverter.convertTag(this.getDataConverterType(), nbt, dataVer, Version.getCurrentVersion());
     }
 
     /**
@@ -50,7 +51,7 @@ abstract class SimpleRegionStorageMixin implements AutoCloseable {
      */
     @Overwrite
     public Dynamic<Tag> upgradeChunkTag(final Dynamic<Tag> nbt, final int dataVer) {
-        final CompoundTag converted = MCDataConverter.convertTag(this.getDataConverterType(), (CompoundTag)nbt.getValue(), dataVer, SharedConstants.getCurrentVersion().getDataVersion().getVersion());
+        final CompoundTag converted = MCDataConverter.convertTag(this.getDataConverterType(), (CompoundTag)nbt.getValue(), dataVer, Version.getCurrentVersion());
         return new Dynamic<>(nbt.getOps(), converted);
     }
 }

@@ -215,7 +215,7 @@ public final class V99 {
         MCTypeRegistry.LEVEL.addStructureWalker(VERSION, (final MapType data, final long fromVersion, final long toVersion) -> {
             WalkerUtils.convertListPath(MCTypeRegistry.TEXT_COMPONENT, data, "CustomBossEvents", "Name", fromVersion, toVersion);
 
-            return null;
+            return MCTypeRegistry.LIGHTWEIGHT_LEVEL.convert(data, fromVersion, toVersion);
         });
 
         MCTypeRegistry.ITEM_STACK.addStructureWalker(VERSION, (final MapType data, final long fromVersion, final long toVersion) -> {
@@ -343,6 +343,7 @@ public final class V99 {
 
         MCTypeRegistry.SAVED_DATA_MAP_DATA.addStructureWalker(VERSION, (final MapType root, final long fromVersion, final long toVersion) -> {
             WalkerUtils.convertListPath(MCTypeRegistry.TEXT_COMPONENT, root, "banners", "Name", fromVersion, toVersion);
+            WalkerUtils.convertListPath(MCTypeRegistry.TEXT_COMPONENT, root.getMap("data"), "banners", "Name", fromVersion, toVersion);
             return null;
         });
         MCTypeRegistry.SAVED_DATA_SCOREBOARD.addStructureWalker(VERSION, (final MapType root, final long fromVersion, final long toVersion) -> {

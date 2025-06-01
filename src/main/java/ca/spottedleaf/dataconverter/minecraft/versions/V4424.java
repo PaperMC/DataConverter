@@ -6,17 +6,17 @@ import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
 import java.util.Arrays;
 import java.util.HashSet;
 
-public final class V3939 {
+public final class V4424 {
 
-    private static final int VERSION = MCVersions.V1_20_6 + 100;
+    private static final int VERSION = MCVersions.V25W15A + 2;
 
     public static void register() {
         MCTypeRegistry.LIGHTWEIGHT_LEVEL.addStructureConverter(new ConverterRemoveFeatureFlag(VERSION, new HashSet<>(
             Arrays.asList(
-                "minecraft:update_1_21"
+                "minecraft:locator_bar"
             )
         )));
     }
 
-    private V3939() {}
+    private V4424() {}
 }

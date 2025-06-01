@@ -10,6 +10,7 @@ public final class MCTypeRegistry {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     public static final MCDataType LEVEL               = new MCDataType("Level");
+    public static final MCDataType LIGHTWEIGHT_LEVEL   = new MCDataType("LightweightLevel");
     public static final MCDataType PLAYER              = new MCDataType("Player");
     public static final MCDataType CHUNK               = new MCDataType("Chunk");
     public static final MCDataType HOTBAR              = new MCDataType("CreativeHotbar");
@@ -204,6 +205,7 @@ public final class MCTypeRegistry {
         V2531.register();
         V2533.register();
         V2535.register();
+        V2537.register();
         V2538.register();
         V2550.register();
         V2551.register();
@@ -356,6 +358,9 @@ public final class MCTypeRegistry {
         V4311.register();
         V4312.register();
         V4314.register();
+        V4420.register();
+        V4421.register();
+        V4424.register();
     }
 
     private MCTypeRegistry() {}
