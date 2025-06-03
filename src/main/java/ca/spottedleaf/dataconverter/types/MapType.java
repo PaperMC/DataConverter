@@ -169,6 +169,7 @@ public interface MapType {
     public default void setGeneric(final String key, final Object value) {
         if (value instanceof Boolean bool) {
             this.setBoolean(key, bool.booleanValue());
+            return;
         } else if (value instanceof Number) {
             if (value instanceof Byte b) {
                 this.setByte(key, b.byteValue());

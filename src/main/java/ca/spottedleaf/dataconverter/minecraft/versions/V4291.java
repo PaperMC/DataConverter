@@ -18,6 +18,8 @@ public final class V4291 {
                 "underlined",
                 "strikethrough",
                 "obfuscated",
+                // add extra interpret field
+                "interpret",
             };
 
             private static void convertToBoolean(final MapType data, final String path) {
@@ -33,7 +35,7 @@ public final class V4291 {
                     for (final String path : BOOLEAN_PATHS_TO_CONVERT) {
                         convertToBoolean(root, path);
                     }
-                } // else: list or string, don't care about formatting for those
+                } // else: list -> handled by walker, string -> no formatting to convert
                 return null;
             }
         });

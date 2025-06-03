@@ -3,7 +3,6 @@ package ca.spottedleaf.dataconverter.minecraft.versions;
 import ca.spottedleaf.dataconverter.converters.DataConverter;
 import ca.spottedleaf.dataconverter.converters.datatypes.DataWalker;
 import ca.spottedleaf.dataconverter.minecraft.MCVersions;
-import ca.spottedleaf.dataconverter.minecraft.converters.custom.V3818_Commands;
 import ca.spottedleaf.dataconverter.minecraft.converters.helpers.RenameHelper;
 import ca.spottedleaf.dataconverter.minecraft.converters.itemstack.ConverterItemStackToDataComponents;
 import ca.spottedleaf.dataconverter.minecraft.converters.particle.ConverterParticleToNBT;
@@ -265,8 +264,8 @@ public final class V3818 {
                     if (pages != null) {
                         for (int i = 0, len = pages.size(); i < len; ++i) {
                             final Object pageGeneric = pages.getGeneric(i);
-                            if (pageGeneric instanceof String) {
-                                final Object convertedGeneric = MCTypeRegistry.TEXT_COMPONENT.convert(pageGeneric, fromVersion, toVersion);
+                            if (pageGeneric instanceof String string) {
+                                final Object convertedGeneric = MCTypeRegistry.TEXT_COMPONENT.convert(string, fromVersion, toVersion);
                                 if (convertedGeneric != null) {
                                     pages.setGeneric(i, convertedGeneric);
                                 }
@@ -322,9 +321,6 @@ public final class V3818 {
 
             return null;
         });
-
-        // Custom converter for converting commands inside signs, books, command blocks
-        V3818_Commands.register_5();
 
         // Step 6
         MCTypeRegistry.ENTITY.addConverterForId("minecraft:area_effect_cloud", new DataConverter<>(VERSION, 6) {

@@ -14,12 +14,7 @@ public final class GameEventListenerWalker implements DataWalker<MapType> {
             return null;
         }
 
-        final MapType event = listener.getMap("event");
-        if (event == null) {
-            return null;
-        }
-
-        WalkerUtils.convert(MCTypeRegistry.GAME_EVENT_NAME, event, "game_event", fromVersion, toVersion);
+        WalkerUtils.convert(MCTypeRegistry.GAME_EVENT_NAME, listener.getMap("event"), "game_event", fromVersion, toVersion);
 
         return null;
     }

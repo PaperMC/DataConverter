@@ -57,7 +57,7 @@ public final class MCTypeRegistry {
     public static final MCDataType SAVED_DATA_MAP_INDEX                 = new MCDataType("SavedData/IdCounts");
     public static final MCDataType SAVED_DATA_TICKETS                   = new MCDataType("SavedData/Tickets");
 
-    public static final MCValueType DATACONVERTER_CUSTOM_TYPE_COMMAND = new MCValueType("DC_Custom/Command");
+    public static final DynamicDataType DATACONVERTER_CUSTOM_TYPE_COMMAND = new DynamicDataType("DC_Custom/Command");
 
     static {
         LOGGER.info("Initialising converters for DataConverter...");

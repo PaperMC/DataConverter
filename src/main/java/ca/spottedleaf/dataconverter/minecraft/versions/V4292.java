@@ -76,9 +76,9 @@ public final class V4292 {
                                 final MapType contents = hoverEvent.getOrCreateMap("contents");
                                 hoverEvent.remove("contents");
 
-                                CopyHelper.copy(contents, "id", hoverEvent, "id");
-                                CopyHelper.copy(contents, "count", hoverEvent, "count");
-                                CopyHelper.copy(contents, "components", hoverEvent, "components");
+                                CopyHelper.move(contents, "id", hoverEvent, "id");
+                                CopyHelper.move(contents, "count", hoverEvent, "count");
+                                CopyHelper.move(contents, "components", hoverEvent, "components");
                             }
                             break;
                         }
@@ -86,9 +86,9 @@ public final class V4292 {
                             final MapType contents = hoverEvent.getOrCreateMap("contents");
                             hoverEvent.remove("contents");
 
-                            CopyHelper.copy(contents, "id", hoverEvent, "uuid");
-                            CopyHelper.copy(contents, "type", hoverEvent, "id");
-                            CopyHelper.copy(contents, "name", hoverEvent, "name");
+                            CopyHelper.move(contents, "id", hoverEvent, "uuid");
+                            CopyHelper.move(contents, "type", hoverEvent, "id");
+                            CopyHelper.move(contents, "name", hoverEvent, "name");
 
                             break;
                         }
@@ -148,6 +148,9 @@ public final class V4292 {
             } else if (input instanceof MapType root) {
                 WalkerUtils.convertList(MCTypeRegistry.TEXT_COMPONENT, root, "extra", fromVersion, toVersion);
                 WalkerUtils.convert(MCTypeRegistry.TEXT_COMPONENT, root, "separator", fromVersion, toVersion);
+
+
+                WalkerUtils.convert(MCTypeRegistry.DATACONVERTER_CUSTOM_TYPE_COMMAND, root.getMap("clickEvent"), "command", fromVersion, toVersion);
 
                 final MapType hoverEvent = root.getMap("hover_event");
                 if (hoverEvent != null) {

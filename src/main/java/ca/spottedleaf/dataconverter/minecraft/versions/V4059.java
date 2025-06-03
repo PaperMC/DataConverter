@@ -81,7 +81,7 @@ public final class V4059 {
                         for (int i = 0, len = pages.size(); i < len; ++i) {
                             final Object pageGeneric = pages.getGeneric(i);
                             final boolean isNBTFormat = fromVersion >= DataConverter.encodeVersions(V4290.VERSION, 0);
-                            // Note: We only parse ListType for 4290 and above as only a String was valid JSON. List of String or anything else was not valid.
+                            // Note: We only parse ListType for 4290 and above as only a String was valid JSON. List of anything was not valid.
                             if (pageGeneric instanceof String || (isNBTFormat && pageGeneric instanceof ListType)) { // handles: String case (JSON/NBT), ListType case (NBT)
                                 final Object convertedGeneric = MCTypeRegistry.TEXT_COMPONENT.convert(pageGeneric, fromVersion, toVersion);
                                 if (convertedGeneric != null) {
@@ -93,14 +93,12 @@ public final class V4059 {
                                     // Assume filterable format
                                     WalkerUtils.convert(MCTypeRegistry.TEXT_COMPONENT, mapType, "raw", fromVersion, toVersion);
                                     WalkerUtils.convert(MCTypeRegistry.TEXT_COMPONENT, mapType, "filtered", fromVersion, toVersion);
-                                } else {
-                                    if (isNBTFormat) {
-                                        final Object convertedGeneric = MCTypeRegistry.TEXT_COMPONENT.convert(mapType, fromVersion, toVersion);
-                                        if (convertedGeneric != null) {
-                                            pages.setGeneric(i, convertedGeneric);
-                                        }
-                                    } // else: invalid data
-                                }
+                                } else if (isNBTFormat) {
+                                    final Object convertedGeneric = MCTypeRegistry.TEXT_COMPONENT.convert(mapType, fromVersion, toVersion);
+                                    if (convertedGeneric != null) {
+                                        pages.setGeneric(i, convertedGeneric);
+                                    }
+                                } // else: invalid data
                             } // else: invalid data
                         }
                     }

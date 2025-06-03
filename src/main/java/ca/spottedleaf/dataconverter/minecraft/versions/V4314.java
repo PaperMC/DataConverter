@@ -102,6 +102,7 @@ public final class V4314 {
         MCTypeRegistry.ENTITY.addConverterForId("minecraft:item_frame", attachedBlockConverter);
         MCTypeRegistry.ENTITY.addConverterForId("minecraft:glow_item_frame", attachedBlockConverter);
         MCTypeRegistry.ENTITY.addConverterForId("minecraft:painting", attachedBlockConverter);
+        // Note: Leash entities never wrote TileX/Y/Z and don't read block_pos... Why is this here then?
         MCTypeRegistry.ENTITY.addConverterForId("minecraft:leash_knot", attachedBlockConverter);
     }
 

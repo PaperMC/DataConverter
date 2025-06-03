@@ -13,8 +13,6 @@ public final class V4297 {
 
     public static void register() {
         MCTypeRegistry.SAVED_DATA_TICKETS.addStructureConverter(new DataConverter<>(VERSION) {
-            private static final long INVALID_COORDINATE = ((long)Integer.MIN_VALUE & 0xFFFFFFFFL) | ((long)Integer.MIN_VALUE << 32);
-
             @Override
             public MapType convert(final MapType root, final long sourceVersion, final long toVersion) {
                 final MapType data = root.getMap("data");
@@ -22,7 +20,7 @@ public final class V4297 {
                     return null;
                 }
 
-                final ListType forced = data.getListUnchecked("Forced");
+                final long[] forced = data.getLongs("Forced");
                 if (forced == null) {
                     return null;
                 }
@@ -34,12 +32,7 @@ public final class V4297 {
                 final ListType tickets = typeUtil.createEmptyList();
                 data.setList("tickets", tickets);
 
-                for (int i = 0, len = forced.size(); i < len; ++i) {
-                    final long coordinate = forced.getLong(i, INVALID_COORDINATE);
-                    if (coordinate == INVALID_COORDINATE) {
-                        continue;
-                    }
-
+                for (final long coordinate : forced) {
                     final MapType ticket = typeUtil.createEmptyMap();
                     tickets.addMap(ticket);
 

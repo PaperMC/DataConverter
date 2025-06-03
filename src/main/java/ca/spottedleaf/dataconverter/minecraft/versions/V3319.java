@@ -13,7 +13,7 @@ public final class V3319 {
         MCTypeRegistry.OPTIONS.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
             public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
-                data.setBoolean("onboardAccessibility", false);
+                data.setString("onboardAccessibility", "false");
                 return null;
             }
         });

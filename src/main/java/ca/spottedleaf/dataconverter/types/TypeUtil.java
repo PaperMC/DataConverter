@@ -14,6 +14,10 @@ public interface TypeUtil<T> {
         return to.genericToBase(this.convertFromBaseToGeneric(input, to));
     }
 
+    public default <D> D convertGenericToBase(final Object valueGeneric, final TypeUtil<D> to) {
+        return to.genericToBase(this.convertTo(valueGeneric, to));
+    }
+
     public Object convertTo(final Object valueGeneric, final TypeUtil<?> to);
 
     public Object baseToGeneric(final T input);

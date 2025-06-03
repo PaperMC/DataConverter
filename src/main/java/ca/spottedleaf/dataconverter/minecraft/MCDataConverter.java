@@ -40,11 +40,18 @@ public final class MCDataConverter {
         return replaced == null ? wrapped.getJson() : replaced.getJson();
     }
 
-    public static <T, R> R convert(final DataType<T, R> type, final T data, int fromVersion, final int toVersion) {
+    public static <T, R> R convert(final DataType<T, R> type, final T data, final int fromVersion, final int toVersion) {
+        return convertWithSubVersion(
+            type, data,
+            DataConverter.encodeVersions(Math.max(fromVersion, V99.VERSION), Integer.MAX_VALUE),
+            DataConverter.encodeVersions(toVersion, Integer.MAX_VALUE)
+        );
+    }
+
+    public static <T, R> R convertWithSubVersion(final DataType<T, R> type, final T data, final long fromVersion, final long toVersion) {
         Object ret = data;
 
-        long currentVersion = DataConverter.encodeVersions(fromVersion < V99.VERSION ? V99.VERSION : fromVersion, Integer.MAX_VALUE);
-        final long nextVersion = DataConverter.encodeVersions(toVersion, Integer.MAX_VALUE);
+        long currentVersion = fromVersion;
 
         for (int i = 0, len = BREAKPOINTS.size(); i < len; ++i) {
             final long breakpoint = BREAKPOINTS.getLong(i);
@@ -53,20 +60,20 @@ public final class MCDataConverter {
                 continue;
             }
 
-            final Object converted = type.convert((T)ret, currentVersion, Math.min(nextVersion, breakpoint - 1));
+            final Object converted = type.convert((T)ret, currentVersion, Math.min(toVersion, breakpoint - 1L));
             if (converted != null) {
                 ret = converted;
             }
 
-            currentVersion = Math.min(nextVersion, breakpoint - 1);
+            currentVersion = Math.min(toVersion, breakpoint - 1L);
 
-            if (currentVersion == nextVersion) {
+            if (currentVersion == toVersion) {
                 break;
             }
         }
 
-        if (currentVersion != nextVersion) {
-            final Object converted = type.convert((T)ret, currentVersion, nextVersion);
+        if (currentVersion != toVersion) {
+            final Object converted = type.convert((T)ret, currentVersion, toVersion);
             if (converted != null) {
                 ret = converted;
             }

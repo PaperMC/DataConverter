@@ -1,6 +1,7 @@
 package ca.spottedleaf.dataconverter.minecraft;
 
 import ca.spottedleaf.dataconverter.converters.DataConverter;
+import ca.spottedleaf.dataconverter.minecraft.versions.V4290;
 import com.mojang.logging.LogUtils;
 import it.unimi.dsi.fastutil.ints.Int2ObjectLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
@@ -329,6 +330,10 @@ public final class MCVersionRegistry {
 
         // final release of major version
         registerBreakpointAfter(MCVersions.V1_20_6, Integer.MAX_VALUE);
+
+        // There is a read of entity sub data in V4299 (salmon) which was written to after V1_20_6
+        // There is also a sub type read in V4290 as it reads and converts all data within a text component
+        registerBreakpointBefore(V4290.VERSION);
     }
 
     static {
@@ -415,6 +420,14 @@ public final class MCVersionRegistry {
         SUBVERSIONS.computeIfAbsent(version, (final int keyInMap) -> {
             return new IntArrayList();
         }).add(step);
+    }
+
+    private static void registerBreakpointBefore(final int version) {
+        registerBreakpointBefore(version, 0);
+    }
+
+    private static void registerBreakpointBefore(final int version, final int step) {
+        BREAKPOINTS.add(DataConverter.encodeVersions(version, step) - 1L);
     }
 
     private static void registerBreakpoint(final int version) {

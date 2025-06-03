@@ -80,7 +80,7 @@ public final class V4299 {
 
                         break;
                     }
-                    case "tropical_fish_bucket": {
+                    case "minecraft:tropical_fish_bucket": {
                         final MapType bucketEntityData = components.getMap("minecraft:bucket_entity_data");
                         if (bucketEntityData == null) {
                             break;

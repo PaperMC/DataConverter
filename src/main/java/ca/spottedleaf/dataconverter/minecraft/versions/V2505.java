@@ -3,6 +3,7 @@ package ca.spottedleaf.dataconverter.minecraft.versions;
 import ca.spottedleaf.dataconverter.converters.DataConverter;
 import ca.spottedleaf.dataconverter.minecraft.MCVersions;
 import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
+import ca.spottedleaf.dataconverter.minecraft.walkers.itemstack.DataWalkerItemLists;
 import ca.spottedleaf.dataconverter.types.MapType;
 import ca.spottedleaf.dataconverter.types.Types;
 
@@ -37,7 +38,7 @@ public final class V2505 {
             }
         });
 
-        //registerMob("minecraft:piglin"); // changed to simple in 1.21.5
+        MCTypeRegistry.ENTITY.addWalker(VERSION, "minecraft:piglin", new DataWalkerItemLists("Inventory"));
     }
 
     private V2505() {}

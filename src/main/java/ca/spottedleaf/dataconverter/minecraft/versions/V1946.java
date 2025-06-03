@@ -29,7 +29,7 @@ public final class V1946 {
 
                     final MapType section = Types.NBT.createEmptyMap();
                     section.setGeneric("Records", records);
-                    sections.setMap(key, section); // integer keys convert to string in DFU (at least for NBT ops)
+                    sections.setMap(key, section);
                 }
 
                 return null;

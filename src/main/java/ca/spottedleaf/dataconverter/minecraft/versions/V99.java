@@ -1,5 +1,8 @@
 package ca.spottedleaf.dataconverter.minecraft.versions;
 
+import ca.spottedleaf.dataconverter.converters.datatypes.DataHook;
+import ca.spottedleaf.dataconverter.converters.datatypes.DataWalker;
+import ca.spottedleaf.dataconverter.minecraft.MCDataConverter;
 import ca.spottedleaf.dataconverter.minecraft.MCVersions;
 import ca.spottedleaf.dataconverter.minecraft.converters.helpers.HelperItemNameV102;
 import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;

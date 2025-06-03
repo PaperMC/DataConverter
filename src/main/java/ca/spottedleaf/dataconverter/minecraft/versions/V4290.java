@@ -1,6 +1,8 @@
 package ca.spottedleaf.dataconverter.minecraft.versions;
 
 import ca.spottedleaf.dataconverter.converters.DataConverter;
+import ca.spottedleaf.dataconverter.converters.datatypes.DataType;
+import ca.spottedleaf.dataconverter.minecraft.MCDataConverter;
 import ca.spottedleaf.dataconverter.minecraft.MCVersions;
 import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
 import ca.spottedleaf.dataconverter.minecraft.walkers.generic.WalkerUtils;
@@ -23,21 +25,46 @@ public final class V4290 {
 
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    // note: we need to convert the hover component here, so that the walker can properly walk over
-    //       the legacy hover event
-    // note: this is not done by Vanilla, and they probably fail to correctly convert nested components
-    //       here (as the converter to convert from JSON is ordered before the conversion of legacy hover)
-    // note: the legacy hover event may contain legacy item data, but there's not really anything we can do about it.
-    //       previous versions of the game never walked and converted this data, it was always left to the
-    //       users to do it (except in the case that DataConverter was used when converting from 1.20.4,
-    //       as we have the custom command walker).
-    //       As a result, the item data could be from any version prior to 1.21.4.
-    //       There's no way we can correctly convert it in all cases, the best we can do is just
-    //       assume that it's 1.21.4 compatible - which is what the code in 1.21.4 was doing when parsing
-    //       hover events.
-    // note: this function does not need to be recursive, as the conversion process itself is recursive -
-    //       the returned text component will be walked with the walker below
-    private static void convertLegacyHover(final TypeUtil<?> typeUtil, final MapType textComponent) {
+    private static void convertNestedList(final ListType components) {
+        if (components == null) {
+            return;
+        }
+        for (int i = 0, len = components.size(); i < len; ++i) {
+            convertNested(components.getGeneric(i));
+        }
+    }
+
+    private static void convertNested(final Object component) {
+        if (component instanceof ListType listType) {
+            convertNestedList(listType);
+        } else if (component instanceof MapType root) {
+            convertLegacyHover(root);
+
+            convertNestedList(root.getListUnchecked("extra"));
+            convertNested(root.getGeneric("separator"));
+
+            final MapType hoverEvent = root.getMap("hoverEvent");
+            if (hoverEvent != null) {
+                switch (hoverEvent.getString("action", "")) {
+                    case "show_text": {
+                        convertNested(hoverEvent.getGeneric("contents"));
+                        break;
+                    }
+                    case "show_item": {
+                        break;
+                    }
+                    case "show_entity": {
+                        convertNested(hoverEvent.getGeneric("name"));
+                        break;
+                    }
+                    // default: do nothing
+                }
+            }
+        } // else: should only be string
+    }
+
+    private static void convertLegacyHover(final MapType textComponent) {
+        final TypeUtil<?> typeUtil = textComponent.getTypeUtil();
         final MapType hoverEvent = textComponent.getMap("hoverEvent");
         if (hoverEvent == null) {
             return;
@@ -72,25 +99,8 @@ public final class V4290 {
                     break;
                 }
 
-                final MapType newContents = typeUtil.createEmptyMap();
                 // note: blindly take precedence over non-legacy data
-                hoverEvent.setMap("contents", newContents);
-
-                final String id = legacyItem.getString("id");
-                if (id != null) {
-                    newContents.setString("id", id);
-                }
-
-                final Number count = legacyItem.getNumber("count");
-                if (count != null) {
-                    newContents.setGeneric("count", count);
-                }
-
-                final MapType components = legacyItem.getMap("components");
-                if (components != null) {
-                    newContents.setMap("components", components.copy());
-                }
-
+                hoverEvent.setMap("contents", legacyItem);
                 break;
             }
             case "show_entity": {
@@ -140,9 +150,8 @@ public final class V4290 {
                     // will be iterated by walker
                     return null;
                 }
-                if (data instanceof MapType mapType) {
+                if (data instanceof MapType) {
                     // (probably) iterated by walker
-                    convertLegacyHover(mapType.getTypeUtil(), mapType);
                     return null;
                 }
                 if (data instanceof Number number) {
@@ -178,9 +187,7 @@ public final class V4290 {
                             default -> throw new IllegalStateException("Unknown nbt type: " + generic);
                         };
 
-                        if (ret instanceof MapType mapType) {
-                            convertLegacyHover(Types.NBT, mapType);
-                        }
+                        convertNested(ret);
                         return ret;
                     }
                 } catch (final JsonParseException ex) {
@@ -197,6 +204,17 @@ public final class V4290 {
             } else if (input instanceof MapType root) {
                 WalkerUtils.convertList(MCTypeRegistry.TEXT_COMPONENT, root, "extra", fromVersion, toVersion);
                 WalkerUtils.convert(MCTypeRegistry.TEXT_COMPONENT, root, "separator", fromVersion, toVersion);
+
+                final MapType clickEvent = root.getMap("clickEvent");
+                if (clickEvent != null) {
+                    switch (clickEvent.getString("action", "")) {
+                        case "run_command":
+                        case "suggest_command": {
+                            WalkerUtils.convert(MCTypeRegistry.DATACONVERTER_CUSTOM_TYPE_COMMAND, clickEvent, "value", fromVersion, toVersion);
+                            break;
+                        }
+                    }
+                }
 
                 final MapType hoverEvent = root.getMap("hoverEvent");
                 if (hoverEvent != null) {
