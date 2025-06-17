@@ -178,12 +178,4 @@ public final class JsonTypeUtil implements TypeUtil<JsonElement> {
 
         return ret;
     }
-
-    private static MapType convertJson(final TypeUtil<?> to, final JsonMapType json) {
-        return convertJson(to, json.map, json.compressed);
-    }
-
-    private static ListType convertJson(final TypeUtil<?> to, final JsonListType json) {
-        return convertJson(to, json.array, json.compressed);
-    }
 }

@@ -125,12 +125,4 @@ public final class NBTTypeUtil implements TypeUtil<Tag> {
 
         return ret;
     }
-
-    public static MapType convertNBT(final TypeUtil<?> to, final NBTMapType nbt) {
-        return convertNBT(to, nbt.map);
-    }
-
-    public static ListType convertNBT(final TypeUtil<?> to, final NBTListType nbt) {
-        return convertNBT(to, nbt.list);
-    }
 }

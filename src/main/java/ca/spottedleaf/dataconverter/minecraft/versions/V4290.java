@@ -1,8 +1,6 @@
 package ca.spottedleaf.dataconverter.minecraft.versions;
 
 import ca.spottedleaf.dataconverter.converters.DataConverter;
-import ca.spottedleaf.dataconverter.converters.datatypes.DataType;
-import ca.spottedleaf.dataconverter.minecraft.MCDataConverter;
 import ca.spottedleaf.dataconverter.minecraft.MCVersions;
 import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
 import ca.spottedleaf.dataconverter.minecraft.walkers.generic.WalkerUtils;
@@ -198,7 +196,8 @@ public final class V4290 {
             }
         });
 
-        MCTypeRegistry.TEXT_COMPONENT.addStructureWalker(VERSION, (final Object input, final long fromVersion, final long toVersion) -> {
+        // step 1
+        MCTypeRegistry.TEXT_COMPONENT.addStructureWalker(VERSION, 1, (final Object input, final long fromVersion, final long toVersion) -> {
             if (input instanceof ListType listType) {
                 WalkerUtils.convert(MCTypeRegistry.TEXT_COMPONENT, listType, fromVersion, toVersion);
             } else if (input instanceof MapType root) {

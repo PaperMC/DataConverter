@@ -280,7 +280,7 @@ public final class MCVersionRegistry {
             4314,
             4420,
             4424,
-            // All up to 1.21.6-rc1
+            // All up to 1.21.6
         };
         Arrays.sort(converterVersions);
 
@@ -306,6 +306,8 @@ public final class MCVersionRegistry {
         registerSubVersion(MCVersions.V24W07A + 1, 4);
         registerSubVersion(MCVersions.V24W07A + 1, 5);
         registerSubVersion(MCVersions.V24W07A + 1, 6);
+
+        registerSubVersion(V4290.VERSION, 1);
 
         // register breakpoints here
         // for all major releases after 1.16, add them. this reduces the work required to determine if a breakpoint
@@ -333,7 +335,7 @@ public final class MCVersionRegistry {
 
         // There is a read of entity sub data in V4299 (salmon) which was written to after V1_20_6
         // There is also a sub type read in V4290 as it reads and converts all data within a text component
-        registerBreakpointBefore(V4290.VERSION);
+        registerBreakpointAfter(V4290.VERSION);
     }
 
     static {
