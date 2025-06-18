@@ -140,6 +140,70 @@ public final class V4290 {
         }
     }
 
+    private static void directWalkComponentList(final ListType list, final long fromVersion, final long toVersion) {
+        for (int i = 0, len = list.size(); i < len; ++i) {
+            directWalkComponent(list.getGeneric(i), fromVersion, toVersion);
+        }
+    }
+
+    private static void directWalkComponent(final Object input, final long fromVersion, final long toVersion) {
+        if (input instanceof ListType listType) {
+            directWalkComponentList(listType, fromVersion, toVersion);
+        } else if (input instanceof MapType root) {
+            final ListType extra = root.getListUnchecked("extra");
+            if (extra != null) {
+                directWalkComponentList(extra, fromVersion, toVersion);
+            }
+
+            final Object separator = root.getGeneric("separator");
+            if (separator != null) {
+                directWalkComponent(separator, fromVersion, toVersion);
+            }
+
+            final MapType clickEvent = root.getMap("clickEvent");
+            if (clickEvent != null) {
+                switch (clickEvent.getString("action", "")) {
+                    case "run_command":
+                    case "suggest_command": {
+                        WalkerUtils.convert(MCTypeRegistry.DATACONVERTER_CUSTOM_TYPE_COMMAND, clickEvent, "value", fromVersion, toVersion);
+                        break;
+                    }
+                }
+            }
+
+            final MapType hoverEvent = root.getMap("hoverEvent");
+            if (hoverEvent != null) {
+                switch (hoverEvent.getString("action", "")) {
+                    case "show_text": {
+                        final Object contents = hoverEvent.getGeneric("contents");
+                        if (contents != null) {
+                            directWalkComponent(contents, fromVersion, toVersion);
+                        }
+                        break;
+                    }
+                    case "show_item": {
+                        if (hoverEvent.hasKey("contents", ObjectType.STRING)) {
+                            WalkerUtils.convert(MCTypeRegistry.ITEM_NAME, hoverEvent, "contents", fromVersion, toVersion);
+                        } else {
+                            WalkerUtils.convert(MCTypeRegistry.ITEM_STACK, hoverEvent, "contents", fromVersion, toVersion);
+                        }
+                        break;
+                    }
+                    case "show_entity": {
+                        WalkerUtils.convert(MCTypeRegistry.ENTITY_NAME, hoverEvent, "type", fromVersion, toVersion);
+
+                        final Object name = hoverEvent.getGeneric("name");
+                        if (name != null) {
+                            directWalkComponent(name, fromVersion, toVersion);
+                        }
+                        break;
+                    }
+                    // default: do nothing
+                }
+            }
+        } // else: should only be string
+    }
+
     public static void register() {
         MCTypeRegistry.TEXT_COMPONENT.addStructureConverter(new DataConverter<>(VERSION) {
             @Override
@@ -186,6 +250,7 @@ public final class V4290 {
                         };
 
                         convertNested(ret);
+                        directWalkComponent(ret, sourceVersion, toVersion);
                         return ret;
                     }
                 } catch (final JsonParseException ex) {
