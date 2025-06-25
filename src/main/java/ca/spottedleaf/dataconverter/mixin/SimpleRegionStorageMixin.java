@@ -42,7 +42,9 @@ abstract class SimpleRegionStorageMixin implements AutoCloseable {
     @Overwrite
     public CompoundTag upgradeChunkTag(final CompoundTag nbt, final int dflVer) {
         final int dataVer = NbtUtils.getDataVersion(nbt, dflVer);
-        return MCDataConverter.convertTag(this.getDataConverterType(), nbt, dataVer, Version.getCurrentVersion());
+        final CompoundTag ret = MCDataConverter.convertTag(this.getDataConverterType(), nbt, dataVer, Version.getCurrentVersion());
+        NbtUtils.addCurrentDataVersion(ret); // Fix MC-299110
+        return ret;
     }
 
     /**
