@@ -250,7 +250,7 @@ public final class V4290 {
                         };
 
                         convertNested(ret);
-                        directWalkComponent(ret, sourceVersion, toVersion);
+                        directWalkComponent(ret, sourceVersion, toVersion); // Fix MC-299285
                         return ret;
                     }
                 } catch (final JsonParseException ex) {
