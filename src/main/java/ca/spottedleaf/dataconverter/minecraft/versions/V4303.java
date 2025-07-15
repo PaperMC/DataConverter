@@ -13,6 +13,9 @@ public final class V4303 {
         final DataConverter<MapType, MapType> fallConverter = new DataConverter<>(VERSION) {
             @Override
             public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
+                if (!data.hasKey("FallDistance")) {
+                    return null;
+                }
                 final float fallDistance = data.getFloat("FallDistance", 0.0f);
                 data.remove("FallDistance");
 
