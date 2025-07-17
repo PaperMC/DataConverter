@@ -358,9 +358,12 @@ public final class MCTypeRegistry {
         V4311.register();
         V4312.register();
         V4314.register();
+        // V1.21.6
         V4420.register();
         V4421.register();
         V4424.register();
+        // V1.21.8
+        V4439.register(); // Fix https://github.com/PaperMC/DataConverter/commit/b6675e47ca068f152c3b648b3869fe63ca12b720
     }
 
     private MCTypeRegistry() {}
