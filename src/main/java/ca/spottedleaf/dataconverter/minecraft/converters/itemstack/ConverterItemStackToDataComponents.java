@@ -294,7 +294,12 @@ public final class ConverterItemStackToDataComponents {
                     continue;
                 }
 
-                newEnchantments.setInt(id, Mth.clamp(level.intValue(), 0, 0xFF));
+                final int clampedLvl = Mth.clamp(level.intValue(), 0, 0xFF);
+                if (clampedLvl <= 0) {
+                    continue;
+                }
+
+                newEnchantments.setInt(id, clampedLvl);
             }
 
             if (!newEnchantments.isEmpty() || hideToolTip) {
@@ -317,18 +322,23 @@ public final class ConverterItemStackToDataComponents {
         final MapType display = transientItem.tag.getMap("display");
 
         if (display != null) {
-            final Object name = display.getGeneric("Name");
-            if (name != null) {
-                display.remove("Name");
-
+            final String name = display.getString("Name");
+            display.remove("Name");
+            if (name != null && ComponentUtils.isValidJson(name)) {
                 transientItem.componentSetGeneric("minecraft:custom_name", name);
             }
 
-            final Object lore = display.getGeneric("Lore");
+            final ListType lore = display.getList("Lore", ObjectType.STRING);
+            display.remove("Lore");
             if (lore != null) {
-                display.remove("Lore");
-
-                transientItem.componentSetGeneric("minecraft:lore", lore);
+                final ListType validLore = type.createEmptyList();
+                for (int i = 0, len = lore.size(); i < len; ++i) {
+                    final String loreEntry = lore.getString(i);
+                    if (ComponentUtils.isValidJson(loreEntry)) {
+                        validLore.addString(loreEntry);
+                    }
+                }
+                transientItem.componentSetGeneric("minecraft:lore", validLore);
             }
         }
 

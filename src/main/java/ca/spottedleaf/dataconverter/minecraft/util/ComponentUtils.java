@@ -78,5 +78,14 @@ public final class ComponentUtils {
         return createPlainTextComponent(input);
     }
 
+    public static boolean isValidJson(final String input) {
+        try {
+            JsonParser.parseString(input);
+            return true;
+        } catch (final JsonParseException ex) {
+            return false;
+        }
+    }
+
     private ComponentUtils() {}
 }
