@@ -56,6 +56,7 @@ public final class MCTypeRegistry {
     public static final MCDataType SAVED_DATA_COMMAND_STORAGE           = new MCDataType("SavedData/CommandStorage");
     public static final MCDataType SAVED_DATA_MAP_INDEX                 = new MCDataType("SavedData/IdCounts");
     public static final MCDataType SAVED_DATA_TICKETS                   = new MCDataType("SavedData/Tickets");
+    public static final MCDataType SAVED_DATA_WORLD_BORDER              = new MCDataType("SavedData/WorldBorder");
 
     public static final DynamicDataType DATACONVERTER_CUSTOM_TYPE_COMMAND = new DynamicDataType("DC_Custom/Command");
 
@@ -364,6 +365,16 @@ public final class MCTypeRegistry {
         V4424.register();
         // V1.21.8
         V4439.register(); // Fix https://github.com/PaperMC/DataConverter/commit/b6675e47ca068f152c3b648b3869fe63ca12b720
+        // V1.21.9
+        // V4531 is simple entity copper_golem
+        // V4532 is simple tile entity copper_golem_statue
+        V4533.register();
+        V4535.register();
+        V4537.register();
+        V4541.register();
+        // V4543 is simple entity mannequin
+        V4544.register();
+        V4548.register();
     }
 
     private MCTypeRegistry() {}
