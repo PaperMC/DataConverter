@@ -52,8 +52,10 @@ abstract class SimpleRegionStorageMixin implements AutoCloseable {
      * @author Spottedleaf
      */
     @Overwrite
-    public Dynamic<Tag> upgradeChunkTag(final Dynamic<Tag> nbt, final int dataVer) {
+    public Dynamic<Tag> upgradeChunkTag(final Dynamic<Tag> nbt, final int dflVer) {
+        final int dataVer = NbtUtils.getDataVersion(nbt, dflVer);
         final CompoundTag converted = MCDataConverter.convertTag(this.getDataConverterType(), (CompoundTag)nbt.getValue(), dataVer, Version.getCurrentVersion());
+        NbtUtils.addCurrentDataVersion(converted);
         return new Dynamic<>(nbt.getOps(), converted);
     }
 }
