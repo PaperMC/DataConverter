@@ -26,10 +26,10 @@ public final class V4548 {
                 final MapType spawn = data.getTypeUtil().createEmptyMap();
                 data.setMap("spawn", spawn);
 
-                data.setString("dimension", "minecraft:overworld");
-                data.setInts("pos", new int[] { x, y, z });
-                data.setFloat("yaw", yaw);
-                data.setFloat("pitch", 0.0f);
+                spawn.setString("dimension", "minecraft:overworld");
+                spawn.setInts("pos", new int[] { x, y, z });
+                spawn.setFloat("yaw", yaw);
+                spawn.setFloat("pitch", 0.0f);
 
                 return null;
             }
