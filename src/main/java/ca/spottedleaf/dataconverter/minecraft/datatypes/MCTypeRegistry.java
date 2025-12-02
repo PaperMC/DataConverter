@@ -212,6 +212,7 @@ public final class MCTypeRegistry {
         V2551.register();
         V2552.register();
         V2553.register();
+        V2556.register();
         V2558.register();
         V2568.register();
         // V1.17
@@ -375,6 +376,15 @@ public final class MCTypeRegistry {
         // V4543 is simple entity mannequin
         V4544.register();
         V4548.register();
+        // V1.21.11
+        V4648.register();
+        V4649.register();
+        // V4650: We don't do DEBUG_PROFILE.
+        V4651.register();
+        V4656.register();
+        V4657.register();
+        V4658.register();
+        V4661.register();
     }
 
     private MCTypeRegistry() {}

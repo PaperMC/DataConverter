@@ -1,7 +1,7 @@
 package ca.spottedleaf.dataconverter.util;
 
 import ca.spottedleaf.dataconverter.types.MapType;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public final class NamespaceUtil {
 
@@ -25,7 +25,7 @@ public final class NamespaceUtil {
         if (value == null) {
             return null;
         }
-        final ResourceLocation resourceLocation = ResourceLocation.tryParse(value);
+        final Identifier resourceLocation = Identifier.tryParse(value);
         return resourceLocation != null ? resourceLocation.toString() : value;
     }
 

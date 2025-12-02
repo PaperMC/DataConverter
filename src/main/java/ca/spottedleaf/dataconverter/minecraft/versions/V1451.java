@@ -21,7 +21,7 @@ import ca.spottedleaf.dataconverter.types.MapType;
 import ca.spottedleaf.dataconverter.types.ObjectType;
 import ca.spottedleaf.dataconverter.types.Types;
 import com.google.common.base.Splitter;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.datafix.fixes.BlockStateData;
 import net.minecraft.util.datafix.fixes.EntityBlockStateFix;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -35,7 +35,7 @@ public final class V1451 {
     private static final int VERSION = MCVersions.V17W47A;
 
     public static String packWithDot(final String string) {
-        final ResourceLocation resourceLocation = ResourceLocation.tryParse(string);
+        final Identifier resourceLocation = Identifier.tryParse(string);
         return resourceLocation != null ? resourceLocation.getNamespace() + "." + resourceLocation.getPath() : string;
     }
 
@@ -323,8 +323,8 @@ public final class V1451 {
                         id = criteriaName;
                     } else {
                         try {
-                            type = ResourceLocation.bySeparator(criteriaName.substring(0, index), '.').toString();
-                            id = ResourceLocation.bySeparator(criteriaName.substring(index + 1), '.').toString();
+                            type = Identifier.bySeparator(criteriaName.substring(0, index), '.').toString();
+                            id = Identifier.bySeparator(criteriaName.substring(index + 1), '.').toString();
                         } catch (final Exception ex) {
                             type = "_special";
                             id = criteriaName;

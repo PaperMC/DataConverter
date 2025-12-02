@@ -4,7 +4,7 @@
     "package": "ca.spottedleaf.dataconverter.mixin",
     "compatibilityLevel": "JAVA_21",
     "mixins": [
-        "ChunkStorageMixin",
+        "LegacyStructureDataHandlerMixin",
         "LevelStorageSourceMixin",
         "MinecraftServerMixin",
         "PlayerDataStorageMixin",
