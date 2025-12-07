@@ -17,6 +17,6 @@
   ],
   "depends": {
     "fabricloader": ">=${loader_version}",
-    "minecraft": "1.21.11-beta.4"
+    "minecraft": "1.21.11-rc.2"
   }
 }
