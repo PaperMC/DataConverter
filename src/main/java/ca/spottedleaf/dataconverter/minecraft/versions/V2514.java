@@ -159,8 +159,8 @@ public final class V2514 {
 
     static void replaceUUIDMLTag(final MapType data, final String oldPath, final String newPath) {
         final int[] uuid = createUUIDFromLongs(data.getMap(oldPath), "M", "L");
+        data.remove(oldPath);
         if (uuid != null) {
-            data.remove(oldPath);
             data.setInts(newPath, uuid);
         }
     }
