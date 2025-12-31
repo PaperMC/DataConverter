@@ -14,6 +14,9 @@ public final class V4658 {
     public static void register() {
         MCTypeRegistry.LEVEL.addStructureConverter(new DataConverter<>(VERSION) {
             private static void convertBool(final MapType data, final String src, final String dst) {
+                if (!data.hasKey(src)) {
+                    return;
+                }
                 final String value = data.getString(src, "");
 
                 data.remove(src);
@@ -22,6 +25,9 @@ public final class V4658 {
             }
 
             private static void convertBoolInv(final MapType data, final String src, final String dst) {
+                if (!data.hasKey(src)) {
+                    return;
+                }
                 final String value = data.getString(src, "");
 
                 data.remove(src);
@@ -38,6 +44,9 @@ public final class V4658 {
             }
 
             private static void convertInt(final MapType data, final String src, final String dst, final int min, final int max) {
+                if (!data.hasKey(src)) {
+                    return;
+                }
                 final String value = data.getString(src, "");
 
                 data.remove(src);
