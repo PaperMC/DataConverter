@@ -4,17 +4,15 @@ import ca.spottedleaf.dataconverter.minecraft.MCDataConverter;
 import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
 import ca.spottedleaf.dataconverter.minecraft.util.Version;
 import com.mojang.datafixers.DataFixer;
-import net.minecraft.SharedConstants;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtUtils;
 import net.minecraft.util.datafix.DataFixTypes;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
+import net.minecraft.world.level.levelgen.structure.templatesystem.loader.TemplateSource;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(StructureTemplateManager.class)
-abstract class StructureTemplateManagerMixin {
+@Mixin(TemplateSource.class)
+abstract class TemplateSourceMixin {
 
     /**
      * Redirects ONLY structure converters to the new dataconverter system. On update,

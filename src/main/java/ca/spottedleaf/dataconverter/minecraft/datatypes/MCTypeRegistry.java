@@ -9,6 +9,7 @@ public final class MCTypeRegistry {
 
     private static final Logger LOGGER = LogUtils.getLogger();
 
+    // Note: LEVEL and LIGHTWEIGHT_LEVEL are not maintained past versions 1.21.11, and they were never tested to begin with.
     public static final MCDataType LEVEL               = new MCDataType("Level");
     public static final MCDataType LIGHTWEIGHT_LEVEL   = new MCDataType("LightweightLevel");
     public static final MCDataType PLAYER              = new MCDataType("Player");
@@ -385,6 +386,11 @@ public final class MCTypeRegistry {
         V4657.register();
         V4658.register();
         V4661.register();
+        // V26.1
+        V4763.register();
+        // V4766: We no longer pretend to "maintain" LEVEL data types.
+        V4769.register();
+        // V4771: Same as for V4766
     }
 
     private MCTypeRegistry() {}

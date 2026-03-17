@@ -20,7 +20,7 @@ abstract class MinecraftServerMixin {
             value = "HEAD"
         )
     )
-    private static <S extends MinecraftServer> void initConfig(final CallbackInfoReturnable<S> cir) {
+    private static <S extends MinecraftServer> void initConverters(final CallbackInfoReturnable<S> cir) {
         MCTypeRegistry.init();
     }
 }

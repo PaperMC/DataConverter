@@ -72,6 +72,7 @@ public final class V4658 {
 
                 gameRules.remove("spawnChunkRadius");
                 gameRules.remove("entitiesWithPassengersCanUsePortals");
+                gameRules.remove("gameLoopFunction");
                 gameRules.remove("doFireTick");
                 gameRules.remove("allowFireTicksAwayFromPlayer");
 

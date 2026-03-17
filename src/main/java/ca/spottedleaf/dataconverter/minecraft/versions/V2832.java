@@ -465,7 +465,7 @@ public final class V2832 {
                 predictChunkStatusBeforeSurface(level, allBlocks);
 
                 // done with sections, update the rest of the chunk
-                updateChunkData(level, isOverworld, isAlreadyExtended.getValue(), "minecraft:noise".equals(generator), bottomSection);
+                updateChunkData(level, isOverworld, isAlreadyExtended.get().booleanValue(), "minecraft:noise".equals(generator), bottomSection);
 
                 return null;
             }

@@ -20,7 +20,8 @@ abstract class MinecraftMixin {
             value = "RETURN"
         )
     )
-    private void initConfig(final CallbackInfo ci) {
-        MCTypeRegistry.init();
+    private void initConverters(final CallbackInfo ci) {
+        // This causes the game to blow up in the renderer... not sure why, and I don't care to find out.
+        //MCTypeRegistry.init();
     }
 }

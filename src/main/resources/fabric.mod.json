@@ -3,7 +3,7 @@
   "id": "dataconverter",
   "version": "${version}",
   "name": "DataConverter",
-  "description": "Rewrites the data fixer system for world loading to fix conversion problems and to vastly improve performance. This mod is only for testing, do not use in any kind of production or singleplayer enviornment.",
+  "description": "Rewrites the data fixer system for world loading to fix conversion problems and to vastly improve performance. This mod is only for testing, do not use in any kind of production or singleplayer environment.",
   "authors": [
     "Spottedleaf"
   ],
@@ -17,6 +17,6 @@
   ],
   "depends": {
     "fabricloader": ">=${loader_version}",
-    "minecraft": "1.21.11"
+    "minecraft": "26.1-pre.2"
   }
 }

@@ -3,7 +3,6 @@ package ca.spottedleaf.dataconverter.mixin;
 import ca.spottedleaf.dataconverter.minecraft.MCDataConverter;
 import ca.spottedleaf.dataconverter.minecraft.datatypes.MCDataType;
 import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
-import ca.spottedleaf.dataconverter.minecraft.util.Version;
 import com.mojang.datafixers.DataFixer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.datafix.DataFixTypes;
@@ -40,13 +39,14 @@ abstract class SimpleRegionStorageMixin implements AutoCloseable {
      * @author Spottedleaf
      */
     @Redirect(
-        method = "upgradeChunkTag(Lnet/minecraft/nbt/CompoundTag;ILnet/minecraft/nbt/CompoundTag;)Lnet/minecraft/nbt/CompoundTag;",
+        method = "upgradeChunkTag(Lnet/minecraft/nbt/CompoundTag;ILnet/minecraft/nbt/CompoundTag;I)Lnet/minecraft/nbt/CompoundTag;",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/util/datafix/DataFixTypes;updateToCurrentVersion(Lcom/mojang/datafixers/DataFixer;Lnet/minecraft/nbt/CompoundTag;I)Lnet/minecraft/nbt/CompoundTag;"
+            target = "Lnet/minecraft/util/datafix/DataFixTypes;update(Lcom/mojang/datafixers/DataFixer;Lnet/minecraft/nbt/CompoundTag;II)Lnet/minecraft/nbt/CompoundTag;"
         )
     )
-    private CompoundTag routeToDataConverter(final DataFixTypes instance, final DataFixer dataFixer, final CompoundTag compoundTag, final int currVer) {
-        return MCDataConverter.convertTag(this.getDataConverterType(), compoundTag, currVer, Version.getCurrentVersion());
+    private CompoundTag routeToDataConverter(final DataFixTypes instance, final DataFixer fixer, final CompoundTag tag,
+                                             final int fromVersion, final int toVersion) {
+        return MCDataConverter.convertTag(this.getDataConverterType(), tag, fromVersion, toVersion);
     }
 }

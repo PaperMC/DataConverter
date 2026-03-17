@@ -292,7 +292,9 @@ public final class MCVersionRegistry {
             4657,
             4658,
             4661,
-            // All up to 1.21.11
+            4763,
+            4769,
+            // All up to 26.1-pre2
         };
         Arrays.sort(converterVersions);
 
@@ -348,6 +350,9 @@ public final class MCVersionRegistry {
         // There is a read of entity sub data in V4299 (salmon) which was written to after V1_20_6
         // There is also a sub type read in V4290 as it reads and converts all data within a text component
         registerBreakpointAfter(V4290.VERSION);
+
+        // final release of major version
+        registerBreakpointAfter(MCVersions.V1_21_11, Integer.MAX_VALUE);
     }
 
     static {
@@ -367,7 +372,15 @@ public final class MCVersionRegistry {
                 LOGGER.warn("Error registering version \"" + name + "\", version number '" + value + "' is already associated with \"" + VERSION_NAMES.get(value) + "\"");
             }
 
-            VERSION_NAMES.put(value, name.substring(1).replace("_PRE", "-PRE").replace("_RC", "-RC").replace('_', '.').toLowerCase(Locale.ROOT));
+            VERSION_NAMES.put(
+                value, name
+                    .substring(1)
+                    .replace("_PRE", "-PRE")
+                    .replace("_RC", "-RC")
+                    .replace("_SNAPSHOT", "-SNAPSHOT")
+                    .replace('_', '.')
+                    .toLowerCase(Locale.ROOT)
+            );
         }
 
         for (final int version : DATACONVERTER_VERSIONS_MAJOR) {
