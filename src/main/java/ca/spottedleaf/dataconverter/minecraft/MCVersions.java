@@ -642,6 +642,11 @@ public final class MCVersions {
     public static final int V26_1_SNAPSHOT11      = 4779;
     public static final int V26_1_PRE1            = 4780;
     public static final int V26_1_PRE2            = 4781;
+    public static final int V26_1_PRE3            = 4782;
+    public static final int V26_1_RC1             = 4783;
+    public static final int V26_1_RC2             = 4784;
+    public static final int V26_1_RC3             = 4785;
+    public static final int V26_1                 = 4786;
 
     private MCVersions() {}
 }
