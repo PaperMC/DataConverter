@@ -14,4 +14,4 @@ pluginManagement {
     }
 }
 
-rootProject.name = "DataConverter"
+rootProject.name = "dataconverter"
