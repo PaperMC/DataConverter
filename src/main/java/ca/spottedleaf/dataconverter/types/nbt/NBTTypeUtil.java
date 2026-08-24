@@ -7,7 +7,9 @@ import ca.spottedleaf.dataconverter.types.TypeUtil;
 import net.minecraft.nbt.ByteArrayTag;
 import net.minecraft.nbt.ByteTag;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.DoubleTag;
 import net.minecraft.nbt.EndTag;
+import net.minecraft.nbt.FloatTag;
 import net.minecraft.nbt.IntArrayTag;
 import net.minecraft.nbt.IntTag;
 import net.minecraft.nbt.ListTag;
@@ -83,6 +85,8 @@ public final class NBTTypeUtil implements TypeUtil<Tag> {
             case Short s -> ShortTag.valueOf(s.shortValue());
             case Integer i -> IntTag.valueOf(i.intValue());
             case Long l -> LongTag.valueOf(l.longValue());
+            case Float f -> FloatTag.valueOf(f.floatValue());
+            case Double d -> DoubleTag.valueOf(d.doubleValue());
             case byte[] bytes -> new ByteArrayTag(bytes);
             case int[] ints -> new IntArrayTag(ints);
             case long[] longs -> new LongArrayTag(longs);
