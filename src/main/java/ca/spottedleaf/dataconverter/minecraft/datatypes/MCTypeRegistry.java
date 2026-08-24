@@ -391,6 +391,13 @@ public final class MCTypeRegistry {
         // V4766: We no longer pretend to "maintain" LEVEL data types.
         V4769.register();
         // V4771: Same as for V4766
+        // V26.2
+        // V4881 is simple entity sulfur_cube and potent_sulfur block entity
+        V4882.register();
+        V4885.register();
+        V4888.register();
+        V4892.register();
+        // TODO V4899 is re-enabling spectator chunk loading on singleplayer hardcore worlds
     }
 
     private MCTypeRegistry() {}

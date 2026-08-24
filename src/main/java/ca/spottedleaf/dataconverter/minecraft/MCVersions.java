@@ -649,6 +649,24 @@ public final class MCVersions {
     public static final int V26_1                 = 4786;
     public static final int V26_1RC1              = 4787;
     public static final int V26_1_1               = 4788;
+    public static final int V26_1_2               = 4790;
+    public static final int V26_2_SNAPSHOT1       = 4883;
+    public static final int V26_2_SNAPSHOT2       = 4884;
+    public static final int V26_2_SNAPSHOT3       = 4886;
+    public static final int V26_2_SNAPSHOT4       = 4887;
+    public static final int V26_2_SNAPSHOT5       = 4889;
+    public static final int V26_2_SNAPSHOT6       = 4890;
+    public static final int V26_2_SNAPSHOT7       = 4891;
+    public static final int V26_2_SNAPSHOT8       = 4893;
+    public static final int V26_2_PRE1            = 4894;
+    public static final int V26_2_PRE2            = 4895;
+    public static final int V26_2_PRE3            = 4896;
+    public static final int V26_2_PRE4            = 4897;
+    public static final int V26_2_PRE5            = 4898;
+    public static final int V26_2_PRE6            = 4900;
+    public static final int V26_2_RC1             = 4901;
+    public static final int V26_2_RC2             = 4902;
+    public static final int V26_2                 = 4903;
 
     private MCVersions() {}
 }

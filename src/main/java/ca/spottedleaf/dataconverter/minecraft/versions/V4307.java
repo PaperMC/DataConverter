@@ -87,10 +87,10 @@ public final class V4307 {
 
             @Override
             public MapType convert(final MapType root, final long sourceVersion, final long toVersion) {
-                final Set<String> hiddenComponents = new LinkedHashSet<>();
-
-                unwrapBlockPredicates(root, "minecraft:can_break", hiddenComponents);
+                // Don't use a linked hash set, and ensure that it is added in the same (undefined) order as the vanilla datafixer
+                final Set<String> hiddenComponents = new java.util.HashSet<>();
                 unwrapBlockPredicates(root, "minecraft:can_place_on", hiddenComponents);
+                unwrapBlockPredicates(root, "minecraft:can_break", hiddenComponents);
 
                 updateComponent(root, "minecraft:trim", hiddenComponents);
                 updateComponent(root, "minecraft:unbreakable", hiddenComponents);
