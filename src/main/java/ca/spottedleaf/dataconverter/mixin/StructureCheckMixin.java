@@ -1,13 +1,8 @@
 package ca.spottedleaf.dataconverter.mixin;
 
-import ca.spottedleaf.dataconverter.minecraft.MCDataConverter;
-import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
-import ca.spottedleaf.dataconverter.minecraft.util.Version;
+import ca.spottedleaf.dataconverter.util.ConvertUtil;
 import com.mojang.datafixers.DataFixer;
-import com.mojang.serialization.Dynamic;
-import net.minecraft.SharedConstants;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtUtils;
 import net.minecraft.util.datafix.DataFixTypes;
 import net.minecraft.world.level.levelgen.structure.StructureCheck;
 import org.spongepowered.asm.mixin.Mixin;
@@ -30,10 +25,6 @@ abstract class StructureCheckMixin {
     )
     private CompoundTag updatePartialChunk(final DataFixTypes type, final DataFixer dataFixer, final CompoundTag compoundTag,
                                            final int version) {
-        if (type == DataFixTypes.CHUNK) {
-            return MCDataConverter.convertTag(MCTypeRegistry.CHUNK, compoundTag, version, Version.getCurrentVersion());
-        }
-
-        return type.updateToCurrentVersion(dataFixer, compoundTag, version);
+        return ConvertUtil.convertTag(type, dataFixer, compoundTag, version);
     }
 }

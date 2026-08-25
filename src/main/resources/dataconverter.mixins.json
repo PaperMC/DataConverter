@@ -1,23 +1,25 @@
 {
-    "required": true,
-    "minVersion": "0.8",
-    "package": "ca.spottedleaf.dataconverter.mixin",
-    "compatibilityLevel": "JAVA_25",
-    "mixins": [
-        "MinecraftServerMixin",
-        "PlayerDataStorageMixin",
-        "SimpleRegionStorageMixin",
-        "StructureCheckMixin",
-        "StructureUpdaterMixin",
-        "TemplateSourceMixin"
-    ],
-    "client": [
-        "MinecraftMixin"
-    ],
-    "injectors": {
-        "defaultRequire": 1
-    },
-    "overwrites": {
-        "requireAnnotations": true
-    }
+  "required": true,
+  "minVersion": "0.8",
+  "package": "ca.spottedleaf.dataconverter.mixin",
+  "compatibilityLevel": "JAVA_25",
+  "mixins": [
+    "CommandsMixin",
+    "MinecraftServerMixin",
+    "PlayerDataStorageMixin",
+    "SimpleRegionStorageMixin",
+    "StructureCheckMixin",
+    "StructureUpdaterMixin",
+    "TemplateSourceMixin"
+  ],
+  "client": [
+    "MinecraftMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "conformVisibility": true,
+    "requireAnnotations": true
+  }
 }

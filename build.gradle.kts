@@ -14,10 +14,20 @@ base {
     archivesName = providers.gradleProperty("archives_base_name")
 }
 
+repositories {
+    maven("https://repo.papermc.io/repository/maven-public/") {
+        name = "PaperMC"
+        mavenContent {
+            includeGroup("ca.spottedleaf")
+        }
+    }
+}
+
 dependencies {
     // To change the versions see the gradle.properties file
     minecraft("com.mojang:minecraft:${providers.gradleProperty("minecraft_version").get()}")
     implementation("net.fabricmc:fabric-loader:${providers.gradleProperty("loader_version").get()}")
+    implementation("ca.spottedleaf:leafpile:1.2.0")
 }
 
 tasks.processResources {

@@ -1,10 +1,7 @@
 package ca.spottedleaf.dataconverter.mixin;
 
-import ca.spottedleaf.dataconverter.minecraft.MCDataConverter;
-import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
-import ca.spottedleaf.dataconverter.minecraft.util.Version;
+import ca.spottedleaf.dataconverter.util.ConvertUtil;
 import com.mojang.datafixers.DataFixer;
-import net.minecraft.SharedConstants;
 import net.minecraft.data.structures.StructureUpdater;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.datafix.DataFixTypes;
@@ -28,10 +25,6 @@ abstract class StructureUpdaterMixin {
     )
     private static CompoundTag updateStructureData(final DataFixTypes type, final DataFixer dataFixer, final CompoundTag compoundTag,
                                                    final int version) {
-        if (type == DataFixTypes.STRUCTURE) {
-            return MCDataConverter.convertTag(MCTypeRegistry.STRUCTURE, compoundTag, version, Version.getCurrentVersion());
-        }
-
-        return type.updateToCurrentVersion(dataFixer, compoundTag, version);
+        return ConvertUtil.convertTag(type, dataFixer, compoundTag, version);
     }
 }

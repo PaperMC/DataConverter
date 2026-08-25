@@ -1,8 +1,10 @@
 package ca.spottedleaf.dataconverter.minecraft.converters.tileentity;
 
-import ca.spottedleaf.dataconverter.converters.DataConverter;
+import ca.spottedleaf.converter.types.ListType;
+import ca.spottedleaf.converter.types.ObjectType;
+import ca.spottedleaf.converter.DataConverter;
 import ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry;
-import ca.spottedleaf.dataconverter.types.MapType;
+import ca.spottedleaf.converter.types.MapType;
 
 public final class ConverterAbstractTileEntityRemove {
 
@@ -37,7 +39,7 @@ public final class ConverterAbstractTileEntityRemove {
         MCTypeRegistry.STRUCTURE.addStructureConverter(new DataConverter<>(version) {
             @Override
             public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
-                final ca.spottedleaf.dataconverter.types.ListType blocks = data.getList("blocks", ca.spottedleaf.dataconverter.types.ObjectType.MAP);
+                final ListType blocks = data.getList("blocks", ObjectType.MAP);
                 if (blocks == null) {
                     return null;
                 }
@@ -56,7 +58,7 @@ public final class ConverterAbstractTileEntityRemove {
         MCTypeRegistry.CHUNK.addStructureConverter(new DataConverter<>(version) {
             @Override
             public MapType convert(final MapType data, final long sourceVersion, final long toVersion) {
-                final ca.spottedleaf.dataconverter.types.ListType blockEntities = data.getList("block_entities", ca.spottedleaf.dataconverter.types.ObjectType.MAP);
+                final ListType blockEntities = data.getList("block_entities", ObjectType.MAP);
                 if (blockEntities == null) {
                     return null;
                 }

@@ -1,6 +1,6 @@
 package ca.spottedleaf.dataconverter.minecraft;
 
-import ca.spottedleaf.dataconverter.converters.DataConverter;
+import ca.spottedleaf.converter.DataConverter;
 import ca.spottedleaf.dataconverter.minecraft.versions.V4290;
 import com.mojang.logging.LogUtils;
 import it.unimi.dsi.fastutil.ints.Int2ObjectLinkedOpenHashMap;
