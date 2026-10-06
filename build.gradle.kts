@@ -18,7 +18,7 @@ repositories {
     maven("https://repo.papermc.io/repository/maven-public/") {
         name = "PaperMC"
         mavenContent {
-            includeGroup("ca.spottedleaf")
+            includeGroupAndSubgroups("ca.spottedleaf")
         }
     }
 }
@@ -27,7 +27,8 @@ dependencies {
     // To change the versions see the gradle.properties file
     minecraft("com.mojang:minecraft:${providers.gradleProperty("minecraft_version").get()}")
     implementation("net.fabricmc:fabric-loader:${providers.gradleProperty("loader_version").get()}")
-    implementation("ca.spottedleaf:leafpile:1.2.0")
+    implementation("ca.spottedleaf.leafpile:common:1.2.4")
+    implementation("ca.spottedleaf.leafpile:converter:1.2.4")
 }
 
 tasks.processResources {
